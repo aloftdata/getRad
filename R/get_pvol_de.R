@@ -9,8 +9,8 @@ get_pvol_de <- function(radar, time, ...) {
     "to import data from German weather radars"
   )
   urls <- c(
-    glue::glue("https://opendata.dwd.de/weather/radar/sites/sweep_vol_z/{substr(radar,3,5)}/hdf5/filter_simple/"),
-    glue::glue("https://opendata.dwd.de/weather/radar/sites/sweep_vol_v/{substr(radar,3,5)}/hdf5/filter_simple/")
+    glue::glue("https://opendata.dwd.de/weather/radar/sites/sweep_vol_{c('z','v')}/{substr(radar,3,5)}/hdf5/filter_simple/"),
+    glue::glue("https://opendata.dwd.de/weather/radar/sites/sweep_vol_{c('rhohv','phidp','zdr')}/{substr(radar,3,5)}/unfiltered/")
   )
 
   res <- lapply(urls, function(x) {
@@ -25,9 +25,10 @@ get_pvol_de <- function(radar, time, ...) {
     dplyr::mutate(file = res) |>
     tidyr::unnest(file) |>
     dplyr::filter(file != "../") |>
-    tidyr::separate_wider_delim(file,
+    dplyr::mutate(filestd=sub('stqual-','',file))|>
+    tidyr::separate_wider_delim(filestd,
       delim = "-", cols_remove = FALSE,
-      names = c("ras", "qual", "sweep", "time_chr", "radar", "odim", "h5")
+      names = c("ras",  "sweep", "time_chr", "radar", "odim", "h5")
     ) |>
     dplyr::mutate(
       time_pos = strptime(time_chr, "%Y%m%d%H%M%S", tz = "UTC")
@@ -39,7 +40,7 @@ get_pvol_de <- function(radar, time, ...) {
         time + lubridate::minutes(5)
       )
     ))
-  if (nrow(files_to_get) != 20) {
+  if (nrow(files_to_get) != 50) {
     cli::cli_abort("The server returned an unexpected number of files",
       class = "getRad_error_germany_unexpected_number_of_files"
     )

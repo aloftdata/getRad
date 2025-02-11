@@ -84,12 +84,13 @@ get_pvol_de <- function(radar, time, ...) {
     dplyr::mutate(
       scan = purrr::map2(scan, param, ~ list_to_scan(.x, .y))
     )
-  pvol <- list_to_pvol(files_to_get$scan, time = time, radar = radar)
+  pvol <- list_to_pvol(files_to_get$scan, time = time, radar = radar,
+                       source=glue::glue("NOD:{radar},CMT:constructed from opendata.dwd.de"))
   return(pvol)
 }
 
 list_to_pvol <- function(x, time, radar,
-                         source = "constructed from opendata.dwd.de") {
+                         source = "CMT:constructed from opendata.dwd.de") {
   stopifnot(length(time) == 1)
   stopifnot(length(radar) == 1)
   stopifnot(is.list(x))
@@ -99,6 +100,9 @@ list_to_pvol <- function(x, time, radar,
   output$scans <- x
 
   output$attributes <- x[[1]]$attributes
+  output$attributes$what[c('starttime','startdate','endtime','enddate')]<-NULL
+  output$attributes$what$date<-sort(unlist(lapply(lapply(lapply(x,'[[','attributes'),'[[', 'what'),'[', c('startdate'))))[1]
+  output$attributes$what$time<-sort(unlist(lapply(lapply(lapply(x,'[[','attributes'),'[[', 'what'),'[', c('starttime'))))[1]
   output$attributes$what$object <- "PVOL"
   output$attributes$what$source <- source
   output$geo <- attr(x[[1]]$params[[1]], "geo")

@@ -26,7 +26,7 @@ get_pvol_de <- function(radar, time, ...) {
     tidyr::unnest(file) |>
     dplyr::filter(file != "../") |>
     dplyr::mutate(filestd=sub('stqual-','',file))|>
-    tidyr::separate_wider_delim(filestd,
+    tidyr::separate_wider_delim('filestd',
       delim = "-", cols_remove = FALSE,
       names = c("ras",  "sweep", "time_chr", "radar", "odim", "h5")
     ) |>

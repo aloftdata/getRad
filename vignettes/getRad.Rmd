@@ -18,23 +18,43 @@ Currently `getRad` focuses on retrieving data from weather radars that are relev
 
 In this vignette we will show examples for all these datasets in independent section. This shows how the information can be downloaded and some typical outputs from each data type.
 
-## Radar information
+# Radar information {#wr}
+
+The `weather_radars()` function gets the for all weather radars in the opera network. This data is on the fly read from the [opera database](https://www.eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/index.html) and includes both active and retired radars.
 
 ```{r setup}
 library(getRad)
+radars <- weather_radars()
+radars
+```
+
+An important column is the `odimcode` as this is used as an identifier for the radar in other functions. The odim code typically consists of 5 characters, the first two corresponding the the country, the last three to the name of the radar. This is typically a city close by. 
+
+Using this we can, for example, visualize the radars presently active according to the frequency band they use. 
+
+```{r radar_map}
+require(leaflet)
+radarsActive <- subset(radars, status == 1)
+pal <- colorFactor(c("navy", "red", "darkgreen"), domain = c("C", "S", "X"))
+leaflet(width = "100%") |>
+  addTiles() |>
+  addCircleMarkers(data = radarsActive, label = ~odimcode, color = ~ pal(band)) |>
+  addLegend(pal = pal, values = c("C", "S", "X"))
 ```
 
 
-## Polar volume's
+# Vertical Profile Time Series {#vpts}
+
+```{r setup2}
+library(getRad)
+```
+
+# Polar volume's {#pvol}
+
+The `get_pvol()` function is used to retrieve polar volumes. They are returned as a pvol (see: `?bioRad::summary.pvol`) object. Currently a selected number of countries is supported (see: `vignette("supported_countries")`). As data is retrieved form country specific repositories there are sometimes specific requirements, the package guides you for setting this up (e.g. set api keys, temporal limitations and installing specific converters or R packages).
 
 ```{r setup3}
 library(getRad)
 ```
 
 
-## Vertical Profile Time Series
-
-
-```{r setup2}
-library(getRad)
-```

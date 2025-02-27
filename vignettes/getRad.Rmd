@@ -1,0 +1,40 @@
+---
+title: "Getting started with `getRad`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with `getRad`}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Currently `getRad` focuses on retrieving data from weather radars that are relevant for biological research. Different data is available for these radars. First there it the metadata describing the location and other static information for the weather radars. Next there is the polar volume data. This contains all the scans/sweeps made in one iteration of the scanning pattern, typically collected every 5 minutes. Last there is the vertical profile data which extracts one point estimate with the vertical distribution biological activity from a polar volume. This information is typically far less volumes compared to the polar volume data. 
+
+In this vignette we will show examples for all these datasets in independent section. This shows how the information can be downloaded and some typical outputs from each data type.
+
+## Radar information
+
+```{r setup}
+library(getRad)
+```
+
+
+## Polar volume's
+
+```{r setup3}
+library(getRad)
+```
+
+
+## Vertical Profile Time Series
+
+
+```{r setup2}
+library(getRad)
+```

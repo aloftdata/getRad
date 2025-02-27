@@ -31,6 +31,7 @@ Suggests:
     leaflet,
     lubridate,
     rhdf5,
+    rmarkdown,
     rnaturalearth,
     rnaturalearthdata,
     sf,

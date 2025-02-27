@@ -92,8 +92,8 @@ radar_to_name <- function(vpts_df_list) {
 #'
 #' @examples
 #' as_integer_shh(c("1", "2", "3"))
-as_integer_shh <- function(x){
-  if(!is.character(x)){
+as_integer_shh <- function(x) {
+  if (!is.character(x)) {
     cli::cli_abort("x must be a character vector")
   }
   suppressWarnings(as.integer(x))
@@ -144,9 +144,42 @@ yes_no_as_logical <- function(x) {
 #'
 #' @examples
 #' as_double_shh(c("1.1", "2.2", "3.3"))
-as_numeric_shh <- function(x){
-  if(!is.character(x)){
+as_numeric_shh <- function(x) {
+  if (!is.character(x)) {
     cli::cli_abort("x must be a character vector")
   }
   suppressWarnings(as.numeric(x))
 }
+
+
+
+
+
+#' Function to set the user agent to a getRad specific one in an httr2 request
+#'
+#' @param req an `httr2` request
+#'
+#' @returns an `httr2` request
+#' @noRd
+req_user_agent_getrad <- function(req) {
+  httr2::req_user_agent(req, string = getOption("getRad.user_agent"))
+}
+
+
+# Create an .onload function to set package options during load
+# getRad.key_prefix is the default prefix used when setting or getting secrets using keyring
+# getRad.user_agent is the string used as a user agent for the http calls generated in this package
+#   It incorporates the package version using `getNamespaceVersion`
+.onLoad <- function(libname, pkgname) { # nolint
+
+  op <- options()
+  op.getRad <- list(
+    getRad.key_prefix = "getRad_",
+    getRad.user_agent = paste("R package getRad", getNamespaceVersion("getRad"))
+  )
+  toset <- !(names(op.getRad) %in% names(op))
+  if (any(toset)) options(op.getRad[toset])
+  rlang::run_on_load()
+  invisible()
+}
+rlang::on_load(rlang::local_use_cli(inline = TRUE))

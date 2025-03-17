@@ -47,6 +47,18 @@ test_that("get_vpts_aloft() returns error when radar is not found in coverage", 
   )
 })
 
+test_that("get_vpts_aloft() returns error when date is requested not in coverage", {
+  expect_error(
+    get_vpts_aloft(
+      radar = "bejab",
+      rounded_interval = lubridate::interval("2018-05-01", "2018-05-02"),
+      source = "baltrad",
+      coverage
+    ),
+    class = "getRad_error_date_not_found"
+  )
+})
+
 test_that("get_vpts_aloft() can fetch vtps data from aloft", {
   skip_if_offline()
 

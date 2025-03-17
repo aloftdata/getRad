@@ -21,7 +21,11 @@ aloft_data_coverage <- function(use_cache = TRUE) {
   coverage_raw <-
     httr2::request(coverage_url) |>
     req_user_agent_getrad() |>
-    httr2::req_retry() |>
+    httr2::req_retry(
+      max_tries = 15, backoff = \(x) sqrt(x) * 2,
+      is_transient = \(resp) httr2::resp_status(resp) %in% c(429),
+      retry_on_failure = TRUE
+    ) |>
     (\(request) if (use_cache) {
       httr2::req_cache(
         request,

@@ -34,12 +34,7 @@ read_vpts_from_url <- function(urls) {
     # Identify ourselves in the request
     purrr::map(req_user_agent_getrad) |>
     # Set retry conditions
-    purrr::map(~ httr2::req_retry(
-      .x,
-      max_tries = 15, backoff = \(x) sqrt(x) * 2,
-      is_transient = \(resp) resp_status(resp) %in% c(429),
-      retry_on_failure = TRUE
-    )) |>
+    purrr::map(req_retry_getrad) |>
     # Perform the requests in parallel
     httr2::req_perform_parallel() |>
     # Fetch the response bodies and parse it using vroom

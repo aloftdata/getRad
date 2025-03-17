@@ -165,6 +165,30 @@ req_user_agent_getrad <- function(req) {
   httr2::req_user_agent(req, string = getOption("getRad.user_agent"))
 }
 
+#' Function to retry a getRad specific httr2 request This function retries the
+#' request if the response status is 429 It retries the request 15 times with a
+#' backoff of 2 times the square root of the number of tries It retries on
+#' failure
+#'
+#' @param req an `httr2` request
+#' @param transient_statuses a vector of status codes that are considered
+#'   transient and should be retried
+#' @param max_tries the maximum number of times to retry the request
+#'
+#' @returns an `httr2` request
+#' @noRd
+req_retry_getrad <- function(req,
+                             transient_statuses = c(429),
+                             max_tries = 15,
+                             retry_on_failure = TRUE){
+  httr2::req_retry(
+    req,
+    max_tries = max_tries,
+    backoff = \(x) sqrt(x) * 2,
+    is_transient = \(resp) httr2::resp_status(resp) %in% transient_statuses,
+    retry_on_failure = retry_on_failure
+  )
+}
 
 # Create an .onload function to set package options during load
 # getRad.key_prefix is the default prefix used when setting or getting secrets using keyring

@@ -58,11 +58,11 @@ get_vpts_aloft <- function(radar_odim_code,
       class = "getRad_error_aloft_radar_not_found")}
 
   # Check if the requested date radar combination is present in the coverage
-  at_least_one_radar_date_combination_exists <-
-    dplyr::filter(coverage,
-                  .data$radar %in% radar_odim_code,
-                  .data$date %within% rounded_interval) |>
-    nrow() > 0
+  filtered_coverage <- dplyr::filter(coverage,
+                                     .data$radar %in% radar_odim_code,
+                                     .data$date %within% rounded_interval,
+                                     .data$source == selected_source)
+  at_least_one_radar_date_combination_exists <- nrow(filtered_coverage) > 0
 
   if(!at_least_one_radar_date_combination_exists) {
     cli::cli_abort(
@@ -74,10 +74,7 @@ get_vpts_aloft <- function(radar_odim_code,
   # convert into paths on the aloft s3 storage
   ## We need to use the rounded interval because coverage only has daily
   ## resolution
-  s3_paths <- dplyr::filter(coverage,
-                            .data$radar == radar_odim_code,
-                            .data$date %within% rounded_interval,
-                            .data$source == selected_source) |>
+  s3_paths <- filtered_coverage |>
     dplyr::pull(.data$directory) |>
     # Replace hdf5 with daily to fetch vpts files instead of hdf5 files
     string_replace("hdf5", "daily") |>

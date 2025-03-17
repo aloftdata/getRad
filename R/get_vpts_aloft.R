@@ -101,7 +101,7 @@ get_vpts_aloft <- function(radar_odim_code,
                 ) |>
     purrr::list_rbind() |>
     # Move the source column to the front, where it makes sense
-    dplyr::relocate("source", .before = "radar") |>
+    dplyr::relocate(dplyr::all_of("source"), .before = dplyr::all_of("radar")) |>
     # Overwrite the radar column with the radar_odim_date, all other values are
     # considered invalid for aloft
     dplyr::mutate(radar = radar_odim_code)

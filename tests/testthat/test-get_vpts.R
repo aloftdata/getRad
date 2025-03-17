@@ -378,14 +378,16 @@ test_that("get_vpts() returns an error when an invalid source is provided",{
   )
 })
 
-test_that("get_vpts() returns an error when no source is provided", {
-  expect_error(
-    get_vpts("bejab","20180501"),
-    class = "getRad_error_source_missing"
+test_that("get_vpts() uses baltrad if no source is provided", {
+  expect_identical(
+    unique(get_vpts("bejab","20180525", as_tibble = TRUE)$source),
+    "baltrad"
   )
+})
 
+test_that("get_vpts() returns an error if NULL is passed as a source",{
   expect_error(
-    get_vpts("bejab","20180501", source = NULL),
+    get_vpts("bejab","20180525", source = NULL),
     class = "getRad_error_source_missing"
   )
 })

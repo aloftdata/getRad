@@ -3,7 +3,8 @@
 #' @inheritParams get_pvol
 #' @param date Either a single date or a [lubridate::interval]
 #' @param source The source of the data. One of baltrad, uva or ecog-04003. Only
-#'   one source can be queried at a time. This is a required argument.
+#'   one source can be queried at a time. If no source is provided `baltrad` is
+#'   used.
 #' @param as_tibble Logical. By default the data is returned as a
 #'   [bioRad::summary.vpts] object. If set to TRUE, a [dplyr::tibble()] will be
 #'   returned instead with an extra column for the radar source.
@@ -18,8 +19,8 @@
 #'
 #' @examplesIf interactive()
 #'
-#'   # Fetch vpts data for a single radar and date
-#'   get_vpts(radar = "bejab", date = "2023-01-01", source = "baltrad")
+#'   # Fetch vpts data for a single radar and date get_vpts(radar = "bejab",
+#'   date = "2023-01-01", source = "baltrad")
 #'
 #'   # Fetch vpts data for multiple radars and a single date
 #'
@@ -49,8 +50,11 @@ get_vpts <- function(radar,
                      source = c("baltrad", "uva", "ecog-04003"),
                      as_tibble = FALSE) {
   # Check source argument
-  ## Check if the source argument was provided, return error if not.
-  if(missing(source) || is.null(source)) {
+  ## If no source is provided, set "baltrad" as default
+  if(missing(source)) {
+    source <- "baltrad"
+  }
+  if(is.null(source)) {
     # providing NULL isn't allowed either
     cli::cli_abort(
       glue::glue(

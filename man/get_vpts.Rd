@@ -17,7 +17,8 @@ get_vpts(
 \item{date}{Either a single date or a \link[lubridate:interval]{lubridate::interval}}
 
 \item{source}{The source of the data. One of baltrad, uva or ecog-04003. Only
-one source can be queried at a time. This is a required argument.}
+one source can be queried at a time. If no source is provided \code{baltrad} is
+used.}
 
 \item{as_tibble}{Logical. By default the data is returned as a
 \link[bioRad:summary.vpts]{bioRad::summary.vpts} object. If set to TRUE, a \code{\link[dplyr:reexports]{dplyr::tibble()}} will be
@@ -35,8 +36,8 @@ Retrieve vertical profile time series data from the Aloft data repository
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
-  # Fetch vpts data for a single radar and date
-  get_vpts(radar = "bejab", date = "2023-01-01", source = "baltrad")
+  # Fetch vpts data for a single radar and date get_vpts(radar = "bejab",
+  date = "2023-01-01", source = "baltrad")
 
   # Fetch vpts data for multiple radars and a single date
 

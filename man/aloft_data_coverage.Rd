@@ -4,7 +4,7 @@
 \alias{aloft_data_coverage}
 \title{Fetch the coverage table from the aloft data repository}
 \usage{
-aloft_data_coverage(use_cache = TRUE, ...)
+aloft_data_coverage(use_cache = TRUE)
 }
 \arguments{
 \item{use_cache}{Logical indicating whether to use the cache. Default is

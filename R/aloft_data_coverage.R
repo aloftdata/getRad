@@ -15,7 +15,7 @@
 #'
 #' @examplesIf interactive()
 #' aloft_data_coverage()
-aloft_data_coverage <- function(use_cache = TRUE, ...) {
+aloft_data_coverage <- function(use_cache = TRUE) {
   # Discover what data is available for the requested radar and time interval
   coverage_url <- "https://aloftdata.s3-eu-west-1.amazonaws.com/coverage.csv"
   coverage_raw <-

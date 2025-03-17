@@ -4,7 +4,13 @@
 \alias{aloft_data_coverage}
 \title{Fetch the coverage table from the aloft data repository}
 \usage{
-aloft_data_coverage()
+aloft_data_coverage(use_cache = TRUE, ...)
+}
+\arguments{
+\item{use_cache}{Logical indicating whether to use the cache. Default is
+\code{TRUE}. If \code{FALSE} the cache is ignored and the file is fetched from the
+aloft data repository. This can be useful if you want to force a refresh of
+the cache.}
 }
 \value{
 A data.frame of the coverage file on the aloft data repository
@@ -12,7 +18,8 @@ A data.frame of the coverage file on the aloft data repository
 \description{
 The coverage table provides an overview of what files are available on the
 aloft data repository. Specifically it lists the directories that are
-available as well as the number of files in every directory.
+available as well as the number of files in every directory. By default this
+file is cached for 6 hours.
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

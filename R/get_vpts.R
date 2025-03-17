@@ -19,8 +19,9 @@
 #'
 #' @examplesIf interactive()
 #'
-#'   # Fetch vpts data for a single radar and date get_vpts(radar = "bejab",
-#'   date = "2023-01-01", source = "baltrad")
+#'   # Fetch vpts data for a single radar and date
+#' 
+#'   get_vpts(radar = "bejab", date = "2023-01-01", source = "baltrad")
 #'
 #'   # Fetch vpts data for multiple radars and a single date
 #'

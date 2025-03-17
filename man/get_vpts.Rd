@@ -36,8 +36,9 @@ Retrieve vertical profile time series data from the Aloft data repository
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
-  # Fetch vpts data for a single radar and date get_vpts(radar = "bejab",
-  date = "2023-01-01", source = "baltrad")
+  # Fetch vpts data for a single radar and date
+
+  get_vpts(radar = "bejab", date = "2023-01-01", source = "baltrad")
 
   # Fetch vpts data for multiple radars and a single date
 

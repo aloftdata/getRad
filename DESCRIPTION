@@ -24,7 +24,8 @@ Imports:
     lubridate,
     purrr,
     vroom,
-    rlang
+    rlang,
+    tools
 URL: https://github.com/aloftdata/getRad, https://aloftdata.github.io/getRad/
 BugReports: https://github.com/aloftdata/getRad/issues
 Suggests:

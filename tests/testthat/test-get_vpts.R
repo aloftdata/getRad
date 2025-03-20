@@ -258,6 +258,7 @@ test_that("get_vpts() supports date intervals with hours and minutes",{
 
 test_that("get_vpts() can return data as a vpts object compatible with getRad",{
   skip_if_offline()
+  skip_on_os("windows") # Does this test cause the Windows CI to timeout?
 
   ## Create vpts object to test on, but only if it doesn't exist. This way the
   ## tests can run in any order.

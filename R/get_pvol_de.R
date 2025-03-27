@@ -99,13 +99,13 @@ list_to_pvol <- function(x, time, radar,
   output$datetime <- time
   output$scans <- x
 
-  output$attributes <- x[[1]]$attributes
-  output$attributes$what[c('starttime','startdate','endtime','enddate')]<-NULL
-  output$attributes$what$date<-sort(unlist(lapply(lapply(lapply(x,'[[','attributes'),'[[', 'what'),'[', c('startdate'))))[1]
-  output$attributes$what$time<-sort(unlist(lapply(lapply(lapply(x,'[[','attributes'),'[[', 'what'),'[', c('starttime'))))[1]
+   output$attributes <- purrr::chuck(x, 1, "attributes")
+  output$attributes$what[c("starttime", "startdate", "endtime", "enddate")] <- NULL
+  output$attributes$what$date <- min(purrr::map_chr(x, ~ purrr::chuck(.x, "attributes", "what", "startdate")))
+  output$attributes$what$time <- min(purrr::map_chr(x, ~ purrr::chuck(.x, "attributes", "what", "starttime")))
   output$attributes$what$object <- "PVOL"
   output$attributes$what$source <- source
-  output$geo <- attr(x[[1]]$params[[1]], "geo")
+  output$geo <- attr(purrr::chuck(x, 1, "params", 1), "geo")
 
   class(output) <- "pvol"
   output

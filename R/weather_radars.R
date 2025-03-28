@@ -40,12 +40,7 @@ weather_radars <- function() {
   purrr::map(urls, \(json_url) {
     httr2::request(json_url["url"]) |>
       req_user_agent_getrad() |>
-      httr2::req_retry(
-        max_tries = 15,
-        backoff = \(x) sqrt(x) * 2,
-        is_transient = \(resp) httr2::resp_status(resp) %in% c(429),
-        retry_on_failure = TRUE
-      ) |>
+      req_retry_getrad() |>
       httr2::req_perform() |>
       # The object is actually returned as text/plain
       httr2::resp_body_json(check_type = FALSE) |>

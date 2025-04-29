@@ -190,12 +190,18 @@ req_retry_getrad <- function(req,
 # getRad.key_prefix is the default prefix used when setting or getting secrets using keyring
 # getRad.user_agent is the string used as a user agent for the http calls generated in this package
 #   It incorporates the package version using `getNamespaceVersion`
+# getRad.max_cache_age_seconds is the default max cache age for the httr2 cache
+# in seconds
+# getRad.max_cache_size_bytes is the default max cache size for the httr2 cache
+# in bytes
 .onLoad <- function(libname, pkgname) { # nolint
 
   op <- options()
   op.getRad <- list(
     getRad.key_prefix = "getRad_",
-    getRad.user_agent = paste("R package getRad", getNamespaceVersion("getRad"))
+    getRad.user_agent = paste("R package getRad", getNamespaceVersion("getRad")),
+    getRad.max_cache_age_seconds = 6 * 60 * 60, # 6 hours
+    getRad.max_cache_size_bytes = 1024 * 1024 * 1024 # 1 GB
   )
   toset <- !(names(op.getRad) %in% names(op))
   if (any(toset)) options(op.getRad[toset])

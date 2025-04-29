@@ -13,7 +13,8 @@
 #'
 #' @param urls A character vector of urls to vpts files.
 #' @param use_cache Logical. If TRUE, the response will be cached in package
-#'   cache.
+#'   cache. If `FALSE` the cache is ignored and the file is fetched from the
+#'   url. This can be useful if you want to force a refresh of the cache.
 #'
 #' @return A list of tibbles, one for each url.
 #' @noRd
@@ -46,8 +47,10 @@ read_vpts_from_url <- function(urls, use_cache = TRUE) {
               tools::R_user_dir("getRad", "cache"),
               "httr2"
             ),
-            max_age = 6 * 60 * 60, # 6 hours
-            max_size = 1024 * 1024 * 1024 # 1 GB
+            max_age = getOption("getRad.max_cache_age_seconds",
+                                default = 6 * 60 * 60), # 6 hours
+            max_size = getOption("getRad.max_cache_size_bytes",
+                                 1024 * 1024 * 1024) # 1 GB
           )
         }
       )

@@ -19,39 +19,41 @@
 #'
 #' @examplesIf interactive()
 #'
-#'   # Fetch vpts data for a single radar and date
+#' # Fetch vpts data for a single radar and date
 #'
-#'   get_vpts(radar = "bejab", date = "2023-01-01", source = "baltrad")
+#' get_vpts(radar = "bejab", date = "2023-01-01", source = "baltrad")
 #'
-#'   # Fetch vpts data for multiple radars and a single date
+#' # Fetch vpts data for multiple radars and a single date
 #'
-#'   get_vpts(
-#'     radar = c("dehnr", "deflg"),
-#'     date = lubridate::ymd("20171015"),
-#'     source = "baltrad"
-#'   )
+#' get_vpts(
+#'   radar = c("dehnr", "deflg"),
+#'   date = lubridate::ymd("20171015"),
+#'   source = "baltrad"
+#' )
 #'
-#'   # Fetch vpts data for a single radar and a date range
+#' # Fetch vpts data for a single radar and a date range
 #'
-#'   get_vpts(
-#'     radar = "bejab",
-#'     date = lubridate::interval(
-#'       lubridate::ymd_hms("2023-01-01 00:00:00"),
-#'       lubridate::ymd_hms("2023-01-02 00:14:00")
-#'     ), source = "baltrad"
-#'   )
+#' get_vpts(
+#'   radar = "bejab",
+#'   date = lubridate::interval(
+#'     lubridate::ymd_hms("2023-01-01 00:00:00"),
+#'     lubridate::ymd_hms("2023-01-02 00:14:00")
+#'   ), source = "baltrad"
+#' )
 #'
-#'   get_vpts("bejab", lubridate::interval("20210101","20210301"), "bejab")
+#' get_vpts("bejab", lubridate::interval("20210101", "20210301"), "bejab")
 #'
-#'   # Fetch vpts data for a single radar and a date range from a specific
-#'   source
+#' # Fetch vpts data for a single radar and a date range from a specific
+#' source
 #'
-#'   get_vpts(radar = "bejab", date = "2016-09-29", source = "ecog-04003")
+#' get_vpts(radar = "bejab", date = "2016-09-29", source = "ecog-04003")
 #'
-#'   # Return a tibble instead of a vpts object
+#' # Return a tibble instead of a vpts object
 #'
-#'   get_vpts(radar = "chlem", date = "2023-03-10", source = "baltrad",
-#'   as_tibble = TRUE)
+#' get_vpts(
+#'   radar = "chlem", date = "2023-03-10", source = "baltrad",
+#'   as_tibble = TRUE
+#' )
 #'
 get_vpts <- function(radar,
                      date,
@@ -69,10 +71,12 @@ get_vpts <- function(radar,
         "Please provide a value for the source argument:
         possible values are {possible_sources}.",
         possible_sources = glue::glue_collapse(glue::backtick(source),
-                                               sep = ", ",
-                                               last = " or ")
+          sep = ", ",
+          last = " or "
+        )
       ),
-      class = "getRad_error_source_missing")
+      class = "getRad_error_source_missing"
+    )
   }
 
   ## Only a single source can be fetched from at a time, and it must be one of
@@ -81,7 +85,8 @@ get_vpts <- function(radar,
   if (length(source) > 1) {
     cli::cli_abort(
       "Only one source can be queried at a time.",
-      class = "getRad_error_multiple_sources")
+      class = "getRad_error_multiple_sources"
+    )
   }
 
   ## The provided source must be one of the supported values in the enumeration
@@ -97,9 +102,11 @@ get_vpts <- function(radar,
         possible_sources = glue::glue_collapse(
           glue::backtick(supported_sources),
           sep = ", ",
-          last = " or ")
+          last = " or "
+        )
       ),
-      class = "getRad_error_source_invalid")
+      class = "getRad_error_source_invalid"
+    )
   }
 
   # Rename radar & source arguments so it's clear that it can contain multiple
@@ -111,16 +118,18 @@ get_vpts <- function(radar,
   if (!is.character(selected_radars)) {
     cli::cli_abort(
       "Radar argument must be a character vector.",
-      class = "getRad_error_radar_not_character")
+      class = "getRad_error_radar_not_character"
+    )
   }
 
   # Check that the provided date argument is parsable as a date or interval
   if (!is.character(date) &&
-      !lubridate::is.Date(date) &&
-      !lubridate::is.interval(date)) {
+    !lubridate::is.Date(date) &&
+    !lubridate::is.interval(date)) {
     cli::cli_abort(
       "Date argument must be a character, Date, or Interval object.",
-      class = "getRad_error_date_parsable")
+      class = "getRad_error_date_parsable"
+    )
   }
   # Parse the provided date argument to a lubridate interval
   ## If the date is a single date, convert it to an interval by adding a whole
@@ -145,9 +154,11 @@ get_vpts <- function(radar,
 
   # Check if the requested radars are present in the coverage
   found_radars <-
-    dplyr::filter(coverage,
-                  .data$source %in% selected_sources,
-                  .data$radar %in% selected_radars) |>
+    dplyr::filter(
+      coverage,
+      .data$source %in% selected_sources,
+      .data$radar %in% selected_radars
+    ) |>
     dplyr::pull(radar)
   missing_radars <- setdiff(selected_radars, found_radars)
 
@@ -155,8 +166,9 @@ get_vpts <- function(radar,
     cli::cli_abort(
       "{length(missing_radars)} Radar{?s} not found in {source} coverage:
       {glue::backtick(missing_radars)}",
-      class = "getRad_error_radar_not_found")
-    }
+      class = "getRad_error_radar_not_found"
+    )
+  }
 
   # Query the selected radars and fetched coverage for aloft vpts data.
   vpts_from_s3 <-
@@ -175,19 +187,25 @@ get_vpts <- function(radar,
   filtered_vpts <-
     vpts_from_s3 |>
     purrr::map(
-      \(df) {dplyr::mutate(df,
-                          datetime = lubridate::as_datetime(.data$datetime))}
-      ) |>
+      \(df) {
+        dplyr::mutate(df,
+          datetime = lubridate::as_datetime(.data$datetime)
+        )
+      }
+    ) |>
     purrr::map(
-      \(df) {dplyr::filter(df,
-                          .data$datetime %within% date_interval)}
-      )
+      \(df) {
+        dplyr::filter(
+          df,
+          .data$datetime %within% date_interval
+        )
+      }
+    )
 
   # Return the vpts data
   ## By default, return drop the source column and convert to a vpts object for
   ## usage in bioRAD
   if (!as_tibble) {
-
     filtered_vpts_no_source <-
       purrr::map(filtered_vpts, \(df) dplyr::select(df, -source))
 
@@ -198,7 +216,7 @@ get_vpts <- function(radar,
     }
     return(vpts_list)
   } else {
-  ## If as_vpts is set to FALSE, return as a tibble with the source column
+    ## If as_vpts is set to FALSE, return as a tibble with the source column
     return(purrr::list_rbind(filtered_vpts))
   }
 }

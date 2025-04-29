@@ -30,7 +30,7 @@ aloft_data_coverage <- function(use_cache = TRUE) {
             tools::R_user_dir("getRad", "cache"),
             "httr2"
           ),
-        max_age = 6 * 60 * 60
+        max_age = 6 * 60 * 60 # 6 hours
         )
     } else {
       request

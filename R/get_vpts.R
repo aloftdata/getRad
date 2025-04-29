@@ -198,6 +198,6 @@ get_vpts <- function(radar,
     return(vpts_list)
   } else {
   ## If as_vpts is set to FALSE, return as a tibble with the source column
-    purrr::list_rbind(filtered_vpts)
+    return(purrr::list_rbind(filtered_vpts))
   }
 }

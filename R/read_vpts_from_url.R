@@ -12,19 +12,19 @@
 #' thus any fields sent to that function need to be parsed as character vectors.
 #'
 #' @param urls A character vector of urls to vpts files.
+#' @param use_cache Logical. If TRUE, the response will be cached in package cache.
 #'
 #' @return A list of tibbles, one for each url.
 #' @noRd
 #'
 #' @examples
-#' c("https://aloftdata.s3-eu-west-1.amazonaws.com/baltrad/daily/bejab/2024/bejab_vpts_20240305.csv",
-#' "https://aloftdata.s3-eu-west-1.amazonaws.com/baltrad/daily/bejab/2024/bejab_vpts_20240306.csv",
-#' "https://aloftdata.s3-eu-west-1.amazonaws.com/baltrad/daily/bejab/2024/bejab_vpts_20240307.csv"
+#' c(
+#'   "https://aloftdata.s3-eu-west-1.amazonaws.com/baltrad/daily/bejab/2024/bejab_vpts_20240305.csv",
+#'   "https://aloftdata.s3-eu-west-1.amazonaws.com/baltrad/daily/bejab/2024/bejab_vpts_20240306.csv",
+#'   "https://aloftdata.s3-eu-west-1.amazonaws.com/baltrad/daily/bejab/2024/bejab_vpts_20240307.csv"
 #' ) |>
-#'  read_vpts_from_url()
-
-read_vpts_from_url <- function(urls) {
-
+#'   read_vpts_from_url()
+read_vpts_from_url <- function(urls, use_cache = TRUE) {
   ## this could also be done by passing the vector of urls to readr::read_csv()
   ## or vroom::vroom(), but both would be slower because they are not parallel
   ## and wouldn't declare our custom user agent or allow us to set retry
@@ -35,6 +35,24 @@ read_vpts_from_url <- function(urls) {
     purrr::map(req_user_agent_getrad) |>
     # Set retry conditions
     purrr::map(req_retry_getrad) |>
+    # Optionally cache the responses
+    (\(request_list) if (use_cache) {
+      purrr::map(
+        request_list,
+        \(request) {
+          httr2::req_cache(request,
+            path = file.path(
+              tools::R_user_dir("getRad", "cache"),
+              "httr2"
+            ),
+            max_age = 6 * 60 * 60, # 6 hours
+            max_size = 1024 * 1024 * 1024 # 1 GB
+          )
+        }
+      )
+    } else {
+      request_list
+    })() |>
     # Perform the requests in parallel
     httr2::req_perform_parallel() |>
     # Fetch the response bodies and parse it using vroom

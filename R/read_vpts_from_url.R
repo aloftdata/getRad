@@ -12,7 +12,8 @@
 #' thus any fields sent to that function need to be parsed as character vectors.
 #'
 #' @param urls A character vector of urls to vpts files.
-#' @param use_cache Logical. If TRUE, the response will be cached in package cache.
+#' @param use_cache Logical. If TRUE, the response will be cached in package
+#'   cache.
 #'
 #' @return A list of tibbles, one for each url.
 #' @noRd

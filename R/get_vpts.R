@@ -20,19 +20,26 @@
 #' @examplesIf interactive()
 #'
 #'   # Fetch vpts data for a single radar and date
-#' 
+#'
 #'   get_vpts(radar = "bejab", date = "2023-01-01", source = "baltrad")
 #'
 #'   # Fetch vpts data for multiple radars and a single date
 #'
-#'   get_vpts(radar = c("dehnr", "deflg"), date = lubridate::ymd("20171015"),
-#'   source = "baltrad")
+#'   get_vpts(
+#'     radar = c("dehnr", "deflg"),
+#'     date = lubridate::ymd("20171015"),
+#'     source = "baltrad"
+#'   )
 #'
 #'   # Fetch vpts data for a single radar and a date range
 #'
-#'   get_vpts(radar = "bejab", date = lubridate::interval(
-#'   lubridate::ymd_hms("2023-01-01 00:00:00"), lubridate::ymd_hms("2023-01-02
-#'   00:14:00") ), source = "baltrad" )
+#'   get_vpts(
+#'     radar = "bejab",
+#'     date = lubridate::interval(
+#'       lubridate::ymd_hms("2023-01-01 00:00:00"),
+#'       lubridate::ymd_hms("2023-01-02 00:14:00")
+#'     ), source = "baltrad"
+#'   )
 #'
 #'   get_vpts("bejab", lubridate::interval("20210101","20210301"), "bejab")
 #'

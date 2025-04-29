@@ -59,10 +59,10 @@ get_vpts <- function(radar,
                      as_tibble = FALSE) {
   # Check source argument
   ## If no source is provided, set "baltrad" as default
-  if(missing(source)) {
+  if (missing(source)) {
     source <- "baltrad"
   }
-  if(is.null(source)) {
+  if (is.null(source)) {
     # providing NULL isn't allowed either
     cli::cli_abort(
       glue::glue(
@@ -78,7 +78,7 @@ get_vpts <- function(radar,
   ## Only a single source can be fetched from at a time, and it must be one of
   ## the provided values in the enumeration. New sources must also be added to
   ## the enumeration in the function definition.
-  if(length(source) > 1) {
+  if (length(source) > 1) {
     cli::cli_abort(
       "Only one source can be queried at a time.",
       class = "getRad_error_multiple_sources")
@@ -89,7 +89,7 @@ get_vpts <- function(radar,
   # Get the default value of the source arg, even if the user provided
   # a different value.
   supported_sources <- eval(formals()$source)
-  if(!source %in% supported_sources) {
+  if (!source %in% supported_sources) {
     cli::cli_abort(
       glue::glue(
         "Invalid source {glue::backtick(source)} provided. Possible values are:
@@ -151,11 +151,12 @@ get_vpts <- function(radar,
     dplyr::pull(radar)
   missing_radars <- setdiff(selected_radars, found_radars)
 
-  if(!all(selected_radars %in% coverage$radar)) {
+  if (!all(selected_radars %in% coverage$radar)) {
     cli::cli_abort(
       "{length(missing_radars)} Radar{?s} not found in {source} coverage:
       {glue::backtick(missing_radars)}",
-      class = "getRad_error_radar_not_found")}
+      class = "getRad_error_radar_not_found")
+    }
 
   # Query the selected radars and fetched coverage for aloft vpts data.
   vpts_from_s3 <-
@@ -174,12 +175,12 @@ get_vpts <- function(radar,
   filtered_vpts <-
     vpts_from_s3 |>
     purrr::map(
-      \(df) dplyr::mutate(df,
-                          datetime = lubridate::as_datetime(.data$datetime))
+      \(df) {dplyr::mutate(df,
+                          datetime = lubridate::as_datetime(.data$datetime))}
       ) |>
     purrr::map(
-      \(df) dplyr::filter(df,
-                          .data$datetime %within% date_interval)
+      \(df) {dplyr::filter(df,
+                          .data$datetime %within% date_interval)}
       )
 
   # Return the vpts data
@@ -192,7 +193,7 @@ get_vpts <- function(radar,
 
     vpts_list <- purrr::map(filtered_vpts_no_source, bioRad::as.vpts)
     # If we are only returning a single radar, don't return a list
-    if(length(vpts_list) == 1) {
+    if (length(vpts_list) == 1) {
       return(purrr::chuck(vpts_list, 1))
     }
     return(vpts_list)

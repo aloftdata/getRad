@@ -151,10 +151,6 @@ as_numeric_shh <- function(x) {
   suppressWarnings(as.numeric(x))
 }
 
-
-
-
-
 #' Function to set the user agent to a getRad specific one in an httr2 request
 #'
 #' @param req an `httr2` request

@@ -23,51 +23,59 @@
 #' @importFrom lubridate %within%
 #'
 #' @examples
-#' get_vpts_aloft("bejab",
-#'                lubridate::interval("20240305", "20240307"),
-#'                "baltrad")
+#' get_vpts_aloft(
+#'   "bejab",
+#'   lubridate::interval("20240305", "20240307"),
+#'   "baltrad"
+#' )
 #'
 #' @noRd
 get_vpts_aloft <- function(radar_odim_code,
                            rounded_interval,
                            source,
                            coverage = aloft_data_coverage()) {
-
   # rename source argument for readability
   selected_source <- source
 
   # Check that only one radar is provided (string of length 1)
-  if(!rlang::is_string(radar_odim_code)) {
+  if (!rlang::is_string(radar_odim_code)) {
     cli::cli_abort(
       "Please provide (only one) radar as a character vector of length 1.",
-      class = "getRad_error_radar_not_single_string")
+      class = "getRad_error_radar_not_single_string"
+    )
   }
 
   # Check that radar_odim_code is a single 5 character string
   if (nchar(radar_odim_code) != 5) {
     cli::cli_abort(
       "Radar ODIM code must be a single 5 character string.",
-      class = "getRad_error_radar_odim_code_invalid")
+      class = "getRad_error_radar_odim_code_invalid"
+    )
   }
 
   # Check if the requested radars are present in the coverage
-  if(!all(radar_odim_code %in% coverage$radar)) {
+  if (!all(radar_odim_code %in% coverage$radar)) {
     cli::cli_abort(
       "Radar(s) not found in ALOFT coverage:
       {radar_odim_code[!radar_odim_code %in% coverage$radar]}.",
-      class = "getRad_error_aloft_radar_not_found")}
+      class = "getRad_error_aloft_radar_not_found"
+    )
+  }
 
   # Check if the requested date radar combination is present in the coverage
-  filtered_coverage <- dplyr::filter(coverage,
-                                     .data$radar %in% radar_odim_code,
-                                     .data$date %within% rounded_interval,
-                                     .data$source == selected_source)
+  filtered_coverage <- dplyr::filter(
+    coverage,
+    .data$radar %in% radar_odim_code,
+    .data$date %within% rounded_interval,
+    .data$source == selected_source
+  )
   at_least_one_radar_date_combination_exists <- nrow(filtered_coverage) > 0
 
-  if(!at_least_one_radar_date_combination_exists) {
+  if (!at_least_one_radar_date_combination_exists) {
     cli::cli_abort(
       "No data found for the requested radar(s) and date(s).",
-      class = "getRad_error_date_not_found")
+      class = "getRad_error_date_not_found"
+    )
   }
 
   # Filter the coverage data to the selected radars and time interval and
@@ -91,17 +99,20 @@ get_vpts_aloft <- function(radar_odim_code,
     })
 
   # Read the vpts csv files
-  aloft_data_url <-"https://aloftdata.s3-eu-west-1.amazonaws.com"
+  aloft_data_url <- "https://aloftdata.s3-eu-west-1.amazonaws.com"
 
   paste(aloft_data_url, s3_paths, sep = "/") |>
     read_vpts_from_url() |>
     # Add a column with the radar source to not lose this information
-    purrr::map2(s3_paths,
-                ~ dplyr::mutate(.x,
-                                source = string_extract(.y,
-                                                        ".+(?=\\/daily)")
-                                )
-                ) |>
+    purrr::map2(
+      s3_paths,
+      ~ dplyr::mutate(.x,
+        source = string_extract(
+          .y,
+          ".+(?=\\/daily)"
+        )
+      )
+    ) |>
     purrr::list_rbind() |>
     # Move the source column to the front, where it makes sense
     dplyr::relocate(dplyr::all_of("source"), .before = dplyr::all_of("radar")) |>

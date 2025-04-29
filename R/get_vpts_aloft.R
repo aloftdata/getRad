@@ -78,11 +78,17 @@ get_vpts_aloft <- function(radar_odim_code,
     dplyr::pull(.data$directory) |>
     # Replace hdf5 with daily to fetch vpts files instead of hdf5 files
     string_replace("hdf5", "daily") |>
-    # Construct the filename using regex magic!
-    string_replace(
-      "(.*?)/(.....)/(\\d{4})/(\\d{2})/(\\d{2})$",
-      "\\1/\\2\\/\\3/\\2_vpts_\\3\\4\\5.csv"
-    )
+    # Construct the filename using glue mapping over every path.
+    purrr::map_chr(\(path){
+      glue::glue(
+        "{dir}/{radar}_vpts_{year}{month}{day}.csv",
+        dir = string_extract(path, ".+/.+/.+/[0-9]{4}"),
+        radar = string_extract(path, "(?<=daily/).{5}"),
+        year = string_extract(path, "[0-9]{4}"),
+        month = string_extract(path, "(?<=/)[0-9]{2}(?=/)"),
+        day = string_extract(path, "[0-9]{2}$")
+      )
+    })
 
   # Read the vpts csv files
   aloft_data_url <-"https://aloftdata.s3-eu-west-1.amazonaws.com"

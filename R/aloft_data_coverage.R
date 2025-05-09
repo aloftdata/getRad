@@ -17,9 +17,10 @@
 #' aloft_data_coverage()
 aloft_data_coverage <- function(use_cache = TRUE) {
   # Discover what data is available for the requested radar and time interval
-  coverage_url <- "https://aloftdata.s3-eu-west-1.amazonaws.com/coverage.csv"
+  aloft_data_url <- getOption("getRad.aloft_data_url")
   coverage_raw <-
-    httr2::request(coverage_url) |>
+    httr2::request(aloft_data_url) |>
+    httr2::req_url_path_append("coverage.csv") |>
     req_user_agent_getrad() |>
     req_retry_getrad() |>
     (\(request) if (use_cache) {

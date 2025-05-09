@@ -101,7 +101,7 @@ get_vpts_aloft <- function(radar_odim_code,
     })
 
   # Read the vpts csv files
-  aloft_data_url <- "https://aloftdata.s3-eu-west-1.amazonaws.com"
+  aloft_data_url <- getOption("getRad.aloft_data_url")
 
   paste(aloft_data_url, s3_paths, sep = "/") |>
     read_vpts_from_url() |>

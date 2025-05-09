@@ -201,7 +201,8 @@ req_retry_getrad <- function(req,
     getRad.key_prefix = "getRad_",
     getRad.user_agent = paste("R package getRad", getNamespaceVersion("getRad")),
     getRad.max_cache_age_seconds = 6 * 60 * 60, # 6 hours
-    getRad.max_cache_size_bytes = 1024 * 1024 * 1024 # 1 GB
+    getRad.max_cache_size_bytes = 1024 * 1024 * 1024, # 1 GB
+    getRad.aloft_data_url = "https://aloftdata.s3-eu-west-1.amazonaws.com"
   )
   toset <- !(names(op.getRad) %in% names(op))
   if (any(toset)) options(op.getRad[toset])

@@ -126,10 +126,10 @@ get_vpts <- function(radar,
 
   # Check that the provided date argument is parsable as a date or interval
   if (!is.character(date) &&
-    !lubridate::is.Date(date) &&
+    !lubridate::is.timepoint(date) &&
     !lubridate::is.interval(date)) {
     cli::cli_abort(
-      "Date argument must be a character, Date, or Interval object.",
+      "Date argument must be a character, POSIXct, Date, or Interval object.",
       class = "getRad_error_date_parsable"
     )
   }

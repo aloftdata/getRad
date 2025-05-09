@@ -5,10 +5,20 @@
 #' available as well as the number of files in every directory. By default this
 #' file is cached for 6 hours.
 #'
+#' ```{r get url to fetch coverage from, echo = FALSE, results = FALSE}
+#' cov_url <- paste(getOption("getRad.aloft_data_url"),
+#'                  "coverage.csv",
+#'                  sep = "/")
+#' ```
+#'
+#' The coverage file is fetched from [`r cov_url`](`r cov_url`).
+#' This can be changed by setting `options(getRad.aloft_data_url)` to any
+#' desired url.
+#'
 #' @param use_cache Logical indicating whether to use the cache. Default is
-#'  `TRUE`. If `FALSE` the cache is ignored and the file is fetched from the
-#'  aloft data repository. This can be useful if you want to force a refresh of
-#'  the cache.
+#'   `TRUE`. If `FALSE` the cache is ignored and the file is fetched from the
+#'   aloft data repository. This can be useful if you want to force a refresh of
+#'   the cache.
 #'
 #' @return A data.frame of the coverage file on the aloft data repository
 #' @export

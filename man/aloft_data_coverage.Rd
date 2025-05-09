@@ -21,6 +21,11 @@ aloft data repository. Specifically it lists the directories that are
 available as well as the number of files in every directory. By default this
 file is cached for 6 hours.
 }
+\details{
+The coverage file is fetched from \url{https://aloftdata.s3-eu-west-1.amazonaws.com/coverage.csv}.
+This can be changed by setting \code{options(getRad.aloft_data_url)} to any
+desired url.
+}
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 aloft_data_coverage()

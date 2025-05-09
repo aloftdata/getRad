@@ -3,13 +3,22 @@
 #' This function retrieves VPTS (Vertical Profile Time Series) data from the
 #' aloftdata server.
 #'
+#' ```{r aloft_data_url, echo = FALSE, results = FALSE}
+#' data_url <- getOption("getRad.aloft_data_url")
+#' ```
+#'
+#' By default, data from the aloft data repository is retrieved from
+#' [`r data_url`](`r data_url`), this can be changed by setting
+#' `options(getRad.aloft_data_url)` to any desired url.
+#'
+#' @section Inner working:
+#'
 #' - Constructs the S3 paths for the VPTS files based on the input
 #' - Performs parallel HTTP requests to fetch the vpts-csv data
 #' - Parses the response bodies with some assumptions about the column classes
 #' - Adds a column with the radar source
 #' - Overwrites the radar column with the radar_odim_code, all other values for
 #' this column are considered in error.
-#'
 #'
 #' @param radar_odim_code The radar ODIM code.
 #' @param rounded_interval The interval to fetch data for, rounded to nearest
@@ -28,8 +37,6 @@
 #'   lubridate::interval("20240305", "20240307"),
 #'   "baltrad"
 #' )
-#'
-#' @noRd
 get_vpts_aloft <- function(radar_odim_code,
                            rounded_interval,
                            source,

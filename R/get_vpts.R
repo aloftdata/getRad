@@ -1,6 +1,7 @@
 #' Retrieve vertical profile time series data from the Aloft data repository
 #'
 #' @inheritParams get_pvol
+#' @inherit get_vpts_aloft details
 #' @param date Either a single date or a [lubridate::interval]
 #' @param source The source of the data. One of baltrad, uva or ecog-04003. Only
 #'   one source can be queried at a time. If no source is provided `baltrad` is
@@ -44,7 +45,7 @@
 #' get_vpts("bejab", lubridate::interval("20210101", "20210301"), "bejab")
 #'
 #' # Fetch vpts data for a single radar and a date range from a specific
-#' source
+#' # source
 #'
 #' get_vpts(radar = "bejab", date = "2016-09-29", source = "ecog-04003")
 #'

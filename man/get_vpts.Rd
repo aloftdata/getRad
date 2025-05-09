@@ -33,6 +33,11 @@ will be returned instead. When \code{as_tibble = TRUE}, a single
 \description{
 Retrieve vertical profile time series data from the Aloft data repository
 }
+\details{
+By default, data from the aloft data repository is retrieved from
+\url{https://aloftdata.s3-eu-west-1.amazonaws.com}, this can be changed by setting
+\code{options(getRad.aloft_data_url)} to any desired url.
+}
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
@@ -61,7 +66,7 @@ get_vpts(
 get_vpts("bejab", lubridate::interval("20210101", "20210301"), "bejab")
 
 # Fetch vpts data for a single radar and a date range from a specific
-source
+# source
 
 get_vpts(radar = "bejab", date = "2016-09-29", source = "ecog-04003")
 

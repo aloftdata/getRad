@@ -262,7 +262,7 @@ test_that("get_vpts() supports POSIXct dates", {
 
   radar_interval <- get_vpts(
     radar = "nlhrw",
-    date = as.POSIXct("2025-05-09 14:53:37", tz = "Europe/Berlin"),
+    date = as.POSIXct("2025-05-07 14:53:37", tz = "Europe/Berlin"),
     return_type = "tibble"
   )
 
@@ -274,7 +274,7 @@ test_that("get_vpts() supports POSIXct dates", {
   # Check that the requested dates are present in the output
   expect_in(
     unique(as.Date((radar_interval$datetime))),
-    as.Date("2025-05-09")
+    as.Date("2025-05-07")
   )
 
 })

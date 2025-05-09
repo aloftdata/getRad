@@ -20,9 +20,12 @@ Imports:
     cli,
     dplyr,
     glue,
-    httr2 (>= 1.0.7),
+    httr2 (>= 1.1.1),
+    lubridate,
     purrr,
-    rlang
+    vroom,
+    rlang,
+    tools
 URL: https://github.com/aloftdata/getRad, https://aloftdata.github.io/getRad/
 BugReports: https://github.com/aloftdata/getRad/issues
 Suggests:
@@ -31,7 +34,6 @@ Suggests:
     keyring,
     knitr,
     leaflet,
-    lubridate,
     rhdf5,
     rnaturalearth,
     rnaturalearthdata,

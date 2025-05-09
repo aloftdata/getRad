@@ -125,12 +125,7 @@ test_that("weather_radars() should return a table with records from main and arc
     ) |>
     httr2::request() |>
     req_user_agent_getrad() |>
-    httr2::req_retry(
-      max_tries = 15,
-      backoff = \(x) sqrt(x) * 2,
-      is_transient = \(resp) httr2::resp_status(resp) %in% c(429),
-      retry_on_failure = TRUE
-    ) |>
+    req_retry_getrad() |>
     httr2::req_perform() |>
     # The object is actually returned as text/plain
     httr2::resp_body_json(check_type = FALSE) |>
@@ -145,12 +140,7 @@ test_that("weather_radars() should return a table with records from main and arc
     ) |>
     httr2::request() |>
     req_user_agent_getrad() |>
-    httr2::req_retry(
-      max_tries = 15,
-      backoff = \(x) sqrt(x) * 2,
-      is_transient = \(resp) httr2::resp_status(resp) %in% c(429),
-      retry_on_failure = TRUE
-    ) |>
+    req_retry_getrad() |>
     httr2::req_perform() |>
     # The object is actually returned as text/plain
     httr2::resp_body_json(check_type = FALSE) |>

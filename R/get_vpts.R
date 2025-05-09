@@ -166,6 +166,7 @@ get_vpts <- function(radar,
     cli::cli_abort(
       "{length(missing_radars)} Radar{?s} not found in {source} coverage:
       {glue::backtick(missing_radars)}",
+      missing_radars = missing_radars,
       class = "getRad_error_radar_not_found"
     )
   }

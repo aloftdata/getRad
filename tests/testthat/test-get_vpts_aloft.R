@@ -45,6 +45,15 @@ test_that("get_vpts_aloft() returns error when radar is not found in coverage", 
     ),
     class = "getRad_error_aloft_radar_not_found"
   )
+  expect_identical(
+    rlang::catch_cnd(get_vpts_aloft(
+      radar = c("nlaaa"),
+      rounded_interval = lubridate::interval("2023-01-01", "2023-01-02"),
+      source = "baltrad",
+      coverage
+    ))$missing_radar,
+    c("nlaaa")
+  )
 })
 
 test_that("get_vpts_aloft() returns error when date is requested not in coverage", {

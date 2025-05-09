@@ -25,10 +25,12 @@ test_that("get_vpts() can return vpts data as a tibble or vpts object", {
 
   # Test that the function can return data as a tibble
   expect_s3_class(
-    get_vpts(radar = "bejab",
-             date = "2023-01-01",
-             source = "baltrad",
-             as_tibble = TRUE),
+    get_vpts(
+      radar = "bejab",
+      date = "2023-01-01",
+      source = "baltrad",
+      as_tibble = TRUE
+    ),
     "data.frame"
   )
 })
@@ -51,19 +53,23 @@ test_that("get_vpts() returns a vpts object by default", {
 
   expect_identical(
     returned_vpts_object,
-    get_vpts(radar = "depro",
-             date = "2016-03-05",
-             source = "uva")
+    get_vpts(
+      radar = "depro",
+      date = "2016-03-05",
+      source = "uva"
+    )
   )
 })
 
 test_that("get_vpts() can fetch vpts data for a single radar and time", {
   skip_if_offline()
   single_radar_single_day <-
-    get_vpts(radar = "bejab",
-             date = "2023-01-01",
-             source = "baltrad",
-             as_tibble = TRUE)
+    get_vpts(
+      radar = "bejab",
+      date = "2023-01-01",
+      source = "baltrad",
+      as_tibble = TRUE
+    )
   expect_s3_class(
     # A known radar and date combination that ALOFT has data for
     single_radar_single_day,
@@ -79,10 +85,12 @@ test_that("get_vpts() can fetch vpts data for a single radar and time", {
 
 test_that("get_vpts() can fetch vpts data for multiple radars", {
   skip_if_offline()
-  multiple_radars <- get_vpts(radar = c("bejab", "bewid"),
-                              date = "2023-01-01",
-                              source = "baltrad",
-                              as_tibble = TRUE)
+  multiple_radars <- get_vpts(
+    radar = c("bejab", "bewid"),
+    date = "2023-01-01",
+    source = "baltrad",
+    as_tibble = TRUE
+  )
   expect_s3_class(
     multiple_radars,
     "data.frame"
@@ -98,28 +106,34 @@ test_that("get_vpts() can fetch data from a single radar source", {
   skip_if_offline()
   # Only data from UVA available for this radar day
   expect_identical(
-    get_vpts(radar = "bejab",
-             date = "2018-02-02",
-             source = "uva",
-             as_tibble = TRUE)$source |>
+    get_vpts(
+      radar = "bejab",
+      date = "2018-02-02",
+      source = "uva",
+      as_tibble = TRUE
+    )$source |>
       unique(),
     "uva"
   )
   # radar day has data both on UVA and BALTRAD
   expect_identical(
-    get_vpts(radar = "bejab",
-             date = "2018-05-18",
-             source = "baltrad",
-             as_tibble = TRUE)$source |>
+    get_vpts(
+      radar = "bejab",
+      date = "2018-05-18",
+      source = "baltrad",
+      as_tibble = TRUE
+    )$source |>
       unique(),
     "baltrad"
   )
 
   expect_identical(
-    get_vpts(radar = "bejab",
-             date = "2018-05-18",
-             source = "uva",
-             as_tibble = TRUE)$source |>
+    get_vpts(
+      radar = "bejab",
+      date = "2018-05-18",
+      source = "uva",
+      as_tibble = TRUE
+    )$source |>
       unique(),
     "uva"
   )
@@ -162,20 +176,24 @@ test_that("get_vpts() returns columns of the expected type and order", {
     )
 
   expect_identical(
-    get_vpts(radar = c("deflg"),
-             date = lubridate::ymd("20171015"),
-             source = "baltrad",
-             as_tibble = TRUE) |>
+    get_vpts(
+      radar = c("deflg"),
+      date = lubridate::ymd("20171015"),
+      source = "baltrad",
+      as_tibble = TRUE
+    ) |>
       purrr::map(class),
     expected_col_types
   )
 
   # Specific radar causing trouble
   expect_identical(
-    get_vpts(radar = c("dehnr"),
-             date = lubridate::ymd("20171015"),
-             source = "uva",
-             as_tibble = TRUE) |>
+    get_vpts(
+      radar = c("dehnr"),
+      date = lubridate::ymd("20171015"),
+      source = "uva",
+      as_tibble = TRUE
+    ) |>
       purrr::map(class),
     expected_col_types
   )
@@ -186,10 +204,12 @@ test_that("get_vpts() can fetch data from a specific source only", {
 
   # Data from only BALTRAD even if UVA is available for the same interval
   expect_identical(
-    get_vpts(radar = "bejab",
-             date = "2018-05-18",
-             source = "baltrad",
-             as_tibble = TRUE) |>
+    get_vpts(
+      radar = "bejab",
+      date = "2018-05-18",
+      source = "baltrad",
+      as_tibble = TRUE
+    ) |>
       dplyr::pull("source") |>
       unique(),
     "baltrad"
@@ -199,13 +219,14 @@ test_that("get_vpts() can fetch data from a specific source only", {
 test_that("get_vpts() can fetch vpts data for a date range", {
   skip_if_offline()
 
-  radar_interval <- get_vpts(radar = "bejab",
-                             lubridate::interval(
-                               lubridate::ymd("2023-01-01"),
-                               lubridate::ymd("2023-01-02")
-                             ),
-                             source = "baltrad",
-                             as_tibble = TRUE
+  radar_interval <- get_vpts(
+    radar = "bejab",
+    lubridate::interval(
+      lubridate::ymd("2023-01-01"),
+      lubridate::ymd("2023-01-02")
+    ),
+    source = "baltrad",
+    as_tibble = TRUE
   )
   expect_s3_class(
     radar_interval,
@@ -217,20 +238,20 @@ test_that("get_vpts() can fetch vpts data for a date range", {
     unique(as.Date((radar_interval$datetime))),
     c(as.Date("2023-01-01"), as.Date("2023-01-02"))
   )
-
 })
 
-test_that("get_vpts() supports date intervals with hours and minutes",{
+test_that("get_vpts() supports date intervals with hours and minutes", {
   skip_if_offline()
 
   hour_minute_interval <-
-    get_vpts(radar = "bejab",
-             lubridate::interval(
-               lubridate::ymd_hms("2023-01-01 12:00:00"),
-               lubridate::ymd_hms("2023-01-01 16:59:59")
-             ),
-             source = "baltrad",
-             as_tibble = TRUE
+    get_vpts(
+      radar = "bejab",
+      lubridate::interval(
+        lubridate::ymd_hms("2023-01-01 12:00:00"),
+        lubridate::ymd_hms("2023-01-01 16:59:59")
+      ),
+      source = "baltrad",
+      as_tibble = TRUE
     )
 
   expect_s3_class(
@@ -256,7 +277,7 @@ test_that("get_vpts() supports date intervals with hours and minutes",{
   )
 })
 
-test_that("get_vpts() can return data as a vpts object compatible with getRad",{
+test_that("get_vpts() can return data as a vpts object compatible with getRad", {
   skip_if_offline()
   skip_on_os("windows") # Does this test cause the Windows CI to timeout?
 
@@ -287,69 +308,80 @@ test_that("get_vpts() can return data as a vpts object compatible with getRad",{
     ) |>
       purrr::pmap(get_vpts) |>
       purrr::map_chr(class),
-    c("vpts","vpts","vpts","vpts")
+    c("vpts", "vpts", "vpts", "vpts")
   )
 
   # The returned object should be identical as if created via bioRad
   expect_identical(
-    get_vpts(radar = "depro",
-             date = "2016-03-05",
-             source = "uva",
-             as_tibble = TRUE) |>
+    get_vpts(
+      radar = "depro",
+      date = "2016-03-05",
+      source = "uva",
+      as_tibble = TRUE
+    ) |>
       dplyr::select(-source) |>
-      bioRad::as.vpts()
-    ,
+      bioRad::as.vpts(),
     returned_vpts_object
   )
   # This also works when multiple radars are selected
   ## In this case a list of vpts objects should be returned
   expect_type(
-    get_vpts(radar = c("depro", "bejab"),
-             date = "2016-03-05",
-             source = "uva"),
+    get_vpts(
+      radar = c("depro", "bejab"),
+      date = "2016-03-05",
+      source = "uva"
+    ),
     "list"
   )
 
   expect_identical(
-    get_vpts(radar = c("depro", "bejab"),
-             date = "2016-03-05",
-             source = "uva") |>
+    get_vpts(
+      radar = c("depro", "bejab"),
+      date = "2016-03-05",
+      source = "uva"
+    ) |>
       purrr::map_chr(class) |>
-      unname(), #only test for class, names are tested elsewhere
-    c("vpts","vpts")
+      unname(), # only test for class, names are tested elsewhere
+    c("vpts", "vpts")
   )
 
   ## This list should be named the same as the requested radars
   requested_radars <- c("depro", "bejab")
   expect_named(
-    get_vpts(radar = c("depro", "bejab"),
-             date = "2016-03-05",
-             source = "uva",
-             as_tibble = FALSE),
+    get_vpts(
+      radar = c("depro", "bejab"),
+      date = "2016-03-05",
+      source = "uva",
+      as_tibble = FALSE
+    ),
     requested_radars
   )
 
   ## The named child objects should correspond to the correct vpts objects (bug)
   expect_identical(
-    get_vpts(radar = c("depro", "bejab"),
-             date = "2016-03-05",
-             source = "uva",
-             as_tibble = FALSE) |>
+    get_vpts(
+      radar = c("depro", "bejab"),
+      date = "2016-03-05",
+      source = "uva",
+      as_tibble = FALSE
+    ) |>
       purrr::chuck("bejab"),
-    get_vpts(radar = "bejab",
-             date = "2016-03-05",
-             source = "uva",
-             as_tibble = FALSE)
+    get_vpts(
+      radar = "bejab",
+      date = "2016-03-05",
+      source = "uva",
+      as_tibble = FALSE
+    )
   )
 
   # Radar day where vpts objects on aloft have 3 different values for the radar
   # column, script should have all convert them to the same odim value
   expect_identical(
-    purrr::chuck(get_vpts("bejab","2018-05-18","baltrad"), "radar"),
+    purrr::chuck(get_vpts("bejab", "2018-05-18", "baltrad"), "radar"),
     "bejab"
   )
   expect_identical(
-    get_vpts("bejab","2018-05-18","baltrad", as_tibble = TRUE) |>
+    get_vpts("bejab", "2018-05-18", "baltrad", as_tibble = TRUE) |>
       dplyr::pull(.data$radar) |>
       unique(),
     "bejab"
@@ -360,35 +392,37 @@ test_that("get_vpts() returns an error when multiple sources are provided", {
   skip_if_offline()
 
   expect_error(
-    get_vpts(radar = "bejab",
-             date = "2018-05-18",
-             source = c("baltrad", "uva")),
+    get_vpts(
+      radar = "bejab",
+      date = "2018-05-18",
+      source = c("baltrad", "uva")
+    ),
     class = "getRad_error_multiple_sources"
   )
 })
 
-test_that("get_vpts() returns an error when an invalid source is provided",{
+test_that("get_vpts() returns an error when an invalid source is provided", {
   expect_error(
-    get_vpts("bejab","20241118","not a source"),
+    get_vpts("bejab", "20241118", "not a source"),
     class = "getRad_error_source_invalid"
   )
 
   expect_error(
-    get_vpts("bejab","20241118","baltradz"),
+    get_vpts("bejab", "20241118", "baltradz"),
     class = "getRad_error_source_invalid"
   )
 })
 
 test_that("get_vpts() uses baltrad if no source is provided", {
   expect_identical(
-    unique(get_vpts("bejab","20180525", as_tibble = TRUE)$source),
+    unique(get_vpts("bejab", "20180525", as_tibble = TRUE)$source),
     "baltrad"
   )
 })
 
-test_that("get_vpts() returns an error if NULL is passed as a source",{
+test_that("get_vpts() returns an error if NULL is passed as a source", {
   expect_error(
-    get_vpts("bejab","20180525", source = NULL),
+    get_vpts("bejab", "20180525", source = NULL),
     class = "getRad_error_source_missing"
   )
 })
@@ -398,10 +432,20 @@ test_that("get_vpts() returns an error for a bad radar", {
 
   # Radar not found in ALOFT coverage
   expect_error(
-    get_vpts(radar = "aaaaa",
-             date = "2023-01-01",
-             source = "uva"),
+    get_vpts(
+      radar = "aaaaa",
+      date = "2023-01-01",
+      source = "uva"
+    ),
     class = "getRad_error_radar_not_found"
+  )
+  expect_identical(
+    rlang::catch_cnd(get_vpts(
+      radar = c("nlhrw2", "deess", "bezav"),
+      date = "2023-01-01",
+      source = "baltrad"
+    ), classes = "getRad_error_radar_not_found")$missing_radars,
+    c("nlhrw2", "bezav")
   )
   # Radar is not a character vector
   expect_error(

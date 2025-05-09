@@ -257,6 +257,28 @@ test_that("get_vpts() can fetch vpts data for a date range", {
   )
 })
 
+test_that("get_vpts() supports POSIXct dates", {
+  skip_if_offline()
+
+  radar_interval <- get_vpts(
+    radar = "nlhrw",
+    date = as.POSIXct("2025-05-09 14:53:37", tz = "Europe/Berlin"),
+    return_type = "tibble"
+  )
+
+  expect_s3_class(
+    radar_interval,
+    "data.frame"
+  )
+
+  # Check that the requested dates are present in the output
+  expect_in(
+    unique(as.Date((radar_interval$datetime))),
+    as.Date("2025-05-09")
+  )
+
+})
+
 test_that("get_vpts() supports date intervals with hours and minutes", {
   skip_if_offline()
 

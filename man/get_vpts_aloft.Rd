@@ -47,9 +47,12 @@ this column are considered in error.
 }
 
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+
 get_vpts_aloft(
   "bejab",
   lubridate::interval("20240305", "20240307"),
   "baltrad"
 )
+\dontshow{\}) # examplesIf}
 }

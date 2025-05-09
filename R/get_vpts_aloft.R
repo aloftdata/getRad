@@ -31,7 +31,8 @@
 #' @importFrom dplyr .data
 #' @importFrom lubridate %within%
 #'
-#' @examples
+#' @examplesIf interactive()
+#'
 #' get_vpts_aloft(
 #'   "bejab",
 #'   lubridate::interval("20240305", "20240307"),

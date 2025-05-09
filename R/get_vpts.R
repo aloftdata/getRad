@@ -6,13 +6,13 @@
 #' @param source The source of the data. One of baltrad, uva or ecog-04003. Only
 #'   one source can be queried at a time. If no source is provided `baltrad` is
 #'   used.
-#' @param return_type Character specifying the type of object that should be
-#'   returned. By default the data is returned as a [bioRad::summary.vpts]
-#'   object. If set to `tibble`, a [dplyr::tibble()] will be returned instead
-#'   with an extra column for the radar source.
+#' @param return_type The type of object that should be returned. By default the
+#'   data is returned as a [bioRad::summary.vpts] object. If set to `tibble`, a
+#'   [dplyr::tibble()] will be returned instead with an extra column for the
+#'   radar source.
 #' @return By default, a vpts object is returned. See [bioRad::summary.vpts] for
 #'   more information. When multiple radars are selected, a list of vpts objects
-#'   will be returned instead. When `as_tibble = TRUE`, a single
+#'   will be returned instead. When `return_type = "tibble"`, a single
 #'   [dplyr::tibble()] is returned with an extra column for the radar source.
 #'
 #' @importFrom dplyr .data

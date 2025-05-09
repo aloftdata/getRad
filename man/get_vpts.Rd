@@ -8,7 +8,7 @@ get_vpts(
   radar,
   date,
   source = c("baltrad", "uva", "ecog-04003"),
-  as_tibble = FALSE
+  return_type = c("vpts", "tibble")
 )
 }
 \arguments{
@@ -20,14 +20,15 @@ get_vpts(
 one source can be queried at a time. If no source is provided \code{baltrad} is
 used.}
 
-\item{as_tibble}{Logical. By default the data is returned as a
-\link[bioRad:summary.vpts]{bioRad::summary.vpts} object. If set to TRUE, a \code{\link[dplyr:reexports]{dplyr::tibble()}} will be
-returned instead with an extra column for the radar source.}
+\item{return_type}{The type of object that should be returned. By default the
+data is returned as a \link[bioRad:summary.vpts]{bioRad::summary.vpts} object. If set to \code{tibble}, a
+\code{\link[dplyr:reexports]{dplyr::tibble()}} will be returned instead with an extra column for the
+radar source.}
 }
 \value{
 By default, a vpts object is returned. See \link[bioRad:summary.vpts]{bioRad::summary.vpts} for
 more information. When multiple radars are selected, a list of vpts objects
-will be returned instead. When \code{as_tibble = TRUE}, a single
+will be returned instead. When \code{return_type = "tibble"}, a single
 \code{\link[dplyr:reexports]{dplyr::tibble()}} is returned with an extra column for the radar source.
 }
 \description{

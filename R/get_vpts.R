@@ -112,7 +112,7 @@ get_vpts <- function(radar,
   # Rename radar & source arguments so it's clear that it can contain multiple
   # radars
   selected_radars <- radar
-  selected_sources <- source
+  selected_source <- source
 
   # Check that the provided radar argument is a character vector
   if (!is.character(selected_radars)) {
@@ -156,7 +156,7 @@ get_vpts <- function(radar,
   found_radars <-
     dplyr::filter(
       coverage,
-      .data$source %in% selected_sources,
+      .data$source %in% selected_source,
       .data$radar %in% selected_radars
     ) |>
     dplyr::pull(radar)
@@ -177,7 +177,7 @@ get_vpts <- function(radar,
       ~ get_vpts_aloft(
         .x,
         rounded_interval = rounded_interval,
-        source = selected_sources,
+        source = selected_source,
         coverage = coverage
       )
     ) |>

@@ -208,18 +208,25 @@ get_vpts <- function(radar,
   # Return the vpts data
   ## By default, return drop the source column and convert to a vpts object for
   ## usage in bioRAD
-  if (!as_tibble) {
-    filtered_vpts_no_source <-
-      purrr::map(filtered_vpts, \(df) dplyr::select(df, -source))
+  return_type <- rlang::arg_match(return_type)
+  ## Depending on the value of the `return_type` argument, do some final
+  ## formatting or conversion
+  return_object <-
+  switch(return_type,
+    tibble = purrr::list_rbind(filtered_vpts),
+    vpts = (\(filtered_vpts) {
+      filtered_vpts_no_source <-
+        purrr::map(filtered_vpts, \(df) dplyr::select(df, -source))
+      vpts_list <- purrr::map(filtered_vpts_no_source, bioRad::as.vpts)
+      # If we are only returning a single radar, don't return a list
+      if (length(vpts_list) == 1) {
+        return(purrr::chuck(vpts_list, 1))
+      } else {
+        return(vpts_list)
+      }
+    })(filtered_vpts)
+  )
+  # Return the converted/formatted object
+  return(return_object)
 
-    vpts_list <- purrr::map(filtered_vpts_no_source, bioRad::as.vpts)
-    # If we are only returning a single radar, don't return a list
-    if (length(vpts_list) == 1) {
-      return(purrr::chuck(vpts_list, 1))
-    }
-    return(vpts_list)
-  } else {
-    ## If as_tibble is set to TRUE, return as a tibble with the source column
-    return(purrr::list_rbind(filtered_vpts))
-  }
 }

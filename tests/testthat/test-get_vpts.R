@@ -10,16 +10,33 @@ test_that("get_vpts() can return vpts data as a tibble or vpts object", {
         radar = "depro",
         date = "2016-03-05",
         source = "uva",
-        as_tibble = FALSE
+        return_type = "vpts"
       )
     )
 
+  returned_vpts_object_default <-
+    get0(
+      "returned_vpts_object_default",
+      ifnotfound = get_vpts(
+        radar = "depro",
+        date = "2016-03-05",
+        source = "uva"
+      )
+    )
   expect_s3_class(
     returned_vpts_object,
     "vpts"
   )
   expect_type(
     returned_vpts_object,
+    "list"
+  )
+  expect_s3_class(
+    returned_vpts_object_default,
+    "vpts"
+  )
+  expect_type(
+    returned_vpts_object_default,
     "list"
   )
 
@@ -29,7 +46,7 @@ test_that("get_vpts() can return vpts data as a tibble or vpts object", {
       radar = "bejab",
       date = "2023-01-01",
       source = "baltrad",
-      as_tibble = TRUE
+      return_type = "tibble"
     ),
     "data.frame"
   )

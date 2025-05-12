@@ -220,7 +220,7 @@ is_odim_scalar<-function(x){
   rlang::is_scalar_character(x) && all(is_odim(x))
 }
 check_odim<-function(x){
-  if(!any(is_odim(x)))
+  if(!all(is_odim(x)))
   {
     cli::cli_abort(
       "Please provide one or more radars as a character vector.

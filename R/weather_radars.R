@@ -1,6 +1,6 @@
-#' Get weather radar data
+#' Get weather radar metadata
 #'
-#' The `weather_radars()` function is used to retreive weather radar metadata
+#' The `weather_radars()` function is used to retrieve weather radar metadata for European weather radars
 #' from the [OPERA network](https://www.eumetnet.eu/activities/observations-programme/current-activities/opera/).
 #' The retrieved data is returned as a tibble.
 #'

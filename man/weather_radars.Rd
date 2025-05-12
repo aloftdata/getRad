@@ -2,7 +2,7 @@
 % Please edit documentation in R/weather_radars.R
 \name{weather_radars}
 \alias{weather_radars}
-\title{Get weather radar data}
+\title{Get weather radar metadata}
 \usage{
 weather_radars()
 }
@@ -10,7 +10,7 @@ weather_radars()
 A tibble containing weather radar metadata
 }
 \description{
-The \code{weather_radars()} function is used to retreive weather radar metadata
+The \code{weather_radars()} function is used to retrieve weather radar metadata for European weather radars
 from the \href{https://www.eumetnet.eu/activities/observations-programme/current-activities/opera/}{OPERA network}.
 The retrieved data is returned as a tibble.
 }

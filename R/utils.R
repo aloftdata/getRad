@@ -55,6 +55,23 @@ round_interval <- function(x, unit = "day"){
   )
 }
 
+#' Get the end of the day for a given datetime
+#'
+#' @param date A datetime object or a character string that can be coerced to a
+#'   datetime object.
+#'
+#' @return A datetime object representing the end of the day.
+#' @noRd
+#'
+#' @examples
+#' end_of_day("2016-03-05")
+#' end_of_day("2020-07-12 11:01:33")
+end_of_day <- function(date){
+  lubridate::floor_date(lubridate::as_datetime(date), "day") +
+    lubridate::ddays(1) -
+    lubridate::dseconds(1)
+}
+
 #' Set the list names to the unique value of the radar column
 #'
 #'

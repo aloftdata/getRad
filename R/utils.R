@@ -207,7 +207,8 @@ req_retry_getrad <- function(req,
 #'
 #' @param x A character to be tested if they are odim codes
 #'
-#' @returns An logical the same length as `x` or an error if it does not match in the check functions
+#' @returns An logical the same length as `x` or an error if it does not match
+#'   in the check functions
 #' @noRd
 is_odim<-function(x){
   if(length(x)<1){

@@ -1,4 +1,4 @@
-#' Retrieve vertical profile time series data from the Aloft data repository
+#' Retrieve vertical profile time series data from the Aloft bucket
 #'
 #' @inheritParams get_pvol
 #' @inherit get_vpts_aloft details

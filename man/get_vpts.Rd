@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_vpts.R
 \name{get_vpts}
 \alias{get_vpts}
-\title{Retrieve vertical profile time series data from the Aloft data repository}
+\title{Retrieve vertical profile time series data from the Aloft bucket}
 \usage{
 get_vpts(
   radar,
@@ -32,7 +32,7 @@ will be returned instead. When \code{return_type = "tibble"}, a single
 \code{\link[dplyr:reexports]{dplyr::tibble()}} is returned with an extra column for the radar source.
 }
 \description{
-Retrieve vertical profile time series data from the Aloft data repository
+Retrieve vertical profile time series data from the Aloft bucket
 }
 \details{
 By default, data from the aloft data repository is retrieved from

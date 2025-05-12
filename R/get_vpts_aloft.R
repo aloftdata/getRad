@@ -30,6 +30,7 @@
 #'
 #' @importFrom dplyr .data
 #' @importFrom lubridate %within%
+#' @keywords internal
 #'
 #' @examplesIf interactive()
 #'

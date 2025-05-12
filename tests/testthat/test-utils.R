@@ -5,6 +5,8 @@ test_that("odim test", {
   expect_false(is_odim("nlhr1"))
   expect_false(is_odim("nlhrww"))
   expect_false(is_odim("nlhr"))
+  expect_false(is_odim(NA_character_))
+  expect_false(is_odim(character(0L)))
   expect_identical(is_odim(c("nlhrw","nldhl")), c(TRUE,TRUE))
 
   expect_false(is_odim_scalar(c("nlhrw","nldhl")))

@@ -7,7 +7,7 @@
 #' data_url <- getOption("getRad.aloft_data_url")
 #' ```
 #'
-#' By default, data from the aloft data repository is retrieved from
+#' By default, data from the [Aloft bucket](https://aloftdata.eu/browse/) is retrieved from
 #' [`r data_url`](`r data_url`), this can be changed by setting
 #' `options(getRad.aloft_data_url)` to any desired url.
 #'

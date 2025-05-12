@@ -43,7 +43,7 @@
 #'   ), source = "baltrad"
 #' )
 #'
-#' get_vpts("bejab", lubridate::interval("20210101", "20210301"), "bejab")
+#' get_vpts("bejab", lubridate::interval("20210101", "20210301"))
 #'
 #' # Fetch vpts data for a single radar and a date range from a specific
 #' # source

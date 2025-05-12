@@ -2,8 +2,8 @@
 #'
 #' @inheritParams get_pvol
 #' @inherit get_vpts_aloft details
-#' @param date Either a single date or a [lubridate::interval]
-#' @param source The source of the data. One of baltrad, uva or ecog-04003. Only
+#' @param date Either a single date or a [lubridate::interval].
+#' @param source The source of the data. One of `baltrad`, `uva` or `ecog-04003`. Only
 #'   one source can be queried at a time. If no source is provided `baltrad` is
 #'   used.
 #' @param return_type The type of object that should be returned. By default the

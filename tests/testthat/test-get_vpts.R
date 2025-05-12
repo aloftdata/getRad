@@ -8,7 +8,7 @@ test_that("get_vpts() can return vpts data as a tibble or vpts object", {
       "returned_vpts_object",
       ifnotfound = get_vpts(
         radar = "depro",
-        date = "2016-03-05",
+        datetime = "2016-03-05",
         source = "uva",
         return_type = "vpts"
       )
@@ -19,7 +19,7 @@ test_that("get_vpts() can return vpts data as a tibble or vpts object", {
       "returned_vpts_object_default",
       ifnotfound = get_vpts(
         radar = "depro",
-        date = "2016-03-05",
+        datetime = "2016-03-05",
         source = "uva"
       )
     )
@@ -44,7 +44,7 @@ test_that("get_vpts() can return vpts data as a tibble or vpts object", {
   expect_s3_class(
     get_vpts(
       radar = "bejab",
-      date = "2023-01-01",
+      datetime = "2023-01-01",
       source = "baltrad",
       return_type = "tibble"
     ),
@@ -62,7 +62,7 @@ test_that("get_vpts() returns a vpts object by default", {
       "returned_vpts_object",
       ifnotfound = get_vpts(
         radar = "depro",
-        date = "2016-03-05",
+        datetime = "2016-03-05",
         source = "uva",
         return_type = "vpts"
       )
@@ -72,7 +72,7 @@ test_that("get_vpts() returns a vpts object by default", {
     returned_vpts_object,
     get_vpts(
       radar = "depro",
-      date = "2016-03-05",
+      datetime = "2016-03-05",
       source = "uva"
     )
   )
@@ -83,7 +83,7 @@ test_that("get_vpts() can fetch vpts data for a single radar and time", {
   single_radar_single_day <-
     get_vpts(
       radar = "bejab",
-      date = "2023-01-01",
+      datetime = "2023-01-01",
       source = "baltrad",
       return_type = "tibble"
     )
@@ -104,7 +104,7 @@ test_that("get_vpts() can fetch vpts data for multiple radars", {
   skip_if_offline()
   multiple_radars <- get_vpts(
     radar = c("bejab", "bewid"),
-    date = "2023-01-01",
+    datetime = "2023-01-01",
     source = "baltrad",
     return_type = "tibble"
   )
@@ -125,7 +125,7 @@ test_that("get_vpts() can fetch data from a single radar source", {
   expect_identical(
     get_vpts(
       radar = "bejab",
-      date = "2018-02-02",
+      datetime = "2018-02-02",
       source = "uva",
       return_type = "tibble"
     )$source |>
@@ -136,7 +136,7 @@ test_that("get_vpts() can fetch data from a single radar source", {
   expect_identical(
     get_vpts(
       radar = "bejab",
-      date = "2018-05-18",
+      datetime = "2018-05-18",
       source = "baltrad",
       return_type = "tibble"
     )$source |>
@@ -147,7 +147,7 @@ test_that("get_vpts() can fetch data from a single radar source", {
   expect_identical(
     get_vpts(
       radar = "bejab",
-      date = "2018-05-18",
+      datetime = "2018-05-18",
       source = "uva",
       return_type = "tibble"
     )$source |>
@@ -195,7 +195,7 @@ test_that("get_vpts() returns columns of the expected type and order", {
   expect_identical(
     get_vpts(
       radar = c("deflg"),
-      date = lubridate::ymd("20171015"),
+      datetime = lubridate::ymd("20171015"),
       source = "baltrad",
       return_type = "tibble"
     ) |>
@@ -207,7 +207,7 @@ test_that("get_vpts() returns columns of the expected type and order", {
   expect_identical(
     get_vpts(
       radar = c("dehnr"),
-      date = lubridate::ymd("20171015"),
+      datetime = lubridate::ymd("20171015"),
       source = "uva",
       return_type = "tibble"
     ) |>
@@ -223,7 +223,7 @@ test_that("get_vpts() can fetch data from a specific source only", {
   expect_identical(
     get_vpts(
       radar = "bejab",
-      date = "2018-05-18",
+      datetime = "2018-05-18",
       source = "baltrad",
       return_type = "tibble"
     ) |>
@@ -262,7 +262,7 @@ test_that("get_vpts() supports POSIXct dates", {
 
   radar_interval <- get_vpts(
     radar = "nlhrw",
-    date = as.POSIXct("2025-05-07 14:53:37", tz = "Europe/Berlin"),
+    datetime = as.POSIXct("2025-05-07 14:53:37", tz = "Europe/Berlin"),
     return_type = "tibble"
   )
 
@@ -284,7 +284,7 @@ test_that("get_vpts() only returns the data for the requested day", {
 
   radar_interval <- get_vpts(
     radar = "nlhrw",
-    date = as.POSIXct("2025-05-10 13:40:37", tz = "Europe/Berlin"),
+    datetime = as.POSIXct("2025-05-10 13:40:37", tz = "Europe/Berlin"),
     return_type = "tibble"
   )
 
@@ -343,7 +343,7 @@ test_that("get_vpts() can return data as a vpts object compatible with getRad", 
       "returned_vpts_object",
       ifnotfound = get_vpts(
         radar = "depro",
-        date = "2016-03-05",
+        datetime = "2016-03-05",
         source = "uva",
         return_type = "vpts"
       )
@@ -353,7 +353,7 @@ test_that("get_vpts() can return data as a vpts object compatible with getRad", 
   expect_identical(
     list(
       radar = list("bejab", "depro", "bejab", "bejab"),
-      date = list(
+      datetime = list(
         "2018-05-18",
         "2016-03-05",
         "2018-05-31",
@@ -370,7 +370,7 @@ test_that("get_vpts() can return data as a vpts object compatible with getRad", 
   expect_identical(
     get_vpts(
       radar = "depro",
-      date = "2016-03-05",
+      datetime = "2016-03-05",
       source = "uva",
       return_type = "tibble"
     ) |>
@@ -383,7 +383,7 @@ test_that("get_vpts() can return data as a vpts object compatible with getRad", 
   expect_type(
     get_vpts(
       radar = c("depro", "bejab"),
-      date = "2016-03-05",
+      datetime = "2016-03-05",
       source = "uva"
     ),
     "list"
@@ -392,7 +392,7 @@ test_that("get_vpts() can return data as a vpts object compatible with getRad", 
   expect_identical(
     get_vpts(
       radar = c("depro", "bejab"),
-      date = "2016-03-05",
+      datetime = "2016-03-05",
       source = "uva"
     ) |>
       purrr::map_chr(class) |>
@@ -405,7 +405,7 @@ test_that("get_vpts() can return data as a vpts object compatible with getRad", 
   expect_named(
     get_vpts(
       radar = c("depro", "bejab"),
-      date = "2016-03-05",
+      datetime = "2016-03-05",
       source = "uva",
       return_type = "vpts"
     ),
@@ -416,14 +416,14 @@ test_that("get_vpts() can return data as a vpts object compatible with getRad", 
   expect_identical(
     get_vpts(
       radar = c("depro", "bejab"),
-      date = "2016-03-05",
+      datetime = "2016-03-05",
       source = "uva",
       return_type = "vpts"
     ) |>
       purrr::chuck("bejab"),
     get_vpts(
       radar = "bejab",
-      date = "2016-03-05",
+      datetime = "2016-03-05",
       source = "uva",
       return_type = "vpts"
     )
@@ -449,7 +449,7 @@ test_that("get_vpts() returns an error when multiple sources are provided", {
   expect_error(
     get_vpts(
       radar = "bejab",
-      date = "2018-05-18",
+      datetime = "2018-05-18",
       source = c("baltrad", "uva")
     ),
     class = "getRad_error_multiple_sources"
@@ -489,7 +489,7 @@ test_that("get_vpts() returns an error for a bad radar", {
   expect_error(
     get_vpts(
       radar = "aaaaa",
-      date = "2023-01-01",
+      datetime = "2023-01-01",
       source = "uva"
     ),
     class = "getRad_error_radar_not_found"
@@ -497,14 +497,14 @@ test_that("get_vpts() returns an error for a bad radar", {
   expect_identical(
     rlang::catch_cnd(get_vpts(
       radar = c("nlhrw2", "deess", "bezav"),
-      date = "2023-01-01",
+      datetime = "2023-01-01",
       source = "baltrad"
     ), classes = "getRad_error_radar_not_found")$missing_radars,
     c("nlhrw2", "bezav")
   )
   # Radar is not a character vector
   expect_error(
-    get_vpts(radar = 1:3, date = "2023-01-01", source = "uva"),
+    get_vpts(radar = 1:3, datetime = "2023-01-01", source = "uva"),
     class = "getRad_error_radar_not_character"
   )
 })
@@ -514,12 +514,12 @@ test_that("get_vpts() returns an error for a bad time argument", {
 
   # Date not found in ALOFT coverage
   expect_error(
-    get_vpts(radar = "bejab", date = "9000-01-02", source = "baltrad"),
+    get_vpts(radar = "bejab", datetime = "9000-01-02", source = "baltrad"),
     class = "getRad_error_date_not_found"
   )
   # Time is not parsable to a date or interval
   expect_error(
-    get_vpts(radar = "bejab", date = 1:3, source = "baltrad"),
+    get_vpts(radar = "bejab", datetime = 1:3, source = "baltrad"),
     class = "getRad_error_date_parsable"
   )
 })

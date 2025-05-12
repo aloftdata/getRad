@@ -2,18 +2,19 @@
 #'
 #' @inheritParams get_pvol
 #' @inherit get_vpts_aloft details
-#' @param date Either a single date or a [lubridate::interval]
-#' @param source The source of the data. One of baltrad, uva or ecog-04003. Only
+#' @param datetime Either a single date or range as either a `character`,
+#'   [`Date`][base::Dates], [`POSIXct`][base::DateTimeClasses] or a [lubridate::interval]
+#' @param source The source of the data. One of `"baltrad"`, `"uva"` or `"ecog-04003"`. Only
 #'   one source can be queried at a time. If no source is provided `baltrad` is
 #'   used.
 #' @param return_type The type of object that should be returned. By default the
-#'   data is returned as a [bioRad::summary.vpts] object. If set to `tibble`, a
+#'   data is returned as a [`vpts`][bioRad::summary.vpts] object. If set to `"tibble"`, a
 #'   [dplyr::tibble()] will be returned instead with an extra column for the
 #'   radar source.
 #' @return By default, a vpts object is returned. See [bioRad::summary.vpts] for
 #'   more information. When multiple radars are selected, a list of vpts objects
 #'   will be returned instead. When `return_type = "tibble"`, a single
-#'   [dplyr::tibble()] is returned with an extra column for the radar source.
+#'   [`tibble`][dplyr::tibble()] is returned with an extra column for the radar source.
 #'
 #' @importFrom dplyr .data
 #' @importFrom lubridate %within%
@@ -23,13 +24,13 @@
 #'
 #' # Fetch vpts data for a single radar and date
 #'
-#' get_vpts(radar = "bejab", date = "2023-01-01", source = "baltrad")
+#' get_vpts(radar = "bejab", datetime = "2023-01-01", source = "baltrad")
 #'
 #' # Fetch vpts data for multiple radars and a single date
 #'
 #' get_vpts(
 #'   radar = c("dehnr", "deflg"),
-#'   date = lubridate::ymd("20171015"),
+#'   datetime = lubridate::ymd("20171015"),
 #'   source = "baltrad"
 #' )
 #'
@@ -37,7 +38,7 @@
 #'
 #' get_vpts(
 #'   radar = "bejab",
-#'   date = lubridate::interval(
+#'   datetime = lubridate::interval(
 #'     lubridate::ymd_hms("2023-01-01 00:00:00"),
 #'     lubridate::ymd_hms("2023-01-02 00:14:00")
 #'   ), source = "baltrad"
@@ -48,17 +49,17 @@
 #' # Fetch vpts data for a single radar and a date range from a specific
 #' # source
 #'
-#' get_vpts(radar = "bejab", date = "2016-09-29", source = "ecog-04003")
+#' get_vpts(radar = "bejab", datetime = "2016-09-29", source = "ecog-04003")
 #'
 #' # Return a tibble instead of a vpts object
 #'
 #' get_vpts(
-#'   radar = "chlem", date = "2023-03-10", source = "baltrad",
+#'   radar = "chlem", datetime = "2023-03-10", source = "baltrad",
 #'   as_tibble = TRUE
 #' )
 #'
 get_vpts <- function(radar,
-                     date,
+                     datetime,
                      source = c("baltrad", "uva", "ecog-04003"),
                      return_type = c("vpts", "tibble")) {
   # Check source argument
@@ -125,27 +126,27 @@ get_vpts <- function(radar,
   }
 
   # Check that the provided date argument is parsable as a date or interval
-  if (!is.character(date) &&
-    !lubridate::is.timepoint(date) &&
-    !lubridate::is.interval(date)) {
+  if (!is.character(datetime) &&
+    !lubridate::is.timepoint(datetime) &&
+    !lubridate::is.interval(datetime)) {
     cli::cli_abort(
-      "Date argument must be a character, POSIXct, Date, or Interval object.",
+      "{.arg datetime} argument must be a character, POSIXct, Date, or Interval object.",
       class = "getRad_error_date_parsable"
     )
   }
   # Parse the provided date argument to a lubridate interval
   ## If the date is a single date, convert it to an interval by adding a whole
   ## day, minus a second
-  if (!inherits(date, "Interval")) {
+  if (!inherits(datetime, "Interval")) {
     date_interval <-
       lubridate::interval(
         ### starting at the datetime itself
-        lubridate::as_datetime(date),
+        lubridate::as_datetime(datetime),
         ### to the end of the day
-        end_of_day(date)
+        end_of_day(datetime)
       )
   } else {
-    date_interval <- date
+    date_interval <- datetime
   }
 
   ## We need to round the interval because coverage only has daily resolution

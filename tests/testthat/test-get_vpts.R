@@ -279,6 +279,22 @@ test_that("get_vpts() supports POSIXct dates", {
 
 })
 
+test_that("get_vpts() only returns the data for the requested day", {
+  # Check bug where one extra day of data was returned due to rounding error
+
+  radar_interval <- get_vpts(
+    radar = "nlhrw",
+    date = as.POSIXct("2025-05-10 13:40:37", tz = "Europe/Berlin"),
+    return_type = "tibble"
+  )
+
+  expect_equal(
+    unique(lubridate::floor_date(radar_interval$datetime, "day")),
+    lubridate::ymd("2025-05-10", tz = "UTC")
+  )
+
+})
+
 test_that("get_vpts() supports date intervals with hours and minutes", {
   skip_if_offline()
 

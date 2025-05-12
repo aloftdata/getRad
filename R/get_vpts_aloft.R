@@ -102,7 +102,7 @@ get_vpts_aloft <- function(radar_odim_code,
         "{dir}/{radar}_vpts_{year}{month}{day}.csv",
         dir = string_extract(path, ".+/.+/.+/[0-9]{4}"),
         radar = string_extract(path, "(?<=daily/).{5}"),
-        year = string_extract(path, "[0-9]{4}"),
+        year = string_extract(path, "(?<=\\/)[0-9]{4}"),
         month = string_extract(path, "(?<=/)[0-9]{2}(?=/)"),
         day = string_extract(path, "[0-9]{2}$")
       )

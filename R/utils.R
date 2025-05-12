@@ -222,7 +222,8 @@ check_odim<-function(x){
   if(!any(is_odim(x)))
   {
     cli::cli_abort(
-      "Please provide one or more radars as a character vector. Consisting of 5 characters each to match an odim code.",
+      "Please provide one or more radars as a character vector.
+      Consisting of 5 characters each to match an odim code.",
       class = "getRad_error_radar_not_odim_string"
     )
   }
@@ -230,7 +231,8 @@ check_odim<-function(x){
 check_odim_scalar<-function(x){
   if(!is_odim_scalar(x))
     cli::cli_abort(
-    "Please provide radar as a character vector of length 1. Consisting of 5 characters to match an odim code.",
+    "Please provide radar as a character vector of length 1.
+    Consisting of 5 characters to match an odim code.",
     class = "getRad_error_radar_not_single_odim_string"
   )
 }

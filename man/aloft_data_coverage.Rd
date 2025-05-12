@@ -9,11 +9,11 @@ aloft_data_coverage(use_cache = TRUE)
 \arguments{
 \item{use_cache}{Logical indicating whether to use the cache. Default is
 \code{TRUE}. If \code{FALSE} the cache is ignored and the file is fetched from the
-aloft data repository. This can be useful if you want to force a refresh of
+\href{https://aloftdata.eu/browse/}{Aloft bucket}. This can be useful if you want to force a refresh of
 the cache.}
 }
 \value{
-A data.frame of the coverage file on the aloft data repository.
+A data.frame of the coverage file on the \href{https://aloftdata.eu/browse/}{Aloft bucket}.
 }
 \description{
 The coverage table provides an overview of what files are available on the

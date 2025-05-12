@@ -30,7 +30,7 @@ This function retrieves VPTS (Vertical Profile Time Series) data from the
 aloftdata server.
 }
 \details{
-By default, data from the aloft data repository is retrieved from
+By default, data from the \href{https://aloftdata.eu/browse/}{Aloft bucket} is retrieved from
 \url{https://aloftdata.s3-eu-west-1.amazonaws.com}, this can be changed by setting
 \code{options(getRad.aloft_data_url)} to any desired url.
 }

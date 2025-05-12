@@ -35,7 +35,7 @@ will be returned instead. When \code{return_type = "tibble"}, a single
 Retrieve vertical profile time series data from the Aloft bucket
 }
 \details{
-By default, data from the aloft data repository is retrieved from
+By default, data from the \href{https://aloftdata.eu/browse/}{Aloft bucket} is retrieved from
 \url{https://aloftdata.s3-eu-west-1.amazonaws.com}, this can be changed by setting
 \code{options(getRad.aloft_data_url)} to any desired url.
 }

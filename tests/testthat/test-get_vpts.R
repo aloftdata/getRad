@@ -284,13 +284,13 @@ test_that("get_vpts() only returns the data for the requested day", {
 
   radar_interval <- get_vpts(
     radar = "nlhrw",
-    datetime = as.POSIXct("2025-05-10 13:40:37", tz = "Europe/Berlin"),
+    datetime = t<-as.POSIXct("2025-04-10 13:45:04", tz = "Europe/Berlin"),
     return_type = "tibble"
   )
 
   expect_equal(
-    unique(lubridate::floor_date(radar_interval$datetime, "day")),
-    lubridate::ymd("2025-05-10", tz = "UTC")
+    unique(radar_interval$datetime),
+   lubridate::with_tz( t,"UTC")
   )
 
 })

@@ -139,10 +139,10 @@ get_vpts <- function(radar,
   if (!inherits(date, "Interval")) {
     date_interval <-
       lubridate::interval(
+        ### starting at the datetime itself
         lubridate::as_datetime(date),
-        lubridate::as_datetime(date) +
-          lubridate::ddays(1) -
-          lubridate::dseconds(1)
+        ### to the end of the day
+        end_of_day(date)
       )
   } else {
     date_interval <- date

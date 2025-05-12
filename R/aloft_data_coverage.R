@@ -1,7 +1,7 @@
-#' Fetch the coverage table from the aloft data repository
+#' Fetch the coverage table from the Aloft bucket
 #'
 #' The coverage table provides an overview of what files are available on the
-#' aloft data repository. Specifically it lists the directories that are
+#' [Aloft bucket](https://aloftdata.eu/browse/). Specifically it lists the directories that are
 #' available as well as the number of files in every directory. By default this
 #' file is cached for 6 hours.
 #'
@@ -20,7 +20,7 @@
 #'   aloft data repository. This can be useful if you want to force a refresh of
 #'   the cache.
 #'
-#' @return A data.frame of the coverage file on the aloft data repository
+#' @return A data.frame of the coverage file on the aloft data repository.
 #' @export
 #'
 #' @examplesIf interactive()

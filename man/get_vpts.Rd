@@ -14,9 +14,9 @@ get_vpts(
 \arguments{
 \item{radar}{The name of the radar (odim string) as a character string (e.g. \code{"nlhrw"} or \code{"fikor"}).}
 
-\item{date}{Either a single date or a \link[lubridate:interval]{lubridate::interval}}
+\item{date}{Either a single date or a \link[lubridate:interval]{lubridate::interval}.}
 
-\item{source}{The source of the data. One of baltrad, uva or ecog-04003. Only
+\item{source}{The source of the data. One of \code{baltrad}, \code{uva} or \code{ecog-04003}. Only
 one source can be queried at a time. If no source is provided \code{baltrad} is
 used.}
 

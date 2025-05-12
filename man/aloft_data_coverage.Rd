@@ -2,7 +2,7 @@
 % Please edit documentation in R/aloft_data_coverage.R
 \name{aloft_data_coverage}
 \alias{aloft_data_coverage}
-\title{Fetch the coverage table from the aloft data repository}
+\title{Fetch the coverage table from the Aloft bucket}
 \usage{
 aloft_data_coverage(use_cache = TRUE)
 }
@@ -13,11 +13,11 @@ aloft data repository. This can be useful if you want to force a refresh of
 the cache.}
 }
 \value{
-A data.frame of the coverage file on the aloft data repository
+A data.frame of the coverage file on the aloft data repository.
 }
 \description{
 The coverage table provides an overview of what files are available on the
-aloft data repository. Specifically it lists the directories that are
+\href{https://aloftdata.eu/browse/}{Aloft bucket}. Specifically it lists the directories that are
 available as well as the number of files in every directory. By default this
 file is cached for 6 hours.
 }

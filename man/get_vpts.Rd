@@ -75,7 +75,7 @@ get_vpts(radar = "bejab", date = "2016-09-29", source = "ecog-04003")
 
 get_vpts(
   radar = "chlem", date = "2023-03-10", source = "baltrad",
-  as_tibble = TRUE
+  return_type = "tibble"
 )
 \dontshow{\}) # examplesIf}
 }

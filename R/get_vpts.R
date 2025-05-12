@@ -54,7 +54,7 @@
 #'
 #' get_vpts(
 #'   radar = "chlem", date = "2023-03-10", source = "baltrad",
-#'   as_tibble = TRUE
+#'   return_type = "tibble"
 #' )
 #'
 get_vpts <- function(radar,

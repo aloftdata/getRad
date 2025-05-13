@@ -1,22 +1,33 @@
 #' Get weather radar metadata
 #'
-#' Gets weather radar metadata from [OPERA](
-#' https://www.eumetnet.eu/activities/observations-programme/current-activities/opera/).
+#' Gets weather radar metadata from the [OPERA](
+#' https://www.eumetnet.eu/activities/observations-programme/current-activities/opera/)
+#' and/or [NEXRAD](https://www.ncei.noaa.gov/products/radar/next-generation-weather-radar) network.
+#'
+#' @param source A character vector for the one or more sources that should be downloaded,
+#'  values can be `"opera"`,`"nexrad"`, and `"all"`
+#' @param ... Arguments to helper functions specific to sources, currently not used
+#'
+#' @details
 #'
 #' The source files for this function are:
 #' - For `opera`: [OPERA_RADARS_DB.json](
 #' http://eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_DB.json)
 #' and [OPERA_RADARS_ARH_DB.json](
 #' http://eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_ARH_DB.json).
+#' - For `nexrad` [nexrad-stations.txt](https://www.ncei.noaa.gov/access/homr/file/nexrad-stations.txt).
 #'
 #' @inheritParams req_cache_getrad
-#' @return A tibble with weather radar metadata.
+#' @return A tibble with weather radar metadata. In all cases the column `source` is
+#' added to indicate the source of the data and `radar` to show the radar identifiers
+#'  used in other functions like [get_pvol()] and [get_vpts()].
 #' @export
 #' @examplesIf interactive()
 #' weather_radars()
 weather_radars <- function(source = c("opera"), use_cache = TRUE, ...) {
-  if (!rlang::is_character(source)) {
-    cli::cli_abort("{.arg source} should be an character vector.",
+  if (!rlang::is_character(source) || any(is.na(source)) || length(source) == 0) {
+    cli::cli_abort("{.arg source} is not valid, it should be an {.cls character}
+                   vector with a length of atleast one not contain NA values.",
       class = "getRad_error_weather_radar_source_not_character"
     )
   }
@@ -27,8 +38,8 @@ weather_radars <- function(source = c("opera"), use_cache = TRUE, ...) {
   if (!all(s <- source %in% valid_source_options)) {
     cli::cli_abort(
       c(
-        x = "{source[!s]} are not valid options for the {.arg source} argument.",
-        i = "{valid_source_options} are possible sources."
+        x = "{.val {source[!s]}} {?is not a/are not} valid option{?s} for the {.arg source} argument.",
+        i = "{.val {valid_source_options}} are possible valid sources."
       ),
       class = "getRad_error_weather_radar_source_not_valid"
     )
@@ -145,11 +156,12 @@ weather_radars_nexrad <- function(use_cache = TRUE, ...) {
       show_col_types = F, col_positions = widths, skip = 2,
       col_types = vroom::cols(
         ncdcid = "i", icao = "c", wban = "c", name = "c",
-        country = "c", st = "c", county = "c", lat = "d", lon = "d", elev = "i", utc = "i", stntype = "c"
+        country = "c", st = "c", county = "c", lat = "d",
+        lon = "d", elev = "i", utc = "i", stntype = "c"
       )
     ) |>
     dplyr::mutate(
-      radar = icao,
+      radar = tolower(icao),
       latitude = lat, longitude = lon,
       country = capwords(tolower(country)),
       location = capwords(sub(
@@ -164,7 +176,8 @@ weather_radars_nexrad <- function(use_cache = TRUE, ...) {
       )),
       heightantenna = elev / 3.28083989
     ) |>
-    dplyr::mutate(-lat, -lon)
+    dplyr::select(-lat, -lon) |>
+    dplyr::select(radar, dplyr::everything())
 }
 
 # from base::chartr examples

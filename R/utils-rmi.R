@@ -1,4 +1,7 @@
-replace_nan <- function(){}
+# All helpers should call this to parse "nan" strings.
+replace_nan <- function(string){
+  if(string == "nan"){return(NaN)}
+}
 
 get_datetime <- function(row_index, start = 0, stop = 13){
   purrr::chuck(fwf_text, row_index) |>

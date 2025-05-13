@@ -4,12 +4,14 @@
 \alias{get_pvol}
 \title{Retrieve polar volumes}
 \usage{
-get_pvol(radar = NULL, time = NULL, ...)
+get_pvol(radar = NULL, datetime = NULL, ...)
 }
 \arguments{
-\item{radar}{The name of the radar (odim string) as a character string (e.g. \code{"nlhrw"} or \code{"fikor"}).}
+\item{radar}{The name of the radar (odim string) as a character string (e.g.
+\code{"nlhrw"} or \code{"fikor"}).}
 
-\item{time}{The time as a \code{POSIXct} for the polar volume to download}
+\item{datetime}{The time as a \code{POSIXct} vector for the polar volume(s) to download or
+an \code{\link[lubridate:interval]{interval}} in which all polar volumes need to be downloaded.}
 
 \item{...}{Additional arguments passed on to the individual reading functions, for example \code{param="all"} to the \code{\link[bioRad:read_pvolfile]{bioRad::read_pvolfile()}} function.}
 }

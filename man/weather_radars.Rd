@@ -2,7 +2,7 @@
 % Please edit documentation in R/weather_radars.R
 \name{weather_radars}
 \alias{weather_radars}
-\title{Get weather radar data}
+\title{Get weather radar metadata}
 \usage{
 weather_radars(use_cache = TRUE)
 }
@@ -12,16 +12,20 @@ weather_radars(use_cache = TRUE)
 This can also be useful if you want to force a refresh of the cache.}
 }
 \value{
-A tibble containing weather radar metadata
+A tibble with weather radar metadata.
 }
 \description{
-The \code{weather_radars()} function is used to retreive weather radar metadata
-from the \href{https://www.eumetnet.eu/activities/observations-programme/current-activities/opera/}{OPERA network}.
-The retrieved data is returned as a tibble.
+Gets weather radar metadata from \href{https://www.eumetnet.eu/activities/observations-programme/current-activities/opera/}{OPERA}.
+}
+\details{
+The source files for this function are:
+\itemize{
+\item For \code{opera}: \href{http://eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_DB.json}{OPERA_RADARS_DB.json}
+and \href{http://eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_ARH_DB.json}{OPERA_RADARS_ARH_DB.json}.
+}
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-
 weather_radars()
 \dontshow{\}) # examplesIf}
 }

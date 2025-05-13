@@ -1,17 +1,18 @@
-#' Get weather radar data
+#' Get weather radar metadata
 #'
-#' The `weather_radars()` function is used to retreive weather radar metadata
-#' from the [OPERA network](https://www.eumetnet.eu/activities/observations-programme/current-activities/opera/).
-#' The retrieved data is returned as a tibble.
+#' Gets weather radar metadata from [OPERA](
+#' https://www.eumetnet.eu/activities/observations-programme/current-activities/opera/).
+#'
+#' The source files for this function are:
+#' - For `opera`: [OPERA_RADARS_DB.json](
+#' http://eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_DB.json)
+#' and [OPERA_RADARS_ARH_DB.json](
+#' http://eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_ARH_DB.json).
 #'
 #' @inheritParams req_cache_getrad
-#'
-#' @return A tibble containing weather radar metadata
-#' @importFrom dplyr .data
+#' @return A tibble with weather radar metadata.
 #' @export
-#'
 #' @examplesIf interactive()
-#'
 #' weather_radars()
 weather_radars <- function(use_cache = TRUE) {
 

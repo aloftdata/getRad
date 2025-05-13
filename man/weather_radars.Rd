@@ -4,7 +4,12 @@
 \alias{weather_radars}
 \title{Get weather radar data}
 \usage{
-weather_radars()
+weather_radars(use_cache = TRUE)
+}
+\arguments{
+\item{use_cache}{Logical indicating whether to use the cache. Default is
+\code{TRUE}. If \code{FALSE} the cache is ignored and the file is fetched anew.
+This can also be useful if you want to force a refresh of the cache.}
 }
 \value{
 A tibble containing weather radar metadata

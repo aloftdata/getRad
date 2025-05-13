@@ -51,6 +51,14 @@ pvol <- get_pvol("nlhrw", as.POSIXct("2023-3-19 22:15", tz = "UTC+1"))
 plot(calculate_vp(pvol, h_layer = 50, n_layer = 40))
 ```
 
+There is also the possibility to download vertical profile time series from the [aloft](https://aloftdata.eu/) data repository as vertical profile time series
+
+```{r vpts}
+vpts_list<-get_vpts(c("bewid","deess"),
+                    as.Date(c("2016-10-03","2016-10-05")),
+                    source="ecog-04003")
+```
+
 ## Meta
 
 - We welcome [contributions](https://aloftdata.github.io/getRad/CONTRIBUTING.html) including bug reports.

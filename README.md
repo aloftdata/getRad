@@ -35,18 +35,16 @@ For the time being the package is not yet released on CRAN.
 ## Usage
 
 Here are some examples of volume data with biological information that
-can be downloaded
+can be downloaded.
 
 ``` r
 library(getRad)
 library(bioRad)
-#> Welcome to bioRad version 0.8.1
-#> Attempting to load MistNet from: /home/bart/R/x86_64-pc-linux-gnu-library/4.4/vol2birdR/lib 
-#> MistNet successfully initialized.
-#> using vol2birdR version 1.0.2 (MistNet installed)
+#> Welcome to bioRad version 0.8.1.9000
+#> using vol2birdR version 1.0.5 (MistNet not installed)
 # Plot insect movements in Finland (Mäkinen et al. 2022)
-pvol<-get_pvol("fianj", as.POSIXct("2012-5-17 14:15", tz="UTC"))
-plot(project_as_ppi(get_scan(pvol,0), range_max = 75000))
+pvol <- get_pvol("fianj", as.POSIXct("2012-5-17 14:15", tz = "UTC"))
+plot(project_as_ppi(get_scan(pvol, 0), range_max = 75000))
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />
@@ -54,13 +52,32 @@ plot(project_as_ppi(get_scan(pvol,0), range_max = 75000))
 ``` r
 
 # Spring migration in Estonia
-pvol<-get_pvol("nlhrw", as.POSIXct("2023-3-19 22:15", tz="UTC+1"))
+pvol <- get_pvol("nlhrw", as.POSIXct("2023-3-19 22:15", tz = "UTC+1"))
 plot(calculate_vp(pvol, h_layer = 50, n_layer = 40))
 #> Running vol2birdSetUp
 #> Warning: radial velocities will be dealiased...
 ```
 
 <img src="man/figures/README-example-2.png" width="100%" />
+
+There is also the possibility to download vertical profile time series
+from the [aloft](https://aloftdata.eu/) data repository as vertical
+profile time series
+
+``` r
+vpts_list <- get_vpts(c("bewid", "deess"),
+  lubridate::interval(lubridate::as_datetime("2016-10-03 16:00:00"), 
+                      lubridate::as_datetime("2016-10-05 10:00:00")),
+  source = "ecog-04003"
+)
+par(mfrow = 2:1)
+for(i in names(vpts_list))
+  plot(regularize_vpts(vpts_list[[i]]), main=i)
+#> projecting on 300 seconds interval grid...
+#> projecting on 900 seconds interval grid...
+```
+
+<img src="man/figures/README-vpts-1.png" width="100%" />
 
 ## Meta
 
@@ -69,8 +86,8 @@ plot(calculate_vp(pvol, h_layer = 50, n_layer = 40))
   including bug reports.
 - License: MIT
 - Get [citation
-  information](https://aloftdata.github.io/getRad/authors.html#citation) for
-  getRad in R doing `citation("getRad")`.
+  information](https://aloftdata.github.io/getRad/authors.html#citation)
+  for getRad in R doing `citation("getRad")`.
 - Please note that this project is released with a [Contributor Code of
   Conduct](https://aloftdata.github.io/getRad/CODE_OF_CONDUCT.html). By
   participating in this project you agree to abide by its terms.

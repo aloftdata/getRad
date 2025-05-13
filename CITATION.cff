@@ -10,8 +10,8 @@ license: MIT
 title: 'getRad: Access and Standardize Radar Data'
 version: 0.1.0.9001
 abstract: This package facilitates downloading radar data for biological research.
-  Currently the main functionality is downloading polar volume data from open repositories
-  of European countries.
+  Currently the main functionality is downloading polar volume and vertical profile
+  data and from open repositories of European countries.
 authors:
 - family-names: Kranstauber
   given-names: Bart

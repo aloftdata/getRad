@@ -14,6 +14,9 @@
 #'
 #' weather_radars()
 weather_radars <- function(use_cache = TRUE) {
+
+}
+weather_radars_opera <- function(use_cache = TRUE) {
   # Build the url where the JSON files are hosted on eumetnet
 
   # Read source JSON files from OPERA
@@ -91,3 +94,25 @@ weather_radars <- function(use_cache = TRUE) {
     # Sort data for consistent git diffs
     dplyr::arrange(.data$country, .data$number, .data$startyear)
 }
+
+weather_radars_nexrad<-function(use_cache = TRUE,...)
+{
+  #  https://www.ncei.noaa.gov/access/homr/reports
+  file_content<-httr2::request('https://www.ncei.noaa.gov/access/homr/file/nexrad-stations.txt') |>
+    req_user_agent_getrad() |> req_cache_getrad(use_cache = TRUE)|>
+    httr2::req_perform() |> httr2::resp_body_string()
+
+  tmp<-file_content|>
+    I()|>
+    vroom::vroom_fwf(show_col_types = F, n_max = 2)
+
+  widths<-vroom::fwf_widths(nchar(unlist(tmp[2,]))+1, tolower(unlist(tmp[1,])))
+# for type specification see: https://www.ncei.noaa.gov/access/homr/file/NexRad_Table.txt
+  file_content|>
+    I()|>
+    vroom::vroom_fwf(show_col_types = F, col_positions = widths,skip = 2,
+                      col_types = vroom::cols(
+                        ncdcid='i',icao='c', wban='c', name='c',
+                        country='c',st='c',county='c', lat='d', lon='d', elev='i',utc='i', stntype='c'
+                      ))
+ }

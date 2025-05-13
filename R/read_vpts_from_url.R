@@ -11,10 +11,9 @@
 #' standard. However, [bioRad::as.vpts()] currently doesn't support factors,
 #' thus any fields sent to that function need to be parsed as character vectors.
 #'
+#'
 #' @param urls A character vector of urls to vpts files.
-#' @param use_cache Logical. If TRUE, the response will be cached in package
-#'   cache. If `FALSE` the cache is ignored and the file is fetched from the
-#'   url. This can be useful if you want to force a refresh of the cache.
+#' @inheritParams req_cache_getrad
 #'
 #' @return A list of tibbles, one for each url.
 #' @noRd

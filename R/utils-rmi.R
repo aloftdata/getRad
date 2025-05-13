@@ -19,7 +19,11 @@ get_u <- function(row_index, start = 19, stop = 25){
     substr(start, stop) |>
     parse_numeric()
 }
-get_v <- function(){}
+get_v <- function(row_index, start = 26, stop = 32){
+  purrr::chuck(fwf_text, row_index) |>
+    substr(start, stop) |>
+    parse_numeric()
+}
 get_w <- function(){}
 get_ff <- function(row_index, start = 41, stop = 46){
   purrr::chuck(fwf_text, row_index) |>

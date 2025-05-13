@@ -1,6 +1,5 @@
 # http://opendata.chmi.cz/meteorology/weather/radar/sites/ska/vol_z/hdf5/
 
-
 get_pvol_cz <- function(radar, time, ...) {
   time_chr <- time_pos <- base <- resp <- NULL
   # All parameters are retrieved from separate files

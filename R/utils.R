@@ -1,35 +1,32 @@
-#' Extracts a substring from a string based on a regex pattern.
+#' Extracts a substring from a string based on a regex pattern
 #'
-#' This function uses regular expressions to extract a substring from a given string
-#' based on a specified pattern. This is a base replacement of stringr::str_extract()
+#' This function uses regular expressions to extract a substring from a given
+#' string based on a specified pattern. This is a base replacement of
+#' stringr::str_extract().
 #'
 #' @param string The input string from which the substring will be extracted.
 #' @param pattern The regular expression pattern used to match the substring.
-#'
 #' @return The extracted substring.
 #' @noRd
-#'
 #' @examples
 #' string_extract("Hello World", "o W")
-#'
 string_extract <- function(string, pattern) {
   regmatches(string, regexpr(pattern, text = string, perl = TRUE))
 }
 
-#' Replace a pattern in a string with a replacement.
+#' Replace a pattern in a string with a replacement
 #'
-#' This function uses regular expressions to replace a pattern in a string with a specified replacement.
-#' This is a base replacement of stringr::str_replace()
+#' This function uses regular expressions to replace a pattern in a string with
+#' a specified replacement. This is a base replacement of
+#' stringr::str_replace().
 #'
 #' @param string The input string.
 #' @param pattern The pattern to search for in the string.
 #' @param replacement The replacement string.
-#'
 #' @return The modified string with the pattern replaced.
 #' @noRd
 #' @examples
 #' string_replace("I'm looking for radars", "radar", "bird")
-#'
 string_replace <- function(string, pattern, replacement) {
   sub(pattern, replacement, string, perl = TRUE)
 }
@@ -76,14 +73,13 @@ string_squish <- function(string){
 #'
 #' Extension of [lubridate::round_date()] to round an interval, by default by
 #' day. This means that of any given interval, the function will return the
-#' interval as a floor of the interval start, to the ceiling of the interal end.
+#' interval as a floor of the interval start, to the ceiling of the interval
+#' end.
 #'
 #' @inheritParams lubridate::round_date
-#'
 #' @return An interval starting with the floor of `x` and ending with the
 #'   ceiling of `x`, by the chosen unit.
 #' @noRd
-#'
 #' @examples
 #' round_interval(lubridate::interval("20230104 143204", "20240402 001206"))
 round_interval <- function(x, unit = "day"){
@@ -95,12 +91,10 @@ round_interval <- function(x, unit = "day"){
 
 #' Get the end of the day for a given datetime
 #'
-#' @param date A datetime object or a character string that can be coerced to a
+#' @param date Datetime object or a character string that can be coerced to a
 #'   datetime object.
-#'
 #' @return A datetime object representing the end of the day.
 #' @noRd
-#'
 #' @examples
 #' end_of_day("2016-03-05")
 #' end_of_day("2020-07-12 11:01:33")
@@ -112,15 +106,11 @@ end_of_day <- function(date){
 
 #' Set the list names to the unique value of the radar column
 #'
-#'
-#' @param vpts_df_list A list of vpts data.frames
-#'
-#' @return A list of vpts data.frames with the names set to the unique value of
-#'   the radar column of the data.frames
-#'
+#' @param vpts_df_list List of vpts data frames.
+#' @return A list of vpts data frames with the names set to the unique value of
+#'   the radar column of the data frames.
 #' @noRd
 #' @examples
-#'
 #' list(dplyr::tibble(radar = "bejab"), dplyr::tibble(radar = "bewid")) |>
 #'   radar_to_name()
 radar_to_name <- function(vpts_df_list) {
@@ -132,15 +122,13 @@ radar_to_name <- function(vpts_df_list) {
     )
   )
 }
-#' Convert a character vector to integer, but do not warn.
+#' Convert a character vector to integer, but do not warn
 #'
 #' This function does not perform coercion, but conversion. For coercion see
-#' [vctrs::vec_cast()](https://vctrs.r-lib.org/reference/vec_cast.html).
+#' vctrs::vec_cast().
 #'
-#'
-#' @param x A character vector
-#'
-#' @return An integer vector
+#' @param x Character vector.
+#' @return An integer vector.
 #' @seealso [as_numeric_shh()] [as_logical_shh()]
 #'
 #' @noRd
@@ -156,14 +144,10 @@ as_integer_shh <- function(x) {
 
 #' Convert a character vector containing `Ỳ`, `N` and `NA` to a logical vector.
 #'
-#' @param x A character vector only containing `Y`, `N` and `NA`. Any other
+#' @param x Character vector only containing `Y`, `N` and `NA`. Any other
 #'   values will be silenty converted to `NA`.
-#'
-#' @return A logical vector
-#' @seealso [as_numeric_shh()] [as_integer_shh()]
-#'
+#' @return A logical vector.
 #' @noRd
-#'
 #' @examples
 #' yes_no_as_logical(c("Y", "N", NA, NA, "Y"))
 #' yes_no_as_logical(c("Y", "foo", "bar", "N", NA))
@@ -185,18 +169,14 @@ yes_no_as_logical <- function(x) {
   return(converted_vector)
 }
 
-#' Convert a character vector to numeric, but do not warn.
+#' Convert a character vector to numeric, but do not warn
 #'
 #' This function does not perform coercion, but conversion. For coercion see
-#' [vctrs::vec_cast()](https://vctrs.r-lib.org/reference/vec_cast.html).
+#' vctrs::vec_cast().
 #'
-#' @param x A character vector
-#'
-#' @return A numeric vector
-#' @seealso [as_integer_shh()] [as_logical_shh()]
-#'
+#' @param x Character vector.
+#' @return A numeric vector.
 #' @noRd
-#'
 #' @examples
 #' as_double_shh(c("1.1", "2.2", "3.3"))
 as_numeric_shh <- function(x) {
@@ -208,25 +188,23 @@ as_numeric_shh <- function(x) {
 
 #' Function to set the user agent to a getRad specific one in an httr2 request
 #'
-#' @param req an `httr2` request
-#'
-#' @returns an `httr2` request
+#' @param req `httr2` request.
+#' @returns A `httr2` request.
 #' @noRd
 req_user_agent_getrad <- function(req) {
   httr2::req_user_agent(req, string = getOption("getRad.user_agent"))
 }
 
-#' Function to retry a getRad specific httr2 request This function retries the
-#' request if the response status is 429 It retries the request 15 times with a
-#' backoff of 2 times the square root of the number of tries It retries on
-#' failure
+#' Function to retry a getRad specific httr2 request
 #'
-#' @param req an `httr2` request
-#' @param transient_statuses a vector of status codes that are considered
-#'   transient and should be retried
-#' @param max_tries the maximum number of times to retry the request
-#'
-#' @returns an `httr2` request
+#' This function retries the request if the response status is 429. It retries
+#' the request 15 times with a backoff of 2 times the square root of the number
+#' of tries It retries on failure.
+#' @param req `httr2` request.
+#' @param transient_statuses Vector of status codes that are considered
+#'   transient and should be retried.
+#' @param max_tries The maximum number of times to retry the request.
+#' @returns A `httr2` request.
 #' @noRd
 req_retry_getrad <- function(req,
                              transient_statuses = c(429),
@@ -244,7 +222,7 @@ req_retry_getrad <- function(req,
 #' Function to set the cache for a getRad specific httr2 request
 #'
 #' @inheritParams httr2::req_cache
-#' @param req A `httr2` request.
+#' @param req `httr2` request.
 #' @param use_cache Logical indicating whether to use the cache. Default is
 #'   `TRUE`. If `FALSE` the cache is ignored and the file is fetched anew.
 #'    This can also be useful if you want to force a refresh of the cache.
@@ -276,12 +254,11 @@ req_cache_getrad <- function(req,
   )
 }
 
-#' Functions for checking odim codes.
+#' Functions for checking odim codes
 #'
-#' @param x A character to be tested if they are odim codes
-#'
-#' @returns An logical the same length as `x` or an error if it does not match
-#'   in the check functions
+#' @param x Character to be tested if they are odim codes.
+#' @returns A logical the same length as `x` or an error if it does not match
+#'   in the check functions.
 #' @noRd
 is_odim<-function(x){
   if(length(x)<1){
@@ -311,12 +288,10 @@ check_odim_scalar<-function(x){
   )
 }
 
-
 #' Replace "nan" with NaN in a string
 #'
-#' @param string A character vector that may contain "nan" values.
-#'
-#' @return A numeric vector where "nan" values are replaced with NaN and other
+#' @param string Character vector that may contain `"nan"` values.
+#' @return A numeric vector where `"nan"` values are replaced with NaN.
 #' @noRd
 #' @examples
 #' replace_nan_numeric(c("44", "-95.6", "nan", 88))
@@ -324,12 +299,11 @@ replace_nan_numeric <- function(string) {
   as.numeric(replace(string, string == "nan", NaN))
 }
 
-#' Fetch data from a list of URLs and return the raw response bodies.
+#' Fetch data from a list of URLs and return the raw response bodies
 #'
-#' @param url A character vector of URLs to fetch data from.
-#' @param use_cache A logical value indicating whether to use caching for the
-#'  requests. Default is TRUE.
-#'
+#' @param url Character vector of URLs to fetch data from.
+#' @param use_cache Logical value indicating whether to use caching for the
+#'  requests. Default is `TRUE`.
 #' @return A list of raw response bodies from the URLs.
 #' @noRd
 fetch_from_url_raw <- function(urls, use_cache = TRUE){
@@ -349,16 +323,14 @@ fetch_from_url_raw <- function(urls, use_cache = TRUE){
 }
 
 #' Read lines from a list of URLs and return them as a list of character
-#' vectors.
+#' vectors
 #'
-#' @param urls A character vector of URLs to read lines from.
-#' @param use_cache A logical value indicating whether to use caching for the
+#' @param urls Character vector of URLs to read lines from.
+#' @param use_cache Logical value indicating whether to use caching for the
 #'   requests.
-#'
 #' @return A list of character vectors, each containing the lines read from the
 #'  corresponding URL.
 #' @noRd
-#'
 #' @examples
 #' read_lines_from_url(
 #'     file.path("https://raw.githubusercontent.com/philspil66",
@@ -373,12 +345,11 @@ read_lines_from_url <- function(urls, use_cache = TRUE) {
 
 #' Check if a URL exists
 #'
-#' This function sends a HEAD request to check if a URL exists. It returns TRUE
-#' if the URL exists and FALSE if it does not.
+#' This function sends a HEAD request to check if a URL exists. It returns
+#' `TRUE` if the URL exists and `FALSE` if it does not.
 #'
-#' @param url A single URLs as a character to check for existence.
-#'
-#' @return A logical value indicating whether the URL exists (TRUE) or not (FALSE).
+#' @param url Single URLs as a character to check for existence.
+#' @return Logical value indicating whether the URL exists (TRUE) or not (FALSE).
 #' @noRd
 url_exists <- purrr::possibly(
   function(url) {
@@ -396,16 +367,20 @@ url_exists <- purrr::possibly(
   otherwise = FALSE, quiet = TRUE
 )
 
-# Create an .onload function to set package options during load
-# getRad.key_prefix is the default prefix used when setting or getting secrets using keyring
-# getRad.user_agent is the string used as a user agent for the http calls generated in this package
-#   It incorporates the package version using `getNamespaceVersion`
-# getRad.max_cache_age_seconds is the default max cache age for the httr2 cache
-# in seconds
-# getRad.max_cache_size_bytes is the default max cache size for the httr2 cache
-# in bytes
-.onLoad <- function(libname, pkgname) { # nolint
 
+#' Create an .onload function to set package options during load
+#'
+#' - getRad.key_prefix is the default prefix used when setting or getting
+#' secrets using keyring.
+#' - getRad.user_agent is the string used as a user agent for the http calls
+#' generated in this package. It incorporates the package version using
+#' `getNamespaceVersion`.
+#' - getRad.max_cache_age_seconds is the default max cache age for the httr2
+#' cache in seconds.
+#' - getRad.max_cache_size_bytes is the default max cache size for the httr2
+#' cache in bytes.
+#' @noRd
+.onLoad <- function(libname, pkgname) { # nolint
   op <- options()
   op.getRad <- list(
     getRad.key_prefix = "getRad_",

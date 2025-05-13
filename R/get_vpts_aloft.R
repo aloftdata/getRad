@@ -30,6 +30,7 @@
 #'
 #' @importFrom dplyr .data
 #' @importFrom lubridate %within%
+#' @keywords internal
 #'
 #' @examplesIf interactive()
 #'
@@ -46,20 +47,7 @@ get_vpts_aloft <- function(radar_odim_code,
   selected_source <- source
 
   # Check that only one radar is provided (string of length 1)
-  if (!rlang::is_string(radar_odim_code)) {
-    cli::cli_abort(
-      "Please provide (only one) radar as a character vector of length 1.",
-      class = "getRad_error_radar_not_single_string"
-    )
-  }
-
-  # Check that radar_odim_code is a single 5 character string
-  if (nchar(radar_odim_code) != 5) {
-    cli::cli_abort(
-      "Radar ODIM code must be a single 5 character string.",
-      class = "getRad_error_radar_odim_code_invalid"
-    )
-  }
+  check_odim_scalar(radar_odim_code)
 
   # Check if the requested radars are present in the coverage
   if (!all(radar_odim_code %in% coverage$radar)) {
@@ -102,7 +90,7 @@ get_vpts_aloft <- function(radar_odim_code,
         "{dir}/{radar}_vpts_{year}{month}{day}.csv",
         dir = string_extract(path, ".+/.+/.+/[0-9]{4}"),
         radar = string_extract(path, "(?<=daily/).{5}"),
-        year = string_extract(path, "[0-9]{4}"),
+        year = string_extract(path, "(?<=\\/)[0-9]{4}"),
         month = string_extract(path, "(?<=/)[0-9]{2}(?=/)"),
         day = string_extract(path, "[0-9]{2}$")
       )

@@ -203,6 +203,41 @@ req_retry_getrad <- function(req,
   )
 }
 
+#' Functions for checking odim codes.
+#'
+#' @param x A character to be tested if they are odim codes
+#'
+#' @returns An logical the same length as `x` or an error if it does not match
+#'   in the check functions
+#' @noRd
+is_odim<-function(x){
+  if(length(x)<1){
+    return(FALSE)
+    }
+  rlang::is_character(x) & !is.na(x) & grepl("^[a-zA-Z]{5}$",x)
+}
+is_odim_scalar<-function(x){
+  rlang::is_scalar_character(x) && all(is_odim(x))
+}
+check_odim<-function(x){
+  if(!all(is_odim(x)))
+  {
+    cli::cli_abort(
+      "Please provide one or more radars as a character vector.
+      Consisting of 5 characters each to match an odim code.",
+      class = "getRad_error_radar_not_odim_string"
+    )
+  }
+}
+check_odim_scalar<-function(x){
+  if(!is_odim_scalar(x))
+    cli::cli_abort(
+    "Please provide radar as a character vector of length 1.
+    Consisting of 5 characters to match an odim code.",
+    class = "getRad_error_radar_not_single_odim_string"
+  )
+}
+
 # Create an .onload function to set package options during load
 # getRad.key_prefix is the default prefix used when setting or getting secrets using keyring
 # getRad.user_agent is the string used as a user agent for the http calls generated in this package

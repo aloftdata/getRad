@@ -276,6 +276,21 @@ check_odim_scalar<-function(x){
   )
 }
 
+
+#' Replace "nan" with NaN in a string
+#'
+#' @param string A character vector that may contain "nan" values.
+#'
+#' @return A character vector with "nan" replaced by NaN.
+#' @noRd
+#' @examples
+#' replace_nan(c("44", "-95.6", "nan", 88))
+replace_nan <- function(string) {
+  purrr::modify(string, \(string) if (string == "nan") {
+    return(NaN)
+  })
+}
+
 # Create an .onload function to set package options during load
 # getRad.key_prefix is the default prefix used when setting or getting secrets using keyring
 # getRad.user_agent is the string used as a user agent for the http calls generated in this package

@@ -339,23 +339,7 @@ fetch_from_url_raw <- function(urls, use_cache = TRUE){
     # Set retry conditions
     purrr::map(req_retry_getrad) |>
     # Optionally cache the responses
-    (\(request_list) if (use_cache) {
-      purrr::map(
-        request_list,
-        \(request) {
-          httr2::req_cache(request,
-                           path = file.path(
-                             tools::R_user_dir("getRad", "cache"),
-                             "httr2"
-                           ),
-                           max_age = getOption("getRad.max_cache_age_seconds"),
-                           max_size = getOption("getRad.max_cache_size_bytes")
-          )
-        }
-      )
-    } else {
-      request_list
-    })() |>
+    purrr::map(req_cache_getrad) |>
     # Perform the requests in parallel
     httr2::req_perform_parallel() |>
     # Fetch the response bodies and parse it using vroom

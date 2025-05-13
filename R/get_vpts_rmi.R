@@ -53,7 +53,28 @@ get_vpts_rmi <- function(radar_odim_code,
                 ) |>
     purrr::list_rbind()
 
-  return(combined_vpts)
+  # Enrich with metadata from `weather_radars()`, but only from the `main`
+  # source to avoid duplicating rows
+  radar_metadata <-
+    weather_radars() %>%
+    dplyr::filter(.data$source == "main") %>%
+    dplyr::mutate(odimcode,
+      radar_latitude = latitude,
+      radar_longitude = longitude,
+      radar_height = heightofstation,
+      radar_wavelength = round(
+        299792458 / (frequency * 10^7), # speed of light in vacuum
+        digits = 1
+      ),
+      .keep = "none"
+    )
+
+  enriched_vpts <-
+    dplyr::left_join(combined_vpts,
+                     radar_metadata,
+                     by = dplyr::join_by(radar == odimcode))
+
+  return(enriched_vpts)
 }
 
 

@@ -25,3 +25,15 @@ test_that("get_vpts_rmi() returns the expected columns", {
 test_that("get_vpts_rmi() supports intervals passing a year boundary", {
 
 })
+
+test_that("get_vpts_rmi() returns rmi as the source", {
+
+})
+
+test_that("get_vpts_rmi() includes a radar column", {
+
+})
+
+test_that("get_vpts_rmi() includes a source_file column", {
+
+})

@@ -6,22 +6,24 @@
 \usage{
 get_vpts(
   radar,
-  date,
+  datetime,
   source = c("baltrad", "uva", "ecog-04003"),
   return_type = c("vpts", "tibble")
 )
 }
 \arguments{
-\item{radar}{The name of the radar (odim string) as a character string (e.g. \code{"nlhrw"} or \code{"fikor"}).}
+\item{radar}{The name of the radar (odim string) as a character string (e.g.
+\code{"nlhrw"} or \code{"fikor"}).}
 
-\item{date}{Either a single date or a \link[lubridate:interval]{lubridate::interval}}
+\item{datetime}{Either a single date or range as either a \code{character},
+\code{\link[base:Dates]{Date}}, \code{\link[base:DateTimeClasses]{POSIXct}} or a \link[lubridate:interval]{lubridate::interval}}
 
-\item{source}{The source of the data. One of baltrad, uva or ecog-04003. Only
+\item{source}{The source of the data. One of \code{"baltrad"}, \code{"uva"} or \code{"ecog-04003"}. Only
 one source can be queried at a time. If no source is provided \code{baltrad} is
 used.}
 
 \item{return_type}{The type of object that should be returned. By default the
-data is returned as a \link[bioRad:summary.vpts]{bioRad::summary.vpts} object. If set to \code{tibble}, a
+data is returned as a \code{\link[bioRad:summary.vpts]{vpts}} object. If set to \code{"tibble"}, a
 \code{\link[dplyr:reexports]{dplyr::tibble()}} will be returned instead with an extra column for the
 radar source.}
 }
@@ -29,7 +31,7 @@ radar source.}
 By default, a vpts object is returned. See \link[bioRad:summary.vpts]{bioRad::summary.vpts} for
 more information. When multiple radars are selected, a list of vpts objects
 will be returned instead. When \code{return_type = "tibble"}, a single
-\code{\link[dplyr:reexports]{dplyr::tibble()}} is returned with an extra column for the radar source.
+\code{\link[dplyr:reexports]{tibble}} is returned with an extra column for the radar source.
 }
 \description{
 Retrieve vertical profile time series data from the Aloft data repository
@@ -44,13 +46,13 @@ By default, data from the aloft data repository is retrieved from
 
 # Fetch vpts data for a single radar and date
 
-get_vpts(radar = "bejab", date = "2023-01-01", source = "baltrad")
+get_vpts(radar = "bejab", datetime = "2023-01-01", source = "baltrad")
 
 # Fetch vpts data for multiple radars and a single date
 
 get_vpts(
   radar = c("dehnr", "deflg"),
-  date = lubridate::ymd("20171015"),
+  datetime = lubridate::ymd("20171015"),
   source = "baltrad"
 )
 
@@ -58,7 +60,7 @@ get_vpts(
 
 get_vpts(
   radar = "bejab",
-  date = lubridate::interval(
+  datetime = lubridate::interval(
     lubridate::ymd_hms("2023-01-01 00:00:00"),
     lubridate::ymd_hms("2023-01-02 00:14:00")
   ), source = "baltrad"
@@ -69,12 +71,12 @@ get_vpts("bejab", lubridate::interval("20210101", "20210301"), "bejab")
 # Fetch vpts data for a single radar and a date range from a specific
 # source
 
-get_vpts(radar = "bejab", date = "2016-09-29", source = "ecog-04003")
+get_vpts(radar = "bejab", datetime = "2016-09-29", source = "ecog-04003")
 
 # Return a tibble instead of a vpts object
 
 get_vpts(
-  radar = "chlem", date = "2023-03-10", source = "baltrad",
+  radar = "chlem", datetime = "2023-03-10", source = "baltrad",
   as_tibble = TRUE
 )
 \dontshow{\}) # examplesIf}

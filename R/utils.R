@@ -385,7 +385,8 @@ url_exists <- purrr::possibly(
     url_does_not_exist <- httr2::request(url) |>
       req_user_agent_getrad() |>
       # Retry, but give up quickly
-      httr2::req_retry(max_seconds = 0.1) |>
+      httr2::req_retry(max_seconds = 2,
+                       max_tries = 3) |>
       httr2::req_method("HEAD") |>
       httr2::req_perform() |>
       httr2::resp_is_error()

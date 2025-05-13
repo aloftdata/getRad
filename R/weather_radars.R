@@ -4,13 +4,16 @@
 #' from the [OPERA network](https://www.eumetnet.eu/activities/observations-programme/current-activities/opera/).
 #' The retrieved data is returned as a tibble.
 #'
+#' @inheritParams req_cache_getrad
+#'
 #' @return A tibble containing weather radar metadata
 #' @importFrom dplyr .data
 #' @export
 #'
 #' @examplesIf interactive()
+#'
 #' weather_radars()
-weather_radars <- function() {
+weather_radars <- function(use_cache = TRUE) {
   # Build the url where the JSON files are hosted on eumetnet
 
   # Read source JSON files from OPERA
@@ -41,6 +44,7 @@ weather_radars <- function() {
     httr2::request(json_url["url"]) |>
       req_user_agent_getrad() |>
       req_retry_getrad() |>
+      req_cache_getrad(use_cache = use_cache) |>
       httr2::req_perform() |>
       # The object is actually returned as text/plain
       httr2::resp_body_json(check_type = FALSE) |>

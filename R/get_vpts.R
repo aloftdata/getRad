@@ -56,7 +56,7 @@
 #'   get_vpts(radar = "sehem", datetime = "20170704")
 #'
 #'   # If you provide an interval with specific time information, only for this
-#'   interval is returned
+#'   # interval is returned
 #'
 #'   get_vpts(radar = "frtou", datetime = lubridate::interval("2021-01-17 22:15:00",
 #'                                                            "2021-01-18 02:45:00"))

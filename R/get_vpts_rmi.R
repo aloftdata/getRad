@@ -26,11 +26,12 @@ get_vpts_rmi <- function(radar_odim_code,
     ) |>
     format("%Y%m%d")
 
-  rmi_urls <- glue::glue(rmi_data_url,
+  rmi_urls <- paste(
+    rmi_data_url,
     radar_odim_code,
     years_in_interval,
-    "{radar_odim_code}_vpts_{yyyymmdd_in_interval}.txt",
-    .sep = "/"
+    paste0(radar_odim_code, "_vpts_", yyyymmdd_in_interval, ".txt"),
+    sep = "/"
   )
 
   # For every url, parse the VPTS

@@ -18,8 +18,6 @@
 #'   [`tibble`][dplyr::tibble()] is returned with an extra column for the radar
 #'   source.
 #'
-#' @importFrom dplyr .data
-#' @importFrom lubridate %within%
 #' @export
 #'
 #' @examplesIf interactive()

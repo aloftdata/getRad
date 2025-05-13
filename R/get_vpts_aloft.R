@@ -28,8 +28,6 @@
 #'   repository. If not provided, it will be fetched from via the internet.
 #' @return A list of vpts data.frames
 #'
-#' @importFrom dplyr .data
-#' @importFrom lubridate %within%
 #' @keywords internal
 #'
 #' @examplesIf interactive()

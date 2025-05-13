@@ -5,7 +5,6 @@
 #' The retrieved data is returned as a tibble.
 #'
 #' @return A tibble containing weather radar metadata
-#' @importFrom dplyr .data
 #' @export
 #'
 #' @examplesIf interactive()

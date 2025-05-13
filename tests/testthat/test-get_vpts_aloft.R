@@ -9,7 +9,7 @@ test_that("get_vpts_aloft() returns error on invalid odim code", {
       source = "uva",
       coverage
     ),
-    class = "getRad_error_radar_odim_code_invalid"
+    class = "getRad_error_radar_not_single_odim_string"
   )
   # radar is not a string
   expect_error(
@@ -19,7 +19,7 @@ test_that("get_vpts_aloft() returns error on invalid odim code", {
       source = "uva",
       coverage
     ),
-    class = "getRad_error_radar_not_single_string"
+    class = "getRad_error_radar_not_single_odim_string"
   )
 })
 
@@ -31,7 +31,7 @@ test_that("get_vpts_aloft() returns error when multiple radars are queried", {
       source = "uva",
       coverage
     ),
-    class = "getRad_error_radar_not_single_string"
+    class = "getRad_error_radar_not_single_odim_string"
   )
 })
 

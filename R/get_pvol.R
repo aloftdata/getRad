@@ -1,7 +1,9 @@
 #' Retrieve polar volumes from [Supported countries](https://aloftdata.github.io/getRad/articles/supported_countries.html).
 #'
-#' @param radar The name of the radar (odim string) as a character string (e.g. `"nlhrw"` or `"fikor"`).
-#' @param time The time as a `POSIXct` for the polar volume to download.
+#' @param radar The name of the radar (odim string) as a character string (e.g.
+#'   `"nlhrw"` or `"fikor"`).
+#' @param datetime The time as a `POSIXct` vector for the polar volume(s) to download or
+#'    an [`interval`][lubridate::interval] in which all polar volumes need to be downloaded.
 #' @param ... Additional arguments passed on to the individual reading functions, for example `param="all"` to the [bioRad::read_pvolfile()] function.
 #'
 #' @details
@@ -20,25 +22,54 @@
 #'   as.POSIXct(Sys.Date())
 #' )
 #' }
-get_pvol <- function(radar = NULL, time = NULL, ...) {
-  if (is.null(radar) ||
-    !rlang::is_character(radar) ||
-    !all(nchar(radar) == 5) ||
-    anyDuplicated(radar)) {
-    cli::cli_abort("The argument {.arg radar} to the {.fn get_pvol} function should be a characters with each a length of 5 characters corresponding to ODIM codes. None should be duplicated.",
-      class = "getRad_error_radar_not_character"
+
+get_pvol <- function(radar = NULL, datetime = NULL, ...) {
+  check_odim(radar)
+  if(anyDuplicated(radar))
+  {
+    cli::cli_abort(
+      "The argument {.arg radar} contains duplications these should be removed.",
+      class="getRad_error_radar_duplicated"
     )
   }
-  if (is.null(time) ||
-    !inherits(time, "POSIXct") ||
-    anyDuplicated(time) ||
-    any((as.numeric(time) %% 300) != 0)) {
-    cli::cli_abort("The argument {.arg time} to the {.fn get_pvol} function should be a POSIXct without duplications. All timestamps should be rounded to 5 minutes intervals.",
+  if (is.null(datetime) ||
+      !inherits(datetime, c("POSIXct", "Interval")) ||
+      anyDuplicated(datetime) ||
+      (any((as.numeric(datetime) %% 300) != 0) && inherits(datetime, "POSIXct"))) {
+    cli::cli_abort("The argument {.arg datetime} to the {.fn get_pvol} function
+                   should be a POSIXct without duplications. All timestamps
+                   should be rounded to 5 minutes intervals.",
       class = "getRad_error_time_not_correct"
     )
   }
-  if (length(time) != 1) {
-    polar_volumes <- (purrr::map(time, get_pvol, radar = radar, ...))
+  if (lubridate::is.interval(datetime) && !rlang::is_scalar_vector(datetime)) {
+    cli::cli_abort(
+      "Only one `interval` can be provided as the {.arg datetime} argument.",
+      class = "getRad_error_multiple_intervals_provided"
+    )
+  }
+  if (lubridate::is.interval(datetime)) {
+    timerange <-
+      lubridate::floor_date(
+        seq(lubridate::int_start(datetime),
+          lubridate::int_end(datetime),
+          by = "5 mins"
+        ),
+        "5 mins"
+      )
+    datetime <- timerange[timerange %within% datetime]
+    if (length(datetime) > 10) {
+      cli::cli_warn("The interval specified for {.arg datetime} resulted in
+                    {length(datetime)} timestamps, when loading that may polar
+                    volumes at the same time computational issues frequently
+                    occur.",
+        class = "getRad_warn_many_pvols_requested"
+      )
+    }
+  }
+
+  if (length(datetime) != 1) {
+    polar_volumes <- (purrr::map(datetime, get_pvol, radar = radar, ...))
     if (length(radar) != 1) {
       # in case multiple radars are requested the results of the recursive call
       # is a list of polar volumes, to prevent a nested list this unlist
@@ -48,11 +79,11 @@ get_pvol <- function(radar = NULL, time = NULL, ...) {
     return(polar_volumes)
   }
   if (length(radar) != 1) {
-    return(purrr::map(radar, get_pvol, time = time, ...))
+    return(purrr::map(radar, get_pvol, datetime = datetime, ...))
   }
 
   fn <- select_get_pvol_function(radar)
-  get(fn)(radar, time, ...)
+  get(fn)(radar, datetime, ...)
 }
 
 

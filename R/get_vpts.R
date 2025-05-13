@@ -26,6 +26,7 @@
 #' @examplesIf interactive()
 #' # Get VPTS data for a single radar and date
 #' get_vpts(radar = "bejab", datetime = "2023-01-01", source = "baltrad")
+#' get_vpts(radar = "bejab", datetime = "2020-01-19", source = "rmi")
 #'
 #' # Get VPTS data for multiple radars and a single date
 #' get_vpts(
@@ -57,7 +58,7 @@
 #' )
 get_vpts <- function(radar,
                      datetime,
-                     source = c("baltrad", "uva", "ecog-04003"),
+                     source = c("baltrad", "uva", "ecog-04003", "rmi"),
                      return_type = c("vpts", "tibble")) {
   # Check source argument
   ## If no source is provided, set "baltrad" as default
@@ -164,6 +165,19 @@ get_vpts <- function(radar,
 
   ## We need to round the interval because coverage only has daily resolution
   rounded_interval <- round_interval(date_interval, "day")
+
+  # Return early for RMI
+  if (source == "rmi") {
+    purrr::map(
+      radar,
+      \(current_radar) {
+        get_vpts_rmi(
+          radar_odim_code = current_radar,
+          rounded_interval = date_interval
+        )
+      }
+    )
+  }
 
   # Discover what data is available for the requested radar and time interval
   coverage <- aloft_data_coverage(use_cache = TRUE)

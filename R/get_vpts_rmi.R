@@ -39,7 +39,7 @@ get_vpts_rmi <- function(radar_odim_code,
 
   if(!all(purrr::map_lgl(rmi_urls, url_exists))){
     cli::cli_abort(
-      "No data found for the requested radar(s) and date(s).",
+      "No data found for the requested radar(s) and date(s) on RMI.",
       class = "getRad_error_date_not_found"
     )
   }

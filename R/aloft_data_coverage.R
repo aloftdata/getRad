@@ -15,6 +15,7 @@
 #' This can be changed by setting `options(getRad.aloft_data_url)` to any
 #' desired url.
 #'
+#' @inheritParams req_cache_getrad
 #' @param use_cache Logical indicating whether to use the cache. Default is
 #'   `TRUE`. If `FALSE` the cache is ignored and the file is fetched from the
 #'   aloft data repository. This can be useful if you want to force a refresh of
@@ -33,19 +34,7 @@ aloft_data_coverage <- function(use_cache = TRUE) {
     httr2::req_url_path_append("coverage.csv") |>
     req_user_agent_getrad() |>
     req_retry_getrad() |>
-    (\(request) if (use_cache) {
-      httr2::req_cache(
-        request,
-        path =
-          file.path(
-            tools::R_user_dir("getRad", "cache"),
-            "httr2"
-          ),
-        max_age = getOption("getRad.max_cache_age_seconds")
-        )
-    } else {
-      request
-    })() |>
+    req_cache_getrad(use_cache = use_cache) |>
     httr2::req_progress(type = "down") |>
     httr2::req_perform() |>
     httr2::resp_body_raw()

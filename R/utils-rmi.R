@@ -55,6 +55,26 @@ get_dens <- function(lines, start = 76, stop = 82) {
     parse_numeric()
 }
 
+get_dbzh <- function(lines, start, stop){
+
+}
+
+get_n <- function(lines, start, stop){
+
+}
+
+get_n_dbz <- function(lines, start, stop){
+
+}
+
+get_n_all <- function(lines, start, stop){
+
+}
+
+get_n_dbz_all <- function(lines, start, stop){
+
+}
+
 parse_numeric <- function(x) {
   string_squish(x) |>
     as.numeric()

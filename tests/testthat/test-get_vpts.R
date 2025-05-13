@@ -257,6 +257,61 @@ test_that("get_vpts() can fetch vpts data for a date range", {
   )
 })
 
+test_that("get_vpts() returns data for a whole day if datetime has no time", {
+  skip_if_offline()
+  single_radar_single_day <-
+    get_vpts(
+      radar = "bejab",
+      datetime = "2023-01-01",
+      source = "baltrad",
+      return_type = "tibble"
+    )
+
+  days_returned <-
+    dplyr::pull(single_radar_single_day, dplyr::all_of("datetime")) |>
+    lubridate::floor_date(unit = "days") |>
+    unique()
+
+  expect_length(
+    days_returned,
+    1L
+  )
+})
+
+test_that("get_vpts() returns data for the interval provided only", {
+  skip_if_offline()
+  ## Define an interval to fetch data for
+  int_start <- lubridate::ymd_hms("2024-10-21 14:22:11")
+  int_end <- lubridate::ymd_hms("2024-10-21 15:23:07")
+
+  radar_interval_hhmmss <- get_vpts(
+    radar = "seoer",
+    lubridate::interval(int_start, int_end),
+    source = "baltrad",
+    return_type = "tibble"
+  )
+
+  ## The function should always round the timestamps down, this causes the least
+  ## surprise
+  ### get the measuring frequency (select the most common one)
+  update_freq <-
+    dplyr::distinct(radar_interval_hhmmss, datetime) |>
+    dplyr::pull(dplyr::all_of("datetime")) |>
+    diff() |>
+    mean() |>
+    as.numeric(units = "mins")
+
+  expect_identical(
+    min(radar_interval_hhmmss$datetime),
+    lubridate::ceiling_date(int_start, unit = paste(update_freq, "minutes"))
+  )
+
+  expect_identical(
+    max(radar_interval_hhmmss$datetime),
+    lubridate::floor_date(int_end, unit = paste(update_freq, "minutes"))
+  )
+})
+
 test_that("get_vpts() supports POSIXct dates", {
   skip_if_offline()
 

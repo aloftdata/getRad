@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_vpts_aloft.R
 \name{get_vpts_aloft}
 \alias{get_vpts_aloft}
-\title{Get VPTS data from aloftdata}
+\title{Get VPTS data from the Aloft bucket}
 \usage{
 get_vpts_aloft(
   radar_odim_code,
@@ -12,35 +12,33 @@ get_vpts_aloft(
 )
 }
 \arguments{
-\item{radar_odim_code}{The radar ODIM code.}
+\item{radar_odim_code}{Radar ODIM code.}
 
-\item{rounded_interval}{The interval to fetch data for, rounded to nearest
-day}
+\item{rounded_interval}{Interval to fetch data for, rounded to nearest day.}
 
-\item{source}{The source of the data. One of baltrad, uva or ecog-04003.}
+\item{source}{Source of the data. One of \code{baltrad}, \code{uva} or \code{ecog-04003}.}
 
-\item{coverage}{A data.frame containing the coverage of the aloft data
-repository. If not provided, it will be fetched from via the internet.}
+\item{coverage}{A data frame containing the coverage of the Aloft bucket.
+If not provided, it will be fetched from via the internet.}
 }
 \value{
-A list of vpts data.frames
+A list of vpts data frames.
 }
 \description{
-This function retrieves VPTS (Vertical Profile Time Series) data from the
-aloftdata server.
+Gets VPTS data from the Aloft bucket.
 }
 \details{
-By default, data from the aloft data repository is retrieved from
-\url{https://aloftdata.s3-eu-west-1.amazonaws.com}, this can be changed by setting
-\code{options(getRad.aloft_data_url)} to any desired url.
+By default, data from the \href{https://aloftdata.eu/browse/}{Aloft bucket} are
+retrieved from \url{https://aloftdata.s3-eu-west-1.amazonaws.com}. This can be changed by
+setting \code{options(getRad.aloft_data_url)} to any desired url.
 }
 \section{Inner working}{
 
 \itemize{
-\item Constructs the S3 paths for the VPTS files based on the input
-\item Performs parallel HTTP requests to fetch the vpts-csv data
-\item Parses the response bodies with some assumptions about the column classes
-\item Adds a column with the radar source
+\item Constructs the S3 paths for the VPTS files based on the input.
+\item Performs parallel HTTP requests to fetch the VPTS-CSV data.
+\item Parses the response bodies with some assumptions about the column classes.
+\item Adds a column with the radar source.
 \item Overwrites the radar column with the radar_odim_code, all other values for
 this column are considered in error.
 }
@@ -48,11 +46,10 @@ this column are considered in error.
 
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-
 get_vpts_aloft(
-  "bejab",
-  lubridate::interval("20240305", "20240307"),
-  "baltrad"
+  radar_odim_code = "bejab",
+  rounded_interval = lubridate::interval("20240305", "20240307"),
+  source = "baltrad"
 )
 \dontshow{\}) # examplesIf}
 }

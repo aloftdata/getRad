@@ -1,14 +1,14 @@
-#' Retrieve polar volumes
+#' Retrieve polar volumes from [Supported countries](https://aloftdata.github.io/getRad/articles/supported_countries.html).
 #'
 #' @param radar The name of the radar (odim string) as a character string (e.g. `"nlhrw"` or `"fikor"`).
-#' @param time The time as a `POSIXct` for the polar volume to download
+#' @param time The time as a `POSIXct` for the polar volume to download.
 #' @param ... Additional arguments passed on to the individual reading functions, for example `param="all"` to the [bioRad::read_pvolfile()] function.
 #'
 #' @details
 #'
-#' For more details on specific countries please see the vignettes.
+#' For more details on specific countries please see the map in the [vignette](https://aloftdata.github.io/getRad/articles/supported_countries.html).
 #'
-#' @return Either a polar volume or a list of polar volumes
+#' @return Either a polar volume or a list of polar volumes.
 #' @export
 #'
 #' @examples

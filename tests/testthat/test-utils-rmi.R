@@ -92,7 +92,7 @@ test_that("get_dens() returns the expected value", {
 
 test_that("get_dbzh() returns the expected value", {
   expect_identical(
-    get_dbzh(fwf_text[6]),
+    get_dbzh(fwf_text[5]),
     26.95
   )
 })
@@ -100,27 +100,27 @@ test_that("get_dbzh() returns the expected value", {
 test_that("get_n() returns the expected value", {
   expect_identical(
     get_n(fwf_text[6]),
-    184L
+    1044L
   )
 })
 
 test_that("get_n_dbz() returns the expected value", {
   expect_identical(
-    get_n_dbz(fwf_text[6]),
+    get_n_dbz(fwf_text[5]),
     829L
   )
 })
 
 test_that("get_n_all() returns the expected value", {
   expect_identical(
-    get_n_all(fwf_text[6]),
+    get_n_all(fwf_text[5]),
     1593L
   )
 })
 
 test_that("get_n_dbz_all() returns the expected value", {
   expect_identical(
-    get_n_dbz_all(fwf_text[6]),
+    get_n_dbz_all(fwf_text[5]),
     3233L
   )
 })

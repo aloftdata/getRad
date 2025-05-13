@@ -37,3 +37,7 @@ test_that("get_vpts_rmi() includes a radar column", {
 test_that("get_vpts_rmi() includes a source_file column", {
 
 })
+
+test_that("get_vpts_rmi() returns error if radar date combo is not found", {
+
+})

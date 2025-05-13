@@ -1,64 +1,62 @@
-#' Retrieve vertical profile time series data from the Aloft data repository
+#' Get vertical profile time series (VPTS) data from supported sources
+#'
+#' Gets vertical profile time series data from supported sources and returns it
+#' as a (list of) of [vpts objects][bioRad::summary.vpts] or a [dplyr::tibble()]
+#' .
 #'
 #' @inheritParams get_pvol
 #' @inherit get_vpts_aloft details
-#' @param date Either a single date or a [lubridate::interval]
-#' @param source The source of the data. One of baltrad, uva or ecog-04003. Only
-#'   one source can be queried at a time. If no source is provided `baltrad` is
-#'   used.
-#' @param return_type The type of object that should be returned. By default the
-#'   data is returned as a [bioRad::summary.vpts] object. If set to `tibble`, a
-#'   [dplyr::tibble()] will be returned instead with an extra column for the
-#'   radar source.
-#' @return By default, a vpts object is returned. See [bioRad::summary.vpts] for
-#'   more information. When multiple radars are selected, a list of vpts objects
-#'   will be returned instead. When `return_type = "tibble"`, a single
-#'   [dplyr::tibble()] is returned with an extra column for the radar source.
-#'
-#' @importFrom dplyr .data
-#' @importFrom lubridate %within%
+#' @param datetime Either:
+#'   - A [`POSIXct`][base::DateTimeClasses] datetime (or `character`
+#'   representation), for which the data file is downloaded.
+#'   - A [`Date`][base::Dates] date (or `character` representation), for which
+#'   all data files are downloaded.
+#'   - A vector of datetimes or dates, between which all data files are
+#'   downloaded.
+#'   - A [lubridate::interval()], between which all data files are downloaded.
+#' @param source Source of the data. One of `"baltrad"`, `"uva"` or
+#'   `"ecog-04003"`. Only one source can be queried at a time. If no source is
+#'   provided `baltrad` is used.
+#' @param return_type Type of object that should be returned. Either:
+#'   - `"vpts"`: vpts object(s) (default).
+#'   - `"tibble"`: a [dplyr::tibble()].
+#' @return Either a vpts object, a list of vpts objects or a tibble. See
+#'   [bioRad::summary.vpts] for details.
 #' @export
-#'
 #' @examplesIf interactive()
+#' # Get VPTS data for a single radar and date
+#' get_vpts(radar = "bejab", datetime = "2023-01-01", source = "baltrad")
 #'
-#' # Fetch vpts data for a single radar and date
-#'
-#' get_vpts(radar = "bejab", date = "2023-01-01", source = "baltrad")
-#'
-#' # Fetch vpts data for multiple radars and a single date
-#'
+#' # Get VPTS data for multiple radars and a single date
 #' get_vpts(
 #'   radar = c("dehnr", "deflg"),
-#'   date = lubridate::ymd("20171015"),
+#'   datetime = lubridate::ymd("20171015"),
 #'   source = "baltrad"
 #' )
 #'
-#' # Fetch vpts data for a single radar and a date range
-#'
+#' # Get VPTS data for a single radar and a date range
 #' get_vpts(
 #'   radar = "bejab",
-#'   date = lubridate::interval(
+#'   datetime = lubridate::interval(
 #'     lubridate::ymd_hms("2023-01-01 00:00:00"),
 #'     lubridate::ymd_hms("2023-01-02 00:14:00")
-#'   ), source = "baltrad"
+#'   ),
+#'   source = "baltrad"
 #' )
+#' get_vpts("bejab", lubridate::interval("20210101", "20210301"))
 #'
-#' get_vpts("bejab", lubridate::interval("20210101", "20210301"), "bejab")
-#'
-#' # Fetch vpts data for a single radar and a date range from a specific
-#' # source
-#'
-#' get_vpts(radar = "bejab", date = "2016-09-29", source = "ecog-04003")
+#' # Get VPTS data for a single radar, date range and non-default source
+#' get_vpts(radar = "bejab", datetime = "2016-09-29", source = "ecog-04003")
 #'
 #' # Return a tibble instead of a vpts object
-#'
 #' get_vpts(
-#'   radar = "chlem", date = "2023-03-10", source = "baltrad",
-#'   as_tibble = TRUE
+#'   radar = "chlem",
+#'   date = "2023-03-10",
+#'   source = "baltrad",
+#'   return_type = "tibble"
 #' )
-#'
 get_vpts <- function(radar,
-                     date,
+                     datetime,
                      source = c("baltrad", "uva", "ecog-04003"),
                      return_type = c("vpts", "tibble")) {
   # Check source argument
@@ -125,27 +123,43 @@ get_vpts <- function(radar,
   }
 
   # Check that the provided date argument is parsable as a date or interval
-  if (!is.character(date) &&
-    !lubridate::is.timepoint(date) &&
-    !lubridate::is.interval(date)) {
+  if (!is.character(datetime) &&
+    !lubridate::is.timepoint(datetime) &&
+    !lubridate::is.interval(datetime)) {
     cli::cli_abort(
-      "Date argument must be a character, POSIXct, Date, or Interval object.",
+      "{.arg datetime} argument must be a character, POSIXct, Date, or Interval object.",
       class = "getRad_error_date_parsable"
     )
   }
   # Parse the provided date argument to a lubridate interval
   ## If the date is a single date, convert it to an interval by adding a whole
   ## day, minus a second
-  if (!inherits(date, "Interval")) {
-    date_interval <-
-      lubridate::interval(
-        ### starting at the datetime itself
-        lubridate::as_datetime(date),
-        ### to the end of the day
-        end_of_day(date)
-      )
+  if (!inherits(datetime, "Interval")) {
+    datetime_converted <- lubridate::as_datetime(datetime)
+    ### If time information is provided
+    if (any(datetime_converted != lubridate::as_datetime(lubridate::as_date(datetime_converted))) ||
+      inherits(datetime, "POSIXct")) {
+      # timestamp like `datetime`
+      date_interval <-
+        lubridate::interval(
+          ### starting at the datetime itself
+          min(datetime_converted),
+          ### to the end of the day
+          max(datetime_converted)
+        )
+      ### If only date information is provided
+    } else {
+      # date like `datetime`
+      date_interval <-
+        lubridate::interval(
+          ### starting at the datetime itself
+          min(datetime_converted),
+          ### to the end of the day
+          end_of_day(max(datetime_converted))
+        )
+    }
   } else {
-    date_interval <- date
+    date_interval <- datetime
   }
 
   ## We need to round the interval because coverage only has daily resolution

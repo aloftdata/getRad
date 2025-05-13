@@ -2,25 +2,36 @@
 % Please edit documentation in R/get_pvol.R
 \name{get_pvol}
 \alias{get_pvol}
-\title{Retrieve polar volumes}
+\title{Get polar volume (PVOL) data from supported countries}
 \usage{
-get_pvol(radar = NULL, time = NULL, ...)
+get_pvol(radar = NULL, datetime = NULL, ...)
 }
 \arguments{
-\item{radar}{The name of the radar (odim string) as a character string (e.g. \code{"nlhrw"} or \code{"fikor"}).}
+\item{radar}{Name of the radar (odim code) as a character string (e.g.
+\code{"nlhrw"} or \code{"fikor"}).}
 
-\item{time}{The time as a \code{POSIXct} for the polar volume to download}
+\item{datetime}{Either:
+\itemize{
+\item A single \code{\link[base:DateTimeClasses]{POSIXct}}, for which the nearest data
+file is downloaded.
+\item A \code{\link[lubridate:interval]{lubridate::interval()}}, between which all data files are downloaded.
+}}
 
-\item{...}{Additional arguments passed on to the individual reading functions, for example \code{param="all"} to the \code{\link[bioRad:read_pvolfile]{bioRad::read_pvolfile()}} function.}
+\item{...}{Additional arguments passed on to the individual reading
+functions, for example \code{param="all"} to the \code{\link[bioRad:read_pvolfile]{bioRad::read_pvolfile()}}
+function.}
 }
 \value{
-Either a polar volume or a list of polar volumes
+Either a polar volume or a list of polar volumes. See
+\code{\link[bioRad:summary.pvol]{bioRad::summary.pvol()}} for details.
 }
 \description{
-Retrieve polar volumes
+Gets polar volume data for supported countries and returns it as a (list of)
+\link[bioRad:summary.pvol]{polar volume objects}.
 }
 \details{
-For more details on specific countries please see the vignettes.
+For more details on supported countries, see
+\code{vignette("supported_countries")}.
 }
 \examples{
 \dontrun{

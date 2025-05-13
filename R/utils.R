@@ -286,9 +286,10 @@ check_odim_scalar<-function(x){
 #' @examples
 #' replace_nan(c("44", "-95.6", "nan", 88))
 replace_nan <- function(string) {
-  purrr::modify(string, \(string) if (string == "nan") {
+  purrr::map(string, \(string) if (string == "nan") {
     return(NaN)
-  })
+  } else {return(string)}) %>%
+    as.numeric()
 }
 
 # Create an .onload function to set package options during load

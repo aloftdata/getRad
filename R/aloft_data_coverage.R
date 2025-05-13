@@ -16,11 +16,6 @@
 #' desired url.
 #'
 #' @inheritParams req_cache_getrad
-#' @param use_cache Logical indicating whether to use the cache. Default is
-#'   `TRUE`. If `FALSE` the cache is ignored and the file is fetched from the
-#'   aloft data repository. This can be useful if you want to force a refresh of
-#'   the cache.
-#'
 #' @return A data.frame of the coverage file on the aloft data repository
 #' @export
 #'

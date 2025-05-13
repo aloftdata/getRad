@@ -161,7 +161,7 @@ weather_radars_nexrad <- function(use_cache = TRUE, ...) {
       )
     ) |>
     dplyr::mutate(
-      radar = tolower(icao),
+      radar = icao,
       latitude = lat, longitude = lon,
       country = capwords(tolower(country)),
       location = capwords(sub(

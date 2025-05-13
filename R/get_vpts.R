@@ -138,9 +138,9 @@ get_vpts <- function(radar,
   ## If the date is a single date, convert it to an interval by adding a whole
   ## day, minus a second
   if (!inherits(datetime, "Interval")) {
-    datetime_converted<-(lubridate::as_datetime(datetime))
-    if(any(datetime_converted!=lubridate::as_datetime(lubridate::as_date(datetime_converted)))||
-       inherits(datetime,"POSIXct")){
+    datetime_converted <- (lubridate::as_datetime(datetime))
+    if (any(datetime_converted != lubridate::as_datetime(lubridate::as_date(datetime_converted))) ||
+      inherits(datetime, "POSIXct")) {
       # timestamp like `datetime`
       date_interval <-
         lubridate::interval(
@@ -149,17 +149,16 @@ get_vpts <- function(radar,
           ### to the end of the day
           max(datetime_converted)
         )
-    }else{
+    } else {
       # date like `datetime`
       date_interval <-
         lubridate::interval(
           ### starting at the datetime itself
-         min(datetime_converted),
+          min(datetime_converted),
           ### to the end of the day
           end_of_day(max(datetime_converted))
         )
     }
-
   } else {
     date_interval <- datetime
   }

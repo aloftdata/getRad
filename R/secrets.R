@@ -29,9 +29,9 @@ get_secret <- function(name) {
 #' Setting and retrieving secrets from the keyring
 #'
 #' @param name Name of the secret to set or retrieve as a scalar character (e.g. `"nl_api_key"`)
-#' @param secret Optionally a character string the the secret alternatively the system will prompt the user
+#' @param secret Optionally a character string with the secret, alternatively the system will prompt the user.
 #'
-#' When working with a cluster it might be advantageous to use a specific keyring this can be done by setting the `keyring_backend` option in R.
+#' When working with a cluster it might be advantageous to use a specific keyring, this can be done by setting the `keyring_backend` option in R.
 #'
 #' The package uses the option `getRad.key_prefix` as a prefix to all keys stored. If you want to use multiple keys for the same api you can manipulate this option.
 #'

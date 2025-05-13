@@ -54,24 +54,29 @@ get_dens <- function(lines, start = 76, stop = 82) {
     parse_numeric()
 }
 
-get_dbzh <- function(lines, start, stop){
-
+get_dbzh <- function(lines, start = 83, stop = 90){
+  substr(lines, start, stop) |>
+    parse_numeric()
 }
 
-get_n <- function(lines, start, stop){
-
+get_n <- function(lines, start = 91, stop = 96){
+  substr(lines, start, stop) |>
+    parse_integer()
 }
 
-get_n_dbz <- function(lines, start, stop){
-
+get_n_dbz <- function(lines, start = 97, stop = 102){
+  substr(lines, start, stop) |>
+    parse_integer()
 }
 
-get_n_all <- function(lines, start, stop){
-
+get_n_all <- function(lines, start = 103, stop = 107){
+  substr(lines, start, stop) |>
+    parse_integer()
 }
 
-get_n_dbz_all <- function(lines, start, stop){
-
+get_n_dbz_all <- function(lines, start = 109, stop = 114){
+  substr(lines, start, stop) |>
+    parse_integer()
 }
 
 parse_numeric <- function(x) {

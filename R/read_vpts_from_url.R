@@ -12,9 +12,7 @@
 #' thus any fields sent to that function need to be parsed as character vectors.
 #'
 #' @param urls Character vector of URLs to VPTS files.
-#' @param use_cache Logical. If `TRUE`, the response will be cached in package
-#'   cache. If `FALSE` the cache is ignored and the file is fetched from the
-#'   URL. This can be useful if you want to force a refresh of the cache.
+#' @inheritParams req_cache_getrad
 #' @return A list of tibbles, one for each URL.
 #' @noRd
 #' @examples
@@ -36,23 +34,7 @@ read_vpts_from_url <- function(urls, use_cache = TRUE) {
     # Set retry conditions
     purrr::map(req_retry_getrad) |>
     # Optionally cache the responses
-    (\(request_list) if (use_cache) {
-      purrr::map(
-        request_list,
-        \(request) {
-          httr2::req_cache(request,
-            path = file.path(
-              tools::R_user_dir("getRad", "cache"),
-              "httr2"
-            ),
-            max_age = getOption("getRad.max_cache_age_seconds"),
-            max_size = getOption("getRad.max_cache_size_bytes")
-          )
-        }
-      )
-    } else {
-      request_list
-    })() |>
+    purrr::map(\(req) req_cache_getrad(req, use_cache = use_cache)) |>
     # Perform the requests in parallel
     httr2::req_perform_parallel() |>
     # Fetch the response bodies and parse it using vroom

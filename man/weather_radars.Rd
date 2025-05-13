@@ -4,7 +4,12 @@
 \alias{weather_radars}
 \title{Get weather radar metadata}
 \usage{
-weather_radars()
+weather_radars(use_cache = TRUE)
+}
+\arguments{
+\item{use_cache}{Logical indicating whether to use the cache. Default is
+\code{TRUE}. If \code{FALSE} the cache is ignored and the file is fetched anew.
+This can also be useful if you want to force a refresh of the cache.}
 }
 \value{
 A tibble with weather radar metadata.
@@ -21,6 +26,7 @@ and \href{http://eumetnet.eu/wp-content/themes/aeron-child/observations-programm
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+
 weather_radars()
 \dontshow{\}) # examplesIf}
 }

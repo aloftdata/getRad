@@ -44,7 +44,6 @@ get_secret <- function(name) {
 #'   successful.
 #' @rdname secret
 #' @export
-#' @keywords internal
 set_secret <- function(name, secret = NULL) {
   rlang::check_installed("keyring", "to manage secrets in getRad")
   if (!rlang::is_scalar_character(name)) {

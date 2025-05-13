@@ -26,7 +26,6 @@ and \href{http://eumetnet.eu/wp-content/themes/aeron-child/observations-programm
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-
 weather_radars()
 \dontshow{\}) # examplesIf}
 }

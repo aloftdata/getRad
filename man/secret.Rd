@@ -30,4 +30,3 @@ successful.
 \description{
 Setting and retrieving secrets from the keyring
 }
-\keyword{internal}

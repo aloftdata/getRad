@@ -383,7 +383,8 @@ read_lines_from_url <- function(urls, use_cache = TRUE) {
 url_exists <- function(url) {
   url_does_not_exist <- httr2::request(url) |>
     req_user_agent_getrad() |>
-    req_retry_getrad() |>
+    # Retry, but give up quickly
+    httr2::req_retry(max_seconds = 2) |>
     httr2::req_method("HEAD") |>
     httr2::req_perform() |>
     httr2::resp_is_error()

@@ -1,65 +1,60 @@
-#' Retrieve vertical profile time series data from the Aloft bucket
+#' Get vertical profile time series (VPTS) data from supported sources
+#'
+#' Gets vertical profile time series data from supported sources and returns it
+#' as a (list of) of [vpts objects][bioRad::summary.vpts] or a [dplyr::tibble()]
+#' .
 #'
 #' @inheritParams get_pvol
 #' @inherit get_vpts_aloft details
-#' @param datetime Either a single date or range as either a `character`,
-#'   [`Date`][base::Dates], [`POSIXct`][base::DateTimeClasses] or a
-#'   [lubridate::interval]
-#' @param source The source of the data. One of `"baltrad"`, `"uva"` or
+#' @param datetime Either:
+#'   - A [`POSIXct`][base::DateTimeClasses] datetime (or `character`
+#'   representation), for which the data file is downloaded.
+#'   - A [`Date`][base::Dates] date (or `character` representation), for which
+#'   all data files are downloaded.
+#'   - A vector of datetimes or dates, between which all data files are
+#'   downloaded.
+#'   - A [lubridate::interval()], between which all data files are downloaded.
+#' @param source Source of the data. One of `"baltrad"`, `"uva"` or
 #'   `"ecog-04003"`. Only one source can be queried at a time. If no source is
 #'   provided `baltrad` is used.
-#' @param return_type The type of object that should be returned. By default the
-#'   data is returned as a [`vpts`][bioRad::summary.vpts] object. If set to
-#'   `"tibble"`, a [dplyr::tibble()] will be returned instead with an extra
-#'   column for the radar source.
-#' @return By default, a vpts object is returned. See [bioRad::summary.vpts] for
-#'   more information. When multiple radars are selected, a list of vpts objects
-#'   will be returned instead. When `return_type = "tibble"`, a single
-#'   [`tibble`][dplyr::tibble()] is returned with an extra column for the radar
-#'   source.
-#'
+#' @param return_type Type of object that should be returned. Either:
+#'   - `"vpts"`: vpts object(s) (default).
+#'   - `"tibble"`: a [dplyr::tibble()].
+#' @return Either a vpts object, a list of vpts objects or a tibble. See
+#'   [bioRad::summary.vpts] for details.
 #' @export
-#'
 #' @examplesIf interactive()
+#' # Get VPTS data for a single radar and date
+#' get_vpts(radar = "bejab", datetime = "2023-01-01", source = "baltrad")
 #'
-#'   # Fetch vpts data for a single radar and date
-#'
-#'   get_vpts(radar = "bejab", datetime = "2023-01-01", source = "baltrad")
-#'
-#'   # Fetch vpts data for multiple radars and a single date
-#'
-#'   get_vpts( radar = c("dehnr", "deflg"), datetime =
-#'   lubridate::ymd("20171015"), source = "baltrad" )
-#'
-#'   # Fetch vpts data for a single radar and a date range
-#'
-#'   get_vpts( radar = "bejab", datetime = lubridate::interval(
-#'   lubridate::ymd_hms("2023-01-01 00:00:00"), lubridate::ymd_hms("2023-01-02
-#'   00:14:00") ), source = "baltrad" )
-#'
-#'   get_vpts("bejab", lubridate::interval("20210101", "20210301"))
-#'
-#'   # Fetch vpts data for a single radar and a date range from a specific #
-#'   source
-#'
-#'   get_vpts(radar = "bejab", datetime = "2016-09-29", source = "ecog-04003")
-#'
-#'   # Return a tibble instead of a vpts object
-#'
+#' # Get VPTS data for multiple radars and a single date
 #' get_vpts(
-#'   radar = "chlem", date = "2023-03-10", source = "baltrad",
-#'   return_type = "tibble"
+#'   radar = c("dehnr", "deflg"),
+#'   datetime = lubridate::ymd("20171015"),
+#'   source = "baltrad"
 #' )
 #'
-#'   # get_vpts() can return data for a whole day
+#' # Get VPTS data for a single radar and a date range
+#' get_vpts(
+#'   radar = "bejab",
+#'   datetime = lubridate::interval(
+#'     lubridate::ymd_hms("2023-01-01 00:00:00"),
+#'     lubridate::ymd_hms("2023-01-02 00:14:00")
+#'   ),
+#'   source = "baltrad"
+#' )
+#' get_vpts("bejab", lubridate::interval("20210101", "20210301"))
 #'
-#'   get_vpts(radar = "sehem", datetime = "20170704")
+#' # Get VPTS data for a single radar, date range and non-default source
+#' get_vpts(radar = "bejab", datetime = "2016-09-29", source = "ecog-04003")
 #'
-#'   # If you provide an interval with specific time information, only for this
-#'   interval is returned
-#'
-#'   get_vpts(radar = "frtou", datetime = lubridate::interval("2021-01-17 22:15:00",
-#'                                                            "2021-01-18 02:45:00"))
+#' # Return a tibble instead of a vpts object
+#' get_vpts(
+#'   radar = "chlem",
+#'   date = "2023-03-10",
+#'   source = "baltrad",
+#'   return_type = "tibble"
+#' )
 get_vpts <- function(radar,
                      datetime,
                      source = c("baltrad", "uva", "ecog-04003"),

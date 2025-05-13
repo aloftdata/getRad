@@ -1,24 +1,22 @@
-#' Reading vpts files from a vector of urls
+#' Reading VPTS files from a vector of URLs
 #'
-#' This is a simple helper to read a vector of urls as vpts files using vroom
+#' This is a simple helper to read a vector of URLs as VPTS files using vroom
 #' and httr2. This wrapper makes use of purrr to create requests that can be
 #' handled in parallel with our own custom retry settings and user agent.
 #'
 #' Apart from parallelisation and these custom settings, this could also be
-#' handled by simple call to `vroom::vroom(file = urls)`
+#' handled by simple call to `vroom::vroom(file = urls)`.
 #'
-#' This function also includes column specifications for the vpts csv data
+#' This function also includes column specifications for the VPTS-CSV data
 #' standard. However, [bioRad::as.vpts()] currently doesn't support factors,
 #' thus any fields sent to that function need to be parsed as character vectors.
 #'
-#' @param urls A character vector of urls to vpts files.
-#' @param use_cache Logical. If TRUE, the response will be cached in package
+#' @param urls Character vector of URLs to VPTS files.
+#' @param use_cache Logical. If `TRUE`, the response will be cached in package
 #'   cache. If `FALSE` the cache is ignored and the file is fetched from the
-#'   url. This can be useful if you want to force a refresh of the cache.
-#'
-#' @return A list of tibbles, one for each url.
+#'   URL. This can be useful if you want to force a refresh of the cache.
+#' @return A list of tibbles, one for each URL.
 #' @noRd
-#'
 #' @examples
 #' c(
 #'   "https://aloftdata.s3-eu-west-1.amazonaws.com/baltrad/daily/bejab/2024/bejab_vpts_20240305.csv",

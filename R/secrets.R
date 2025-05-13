@@ -28,18 +28,23 @@ get_secret <- function(name) {
 
 #' Setting and retrieving secrets from the keyring
 #'
-#' @param name Name of the secret to set or retrieve as a scalar character (e.g. `"nl_api_key"`)
-#' @param secret Optionally a character string with the secret, alternatively the system will prompt the user.
+#' @param name Name of the secret to set or retrieve as a scalar character
+#'   (e.g. `"nl_api_key"`).
+#' @param secret Optionally a character string with the secret, alternatively
+#'   the system will prompt the user.
 #'
-#' When working with a cluster it might be advantageous to use a specific keyring, this can be done by setting the `keyring_backend` option in R.
+#' When working with a cluster it might be advantageous to use a specific
+#' keyring, this can be done by setting the `keyring_backend` option in R.
 #'
-#' The package uses the option `getRad.key_prefix` as a prefix to all keys stored. If you want to use multiple keys for the same api you can manipulate this option.
+#' The package uses the option `getRad.key_prefix` as a prefix to all keys
+#' stored. If you want to use multiple keys for the same api you can manipulate
+#' this option.
 #'
-#' @return `get_secret` returns a character string, `set_secret` `TRUE` if successful.
+#' @return `get_secret` returns a character string, `set_secret` `TRUE` if
+#'   successful.
 #' @rdname secret
-#'
 #' @export
-
+#' @keywords internal
 set_secret <- function(name, secret = NULL) {
   rlang::check_installed("keyring", "to manage secrets in getRad")
   if (!rlang::is_scalar_character(name)) {
@@ -64,7 +69,6 @@ set_secret <- function(name, secret = NULL) {
   keyring::key_set_with_value(service = sname, password = secret)
   invisible(TRUE)
 }
-
 
 list_secrets <- list(
   "dk_api_key" = c(

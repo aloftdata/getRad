@@ -1,18 +1,23 @@
-#' Retrieve polar volumes from [Supported countries](https://aloftdata.github.io/getRad/articles/supported_countries.html).
+#' Get polar volume (PVOL) data from supported countries
 #'
-#' @param radar The name of the radar (odim string) as a character string (e.g.
+#' Gets polar volume data for supported countries and returns it as a (list of)
+#' [polar volume objects][bioRad::summary.pvol].
+#'
+#' @param radar Name of the radar (odim code) as a character string (e.g.
 #'   `"nlhrw"` or `"fikor"`).
-#' @param datetime The time as a `POSIXct` vector for the polar volume(s) to download or
-#'    an [`interval`][lubridate::interval] in which all polar volumes need to be downloaded.
-#' @param ... Additional arguments passed on to the individual reading functions, for example `param="all"` to the [bioRad::read_pvolfile()] function.
-#'
+#' @param datetime Either:
+#'   - A single [`POSIXct`][base::DateTimeClasses], for which the nearest data
+#'   file is downloaded.
+#'   - A [lubridate::interval()], between which all data files are downloaded.
+#' @param ... Additional arguments passed on to the individual reading
+#'   functions, for example `param="all"` to the [bioRad::read_pvolfile()]
+#'   function.
 #' @details
-#'
-#' For more details on specific countries please see the map in the [vignette](https://aloftdata.github.io/getRad/articles/supported_countries.html).
-#'
-#' @return Either a polar volume or a list of polar volumes.
+#' For more details on supported countries, see
+#' `vignette("supported_countries")`.
+#' @return Either a polar volume or a list of polar volumes. See
+#'   [bioRad::summary.pvol()] for details.
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' get_pvol("deess", as.POSIXct(Sys.Date()))
@@ -22,7 +27,6 @@
 #'   as.POSIXct(Sys.Date())
 #' )
 #' }
-
 get_pvol <- function(radar = NULL, datetime = NULL, ...) {
   check_odim(radar)
   if(anyDuplicated(radar))

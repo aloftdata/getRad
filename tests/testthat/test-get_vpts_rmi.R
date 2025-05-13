@@ -39,5 +39,12 @@ test_that("get_vpts_rmi() includes a source_file column", {
 })
 
 test_that("get_vpts_rmi() returns error if radar date combo is not found", {
-
+  expect_error(
+    get_vpts_rmi("bejab",
+      rounded_interval = lubridate::interval("3030-01-01", "3031-01-01")
+    ),
+    class = "getRad_error_date_not_found"
+  )
 })
+
+

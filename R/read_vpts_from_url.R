@@ -7,7 +7,7 @@
 #' Apart from parallelisation and these custom settings, this could also be
 #' handled by simple call to `vroom::vroom(file = urls)`.
 #'
-#' This function also includes column specifications for the VPTS-CSV data
+#' This function also includes column specifications for the VPTS CSV data
 #' standard. However, [bioRad::as.vpts()] currently doesn't support factors,
 #' thus any fields sent to that function need to be parsed as character vectors.
 #'

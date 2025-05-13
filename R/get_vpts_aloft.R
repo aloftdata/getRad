@@ -12,7 +12,7 @@
 #'
 #' @section Inner working:
 #' - Constructs the S3 paths for the VPTS files based on the input.
-#' - Performs parallel HTTP requests to fetch the VPTS-CSV data.
+#' - Performs parallel HTTP requests to fetch the VPTS CSV data.
 #' - Parses the response bodies with some assumptions about the column classes.
 #' - Adds a column with the radar source.
 #' - Overwrites the radar column with the radar_odim_code, all other values for

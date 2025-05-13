@@ -7,7 +7,7 @@
 get_vpts(
   radar,
   datetime,
-  source = c("baltrad", "uva", "ecog-04003"),
+  source = c("baltrad", "uva", "ecog-04003", "rmi"),
   return_type = c("vpts", "tibble")
 )
 }
@@ -54,6 +54,7 @@ setting \code{options(getRad.aloft_data_url)} to any desired url.
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Get VPTS data for a single radar and date
 get_vpts(radar = "bejab", datetime = "2023-01-01", source = "baltrad")
+get_vpts(radar = "bejab", datetime = "2020-01-19", source = "rmi")
 
 # Get VPTS data for multiple radars and a single date
 get_vpts(

@@ -1,5 +1,5 @@
 skip_if_offline()
-fwf_text <- readr::read_lines("https://opendata.meteo.be/ftp/observations/radar/vbird/bejab/2020/bejab_vpts_20200124.txt")
+fwf_text <- vroom::vroom_lines("https://opendata.meteo.be/ftp/observations/radar/vbird/bejab/2020/bejab_vpts_20200124.txt")
 
 test_that("get_datetime() returns the expected value", {
   expect_identical(

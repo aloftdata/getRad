@@ -40,7 +40,7 @@ get_vpts_rmi <- function(radar_odim_code,
 
   # For every url, parse the VPTS
   combined_vpts <-
-    purrr::map(rmi_urls, readr::read_lines) |>
+    purrr::map(rmi_urls, vroom::vroom_lines) |>
     purrr::map(parse_rmi) |>
     purrr::list_rbind()
 

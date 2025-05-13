@@ -1,0 +1,27 @@
+test_that("get_vpts_rmi() can return vpts data for a single radar", {
+  skip_if_offline()
+
+  rmi_vpts_tbl <-
+    get_vpts_rmi("bejab",
+                 lubridate::interval("20200119", "20200124"))
+
+  # Test that a tibble is returned
+  expect_type(
+    rmi_vpts_tbl,
+    "list"
+  )
+
+  expect_s3_class(
+    rmi_vpts_tbl,
+    "tbl_df"
+  )
+
+})
+
+test_that("get_vpts_rmi() returns the expected columns", {
+
+})
+
+test_that("get_vpts_rmi() supports intervals passing a year boundary", {
+
+})

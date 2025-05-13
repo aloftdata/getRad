@@ -11,8 +11,7 @@ get_datetime <- function(lines, start = 0, stop = 13) {
 }
 get_height <- function(lines, start = 14, stop = 18) {
   substr(lines, start, stop) |>
-    string_squish() |>
-    as.integer()
+    parse_integer()
 }
 get_u <- function(lines, start = 19, stop = 25) {
   substr(lines, start, stop) |>
@@ -78,4 +77,9 @@ get_n_dbz_all <- function(lines, start, stop){
 parse_numeric <- function(x) {
   string_squish(x) |>
     as.numeric()
+}
+
+parse_integer <- function(x) {
+  string_squish(x) |>
+    as.integer()
 }

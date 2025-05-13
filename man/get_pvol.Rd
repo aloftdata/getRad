@@ -2,25 +2,25 @@
 % Please edit documentation in R/get_pvol.R
 \name{get_pvol}
 \alias{get_pvol}
-\title{Retrieve polar volumes}
+\title{Retrieve polar volumes from \href{https://aloftdata.github.io/getRad/articles/supported_countries.html}{Supported countries}.}
 \usage{
 get_pvol(radar = NULL, time = NULL, ...)
 }
 \arguments{
 \item{radar}{The name of the radar (odim string) as a character string (e.g. \code{"nlhrw"} or \code{"fikor"}).}
 
-\item{time}{The time as a \code{POSIXct} for the polar volume to download}
+\item{time}{The time as a \code{POSIXct} for the polar volume to download.}
 
 \item{...}{Additional arguments passed on to the individual reading functions, for example \code{param="all"} to the \code{\link[bioRad:read_pvolfile]{bioRad::read_pvolfile()}} function.}
 }
 \value{
-Either a polar volume or a list of polar volumes
+Either a polar volume or a list of polar volumes.
 }
 \description{
-Retrieve polar volumes
+Retrieve polar volumes from \href{https://aloftdata.github.io/getRad/articles/supported_countries.html}{Supported countries}.
 }
 \details{
-For more details on specific countries please see the vignettes.
+For more details on specific countries please see the map in the \href{https://aloftdata.github.io/getRad/articles/supported_countries.html}{vignette}.
 }
 \examples{
 \dontrun{

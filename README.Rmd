@@ -54,9 +54,14 @@ plot(calculate_vp(pvol, h_layer = 50, n_layer = 40))
 There is also the possibility to download vertical profile time series from the [aloft](https://aloftdata.eu/) data repository as vertical profile time series
 
 ```{r vpts}
-vpts_list<-get_vpts(c("bewid","deess"),
-                    as.Date(c("2016-10-03","2016-10-05")),
-                    source="ecog-04003")
+vpts_list <- get_vpts(c("bewid", "deess"),
+  lubridate::interval(lubridate::as_datetime("2016-10-03 16:00:00"), 
+                      lubridate::as_datetime("2016-10-05 10:00:00")),
+  source = "ecog-04003"
+)
+par(mfrow = 2:1)
+for(i in names(vpts_list))
+  plot(regularize_vpts(vpts_list[[i]]), main=i)
 ```
 
 ## Meta

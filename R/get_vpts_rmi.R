@@ -1,7 +1,5 @@
 #' Get VPTS RMI
 #' @inheritParams get_vpts_aloft
-#'
-#' @return A list of vpts data.frames from RMI.
 #' @keywords internal
 #'
 #' @examples
@@ -40,10 +38,10 @@ get_vpts_rmi <- function(radar_odim_code,
   rmi_files <-
     purrr::map(
       rmi_urls,
-      ~ vroom::vroom_lines(.x,
-                           progress = FALSE
+      read_lines_from_url,
+      .progress = TRUE
       )
-    )
+
 
   combined_vpts <-
     # drop the header for parsing

@@ -7,10 +7,9 @@
 get_vpts_rmi(radar_odim_code, rounded_interval)
 }
 \arguments{
-\item{radar_odim_code}{The radar ODIM code.}
+\item{radar_odim_code}{Radar ODIM code.}
 
-\item{rounded_interval}{The interval to fetch data for, rounded to nearest
-day}
+\item{rounded_interval}{Interval to fetch data for, rounded to nearest day.}
 }
 \value{
 A tibble with the parsed VPTS data.

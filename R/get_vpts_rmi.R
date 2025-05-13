@@ -19,9 +19,6 @@ get_vpts_rmi <- function(radar_odim_code,
     seq(lubridate::year(lubridate::int_start(rounded_interval)),
         lubridate::year(lubridate::int_end(rounded_interval)))
 
-
-  paste(rmi_data_url, radar_odim_code, years_in_interval)
-
   yyyymmdd_in_interval <-
     seq(lubridate::int_start(rounded_interval),
       lubridate::int_end(rounded_interval),

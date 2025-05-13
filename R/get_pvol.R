@@ -22,15 +22,14 @@
 #'   as.POSIXct(Sys.Date())
 #' )
 #' }
-get_pvol <- function(radar = NULL, datetime = NULL, ...) {
-  if (is.null(radar) ||
-      !rlang::is_character(radar) ||
-      !all(nchar(radar) == 5) ||
-      anyDuplicated(radar)) {
-    cli::cli_abort("The argument {.arg radar} to the {.fn get_pvol} function
-                   should be a characters with each a length of 5 characters
-                   corresponding to ODIM codes. None should be duplicated.",
-      class = "getRad_error_radar_not_character"
+
+get_pvol <- function(radar = NULL, time = NULL, ...) {
+  check_odim(radar)
+  if(anyDuplicated(radar))
+  {
+    cli::cli_abort(
+      "The argument {.arg radar} contains duplications these should be removed.",
+      class="getRad_error_radar_duplicated"
     )
   }
   if (is.null(datetime) ||

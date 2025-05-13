@@ -2,22 +2,22 @@
 # files
 
 test_that("get_pvol radar argument", {
-  expect_error(get_pvol(), class = "getRad_error_radar_not_character")
+  expect_error(get_pvol(), class = "getRad_error_radar_not_odim_string")
   expect_error(
     get_pvol(1L, datetime = as.POSIXct(Sys.Date())),
-    class = "getRad_error_radar_not_character"
+    class = "getRad_error_radar_not_odim_string"
   )
   expect_error(
     get_pvol("nldhlu", datetime = as.POSIXct(Sys.Date())),
-    class = "getRad_error_radar_not_character"
+    class = "getRad_error_radar_not_odim_string"
   )
   expect_error(
     get_pvol(c("nlhrw", "nldhlu"), datetime = as.POSIXct(Sys.Date())),
-    class = "getRad_error_radar_not_character"
+    class = "getRad_error_radar_not_odim_string"
   )
   expect_error(
     get_pvol(c("nlhrw", "nldhl", "nlhrw"), datetime = as.POSIXct(Sys.Date())),
-    class = "getRad_error_radar_not_character"
+    class = "getRad_error_radar_duplicated"
   )
   expect_error(
     get_pvol("nnhrw", datetime = as.POSIXct(Sys.Date())),

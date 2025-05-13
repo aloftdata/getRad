@@ -2,7 +2,7 @@
 % Please edit documentation in R/aloft_data_coverage.R
 \name{aloft_data_coverage}
 \alias{aloft_data_coverage}
-\title{Get coverage table for Aloft bucket}
+\title{Get coverage of Aloft bucket}
 \usage{
 aloft_data_coverage(use_cache = TRUE)
 }

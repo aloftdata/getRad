@@ -1,4 +1,4 @@
-#' Get coverage table for Aloft bucket
+#' Get coverage of Aloft bucket
 #'
 #' Retrieves an overview of the number of hdf5 files per directory in the
 #' [Aloft bucket](https://aloftdata.eu/browse/), based on the `coverage.csv`

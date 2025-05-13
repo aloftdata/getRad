@@ -371,6 +371,26 @@ read_lines_from_url <- function(urls, use_cache = TRUE) {
     ))
 }
 
+#' Check if a URL exists
+#'
+#' This function sends a HEAD request to check if a URL exists. It returns TRUE
+#' if the URL exists and FALSE if it does not.
+#'
+#' @param url A single URLs as a character to check for existence.
+#'
+#' @return A logical value indicating whether the URL exists (TRUE) or not (FALSE).
+#' @noRd
+url_exists <- function(url) {
+  url_does_not_exist <- httr2::request(url) |>
+    req_user_agent_getrad() |>
+    req_retry_getrad() |>
+    httr2::req_method("HEAD") |>
+    httr2::req_perform() |>
+    httr2::resp_is_error()
+
+  return(!url_does_not_exist)
+}
+
 # Create an .onload function to set package options during load
 # getRad.key_prefix is the default prefix used when setting or getting secrets using keyring
 # getRad.user_agent is the string used as a user agent for the http calls generated in this package

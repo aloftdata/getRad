@@ -45,7 +45,7 @@ string_replace <- function(string, pattern, replacement) {
 #' @param pattern The pattern to search for in the string.
 #' @param replacement The replacement string.
 #'
-#' @return
+#' @return The modified string with all occurrences of the pattern replaced.
 #' @noRd
 #'
 #' @examples

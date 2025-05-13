@@ -34,6 +34,44 @@ string_replace <- function(string, pattern, replacement) {
   sub(pattern, replacement, string, perl = TRUE)
 }
 
+
+#' Replace all occurrences of a pattern in a string with a replacement.
+#'
+#' This function uses regular expressions to replace all occurrences of a
+#' pattern in a string with a specified replacement. This is a base replacement
+#' of stringr::str_replace_all()
+#'
+#' @param string The input string.
+#' @param pattern The pattern to search for in the string.
+#' @param replacement The replacement string.
+#'
+#' @return
+#' @noRd
+#'
+#' @examples
+#' string_replace_all("aaabbcc", "a", "_")
+string_replace_all <- function(string, pattern, replacement) {
+  gsub(pattern, replacement, string, perl = TRUE)
+}
+
+#' Remove all whitespace from a string from both ends.
+#'
+#' This function uses regular expressions to remove all whitespace from a
+#' string. This is a base replacement of stringr::str_squish()
+#'
+#' @param string The input string.
+#'
+#' @return A string with all whitespace removed from both ends.
+#' @noRd
+#'
+#' @examples
+#' string_squish("  aoosh  ")
+#' string_squish(" A sentence with extra whitespace.   ")
+string_squish <- function(string){
+  string_replace_all(string, "^\\s+", "") |>
+    string_replace_all("\\s+$", "")
+}
+
 #' Round a lubridate interval
 #'
 #' Extension of [lubridate::round_date()] to round an interval, by default by

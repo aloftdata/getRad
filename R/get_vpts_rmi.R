@@ -45,63 +45,8 @@ get_vpts_rmi <- function(radar_odim_code,
     purrr::list_rbind()
 
   return(combined_vpts)
-
-  # cols_widths <- c(
-  #
-  # )
-  # cols$names <- c(
-  #   "date",
-  #   "time",
-  #   "HGHT",
-  #   "u",
-  #   "v",
-  #   "w",
-  #   "ff",
-  #   "dd",
-  #   "sd_vvp",
-  #   "gap",
-  #   "dbz",
-  #   "eta",
-  #   "dens",
-  #   "DBZH",
-  #   "n",
-  #   "n_dbz",
-  #   "n_all",
-  #   "n_dbz_all"
-  # )
-  # readr::read_lines("https://opendata.meteo.be/ftp/observations/radar/vbird/bejab/2020/bejab_vpts_20200124.txt") |>
-  #   I() |>
-  #   readr::read_fwf(col_positions = readr::fwf_widths(cols$widths,
-  #                                                     cols$names),
-  #                   comment = "#",
-  #                   show_col_types = FALSE) |>
-  #   purrr::set_names(col_names)
-
 }
-# fwf_text <-
-#   readr::read_lines("https://opendata.meteo.be/ftp/observations/radar/vbird/bejab/2020/bejab_vpts_20200124.txt")
-# row_index <- 5
-# get_datetime <- function(row_index, start = 0, stop = 13){
-#   purrr::chuck(fwf_text, row_index) |>
-#     substr(start, stop) |>
-#     lubridate::ymd_hm()
-# }
-# get_height <- function(row_index, start = 14, stop = 18){
-#   purrr::chuck(fwf_text, row_index) |>
-#     substr(start, stop) |>
-#     string_squish() |>
-#     as.integer()
-# }
-# get_u
-# get_v
-# get_w
-# get_ff <- function(row, 41, 46)
-# get_dd <- function(row, 47, 52)
-# get_sd_vpp <- function(row, 41,46)
-# get_gap
-# get_dbz
-# get_eta <- function(row, 70, 75)
-# get_dens <- function(row, 76, 82)
+
 
 parse_rmi <- function(lines){
   dplyr::tibble(

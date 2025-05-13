@@ -81,6 +81,11 @@ parse_rmi <- function(lines){
     gap = get_gap(lines),
     dbz = get_dbz(lines),
     eta = get_eta(lines),
-    dens = get_dens(lines)
+    dens = get_dens(lines),
+    dbzh = get_dbzh(lines),
+    n = get_n(lines),
+    n_dbz = get_n_dbz(lines),
+    n_all = get_n_all(lines),
+    n_dbz_all = get_n_dbz(lines)
   )
 }

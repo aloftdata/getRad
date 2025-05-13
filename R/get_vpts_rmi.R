@@ -14,7 +14,7 @@ get_vpts_rmi <- function(radar_odim_code,
 
   ## Build the potential path for the rmi fwf
 
-  rmi_data_url <- "https://opendata.meteo.be/ftp/observations/radar/vbird/"
+  rmi_data_url <- "https://opendata.meteo.be/ftp/observations/radar/vbird"
 
   ## extract the years in the interval
   years_in_interval <-

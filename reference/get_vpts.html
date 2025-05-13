@@ -45,7 +45,7 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_vpts</span><span class="op">(</span></span>
 <span>  <span class="va">radar</span>,</span>
-<span>  <span class="va">date</span>,</span>
+<span>  <span class="va">datetime</span>,</span>
 <span>  source <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"baltrad"</span>, <span class="st">"uva"</span>, <span class="st">"ecog-04003"</span><span class="op">)</span>,</span>
 <span>  return_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"vpts"</span>, <span class="st">"tibble"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -56,22 +56,24 @@
 
 
 <dl><dt id="arg-radar">radar<a class="anchor" aria-label="anchor" href="#arg-radar"></a></dt>
-<dd><p>The name of the radar (odim string) as a character string (e.g. <code>"nlhrw"</code> or <code>"fikor"</code>).</p></dd>
+<dd><p>The name of the radar (odim string) as a character string (e.g.
+<code>"nlhrw"</code> or <code>"fikor"</code>).</p></dd>
 
 
-<dt id="arg-date">date<a class="anchor" aria-label="anchor" href="#arg-date"></a></dt>
-<dd><p>Either a single date or a <a href="https://lubridate.tidyverse.org/reference/interval.html" class="external-link">lubridate::interval</a></p></dd>
+<dt id="arg-datetime">datetime<a class="anchor" aria-label="anchor" href="#arg-datetime"></a></dt>
+<dd><p>Either a single date or range as either a <code>character</code>,
+<code><a href="https://rdrr.io/r/base/Dates.html" class="external-link">Date</a></code>, <code><a href="https://rdrr.io/r/base/DateTimeClasses.html" class="external-link">POSIXct</a></code> or a <a href="https://lubridate.tidyverse.org/reference/interval.html" class="external-link">lubridate::interval</a></p></dd>
 
 
 <dt id="arg-source">source<a class="anchor" aria-label="anchor" href="#arg-source"></a></dt>
-<dd><p>The source of the data. One of baltrad, uva or ecog-04003. Only
+<dd><p>The source of the data. One of <code>"baltrad"</code>, <code>"uva"</code> or <code>"ecog-04003"</code>. Only
 one source can be queried at a time. If no source is provided <code>baltrad</code> is
 used.</p></dd>
 
 
 <dt id="arg-return-type">return_type<a class="anchor" aria-label="anchor" href="#arg-return-type"></a></dt>
 <dd><p>The type of object that should be returned. By default the
-data is returned as a <a href="https://adriaandokter.com/bioRad/reference/summary.vpts.html" class="external-link">bioRad::summary.vpts</a> object. If set to <code>tibble</code>, a
+data is returned as a <code><a href="https://adriaandokter.com/bioRad/reference/summary.vpts.html" class="external-link">vpts</a></code> object. If set to <code>"tibble"</code>, a
 <code><a href="https://dplyr.tidyverse.org/reference/reexports.html" class="external-link">dplyr::tibble()</a></code> will be returned instead with an extra column for the
 radar source.</p></dd>
 
@@ -81,7 +83,7 @@ radar source.</p></dd>
     <p>By default, a vpts object is returned. See <a href="https://adriaandokter.com/bioRad/reference/summary.vpts.html" class="external-link">bioRad::summary.vpts</a> for
 more information. When multiple radars are selected, a list of vpts objects
 will be returned instead. When <code>return_type = "tibble"</code>, a single
-<code><a href="https://dplyr.tidyverse.org/reference/reexports.html" class="external-link">dplyr::tibble()</a></code> is returned with an extra column for the radar source.</p>
+<code><a href="https://dplyr.tidyverse.org/reference/reexports.html" class="external-link">tibble</a></code> is returned with an extra column for the radar source.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -96,13 +98,13 @@ will be returned instead. When <code>return_type = "tibble"</code>, a single
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Fetch vpts data for a single radar and date</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">get_vpts</span><span class="op">(</span>radar <span class="op">=</span> <span class="st">"bejab"</span>, date <span class="op">=</span> <span class="st">"2023-01-01"</span>, source <span class="op">=</span> <span class="st">"baltrad"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">get_vpts</span><span class="op">(</span>radar <span class="op">=</span> <span class="st">"bejab"</span>, datetime <span class="op">=</span> <span class="st">"2023-01-01"</span>, source <span class="op">=</span> <span class="st">"baltrad"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Fetch vpts data for multiple radars and a single date</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">get_vpts</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  radar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dehnr"</span>, <span class="st">"deflg"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  date <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"20171015"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  datetime <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"20171015"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  source <span class="op">=</span> <span class="st">"baltrad"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -110,7 +112,7 @@ will be returned instead. When <code>return_type = "tibble"</code>, a single
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">get_vpts</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  radar <span class="op">=</span> <span class="st">"bejab"</span>,</span></span>
-<span class="r-in"><span>  date <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/interval.html" class="external-link">interval</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  datetime <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/interval.html" class="external-link">interval</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2023-01-01 00:00:00"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html" class="external-link">ymd_hms</a></span><span class="op">(</span><span class="st">"2023-01-02 00:14:00"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span>, source <span class="op">=</span> <span class="st">"baltrad"</span></span></span>
@@ -121,12 +123,12 @@ will be returned instead. When <code>return_type = "tibble"</code>, a single
 <span class="r-in"><span><span class="co"># Fetch vpts data for a single radar and a date range from a specific</span></span></span>
 <span class="r-in"><span><span class="co"># source</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">get_vpts</span><span class="op">(</span>radar <span class="op">=</span> <span class="st">"bejab"</span>, date <span class="op">=</span> <span class="st">"2016-09-29"</span>, source <span class="op">=</span> <span class="st">"ecog-04003"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">get_vpts</span><span class="op">(</span>radar <span class="op">=</span> <span class="st">"bejab"</span>, datetime <span class="op">=</span> <span class="st">"2016-09-29"</span>, source <span class="op">=</span> <span class="st">"ecog-04003"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Return a tibble instead of a vpts object</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">get_vpts</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  radar <span class="op">=</span> <span class="st">"chlem"</span>, date <span class="op">=</span> <span class="st">"2023-03-10"</span>, source <span class="op">=</span> <span class="st">"baltrad"</span>,</span></span>
+<span class="r-in"><span>  radar <span class="op">=</span> <span class="st">"chlem"</span>, datetime <span class="op">=</span> <span class="st">"2023-03-10"</span>, source <span class="op">=</span> <span class="st">"baltrad"</span>,</span></span>
 <span class="r-in"><span>  as_tibble <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>

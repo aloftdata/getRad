@@ -43,7 +43,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_pvol</span><span class="op">(</span>radar <span class="op">=</span> <span class="cn">NULL</span>, time <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_pvol</span><span class="op">(</span>radar <span class="op">=</span> <span class="cn">NULL</span>, datetime <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -51,11 +51,13 @@
 
 
 <dl><dt id="arg-radar">radar<a class="anchor" aria-label="anchor" href="#arg-radar"></a></dt>
-<dd><p>The name of the radar (odim string) as a character string (e.g. <code>"nlhrw"</code> or <code>"fikor"</code>).</p></dd>
+<dd><p>The name of the radar (odim string) as a character string (e.g.
+<code>"nlhrw"</code> or <code>"fikor"</code>).</p></dd>
 
 
-<dt id="arg-time">time<a class="anchor" aria-label="anchor" href="#arg-time"></a></dt>
-<dd><p>The time as a <code>POSIXct</code> for the polar volume to download</p></dd>
+<dt id="arg-datetime">datetime<a class="anchor" aria-label="anchor" href="#arg-datetime"></a></dt>
+<dd><p>The time as a <code>POSIXct</code> vector for the polar volume(s) to download or
+an <code><a href="https://lubridate.tidyverse.org/reference/interval.html" class="external-link">interval</a></code> in which all polar volumes need to be downloaded.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

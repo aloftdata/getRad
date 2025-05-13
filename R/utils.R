@@ -203,6 +203,39 @@ req_retry_getrad <- function(req,
   )
 }
 
+#' Function to set the cache for a getRad specific httr2 request
+#'
+#' @inheritParams httr2::req_cache
+#' @param req A `httr2` request.
+#' @param use_cache Logical indicating whether to use the cache. Default is `TRUE`.
+#' If set to `FALSE` the input request is returned as is.
+#' @param ... Additional arguments passed to `httr2::req_cache()`.
+req_cache_getrad <- function(req,
+                             use_cache = TRUE,
+                             max_age = getOption("getRad.max_cache_age_seconds",
+                                                 default = 6 * 60 * 60),
+                             max_n = getOption("getRad.max_cache_n",
+                                               default = Inf),
+                             max_size = getOption("getRad.max_cache_size_bytes",
+                                                  default = 1024 * 1024 * 1024),
+                             ...){
+  # If caching is disabled, return early.
+  if(!use_cache){return(req)}
+
+  httr2::req_cache(
+    req,
+    path =
+      file.path(
+        tools::R_user_dir("getRad", "cache"),
+        "httr2"
+      ),
+    max_age = max_age,
+    max_n = max_n,
+    max_size = max_size,
+    ...
+  )
+}
+
 #' Functions for checking odim codes.
 #'
 #' @param x A character to be tested if they are odim codes

@@ -14,7 +14,11 @@ get_height <- function(row_index, start = 14, stop = 18){
     string_squish() |>
     as.integer()
 }
-get_u <- function(){}
+get_u <- function(row_index, start = 19, stop = 25){
+  purrr::chuck(fwf_text, row_index) |>
+    substr(start, stop) |>
+    parse_numeric()
+}
 get_v <- function(){}
 get_w <- function(){}
 get_ff <- function(row_index, start = 41, stop = 46){

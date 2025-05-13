@@ -24,7 +24,11 @@ get_v <- function(row_index, start = 26, stop = 32){
     substr(start, stop) |>
     parse_numeric()
 }
-get_w <- function(){}
+get_w <- function(row_index, start = 33, stop = 40){
+  purrr::chuck(fwf_text, row_index) |>
+    substr(start, stop) |>
+    parse_numeric()
+}
 get_ff <- function(row_index, start = 41, stop = 46){
   purrr::chuck(fwf_text, row_index) |>
     substr(start, stop) |>
@@ -45,13 +49,21 @@ get_gap <- function(row_index, start = 61, stop = 61){
     substr(start, stop) |>
     as.logical()
 }
-get_dbz <- function(){}
+get_dbz <- function(row_index, start = 62, stop = 69){
+  purrr::chuck(fwf_text, row_index) |>
+    substr(start, stop) |>
+    parse_numeric()
+}
 get_eta <- function(row_index, start = 70, stop = 75){
   purrr::chuck(fwf_text, row_index) |>
     substr(start, stop) |>
     parse_numeric()
 }
-get_dens <- function(row_index, start = 76, stop = 82){}
+get_dens <- function(row_index, start = 76, stop = 82){
+  purrr::chuck(fwf_text, row_index) |>
+    substr(start, stop) |>
+    parse_numeric()
+}
 
 parse_numeric <- function(x){
   string_squish(x) |>

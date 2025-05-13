@@ -207,9 +207,11 @@ req_retry_getrad <- function(req,
 #'
 #' @inheritParams httr2::req_cache
 #' @param req A `httr2` request.
-#' @param use_cache Logical indicating whether to use the cache. Default is `TRUE`.
-#' If set to `FALSE` the input request is returned as is.
+#' @param use_cache Logical indicating whether to use the cache. Default is
+#'   `TRUE`. If `FALSE` the cache is ignored and the file is fetched anew.
+#'    This can also be useful if you want to force a refresh of the cache.
 #' @param ... Additional arguments passed to `httr2::req_cache()`.
+#' @keywords internal
 req_cache_getrad <- function(req,
                              use_cache = TRUE,
                              max_age = getOption("getRad.max_cache_age_seconds",

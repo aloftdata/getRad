@@ -23,7 +23,7 @@
 #' )
 #' }
 
-get_pvol <- function(radar = NULL, time = NULL, ...) {
+get_pvol <- function(radar = NULL, datetime = NULL, ...) {
   check_odim(radar)
   if(anyDuplicated(radar))
   {

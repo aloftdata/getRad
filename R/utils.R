@@ -214,7 +214,7 @@ is_odim<-function(x){
   if(length(x)<1){
     return(FALSE)
     }
-  rlang::is_character(x) & !is.na(x) & grepl("^[a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z]$",x)
+  rlang::is_character(x) & !is.na(x) & grepl("^[a-zA-Z]{5}$",x)
 }
 is_odim_scalar<-function(x){
   rlang::is_scalar_character(x) && all(is_odim(x))

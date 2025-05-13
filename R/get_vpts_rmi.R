@@ -69,6 +69,7 @@ get_vpts_rmi <- function(radar_odim_code,
 
 parse_rmi <- function(lines){
   dplyr::tibble(
+    source = "rmi",
     datetime = get_datetime(lines),
     height = get_height(lines),
     u = get_u(lines),

@@ -20,7 +20,5 @@ from the \href{https://www.eumetnet.eu/activities/observations-programme/current
 The retrieved data is returned as a tibble.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 weather_radars()
-\dontshow{\}) # examplesIf}
 }

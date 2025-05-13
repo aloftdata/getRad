@@ -76,10 +76,11 @@ get_n_dbz_all <- function(lines, start = 109, stop = 114){
 
 parse_numeric <- function(x) {
   string_squish(x) |>
-    as.numeric()
+    replace_nan_numeric()
 }
 
 parse_integer <- function(x) {
   string_squish(x) |>
+    replace_nan_numeric() |>
     as.integer()
 }

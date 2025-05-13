@@ -22,6 +22,13 @@ test_that("get_u() returns the expected value", {
   )
 })
 
+test_that("get_u() can convert `'nan'` to NaN", {
+  expect_identical(
+    get_u(fwf_text[5]),
+    NaN
+  )
+})
+
 test_that("get_v() returns the expected value", {
   expect_identical(
     get_v(fwf_text[6]),
@@ -124,3 +131,5 @@ test_that("get_n_dbz_all() returns the expected value", {
     3233L
   )
 })
+
+

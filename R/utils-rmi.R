@@ -84,3 +84,17 @@ parse_integer <- function(x) {
     replace_nan_numeric() |>
     as.integer()
 }
+
+#' Get the source file name from the RMI vpts metadata header
+#'
+#' @param lines A character vector containing the lines of the RMI vpts file.
+#'
+#' @return A character string representing the source file name.
+#' @noRd
+#'
+#' @examples
+#' vroom::vroom_lines("https://opendata.meteo.be/ftp/observations/radar/vbird/bejab/2020/bejab_vpts_20200124.txt") |>
+#'      get_rmi_sourcefile()
+get_rmi_sourcefile <- function(lines){
+  string_extract(lines, "(?<=input\\: ).+")
+}

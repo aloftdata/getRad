@@ -6,7 +6,7 @@
 \alias{getRad-package}
 \title{getRad: Access and Standardize Radar Data}
 \description{
-This package facilitates downloading radar data for biological research. Currently the main functionality is downloading polar volume data from open repositories of European countries.
+This package facilitates downloading radar data for biological research. Currently the main functionality is downloading polar volume and vertical profile data and from open repositories of European countries.
 }
 \seealso{
 Useful links:

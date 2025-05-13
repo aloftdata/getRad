@@ -11,7 +11,7 @@ A tibble containing weather radar metadata
 }
 \description{
 The \code{weather_radars()} function is used to retreive weather radar metadata
-from the \href{https://www.eumetnet.eu/activities/observations-programme/current-activities/opera/}{OPERA network}.
+from the \href{https://www.eumetnet.eu/observations/weather-radar-network/}{OPERA network}.
 The retrieved data is returned as a tibble.
 }
 \examples{

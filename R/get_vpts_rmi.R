@@ -1,10 +1,8 @@
 #' Get VPTS RMI
+#' @inheritParams get_vpts_aloft
 #'
-#' @param radar_odim_code
-#' @param rounded_interval
-#'
-#' @return
-#' @export
+#' @return A list of vpts data.frames from RMI.
+#' @keywords internal
 #'
 #' @examples
 #' get_vpts_rmi("bejab",

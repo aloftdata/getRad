@@ -1,3 +1,5 @@
+replace_nan <- function(){}
+
 get_datetime <- function(row_index, start = 0, stop = 13){
   purrr::chuck(fwf_text, row_index) |>
     substr(start, stop) |>
@@ -9,15 +11,38 @@ get_height <- function(row_index, start = 14, stop = 18){
     string_squish() |>
     as.integer()
 }
-get_u
-get_v
-get_w
+get_u <- function(){}
+get_v <- function(){}
+get_w <- function(){}
 get_ff <- function(row_index, start = 41, stop = 46){
-
+  purrr::chuck(fwf_text, row_index) |>
+    substr(start, stop) |>
+    parse_numeric()
 }
-get_dd <- function(row_index, start = 47, stop = 52){}
-get_sd_vpp <- function(row_index, start = 41,stop = 46){}
-get_gap
-get_dbz
-get_eta <- function(row_index, start = 70, stop = 75){}
+get_dd <- function(row_index, start = 47, stop = 52){
+  purrr::chuck(fwf_text, row_index) |>
+    substr(start, stop) |>
+    parse_numeric()
+}
+get_sd_vpp <- function(row_index, start = 41,stop = 46){
+  purrr::chuck(fwf_text, row_index) |>
+    substr(start, stop) |>
+    parse_numeric()
+}
+get_gap <- function(row_index, start = 61, stop = 61){
+  purrr::chuck(fwf_text, row_index) |>
+    substr(start, stop) |>
+    as.logical()
+}
+get_dbz <- function(){}
+get_eta <- function(row_index, start = 70, stop = 75){
+  purrr::chuck(fwf_text, row_index) |>
+    substr(start, stop) |>
+    parse_numeric()
+}
 get_dens <- function(row_index, start = 76, stop = 82){}
+
+parse_numeric <- function(x){
+  string_squish(x) |>
+    as.numeric()
+}

@@ -13,7 +13,7 @@ get_vpts_rmi(radar_odim_code, rounded_interval)
 day}
 }
 \value{
-A list of vpts data.frames from RMI.
+A tibble with the parsed VPTS data.
 }
 \description{
 Get VPTS RMI

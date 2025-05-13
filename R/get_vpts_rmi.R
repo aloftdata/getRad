@@ -2,6 +2,8 @@
 #' @inheritParams get_vpts_aloft
 #' @keywords internal
 #'
+#' @return A tibble with the parsed VPTS data.
+#'
 #' @examples
 #' get_vpts_rmi("bejab",
 #'              lubridate::interval("20200119", "20200124"))

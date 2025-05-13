@@ -65,6 +65,26 @@ get_vpts_rmi <- function(radar_odim_code,
 }
 
 
+#' Parse RMI VPTS data.
+#'
+#' @param lines A character vector containing the lines of the RMI VPTS file.
+#'
+#' @return A tibble with the parsed VPTS data.
+#' @noRd
+#'
+#' @examples
+#'
+#' read_lines_from_url(file.path("https://opendata.meteo.be/",
+#'                               "ftp",
+#'                               "observations",
+#'                               "radar",
+#'                               "vbird",
+#'                               "bejab",
+#'                               "2020",
+#'                               "bejab_vpts_20200124.txt")) |>
+#'     unlist() |> # read_lines_from_url() returns a list
+#'     tail(-4) |> # skip the metadata
+#'     parse_rmi()
 parse_rmi <- function(lines){
   dplyr::tibble(
     source = "rmi",

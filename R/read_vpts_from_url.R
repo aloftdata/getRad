@@ -32,35 +32,7 @@ read_vpts_from_url <- function(urls, use_cache = TRUE) {
   ## and wouldn't declare our custom user agent or allow us to set retry
   ## criteria
 
-  purrr::map(urls, httr2::request) |>
-    # Identify ourselves in the request
-    purrr::map(req_user_agent_getrad) |>
-    # Set retry conditions
-    purrr::map(req_retry_getrad) |>
-    # Optionally cache the responses
-    (\(request_list) if (use_cache) {
-      purrr::map(
-        request_list,
-        \(request) {
-          httr2::req_cache(request,
-            path = file.path(
-              tools::R_user_dir("getRad", "cache"),
-              "httr2"
-            ),
-            max_age = getOption("getRad.max_cache_age_seconds"),
-            max_size = getOption("getRad.max_cache_size_bytes")
-          )
-        }
-      )
-    } else {
-      request_list
-    })() |>
-    # Perform the requests in parallel
-    httr2::req_perform_parallel() |>
-    # Fetch the response bodies and parse it using vroom
-    ## A helper in bioRad (validate_vpts()) that we call indirectly via
-    # " bioRad::as.vpts() currently doesn't support factors: bioRad v0.8.1
-    purrr::map(httr2::resp_body_raw) |>
+  fetch_from_url_raw(urls, use_cache = use_cache) |>
     purrr::map(~ vroom::vroom(
       delim = ",",
       I(.x),

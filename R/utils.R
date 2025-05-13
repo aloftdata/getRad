@@ -49,7 +49,7 @@ string_replace <- function(string, pattern, replacement) {
 #' @noRd
 #'
 #' @examples
-#' string_replace_all("aaabbcc", "a", "_")
+#' string_replace_all("starwars", "wars", "trek")
 string_replace_all <- function(string, pattern, replacement) {
   gsub(pattern, replacement, string, perl = TRUE)
 }
@@ -287,6 +287,69 @@ check_odim_scalar<-function(x){
 #' replace_nan_numeric(c("44", "-95.6", "nan", 88))
 replace_nan_numeric <- function(string) {
   as.numeric(replace(string, string == "nan", NaN))
+}
+
+#' Fetch data from a list of URLs and return the raw response bodies.
+#'
+#' @param url A character vector of URLs to fetch data from.
+#' @param use_cache A logical value indicating whether to use caching for the
+#'  requests. Default is TRUE.
+#'
+#' @return A list of raw response bodies from the URLs.
+#' @noRd
+fetch_from_url_raw <- function(urls, use_cache = TRUE){
+  purrr::map(urls, httr2::request) |>
+    # Identify ourselves in the request
+    purrr::map(req_user_agent_getrad) |>
+    # Set retry conditions
+    purrr::map(req_retry_getrad) |>
+    # Optionally cache the responses
+    (\(request_list) if (use_cache) {
+      purrr::map(
+        request_list,
+        \(request) {
+          httr2::req_cache(request,
+                           path = file.path(
+                             tools::R_user_dir("getRad", "cache"),
+                             "httr2"
+                           ),
+                           max_age = getOption("getRad.max_cache_age_seconds"),
+                           max_size = getOption("getRad.max_cache_size_bytes")
+          )
+        }
+      )
+    } else {
+      request_list
+    })() |>
+    # Perform the requests in parallel
+    httr2::req_perform_parallel() |>
+    # Fetch the response bodies and parse it using vroom
+    ## A helper in bioRad (validate_vpts()) that we call indirectly via
+    # " bioRad::as.vpts() currently doesn't support factors: bioRad v0.8.1
+    purrr::map(httr2::resp_body_raw)
+}
+
+#' Read lines from a list of URLs and return them as a list of character
+#' vectors.
+#'
+#' @param urls A character vector of URLs to read lines from.
+#' @param use_cache A logical value indicating whether to use caching for the
+#'   requests.
+#'
+#' @return A list of character vectors, each containing the lines read from the
+#'  corresponding URL.
+#' @noRd
+#'
+#' @examples
+#' read_lines_from_url(
+#'     file.path("https://raw.githubusercontent.com/philspil66",
+#'               "Super-Star-Trek/refs/heads/main/superstartrek.bas"))
+read_lines_from_url <- function(urls, use_cache = TRUE) {
+  fetch_from_url_raw(urls, use_cache = use_cache) |>
+    I() |>
+    purrr::map(~ vroom::vroom_lines(.x,
+                                    progress = FALSE
+    ))
 }
 
 # Create an .onload function to set package options during load

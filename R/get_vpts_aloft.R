@@ -1,43 +1,34 @@
-#' Get VPTS data from aloftdata
+#' Get VPTS data from the Aloft bucket
 #'
-#' This function retrieves VPTS (Vertical Profile Time Series) data from the
-#' aloftdata server.
+#' Gets VPTS data from the Aloft bucket.
 #'
 #' ```{r aloft_data_url, echo = FALSE, results = FALSE}
 #' data_url <- getOption("getRad.aloft_data_url")
 #' ```
 #'
-#' By default, data from the aloft data repository is retrieved from
-#' [`r data_url`](`r data_url`), this can be changed by setting
-#' `options(getRad.aloft_data_url)` to any desired url.
+#' By default, data from the [Aloft bucket](https://aloftdata.eu/browse/) are
+#' retrieved from <`r data_url`>. This can be changed by
+#' setting `options(getRad.aloft_data_url)` to any desired url.
 #'
 #' @section Inner working:
-#'
-#' - Constructs the S3 paths for the VPTS files based on the input
-#' - Performs parallel HTTP requests to fetch the vpts-csv data
-#' - Parses the response bodies with some assumptions about the column classes
-#' - Adds a column with the radar source
+#' - Constructs the S3 paths for the VPTS files based on the input.
+#' - Performs parallel HTTP requests to fetch the VPTS-CSV data.
+#' - Parses the response bodies with some assumptions about the column classes.
+#' - Adds a column with the radar source.
 #' - Overwrites the radar column with the radar_odim_code, all other values for
 #' this column are considered in error.
-#'
-#' @param radar_odim_code The radar ODIM code.
-#' @param rounded_interval The interval to fetch data for, rounded to nearest
-#'   day
-#' @param source The source of the data. One of baltrad, uva or ecog-04003.
-#' @param coverage A data.frame containing the coverage of the aloft data
-#'   repository. If not provided, it will be fetched from via the internet.
-#' @return A list of vpts data.frames
-#'
-#' @importFrom dplyr .data
-#' @importFrom lubridate %within%
+#' @param radar_odim_code Radar ODIM code.
+#' @param rounded_interval Interval to fetch data for, rounded to nearest day.
+#' @param source Source of the data. One of `baltrad`, `uva` or `ecog-04003`.
+#' @param coverage A data frame containing the coverage of the Aloft bucket.
+#'   If not provided, it will be fetched from via the internet.
+#' @return A list of vpts data frames.
 #' @keywords internal
-#'
 #' @examplesIf interactive()
-#'
 #' get_vpts_aloft(
-#'   "bejab",
-#'   lubridate::interval("20240305", "20240307"),
-#'   "baltrad"
+#'   radar_odim_code = "bejab",
+#'   rounded_interval = lubridate::interval("20240305", "20240307"),
+#'   source = "baltrad"
 #' )
 get_vpts_aloft <- function(radar_odim_code,
                            rounded_interval,

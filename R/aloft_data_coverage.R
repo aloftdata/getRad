@@ -1,24 +1,21 @@
-#' Fetch the coverage table from the aloft data repository
+#' Get coverage of Aloft bucket
 #'
-#' The coverage table provides an overview of what files are available on the
-#' aloft data repository. Specifically it lists the directories that are
-#' available as well as the number of files in every directory. By default this
-#' file is cached for 6 hours.
+#' Retrieves an overview of the number of hdf5 files per directory in the
+#' [Aloft bucket](https://aloftdata.eu/browse/), based on the `coverage.csv`
+#' file in that bucket. By default this file is cached for 6 hours.
 #'
 #' ```{r get url to fetch coverage from, echo = FALSE, results = FALSE}
-#' cov_url <- paste(getOption("getRad.aloft_data_url"),
-#'                  "coverage.csv",
-#'                  sep = "/")
+#' cov_url <- paste(
+#'   getOption("getRad.aloft_data_url"), "coverage.csv", sep = "/"
+#' )
 #' ```
 #'
-#' The coverage file is fetched from [`r cov_url`](`r cov_url`).
-#' This can be changed by setting `options(getRad.aloft_data_url)` to any
-#' desired url.
+#' The coverage file is fetched from <`r cov_url`>. This can be changed by
+#' setting `options(getRad.aloft_data_url)` to any desired url.
 #'
 #' @inheritParams req_cache_getrad
-#' @return A data.frame of the coverage file on the aloft data repository
+#' @return A data frame of the coverage file on the Aloft bucket.
 #' @export
-#'
 #' @examplesIf interactive()
 #' aloft_data_coverage()
 aloft_data_coverage <- function(use_cache = TRUE) {

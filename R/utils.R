@@ -281,15 +281,12 @@ check_odim_scalar<-function(x){
 #'
 #' @param string A character vector that may contain "nan" values.
 #'
-#' @return A character vector with "nan" replaced by NaN.
+#' @return A numeric vector where "nan" values are replaced with NaN and other
 #' @noRd
 #' @examples
-#' replace_nan(c("44", "-95.6", "nan", 88))
-replace_nan <- function(string) {
-  purrr::map(string, \(string) if (string == "nan") {
-    return(NaN)
-  } else {return(string)}) %>%
-    as.numeric()
+#' replace_nan_numeric(c("44", "-95.6", "nan", 88))
+replace_nan_numeric <- function(string) {
+  as.numeric(replace(string, string == "nan", NaN))
 }
 
 # Create an .onload function to set package options during load

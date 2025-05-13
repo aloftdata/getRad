@@ -34,7 +34,7 @@ get_dd <- function(lines, start = 47, stop = 52) {
   substr(lines, start, stop) |>
     parse_numeric()
 }
-get_sd_vpp <- function(lines, start = 41, stop = 46) {
+get_sd_vpp <- function(lines, start = 53, stop = 60) {
   substr(lines, start, stop) |>
     parse_numeric()
 }

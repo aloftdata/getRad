@@ -10,7 +10,8 @@
 #' @importFrom dplyr .data
 #' @export
 #'
-#' @examples
+#' @examplesIf interactive()
+#'
 #' weather_radars()
 weather_radars <- function(use_cache = TRUE) {
   # Build the url where the JSON files are hosted on eumetnet

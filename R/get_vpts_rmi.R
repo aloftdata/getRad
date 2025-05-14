@@ -64,12 +64,12 @@ get_vpts_rmi <- function(radar_odim_code,
   radar_metadata <-
     weather_radars() |>
     dplyr::filter(.data$source == "main") |>
-    dplyr::mutate(odimcode,
-      radar_latitude = latitude,
-      radar_longitude = longitude,
-      radar_height = heightofstation,
+    dplyr::mutate(.data$odimcode,
+      radar_latitude = .data$latitude,
+      radar_longitude = .data$longitude,
+      radar_height = .data$heightofstation,
       radar_wavelength = round(
-        299792458 / (frequency * 10^7), # speed of light in vacuum
+        299792458 / (.data$frequency * 10^7), # speed of light in vacuum
         digits = 1
       ),
       .keep = "none"

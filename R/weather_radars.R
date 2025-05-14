@@ -1,29 +1,32 @@
 #' Get weather radar metadata
 #'
-#' Gets weather radar metadata from the [OPERA](
+#' Gets weather radar metadata from [OPERA](
 #' https://www.eumetnet.eu/activities/observations-programme/current-activities/opera/)
-#' and/or [NEXRAD](https://www.ncei.noaa.gov/products/radar/next-generation-weather-radar) network.
-#'
-#' @param source A character vector for the one or more sources that should be downloaded,
-#'  values can be `"opera"`,`"nexrad"`, and `"all"`
-#' @param ... Arguments to helper functions specific to sources, currently not used
+#' and/or [NEXRAD](
+#' https://www.ncei.noaa.gov/products/radar/next-generation-weather-radar).
 #'
 #' @details
-#'
 #' The source files for this function are:
 #' - For `opera`: [OPERA_RADARS_DB.json](
 #' http://eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_DB.json)
 #' and [OPERA_RADARS_ARH_DB.json](
 #' http://eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_ARH_DB.json).
-#' - For `nexrad` [nexrad-stations.txt](https://www.ncei.noaa.gov/access/homr/file/nexrad-stations.txt).
+#' - For `nexrad`: [nexrad-stations.txt](https://www.ncei.noaa.gov/access/homr/file/nexrad-stations.txt).
 #'
 #' @inheritParams req_cache_getrad
+#' @param source Source of the metadata. `"opera"`, `"nexrad"` or `"all"`.
+#' @param ... Additional arguments passed on to reading functions per source,
+#'   currently not used.
 #' @return A tibble with weather radar metadata. In all cases the column `source` is
 #' added to indicate the source of the data and `radar` to show the radar identifiers
 #'  used in other functions like [get_pvol()] and [get_vpts()].
 #' @export
 #' @examplesIf interactive()
-#' weather_radars()
+#' # Get radar metadata from OPERA
+#' weather_radars(source = "opera")
+#'
+#' # Get radar metadata from NEXRAD
+#' weather_radars(source = "nexrad")
 weather_radars <- function(source = c("opera"), use_cache = TRUE, ...) {
   if (!rlang::is_character(source) || any(is.na(source)) || length(source) == 0) {
     cli::cli_abort("{.arg source} is not valid, it should be an {.cls character}

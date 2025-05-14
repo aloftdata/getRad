@@ -166,19 +166,6 @@ get_vpts <- function(radar,
   ## We need to round the interval because coverage only has daily resolution
   rounded_interval <- round_interval(date_interval, "day")
 
-  # Return early for RMI
-  if (source == "rmi") {
-    purrr::map(
-      radar,
-      \(current_radar) {
-        get_vpts_rmi(
-          radar_odim_code = current_radar,
-          rounded_interval = date_interval
-        )
-      }
-    )
-  }
-
   # Discover what data is available for the requested radar and time interval
   coverage <- aloft_data_coverage(use_cache = TRUE)
 

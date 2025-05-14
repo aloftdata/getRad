@@ -1,5 +1,3 @@
-
-
 get_datetime <- function(lines, start = 0, stop = 13) {
   substr(lines, start, stop) |>
     lubridate::ymd_hm()
@@ -49,27 +47,27 @@ get_dens <- function(lines, start = 76, stop = 82) {
     parse_numeric()
 }
 
-get_dbzh <- function(lines, start = 83, stop = 90){
+get_dbzh <- function(lines, start = 83, stop = 90) {
   substr(lines, start, stop) |>
     parse_numeric()
 }
 
-get_n <- function(lines, start = 91, stop = 96){
+get_n <- function(lines, start = 91, stop = 96) {
   substr(lines, start, stop) |>
     parse_integer()
 }
 
-get_n_dbz <- function(lines, start = 97, stop = 102){
+get_n_dbz <- function(lines, start = 97, stop = 102) {
   substr(lines, start, stop) |>
     parse_integer()
 }
 
-get_n_all <- function(lines, start = 103, stop = 107){
+get_n_all <- function(lines, start = 103, stop = 107) {
   substr(lines, start, stop) |>
     parse_integer()
 }
 
-get_n_dbz_all <- function(lines, start = 109, stop = 114){
+get_n_dbz_all <- function(lines, start = 109, stop = 114) {
   substr(lines, start, stop) |>
     parse_integer()
 }
@@ -94,7 +92,7 @@ parse_integer <- function(x) {
 #'
 #' @examples
 #' vroom::vroom_lines("https://opendata.meteo.be/ftp/observations/radar/vbird/bejab/2020/bejab_vpts_20200124.txt") |>
-#'      get_rmi_sourcefile()
-get_rmi_sourcefile <- function(lines){
+#'   get_rmi_sourcefile()
+get_rmi_sourcefile <- function(lines) {
   string_extract(lines, "(?<=input\\: ).+")
 }

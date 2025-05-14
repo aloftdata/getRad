@@ -178,7 +178,11 @@ test_that("get_vpts() can fetch data from a single radar source", {
 
 test_that("get_vpts() returns a single vpts object per radar", {
   expect_length(
-    get_vpts(radar = c("bejab", "nldhl"), datetime = "2023-01-01", source = "baltrad"),
+    get_vpts(
+      radar = c("bejab", "nldhl"),
+      datetime = "2023-01-01",
+      source = "baltrad"
+    ),
     2L
   )
 })
@@ -366,15 +370,14 @@ test_that("get_vpts() only returns the data for the requested day", {
 
   radar_interval <- get_vpts(
     radar = "nlhrw",
-    datetime = t<-as.POSIXct("2025-04-10 13:45:04", tz = "Europe/Berlin"),
+    datetime = t <- as.POSIXct("2025-04-10 13:45:04", tz = "Europe/Berlin"),
     return_type = "tibble"
   )
 
   expect_equal(
     unique(radar_interval$datetime),
-   lubridate::with_tz( t,"UTC")
+    lubridate::with_tz(t, "UTC")
   )
-
 })
 
 test_that("get_vpts() supports date intervals with hours and minutes", {

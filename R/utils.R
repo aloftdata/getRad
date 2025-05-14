@@ -65,7 +65,7 @@ string_replace_all <- function(string, pattern, replacement) {
 #' @examples
 #' string_squish("  aoosh  ")
 #' string_squish(" A sentence with extra whitespace.   ")
-string_squish <- function(string){
+string_squish <- function(string) {
   string_replace_all(string, "^\\s+", "") |>
     string_replace_all("\\s+$", "")
 }
@@ -83,7 +83,7 @@ string_squish <- function(string){
 #' @noRd
 #' @examples
 #' round_interval(lubridate::interval("20230104 143204", "20240402 001206"))
-round_interval <- function(x, unit = "day"){
+round_interval <- function(x, unit = "day") {
   lubridate::interval(
     lubridate::floor_date(lubridate::int_start(x), unit),
     lubridate::ceiling_date(lubridate::int_end(x), unit)
@@ -99,7 +99,7 @@ round_interval <- function(x, unit = "day"){
 #' @examples
 #' end_of_day("2016-03-05")
 #' end_of_day("2020-07-12 11:01:33")
-end_of_day <- function(date){
+end_of_day <- function(date) {
   lubridate::floor_date(lubridate::as_datetime(date), "day") +
     lubridate::ddays(1) -
     lubridate::dseconds(1)
@@ -120,8 +120,8 @@ end_of_day <- function(date){
 #' @noRd
 #'
 #' @examples
-calc_single_mean_rcs <- function(eta,dens){
-  rcs <- eta/dens
+calc_single_mean_rcs <- function(eta, dens) {
+  rcs <- eta / dens
   # Omit NA, NaN and Inf
   rcs[is.nan(rcs) | is.infinite(rcs)] <- NA
   # Get the mean as bioRad::as.vpts() only uses the first value anyway.
@@ -234,7 +234,7 @@ req_user_agent_getrad <- function(req) {
 req_retry_getrad <- function(req,
                              transient_statuses = c(429),
                              max_tries = 15,
-                             retry_on_failure = TRUE){
+                             retry_on_failure = TRUE) {
   httr2::req_retry(
     req,
     max_tries = max_tries,
@@ -256,14 +256,19 @@ req_retry_getrad <- function(req,
 req_cache_getrad <- function(req,
                              use_cache = TRUE,
                              max_age = getOption("getRad.max_cache_age_seconds",
-                                                 default = 6 * 60 * 60),
+                               default = 6 * 60 * 60
+                             ),
                              max_n = getOption("getRad.max_cache_n",
-                                               default = Inf),
+                               default = Inf
+                             ),
                              max_size = getOption("getRad.max_cache_size_bytes",
-                                                  default = 1024 * 1024 * 1024),
-                             ...){
+                               default = 1024 * 1024 * 1024
+                             ),
+                             ...) {
   # If caching is disabled, return early.
-  if(!use_cache){return(req)}
+  if (!use_cache) {
+    return(req)
+  }
 
   httr2::req_cache(
     req,
@@ -331,7 +336,7 @@ replace_nan_numeric <- function(string) {
 #'  requests. Default is `TRUE`.
 #' @return A list of raw response bodies from the URLs.
 #' @noRd
-fetch_from_url_raw <- function(urls, use_cache = TRUE){
+fetch_from_url_raw <- function(urls, use_cache = TRUE) {
   purrr::map(urls, httr2::request) |>
     # Identify ourselves in the request
     purrr::map(req_user_agent_getrad) |>
@@ -364,7 +369,7 @@ read_lines_from_url <- function(urls, use_cache = TRUE) {
   fetch_from_url_raw(urls, use_cache = use_cache) |>
     I() |>
     purrr::map(~ vroom::vroom_lines(.x,
-                                    progress = FALSE
+      progress = FALSE
     ))
 }
 
@@ -374,7 +379,8 @@ read_lines_from_url <- function(urls, use_cache = TRUE) {
 #' `TRUE` if the URL exists and `FALSE` if it does not.
 #'
 #' @param url Single URLs as a character to check for existence.
-#' @return Logical value indicating whether the URL exists (TRUE) or not (FALSE).
+#' @return Logical value indicating whether the URL exists (TRUE) or not
+#'   (FALSE).
 #' @noRd
 url_exists <- purrr::possibly(
   function(url) {

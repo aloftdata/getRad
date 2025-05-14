@@ -2,8 +2,10 @@ test_that("get_vpts_rmi() can return vpts data for a single radar", {
   skip_if_offline()
 
   rmi_vpts_tbl <-
-    get_vpts_rmi("bejab",
-                 lubridate::interval("20200119", "20200124"))
+    get_vpts_rmi(
+      "bejab",
+      lubridate::interval("20200119", "20200124")
+    )
 
   # Test that a tibble is returned
   expect_type(
@@ -15,7 +17,6 @@ test_that("get_vpts_rmi() can return vpts data for a single radar", {
     rmi_vpts_tbl,
     "tbl_df"
   )
-
 })
 
 test_that("get_vpts_rmi() returns the expected columns", {
@@ -51,22 +52,25 @@ test_that("get_vpts_rmi() returns the expected columns", {
   )
 
   rmi_vpts_tbl <-
-    get_vpts_rmi("frave",
-                 lubridate::interval("20240807", "20240810"))
+    get_vpts_rmi(
+      "frave",
+      lubridate::interval("20240807", "20240810")
+    )
 
   expect_named(
     rmi_vpts_tbl,
     expected_columns
   )
-
 })
 
 test_that("get_vpts_rmi() supports intervals passing a year boundary", {
   skip_if_offline()
 
   rmi_vpts_tbl_multi_year <-
-    get_vpts_rmi("frave",
-                 lubridate::interval("20231222", "20240110"))
+    get_vpts_rmi(
+      "frave",
+      lubridate::interval("20231222", "20240110")
+    )
 
   # Check that a tibble was returned (and no error)
   expect_s3_class(
@@ -85,8 +89,10 @@ test_that("get_vpts_rmi() returns rmi as the source", {
   skip_if_offline()
 
   rmi_vpts_tbl <-
-    get_vpts_rmi("bejab",
-                 lubridate::interval("20200119", "20200124"))
+    get_vpts_rmi(
+      "bejab",
+      lubridate::interval("20200119", "20200124")
+    )
 
   expect_identical(
     unique(rmi_vpts_tbl$source),
@@ -104,5 +110,3 @@ test_that("get_vpts_rmi() returns error if radar date combo is not found", {
     class = "getRad_error_date_not_found"
   )
 })
-
-

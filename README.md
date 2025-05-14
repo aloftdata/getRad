@@ -10,19 +10,27 @@ status](https://www.r-pkg.org/badges/version/getRad)](https://CRAN.R-project.org
 [![R-CMD-check](https://github.com/aloftdata/getRad/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/aloftdata/getRad/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/aloftdata/getRad/branch/main/graph/badge.svg)](https://app.codecov.io/gh/aloftdata/getRad/)
 [![repo
-status](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+status](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 <!-- badges: end -->
 
-The goal of `getRad` is to provide a unified interface to radar data for
-biological research. This is done by downloading data from repositories
-and loading it directly into R. Currently the functionality if focused
-around volume data from weather radars. However in the longer term it
-might also support vertical profile information, vertically integrated
-profile information and possibly data from other radars.
+getRad is an R package that provides a unified interface to download
+radar data for biological and aeroecological research. It gives access
+to both polar volume radar data and [vertical profile
+data](https://aloftdata.eu/vpts-csv/) from [different
+repositories](https://aloftdata.github.io/getRad/articles/supported_countries.html)
+and loads it directly into R. getRad also facilitates further
+exploration of the data by other tools such as
+[bioRad](https://adokter.github.io/bioRad) by standardizing the data.
 
 ## Installation
 
-You can install the development version of `getRad` from
+You can install the released version of getRad from CRAN with:
+
+``` r
+install.packages("getRad")
+```
+
+Alternatively, you can install the development version of getRad from
 [GitHub](https://github.com/) with:
 
 ``` r
@@ -30,18 +38,21 @@ You can install the development version of `getRad` from
 devtools::install_github("aloftdata/getRad")
 ```
 
-For the time being the package is not yet released on CRAN.
+Then load the package:
+
+``` r
+library(getRad)
+```
 
 ## Usage
 
-Here are some examples of volume data with biological information that
-can be downloaded.
+Download a polar volume, and then plot it using `bioRad`:
 
 ``` r
 library(getRad)
 library(bioRad)
-#> Welcome to bioRad version 0.8.1.9000
-#> using vol2birdR version 1.0.5 (MistNet not installed)
+#> Welcome to bioRad version 0.9.1.9000
+#> using vol2birdR version 1.0.9 (MistNet not installed)
 # Plot insect movements in Finland (Mäkinen et al. 2022)
 pvol <- get_pvol("fianj", as.POSIXct("2012-5-17 14:15", tz = "UTC"))
 plot(project_as_ppi(get_scan(pvol, 0), range_max = 75000))
@@ -50,19 +61,21 @@ plot(project_as_ppi(get_scan(pvol, 0), range_max = 75000))
 <img src="man/figures/README-example-1.png" width="100%" />
 
 ``` r
-
-# Spring migration in Estonia
-pvol <- get_pvol("nlhrw", as.POSIXct("2023-3-19 22:15", tz = "UTC+1"))
 plot(calculate_vp(pvol, h_layer = 50, n_layer = 40))
 #> Running vol2birdSetUp
+#> Warning: correlation coefficient missing, dropping scan 4 ...
+#> Warning: correlation coefficient missing, dropping scan 7 ...
+#> Warning: correlation coefficient missing, dropping scan 9 ...
+#> Warning: correlation coefficient missing, dropping scan 10 ...
+#> Warning: correlation coefficient missing, dropping scan 11 ...
+#> Warning: correlation coefficient missing, dropping scan 12 ...
 #> Warning: radial velocities will be dealiased...
 ```
 
 <img src="man/figures/README-example-2.png" width="100%" />
 
-There is also the possibility to download vertical profile time series
-from the [aloft](https://aloftdata.eu/) data repository as vertical
-profile time series
+Download a vertical profile time series from the
+[Aloft](https://aloftdata.eu/) bucket:
 
 ``` r
 vpts_list <- get_vpts(c("bewid", "deess"),

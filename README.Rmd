@@ -22,22 +22,32 @@ knitr::opts_chunk$set(
 [![repo status](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 <!-- badges: end -->
 
-The goal of `getRad` is to provide a unified interface to radar data for biological research. This is done by downloading data from repositories and loading it directly into R. Currently the functionality if focused around volume data from weather radars. However in the longer term it might also support vertical profile information, vertically integrated profile information and possibly data from other radars. 
+getRad is an R package that provides a unified interface to download radar data for biological and aeroecological research. It gives access to both polar volume radar data and [vertical profile data](https://aloftdata.eu/vpts-csv/) from [different repositories](https://aloftdata.github.io/getRad/articles/supported_countries.html) and loads it directly into R. getRad also facilitates further exploration of the data by other tools such as [bioRad](https://adokter.github.io/bioRad) by standardizing the data.
 
 ## Installation
 
-You can install the development version of `getRad` from [GitHub](https://github.com/) with:
+You can install the released version of getRad from CRAN with:
+
+``` r
+install.packages("getRad")
+```
+
+Alternatively, you can install the development version of getRad from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("aloftdata/getRad")
 ```
 
-For the time being the package is not yet released on CRAN.
+Then load the package:
+
+``` r
+library(getRad)
+```
 
 ## Usage
 
-Here are some examples of volume data with biological information that can be downloaded.
+Download a polar volume, and then plot it using `bioRad`:
 
 ```{r example}
 library(getRad)
@@ -45,13 +55,10 @@ library(bioRad)
 # Plot insect movements in Finland (Mäkinen et al. 2022)
 pvol <- get_pvol("fianj", as.POSIXct("2012-5-17 14:15", tz = "UTC"))
 plot(project_as_ppi(get_scan(pvol, 0), range_max = 75000))
-
-# Spring migration in Estonia
-pvol <- get_pvol("nlhrw", as.POSIXct("2023-3-19 22:15", tz = "UTC+1"))
 plot(calculate_vp(pvol, h_layer = 50, n_layer = 40))
 ```
 
-There is also the possibility to download vertical profile time series from the [aloft](https://aloftdata.eu/) data repository as vertical profile time series
+Download a vertical profile time series from the [Aloft](https://aloftdata.eu/) bucket:
 
 ```{r vpts}
 vpts_list <- get_vpts(c("bewid", "deess"),

@@ -189,21 +189,33 @@ get_vpts <- function(radar,
   }
 
   # Query the selected radars and fetched coverage for aloft vpts data.
-  vpts_from_s3 <-
-    purrr::map(
-      selected_radars,
-      ~ get_vpts_aloft(
-        .x,
-        rounded_interval = rounded_interval,
-        source = selected_source,
-        coverage = coverage
-      )
-    ) |>
-    radar_to_name()
+  # fetched_vpts <-
+  #   purrr::map(
+  #     selected_radars,
+  #     ~ get_vpts_aloft(
+  #       .x,
+  #       rounded_interval = rounded_interval,
+  #       source = selected_source,
+  #       coverage = coverage
+  #     )
+  #   ) |>
+  #   radar_to_name()
+
+  fetched_vpts <-
+    switch(source,
+           c(rmi = get_vpts_rmi(radar, rounded_interval),
+             purrr::set_names(
+               purrr::map(selected_radars,
+                          ~ get_vpts_aloft(.x,
+                                           rounded_interval = rounded_interval,
+                                           source = selected_source,
+                                           coverage = coverage)),
+               nm = c("uva", "ecog-04003", "rmi")
+             )))
 
   # Drop any results outside the requested interval
   filtered_vpts <-
-    vpts_from_s3 |>
+    fetched_vpts |>
     purrr::map(
       \(df) {
         dplyr::mutate(df,

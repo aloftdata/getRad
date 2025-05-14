@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_pvol.R
 \name{get_pvol}
 \alias{get_pvol}
-\title{Get polar volume (PVOL) data from supported countries}
+\title{Get polar volume (PVOL) data from supported sources}
 \usage{
 get_pvol(radar = NULL, datetime = NULL, ...)
 }
@@ -25,8 +25,9 @@ Either a polar volume or a list of polar volumes. See
 \code{\link[bioRad:summary.pvol]{bioRad::summary.pvol()}} for details.
 }
 \description{
-Gets polar volume data for supported countries and returns it as a (list of)
-\link[bioRad:summary.pvol]{polar volume objects}.
+Gets polar volume data from supported sources and returns it as a (list of)
+\link[bioRad:summary.pvol]{polar volume objects}. The source is automatically
+detected based on the provided \code{radar}.
 }
 \details{
 For more details on supported sources, see \code{vignette("supported_sources")}.

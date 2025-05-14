@@ -2,11 +2,6 @@
 
 get_pvol_us <- function(radar, time, ...) {
 
-    rlang::check_installed(
-    c("xml2", "lubridate", "tidyr", "httr2"),
-    "to import data from US weather radars"
-  )
-
   if (!inherits(time, "POSIXct"))
     cli::cli_abort("{.arg time} must be POSIXct.", class = "getRad_error_us_time_not_posix")
 

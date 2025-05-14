@@ -53,6 +53,7 @@ get_pvol_us <- function(radar, time, ...) {
 
   repeat {
     xml <- httr2::request(host) |>
+      req_user_agent_getrad() |>
       httr2::req_url_query(`list-type` = "2",
                            prefix = prefix,
                            `continuation-token` = token) |>

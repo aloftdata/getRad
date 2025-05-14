@@ -202,34 +202,17 @@ get_vpts <- function(radar,
   #   )
 
   fetched_vpts <-
-    switch(source,
-             rmi =
-             purrr::map(radar, ~ get_vpts_rmi(.x, rounded_interval)),
-             baltrad = purrr::map(
-               selected_radars,
-               ~ get_vpts_aloft(
-                 .x,
-                 rounded_interval = rounded_interval,
-                 source = selected_source
-               )
-             ),
-             uva = purrr::map(
-               selected_radars,
-               ~ get_vpts_aloft(
-                 .x,
-                 rounded_interval = rounded_interval,
-                 source = selected_source
-               )
-             ),
-             `ecog-04003` = purrr::map(
-               selected_radars,
-               ~ get_vpts_aloft(
-                 .x,
-                 rounded_interval = rounded_interval,
-                 source = selected_source
-             )
-             )
-    ) |> radar_to_name()
+    switch(dplyr::case_when(
+      source == "rmi" ~ "rmi",
+      source %in% eval(formals("get_vpts_aloft")$source) ~ "aloft"
+    ),
+    rmi = purrr::map(radar, ~ get_vpts_rmi(.x, rounded_interval)),
+    aloft = purrr::map(radar, ~ get_vpts_aloft(
+      .x,
+      rounded_interval = rounded_interval,
+      source = source
+    ))) |> radar_to_name()
+
 
   # Drop any results outside the requested interval
   filtered_vpts <-

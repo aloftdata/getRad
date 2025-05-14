@@ -163,7 +163,8 @@ get_vpts <- function(radar,
     date_interval <- datetime
   }
 
-  ## We need to round the interval because coverage only has daily resolution
+  ## We need to round the interval because the helpers always fetch data a day
+  ## at a time
   rounded_interval <- round_interval(date_interval, "day")
 
   # Query the selected radars and fetched coverage for aloft vpts data.

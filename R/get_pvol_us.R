@@ -1,26 +1,30 @@
-
 get_pvol_us <- function(radar, time, ...) {
-  if (!inherits(time, "POSIXct")) {
-    cli::cli_abort("{.arg time} must be POSIXct.", class = "getRad_error_us_time_not_posix")
+  if (!inherits(time, c("Interval", "POSIXct"))) {
+    cli::cli_abort("{.arg time} must be POSIXct or Interval.", class = "getRad_error_us_time_not_posix")
   }
+  keys <- .most_representative_nexrad_key(time, radar)
+  pvol <- list()
+  for (key in keys) {
+    url <- nexrad_key_to_url(key)
 
-  key <- .most_representative_nexrad_key(time, radar)
-  url <- nexrad_key_to_url(key)
+    tmp <- file.path(tempdir(), basename(key))
 
-  tmp <- file.path(tempdir(), basename(key))
-
-  tryCatch(
-    httr2::request(url) |>
-      req_user_agent_getrad() |>
-      httr2::req_perform(path = tmp),
-    httr2_http_404 = function(cnd) {
-      cli::cli_abort("NEXRAD file not found at {.url {url}}.",
-        cnd = cnd, class = "getRad_error_us_file_not_found"
-      )
-    }
-  )
-  pvol <- bioRad::read_pvolfile(tmp, ...)
-  unlink(tmp)
+    tryCatch(
+      httr2::request(url) |>
+        req_user_agent_getrad() |>
+        httr2::req_perform(path = tmp),
+      httr2_http_404 = function(cnd) {
+        cli::cli_abort("NEXRAD file not found at {.url {url}}.",
+          cnd = cnd, class = "getRad_error_us_file_not_found"
+        )
+      }
+    )
+    pvol[[key]] <- bioRad::read_pvolfile(tmp, ...)
+    unlink(tmp)
+  }
+  if (!lubridate::is.interval(time)) {
+    pvol <- unlist(pvol)
+  }
   pvol
 }
 
@@ -34,7 +38,7 @@ get_pvol_us <- function(radar, time, ...) {
 #' @noRd
 #' @examples
 #' .list_nexrad_keys(as.Date("2025-3-4"), "KARX")
-.list_nexrad_keys <- function(date, radar) {
+.list_nexrad_keys <- function(date, radar, use_cache = T) {
   d <- as.Date(date, tz = "UTC")
   if (!rlang::is_scalar_character(radar)) {
     cli::cli_abort("Radar should be a character of length one as otherwise not all
@@ -59,7 +63,8 @@ get_pvol_us <- function(radar, time, ...) {
         prefix = prefix,
         `continuation-token` = token
       ) |>
-      httr2::req_perform() |>
+      req_cache_getrad(use_cache = use_cache)
+    httr2::req_perform() |>
       httr2::resp_body_xml()
 
     keys <- c(keys, xml2::xml_text(xml2::xml_find_all(xml, ".//s3:Key", ns)))
@@ -73,16 +78,26 @@ get_pvol_us <- function(radar, time, ...) {
 
 #' Fine the most representative key for a timestamps radar combination within the nexrad network
 #'
-#' @param datetime a POSIXct datetime of length one
+#' @param datetime a POSIXct datetime or Interval of length one
 #' @param radar A radar of length one
 #'
-#' @returns a character with the name of the key
+#' @returns a character with the name of the key(s)
 #'
 #' @noRd
 #' @examples
 #' .most_representative_nexrad_key(lubridate::as_datetime("2024-5-9 14:44:00"), "KBBX")
 .most_representative_nexrad_key <- function(datetime, radar) {
-  days <- unique(as.Date(datetime + c(-86400, 0, 86400), tz = "UTC"))
+  if (lubridate::is.interval(datetime)) {
+    days <- unique(as.Date(
+      seq(
+        lubridate::int_start(datetime) - lubridate::days(1),
+        lubridate::int_start(datetime) + lubridate::days(2), "day"
+      ),
+      tz = "UTC"
+    ))
+  } else {
+    days <- unique(as.Date(datetime + c(-86400, 0, 86400), tz = "UTC"))
+  }
   keys <- unlist(lapply(days, .list_nexrad_keys, radar = radar), use.names = FALSE)
 
   keys <- keys[!grepl("_MDM(\\.gz)?$", keys)]
@@ -95,7 +110,11 @@ get_pvol_us <- function(radar, time, ...) {
       class = "getRad_error_us_no_scan_found"
     )
   }
-  keys[max(which(datetime < ts))]
+  if (lubridate::is.interval(datetime)) {
+    keys[ts %within% datetime]
+  } else {
+    keys[max(which(datetime < ts))]
+  }
 }
 
 nexrad_key_to_url <- function(key) {

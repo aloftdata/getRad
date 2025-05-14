@@ -255,8 +255,8 @@ check_odim<-function(x){
 check_odim_nexrad <- function(x) {
   if (!all(is_odim_nexrad(x))) {
     cli::cli_abort(
-      "Each element of {.arg radar} must be either a 5-letter ODIM code ",
-      "or a 4-letter NEXRAD ICAO code.",
+      "Each element of {.arg radar} must be either a 5-letter ODIM code
+      or a 4-letter NEXRAD ICAO code.",
       class = "getRad_error_radar_not_odim_nexrad")
   }
   invisible(TRUE)

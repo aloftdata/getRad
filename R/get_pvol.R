@@ -15,7 +15,7 @@
 #'   - A [lubridate::interval()] or two [`POSIXct`][base::DateTimeClasses], between which all data files with a reference time in the interval are downloaded.
 #' @param ... Additional arguments passed on to reading functions, for example
 #'   `param = "all"` to the [bioRad::read_pvolfile()].
-#' @return Either a polar volume or a list of polar volumes. See
+#' @return Either a polar volume or a list of polar volumes when requesting an interval. See
 #'   [bioRad::summary.pvol()] for details.
 #' @export
 #' @examples
@@ -36,6 +36,11 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
     )
   }
   if (inherits(datetime, "POSIXct") && length(datetime) == 2) {
+    if(any(duplicated(datetime))){
+      cli::cli_abort("When providing two {.cls POSIXct} as a {.arg datetime}
+                     they should differ to represent an inverval.",
+                     class = "getRad_error_duplicated_timestamps")
+    }
     datetime <- lubridate::interval(min(datetime), max(datetime))
   }
   if (is.null(datetime) ||
@@ -57,7 +62,11 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
   # the last radar
   if (length(radar) != 1) {
     purrr::map(radar, select_get_pvol_function) # quick check if all radars exist
-    return(purrr::map(radar, safe_get_pvol, datetime = datetime, ...))
+    pvols <- purrr::map(radar, safe_get_pvol, datetime = datetime, ...)
+    if (lubridate::is.interval(datetime)) {
+      pvols <- unlist(pvols, recursive = F)
+    }
+    return(pvols)
   }
 
 
@@ -69,30 +78,30 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
                     in many polar volumes, when loading that may polar
                     volumes at the same time computational issues frequently
                     occur.",
-                    class = "getRad_warn_many_pvols_requested"
+        class = "getRad_warn_many_pvols_requested"
       )
     }
-
-
   }
   # for all but the us we can predict nominal times (every 5 minutes) and therefore we can do recursive calls to the respective function using one timestamp. In the US we call with an interval and in the function find the right keys
-  if(fn!="get_pvol_us"){
-  timerange <-
-    lubridate::floor_date(
-      seq(lubridate::int_start(datetime),
-          lubridate::int_end(datetime) + lubridate::minutes(5),
-          by = "5 mins"
-      ),
-      "5 mins"
-    )
-  datetime <- timerange[timerange %within% datetime]
-  if (length(datetime) != 1) {
-    polar_volumes <- (purrr::map(datetime, safe_get_pvol, radar = radar, ...))
-    return(polar_volumes)
-  }
-
-   get(fn)(radar, datetime, ...)
-  }else{
+  if (fn != "get_pvol_us") {
+    if (lubridate::is.interval(datetime)) {
+      timerange <-
+        lubridate::floor_date(
+          seq(lubridate::int_start(datetime),
+            lubridate::int_end(datetime) + lubridate::minutes(5),
+            by = "5 mins"
+          ),
+          "5 mins"
+        )
+      datetime <- timerange[timerange %within% datetime]
+      polar_volumes <- purrr::map(datetime, safe_get_pvol, radar = radar, ...)
+      return(polar_volumes)
+    } else {
+      get(fn)(radar, datetime, ...)
+    }
+  } else {
+    # For now then US data is request the interval if forwarded
+    # get_pvol_us supports intervals
     get(fn)(radar, datetime, ...)
   }
 }

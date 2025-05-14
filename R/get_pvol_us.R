@@ -23,7 +23,7 @@ get_pvol_us <- function(radar, time, ...) {
     unlink(tmp)
   }
   if (!lubridate::is.interval(time)) {
-    pvol <- unlist(pvol)
+    pvol <- pvol[[1]]
   }
   pvol
 }
@@ -63,7 +63,7 @@ get_pvol_us <- function(radar, time, ...) {
         prefix = prefix,
         `continuation-token` = token
       ) |>
-      req_cache_getrad(use_cache = use_cache)
+      req_cache_getrad(use_cache = use_cache) |>
     httr2::req_perform() |>
       httr2::resp_body_xml()
 

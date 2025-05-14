@@ -1,5 +1,5 @@
 Package: getRad
-Title: Access and Standardize Radar Data
+Title: Download Radar Data for Biological Research
 Version: 0.1.0.9001
 Authors@R: c(
     person("Bart", "Kranstauber", , "b.kranstauber@uva.nl", role = c("aut", "cre"),
@@ -9,9 +9,10 @@ Authors@R: c(
     person("Peter", "Desmet", , "peter.desmet@inbo.be", role = "aut",
            comment = c(ORCID = "0000-0002-8442-8025", affiliation = "Research Institute for Nature and Forest (INBO)"))
   )
-Description: Download radar data for
-    biological research. Currently the main functionality is downloading
-    polar volume and vertical profile data and from open repositories of European countries.
+Description: Load polar volume data and vertical profile data for aeroecological 
+research directly into R. Access to data from several different sources in Europe 
+and the US is provided. The data is standardised to facilitate further exploration 
+with other tools such as bioRad.
 License: MIT + file LICENSE
 URL: https://github.com/aloftdata/getRad, https://aloftdata.github.io/getRad/
 BugReports: https://github.com/aloftdata/getRad/issues

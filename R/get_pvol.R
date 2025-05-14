@@ -97,7 +97,7 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
       polar_volumes <- purrr::map(datetime, safe_get_pvol, radar = radar, ...)
       return(polar_volumes)
     } else {
-      get(fn)(radar, datetime, ...)
+      get(fn)(radar, lubridate::floor_date(datetime,"5 mins"), ...)
     }
   } else {
     # For now then US data is request the interval if forwarded

@@ -37,15 +37,17 @@ get_vpts_rmi <- function(radar_odim_code,
   # Check if the urls exist, if not, then RMI doens't have data for that
   # radar/datetime combo
 
-  if(!all(purrr::map_lgl(rmi_urls, url_exists))){
+  if (purrr::none(rmi_urls, url_exists)) {
     cli::cli_abort(
       "No data found for the requested radar(s) and date(s) on RMI.",
       class = "getRad_error_date_not_found"
     )
   }
 
-  # For every url, parse the VPTS
-  rmi_files <- read_lines_from_url(rmi_urls)
+  # For every url that exists, parse the VPTS: skip over any days with a missing
+  # file
+  rmi_files <-
+    read_lines_from_url(rmi_urls[purrr::map_lgl(rmi_urls, url_exists)])
 
 
   combined_vpts <-

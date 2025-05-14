@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Access and Standardize Radar Data • getRad</title>
+<title>Download Radar Data for Biological Research • getRad</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Access and Standardize Radar Data">
-<meta name="description" content="This package facilitates downloading radar data for biological research. Currently the main functionality is downloading polar volume data from open repositories of European countries.">
-<meta property="og:description" content="This package facilitates downloading radar data for biological research. Currently the main functionality is downloading polar volume data from open repositories of European countries.">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Download Radar Data for Biological Research">
+<meta name="description" content="Load polar volume and vertical profile data for aeroecological research directly into R. With getRad you can access data from several sources in Europe and the US and standardize it to faciliate further exploration in tools such as bioRad.">
+<meta property="og:description" content="Load polar volume and vertical profile data for aeroecological research directly into R. With getRad you can access data from several sources in Europe and the US and standardize it to faciliate further exploration in tools such as bioRad.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -35,7 +35,7 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/supported_countries.html">Supported countries</a></li>
+<li><a class="dropdown-item" href="articles/supported_countries.html">Supported sources</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
@@ -57,39 +57,72 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>The goal of <code>getRad</code> is to provide a unified interface to radar data for biological research. This is done by downloading data from repositories and loading it directly into R. Currently the functionality if focused around volume data from weather radars. However in the longer term it might also support vertical profile information, vertically integrated profile information and possibly data from other radars.</p>
+<p>getRad is an R package that provides a unified interface to download radar data for biological and aeroecological research. It gives access to both polar volume radar data and <a href="https://aloftdata.eu/vpts-csv/" class="external-link">vertical profile data</a> from <a href="https://aloftdata.github.io/getRad/articles/supported_sources.html">different sources</a> and loads it directly into R. getRad also facilitates further exploration of the data by other tools such as <a href="https://adokter.github.io/bioRad" class="external-link">bioRad</a> by standardizing the data.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of <code>getRad</code> from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<p>Install the latest released version from CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"getRad"</span><span class="op">)</span></span></code></pre></div>
+<p>Or the development version from <a href="https://github.com/aloftdata/getRad" class="external-link">GitHub</a>:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"aloftdata/getRad"</span><span class="op">)</span></span></code></pre></div>
-<p>For the time being the package is not yet released on CRAN.</p>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
-<p>Here are some examples of volume data with biological information that can be downloaded</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<p>Download a polar volume, and then plot it using <code>bioRad</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/aloftdata/getRad" class="external-link">getRad</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/adokter/bioRad/" class="external-link">bioRad</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Welcome to bioRad version 0.8.1</span></span>
-<span><span class="co">#&gt; Attempting to load MistNet from: /home/bart/R/x86_64-pc-linux-gnu-library/4.4/vol2birdR/lib </span></span>
-<span><span class="co">#&gt; MistNet successfully initialized.</span></span>
-<span><span class="co">#&gt; using vol2birdR version 1.0.2 (MistNet installed)</span></span>
-<span><span class="co"># Plot insect movements in Finland (Mäkinen et al. 2022)</span></span>
-<span><span class="va">pvol</span><span class="op">&lt;-</span><span class="fu"><a href="reference/get_pvol.html">get_pvol</a></span><span class="op">(</span><span class="st">"fianj"</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="st">"2012-5-17 14:15"</span>, tz<span class="op">=</span><span class="st">"UTC"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://adriaandokter.com/bioRad/reference/project_as_ppi.html" class="external-link">project_as_ppi</a></span><span class="op">(</span><span class="fu"><a href="https://adriaandokter.com/bioRad/reference/get_scan.html" class="external-link">get_scan</a></span><span class="op">(</span><span class="va">pvol</span>,<span class="fl">0</span><span class="op">)</span>, range_max <span class="op">=</span> <span class="fl">75000</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># Plot daytime insect movements in Finland (Mäkinen et al. 2022)</span></span>
+<span><span class="va">pvol</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_pvol.html">get_pvol</a></span><span class="op">(</span><span class="st">"fianj"</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="st">"2012-05-17 14:00"</span>, tz <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://adriaandokter.com/bioRad/reference/project_as_ppi.html" class="external-link">project_as_ppi</a></span><span class="op">(</span><span class="fu"><a href="https://adriaandokter.com/bioRad/reference/get_scan.html" class="external-link">get_scan</a></span><span class="op">(</span><span class="va">pvol</span>, <span class="fl">0</span><span class="op">)</span>, range_max <span class="op">=</span> <span class="fl">75000</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-example-1.png" width="100%"></p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="co"># Spring migration in Estonia</span></span>
-<span><span class="va">pvol</span><span class="op">&lt;-</span><span class="fu"><a href="reference/get_pvol.html">get_pvol</a></span><span class="op">(</span><span class="st">"nlhrw"</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="st">"2023-3-19 22:15"</span>, tz<span class="op">=</span><span class="st">"UTC+1"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://adriaandokter.com/bioRad/reference/calculate_vp.html" class="external-link">calculate_vp</a></span><span class="op">(</span><span class="va">pvol</span>, h_layer <span class="op">=</span> <span class="fl">50</span>, n_layer <span class="op">=</span> <span class="fl">40</span><span class="op">)</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://adriaandokter.com/bioRad/reference/calculate_vp.html" class="external-link">calculate_vp</a></span><span class="op">(</span><span class="va">pvol</span>, h_layer <span class="op">=</span> <span class="fl">50</span>, n_layer <span class="op">=</span> <span class="fl">40</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Running vol2birdSetUp</span></span>
+<span><span class="co">#&gt; Warning: correlation coefficient missing, dropping scan 4 ...</span></span>
+<span><span class="co">#&gt; Warning: correlation coefficient missing, dropping scan 7 ...</span></span>
+<span><span class="co">#&gt; Warning: correlation coefficient missing, dropping scan 9 ...</span></span>
+<span><span class="co">#&gt; Warning: correlation coefficient missing, dropping scan 10 ...</span></span>
+<span><span class="co">#&gt; Warning: correlation coefficient missing, dropping scan 11 ...</span></span>
+<span><span class="co">#&gt; Warning: correlation coefficient missing, dropping scan 12 ...</span></span>
 <span><span class="co">#&gt; Warning: radial velocities will be dealiased...</span></span></code></pre></div>
 <p><img src="reference/figures/README-example-2.png" width="100%"></p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># Plot nocturnal migration in Finland</span></span>
+<span><span class="va">pvol</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_pvol.html">get_pvol</a></span><span class="op">(</span><span class="st">"fianj"</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="st">"2012-05-11 23:00"</span>, tz <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://adriaandokter.com/bioRad/reference/project_as_ppi.html" class="external-link">project_as_ppi</a></span><span class="op">(</span><span class="fu"><a href="https://adriaandokter.com/bioRad/reference/get_scan.html" class="external-link">get_scan</a></span><span class="op">(</span><span class="va">pvol</span>, <span class="fl">0</span><span class="op">)</span>, range_max <span class="op">=</span> <span class="fl">75000</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-example-3.png" width="100%"></p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://adriaandokter.com/bioRad/reference/calculate_vp.html" class="external-link">calculate_vp</a></span><span class="op">(</span><span class="va">pvol</span>, h_layer <span class="op">=</span> <span class="fl">50</span>, n_layer <span class="op">=</span> <span class="fl">40</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Running vol2birdSetUp</span></span>
+<span><span class="co">#&gt; Warning: correlation coefficient missing, dropping scan 4 ...</span></span>
+<span><span class="co">#&gt; Warning: correlation coefficient missing, dropping scan 7 ...</span></span>
+<span><span class="co">#&gt; Warning: correlation coefficient missing, dropping scan 9 ...</span></span>
+<span><span class="co">#&gt; Warning: correlation coefficient missing, dropping scan 10 ...</span></span>
+<span><span class="co">#&gt; Warning: correlation coefficient missing, dropping scan 11 ...</span></span>
+<span><span class="co">#&gt; Warning: correlation coefficient missing, dropping scan 12 ...</span></span>
+<span><span class="co">#&gt; Warning: radial velocities will be dealiased...</span></span></code></pre></div>
+<p><img src="reference/figures/README-example-4.png" width="100%"></p>
+<p>Download a vertical profile time series from the <a href="https://aloftdata.eu/browse/" class="external-link">Aloft bucket</a>:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Plot VPTS data for two radars</span></span>
+<span><span class="va">vpts_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_vpts.html">get_vpts</a></span><span class="op">(</span></span>
+<span>  radar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bejab"</span>, <span class="st">"deess"</span><span class="op">)</span>,</span>
+<span>  datetime <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/interval.html" class="external-link">interval</a></span><span class="op">(</span></span>
+<span>    <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_datetime</a></span><span class="op">(</span><span class="st">"2021-10-03 16:00:00"</span><span class="op">)</span>, </span>
+<span>    <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_datetime</a></span><span class="op">(</span><span class="st">"2021-10-05 10:00:00"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  source <span class="op">=</span> <span class="st">"baltrad"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">vpts_list</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://adriaandokter.com/bioRad/reference/regularize_vpts.html" class="external-link">regularize_vpts</a></span><span class="op">(</span><span class="va">vpts_list</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, main <span class="op">=</span> <span class="va">i</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-vpts-1.png" width="100%"></p>
 </div>
 <div class="section level2">
 <h2 id="meta">Meta<a class="anchor" aria-label="anchor" href="#meta"></a>
@@ -139,6 +172,7 @@
 <li>Bart Kranstauber <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-8303-780X" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
 <li>Pieter Huybrechts <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-6658-6062" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
 <li>Peter Desmet <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-8442-8025" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
+<li>Biodiversa+ <br><small class="roles"> Funder </small>   </li>
 <li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
@@ -149,7 +183,7 @@
 <li><a href="https://CRAN.R-project.org/package=getRad" class="external-link"><img src="https://www.r-pkg.org/badges/version/getRad" alt="CRAN status"></a></li>
 <li><a href="https://github.com/aloftdata/getRad/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/aloftdata/getRad/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://app.codecov.io/gh/aloftdata/getRad/" class="external-link"><img src="https://codecov.io/gh/aloftdata/getRad/branch/main/graph/badge.svg" alt="codecov"></a></li>
-<li><a href="https://www.repostatus.org/#wip" class="external-link"><img src="https://www.repostatus.org/badges/latest/wip.svg" alt="repo status"></a></li>
+<li><a href="https://www.repostatus.org/#active" class="external-link"><img src="https://www.repostatus.org/badges/latest/active.svg" alt="repo status"></a></li>
 </ul>
 </div>
 
@@ -158,7 +192,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Bart Kranstauber, Pieter Huybrechts, Peter Desmet.</p>
+  <p>Developed by Bart Kranstauber, Pieter Huybrechts, Peter Desmet, Biodiversa+.</p>
 </div>
 
 <div class="pkgdown-footer-right">

@@ -315,7 +315,7 @@ fetch_from_url_raw <- function(urls, use_cache = TRUE){
     # Optionally cache the responses
     purrr::map(req_cache_getrad) |>
     # Perform the requests in parallel
-    httr2::req_perform_parallel() |>
+    httr2::req_perform_parallel(progress = interactive()) |>
     # Fetch the response bodies and parse it using vroom
     ## A helper in bioRad (validate_vpts()) that we call indirectly via
     # " bioRad::as.vpts() currently doesn't support factors: bioRad v0.8.1

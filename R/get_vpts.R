@@ -166,40 +166,8 @@ get_vpts <- function(radar,
   ## at a time
   rounded_interval <- round_interval(date_interval, "day")
 
-  # Query the selected radars and fetched coverage for aloft vpts data.
-  # fetched_vpts <-
-  #   purrr::map(
-  #     selected_radars,
-  #     ~ get_vpts_aloft(
-  #       .x,
-  #       rounded_interval = rounded_interval,
-  #       source = selected_source,
-  #       coverage = coverage
-  #     )
-  #   ) |>
-  #   radar_to_name()
-
-  # fetched_vpts <-
-  #   switch(source,
-  #     c(
-  #       rmi = get_vpts_rmi(radar, rounded_interval),
-  #       # For every value of the source argument in get_vpts_aloft(),
-  #       # generate an expression and link it to it's source
-  #       purrr::set_names(
-  #         rep(
-  #           purrr::map(
-  #             selected_radars,
-  #             ~ get_vpts_aloft(.x,
-  #               rounded_interval = rounded_interval,
-  #               source = selected_source
-  #             )
-  #           ),
-  #           length(eval(formals("get_vpts_aloft")$source))
-  #         ),
-  #         nm = eval(formals("get_vpts_aloft")$source)
-  #       )
-  #     )
-  #   )
+  # Query the selected radars by directing to the correct get_vpts_* helper
+  # based on source.
 
   fetched_vpts <-
     switch(dplyr::case_when(

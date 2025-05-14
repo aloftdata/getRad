@@ -17,7 +17,7 @@ getRad is an R package that provides a unified interface to download
 radar data for biological and aeroecological research. It gives access
 to both polar volume radar data and [vertical profile
 data](https://aloftdata.eu/vpts-csv/) from [different
-sources](https://aloftdata.github.io/getRad/articles/supported_countries.html)
+sources](https://aloftdata.github.io/getRad/articles/supported_sources.html)
 and loads it directly into R. getRad also facilitates further
 exploration of the data by other tools such as
 [bioRad](https://adokter.github.io/bioRad) by standardizing the data.

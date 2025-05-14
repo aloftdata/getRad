@@ -4,8 +4,7 @@
 #' [polar volume objects][bioRad::summary.pvol].
 #'
 #' @details
-#' For more details on supported countries, see
-#' `vignette("supported_countries")`.
+#' For more details on supported sources, see `vignette("supported_sources")`.
 #'
 #' @param radar Name of the radar (odim code) as a character string (e.g.
 #'   `"nlhrw"` or `"fikor"`).

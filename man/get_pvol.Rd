@@ -29,8 +29,7 @@ Gets polar volume data for supported countries and returns it as a (list of)
 \link[bioRad:summary.pvol]{polar volume objects}.
 }
 \details{
-For more details on supported countries, see
-\code{vignette("supported_countries")}.
+For more details on supported sources, see \code{vignette("supported_sources")}.
 }
 \examples{
 \dontrun{

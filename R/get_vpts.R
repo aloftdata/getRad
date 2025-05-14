@@ -4,6 +4,9 @@
 #' as a (list of) of [vpts objects][bioRad::summary.vpts] or a
 #' [dplyr::tibble()].
 #'
+#' @details
+#' For more details on supported sources, see `vignette("supported_sources")`.
+#'
 #' @inheritParams get_pvol
 #' @inherit get_vpts_aloft details
 #' @param datetime Either:

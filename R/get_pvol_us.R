@@ -89,8 +89,7 @@ get_pvol_us <- function(radar, time, ...) {
       class = "getRad_error_us_no_scan_found"
     )
   }
-#  max(which(datetime<ts)) XX Elske is checking
-  keys[which.min(abs(difftime(ts, datetime, units = "secs")))]
+  keys[max(which(datetime<ts))]
 }
 
 nexrad_key_to_url <- function(key) {

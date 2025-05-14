@@ -104,7 +104,7 @@ get_vpts_rmi <- function(radar_odim_code,
 #'     unlist() |> # read_lines_from_url() returns a list
 #'     tail(-4) |> # skip the metadata
 #'     parse_rmi()
-parse_rmi <- function(lines){
+parse_rmi <- function(lines) {
   dplyr::tibble(
     source = "rmi",
     datetime = get_datetime(lines),

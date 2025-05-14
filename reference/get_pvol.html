@@ -59,9 +59,9 @@ polar volume objects."></head><body>
 
 
 <dt id="arg-datetime">datetime<a class="anchor" aria-label="anchor" href="#arg-datetime"></a></dt>
-<dd><p>Either:</p><ul><li><p>A single <code><a href="https://rdrr.io/r/base/DateTimeClasses.html" class="external-link">POSIXct</a></code>, for which the nearest data
-file is downloaded.</p></li>
-<li><p>A <code><a href="https://lubridate.tidyverse.org/reference/interval.html" class="external-link">lubridate::interval()</a></code>, between which all data files are downloaded.</p></li>
+<dd><p>Either:</p><ul><li><p>A single <code><a href="https://rdrr.io/r/base/DateTimeClasses.html" class="external-link">POSIXct</a></code>, for which the most representative data
+file is downloaded. In most cases this will be the time before.</p></li>
+<li><p>A <code><a href="https://lubridate.tidyverse.org/reference/interval.html" class="external-link">lubridate::interval()</a></code> or two <code><a href="https://rdrr.io/r/base/DateTimeClasses.html" class="external-link">POSIXct</a></code>, between which all data files with a reference time in the interval are downloaded.</p></li>
 </ul></dd>
 
 

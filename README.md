@@ -17,31 +17,25 @@ getRad is an R package that provides a unified interface to download
 radar data for biological and aeroecological research. It gives access
 to both polar volume radar data and [vertical profile
 data](https://aloftdata.eu/vpts-csv/) from [different
-repositories](https://aloftdata.github.io/getRad/articles/supported_countries.html)
+sources](https://aloftdata.github.io/getRad/articles/supported_countries.html)
 and loads it directly into R. getRad also facilitates further
 exploration of the data by other tools such as
 [bioRad](https://adokter.github.io/bioRad) by standardizing the data.
 
 ## Installation
 
-You can install the released version of getRad from CRAN with:
+Install the latest released version from CRAN:
 
 ``` r
 install.packages("getRad")
 ```
 
-Alternatively, you can install the development version of getRad from
-[GitHub](https://github.com/) with:
+Or the development version from
+[GitHub](https://github.com/aloftdata/getRad):
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("aloftdata/getRad")
-```
-
-Then load the package:
-
-``` r
-library(getRad)
 ```
 
 ## Usage
@@ -52,7 +46,7 @@ Download a polar volume, and then plot it using `bioRad`:
 library(getRad)
 library(bioRad)
 #> Welcome to bioRad version 0.9.1.9000
-#> using vol2birdR version 1.0.9 (MistNet not installed)
+#> using vol2birdR version 1.0.5 (MistNet not installed)
 # Plot insect movements in Finland (Mäkinen et al. 2022)
 pvol <- get_pvol("fianj", as.POSIXct("2012-5-17 14:15", tz = "UTC"))
 plot(project_as_ppi(get_scan(pvol, 0), range_max = 75000))
@@ -74,18 +68,21 @@ plot(calculate_vp(pvol, h_layer = 50, n_layer = 40))
 
 <img src="man/figures/README-example-2.png" width="100%" />
 
-Download a vertical profile time series from the
-[Aloft](https://aloftdata.eu/) bucket:
+Download a vertical profile time series from the [Aloft
+bucket](https://aloftdata.eu/browse/):
 
 ``` r
-vpts_list <- get_vpts(c("bewid", "deess"),
-  lubridate::interval(lubridate::as_datetime("2016-10-03 16:00:00"), 
-                      lubridate::as_datetime("2016-10-05 10:00:00")),
+vpts_list <- get_vpts(
+  radar = c("bewid", "deess"),
+  datetime = lubridate::interval(
+    lubridate::as_datetime("2016-10-03 16:00:00"), 
+    lubridate::as_datetime("2016-10-05 10:00:00")
+  ),
   source = "ecog-04003"
 )
 par(mfrow = 2:1)
 for(i in names(vpts_list))
-  plot(regularize_vpts(vpts_list[[i]]), main=i)
+  plot(regularize_vpts(vpts_list[[i]]), main = i)
 #> projecting on 300 seconds interval grid...
 #> projecting on 900 seconds interval grid...
 ```

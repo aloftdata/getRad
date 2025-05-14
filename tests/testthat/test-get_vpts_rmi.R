@@ -75,7 +75,7 @@ test_that("get_vpts_rmi() supports intervals passing a year boundary", {
   # Check that the requested years are present
   expect_identical(
     unique(lubridate::year(rmi_vpts_tbl_multi_year$datetime)),
-    c(2023L, 2024L)
+    c(2023, 2024)
   )
 })
 

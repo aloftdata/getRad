@@ -43,7 +43,7 @@ devtools::install_github("aloftdata/getRad")
 
 Download a polar volume, and then plot it using `bioRad`:
 
-```{r example, message = FALSE}
+```{r example, message = FALSE, warning = FALSE}
 library(getRad)
 library(bioRad)
 # Plot daytime insect movements in Finland (Mäkinen et al. 2022)
@@ -59,8 +59,7 @@ plot(calculate_vp(pvol, h_layer = 50, n_layer = 40))
 
 Download a vertical profile time series from the [Aloft bucket](https://aloftdata.eu/browse/):
 
-```{r vpts, message = FALSE}
-
+```{r vpts, message = FALSE, warning = FALSE}
 # Plot VPTS data for two radars
 vpts_list <- get_vpts(
   radar = c("bejab", "deess"),

@@ -93,7 +93,6 @@ Download a vertical profile time series from the [Aloft
 bucket](https://aloftdata.eu/browse/):
 
 ``` r
-
 # Plot VPTS data for two radars
 vpts_list <- get_vpts(
   radar = c("bejab", "deess"),
@@ -106,10 +105,6 @@ vpts_list <- get_vpts(
 par(mfrow = 2:1)
 for(i in names(vpts_list))
   plot(regularize_vpts(vpts_list[[i]]), main = i)
-#> Warning in regularize_vpts(vpts_list[[i]]): Dropped 337 profiles with duplicate
-#> datetime values
-#> Warning in regularize_vpts(vpts_list[[i]]): Dropped 338 profiles with duplicate
-#> datetime values
 ```
 
 <img src="man/figures/README-vpts-1.png" width="100%" />

@@ -28,7 +28,15 @@
 #' )
 #' }
 get_pvol <- function(radar = NULL, datetime = NULL, ...) {
-  check_odim(radar)
+  
+    if (!(all(is_odim(radar)) || all(is_nexrad(radar)))) {
+    cli::cli_abort(
+      "Argument {.arg radar} must be either one or more 5-char ODIM codes\n",
+      "or one or more 4-char NEXRAD ICAO codes (but not a mix of both).",
+      class = "getRad_error_radar_must_be_odim_or_nexrad"
+    )
+  }
+
   if(anyDuplicated(radar))
   {
     cli::cli_abort(

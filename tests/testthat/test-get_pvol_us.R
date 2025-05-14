@@ -1,19 +1,16 @@
-time <- ymd_hms("2024-05-12 04:10:00", tz = "UTC")
-test_that("nearest NEXRAD key is floored correctly", {
-    skip_if_offline()
-    key <- getRad:::.nearest_nexrad_key(time, "KABR")
-    expect_equal(key, "2024/05/12/KABR/KABR20240512_040622_V06")
-})
-
-test_that("URL helper concatenates correctly", {
-    skip_if_offline()
-    key  <- "2024/05/12/KABR/KABR20240512_040622_V06"
-    url  <- "https://noaa-nexrad-level2.s3.amazonaws.com/2024/05/12/KABR/KABR20240512_040622_V06"
-    expect_equal(getRad::nexrad_key_to_url(key), url)
-})
+time <- lubridate::ymd_hms("2024-05-12 04:10:00", tz = "UTC")
 
 test_that("get_pvol_us downloads and reads a pvol", {
     skip_if_offline()
-    pvol <- getRad::get_pvol_us("KABR", time)
+    pvol <- getRad::get_pvol("KABR", time)
     expect_true(inherits(pvol, "pvol"))
 })
+
+nexrad_stations <- read_fwf(
+  "~/Downloads/nexrad-stations.txt",          # keep raw txt in data-raw/
+  fwf_cols(icao = c(10, 13)),              # start = 10, end = 13  (1-indexed)
+  skip = 2,                                # drop the header + dashes
+  col_types = "c",                         # all character
+  trim_ws = TRUE
+) |>
+  filter(grepl("^[A-Z]{4}$", icao))        # sanity check

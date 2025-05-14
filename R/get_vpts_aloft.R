@@ -34,7 +34,7 @@
 #' )
 get_vpts_aloft <- function(radar_odim_code,
                            rounded_interval,
-                           source,
+                           source = c("baltrad", "uva", "ecog-04003"),
                            coverage = aloft_data_coverage()) {
   # rename source argument for readability
   selected_source <- source
@@ -66,6 +66,25 @@ get_vpts_aloft <- function(radar_odim_code,
     cli::cli_abort(
       "No data found for the requested radar(s) and date(s).",
       class = "getRad_error_date_not_found"
+    )
+  }
+
+  # Check if the requested radars are present in the coverage for the source.
+  found_radars <-
+    dplyr::filter(
+      coverage,
+      .data$source %in% selected_source,
+      .data$radar %in% radar_odim_code
+    ) |>
+    dplyr::pull(radar)
+  missing_radars <- setdiff(radar_odim_code, found_radars)
+
+  if (!all(radar_odim_code %in% coverage$radar)) {
+    cli::cli_abort(
+      "{length(missing_radars)} Radar{?s} not found in {source} coverage:
+      {glue::backtick(missing_radars)}",
+      missing_radars = missing_radars,
+      class = "getRad_error_radar_not_found"
     )
   }
 

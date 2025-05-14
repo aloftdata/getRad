@@ -166,28 +166,6 @@ get_vpts <- function(radar,
   ## We need to round the interval because coverage only has daily resolution
   rounded_interval <- round_interval(date_interval, "day")
 
-  # Discover what data is available for the requested radar and time interval
-  coverage <- aloft_data_coverage(use_cache = TRUE)
-
-  # Check if the requested radars are present in the coverage
-  found_radars <-
-    dplyr::filter(
-      coverage,
-      .data$source %in% selected_source,
-      .data$radar %in% selected_radars
-    ) |>
-    dplyr::pull(radar)
-  missing_radars <- setdiff(selected_radars, found_radars)
-
-  if (!all(selected_radars %in% coverage$radar)) {
-    cli::cli_abort(
-      "{length(missing_radars)} Radar{?s} not found in {source} coverage:
-      {glue::backtick(missing_radars)}",
-      missing_radars = missing_radars,
-      class = "getRad_error_radar_not_found"
-    )
-  }
-
   # Query the selected radars and fetched coverage for aloft vpts data.
   # fetched_vpts <-
   #   purrr::map(

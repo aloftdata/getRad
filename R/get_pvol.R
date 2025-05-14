@@ -10,12 +10,12 @@
 #' @param radar Name of the radar (odim code) as a character string (e.g.
 #'   `"nlhrw"` or `"fikor"`).
 #' @param datetime Either:
-#'   - A single [`POSIXct`][base::DateTimeClasses], for which the nearest data
-#'   file is downloaded.
-#'   - A [lubridate::interval()], between which all data files are downloaded.
+#'   - A single [`POSIXct`][base::DateTimeClasses], for which the most representative data
+#'   file is downloaded. In most cases this will be the time before.
+#'   - A [lubridate::interval()] or two [`POSIXct`][base::DateTimeClasses], between which all data files with a reference time in the interval are downloaded.
 #' @param ... Additional arguments passed on to reading functions, for example
 #'   `param = "all"` to the [bioRad::read_pvolfile()].
-#' @return Either a polar volume or a list of polar volumes. See
+#' @return Either a polar volume or a list of polar volumes when requesting an interval. See
 #'   [bioRad::summary.pvol()] for details.
 #' @export
 #' @examples
@@ -28,71 +28,90 @@
 #' )
 #' }
 get_pvol <- function(radar = NULL, datetime = NULL, ...) {
-  check_odim(radar)
-  if(anyDuplicated(radar))
-  {
+  check_odim_nexrad(radar)
+  if (anyDuplicated(radar)) {
     cli::cli_abort(
       "The argument {.arg radar} contains duplications these should be removed.",
-      class="getRad_error_radar_duplicated"
+      class = "getRad_error_radar_duplicated"
     )
   }
+  if (inherits(datetime, "POSIXct") && length(datetime) == 2) {
+    if(any(duplicated(datetime))){
+      cli::cli_abort("When providing two {.cls POSIXct} as a {.arg datetime}
+                     they should differ to represent an inverval.",
+                     class = "getRad_error_duplicated_timestamps")
+    }
+    datetime <- lubridate::interval(min(datetime), max(datetime))
+  }
   if (is.null(datetime) ||
-      !inherits(datetime, c("POSIXct", "Interval")) ||
-      anyDuplicated(datetime) ||
-      (any((as.numeric(datetime) %% 300) != 0) && inherits(datetime, "POSIXct"))) {
+    !inherits(datetime, c("POSIXct", "Interval")) ||
+    !rlang::is_scalar_vector(datetime)
+  ) {
     cli::cli_abort("The argument {.arg datetime} to the {.fn get_pvol} function
-                   should be a POSIXct without duplications. All timestamps
-                   should be rounded to 5 minutes intervals.",
+                   should be a single {.cls POSIXct} or a {.cls interval}.",
       class = "getRad_error_time_not_correct"
     )
   }
-  if (lubridate::is.interval(datetime) && !rlang::is_scalar_vector(datetime)) {
-    cli::cli_abort(
-      "Only one `interval` can be provided as the {.arg datetime} argument.",
-      class = "getRad_error_multiple_intervals_provided"
-    )
+
+
+  safe_get_pvol <- purrr::possibly(get_pvol, otherwise = NULL, quiet = TRUE)
+
+  # First start mapping over radars so later one only one radar is present. I
+  # do however here already check if I can find a function for a radar to
+  # ensure early failure and not first do a lot of download before failing on
+  # the last radar
+  if (length(radar) != 1) {
+    purrr::map(radar, select_get_pvol_function) # quick check if all radars exist
+    pvols <- purrr::map(radar, safe_get_pvol, datetime = datetime, ...)
+    if (lubridate::is.interval(datetime)) {
+      pvols <- unlist(pvols, recursive = F)
+    }
+    return(pvols)
   }
+
+
+  fn <- select_get_pvol_function(radar)
+
   if (lubridate::is.interval(datetime)) {
-    timerange <-
-      lubridate::floor_date(
-        seq(lubridate::int_start(datetime),
-          lubridate::int_end(datetime),
-          by = "5 mins"
-        ),
-        "5 mins"
-      )
-    datetime <- timerange[timerange %within% datetime]
-    if (length(datetime) > 10) {
-      cli::cli_warn("The interval specified for {.arg datetime} resulted in
-                    {length(datetime)} timestamps, when loading that may polar
+    if (lubridate::as.duration(datetime) > lubridate::hours(1)) {
+      cli::cli_warn("The interval specified for {.arg datetime} () likely results
+                    in many polar volumes, when loading that may polar
                     volumes at the same time computational issues frequently
                     occur.",
         class = "getRad_warn_many_pvols_requested"
       )
     }
   }
-
-  if (length(datetime) != 1) {
-    polar_volumes <- (purrr::map(datetime, get_pvol, radar = radar, ...))
-    if (length(radar) != 1) {
-      # in case multiple radars are requested the results of the recursive call
-      # is a list of polar volumes, to prevent a nested list this unlist
-      # statement is used
-      polar_volumes <- unlist(polar_volumes, recursive = FALSE)
+  # for all but the us we can predict nominal times (every 5 minutes) and therefore we can do recursive calls to the respective function using one timestamp. In the US we call with an interval and in the function find the right keys
+  if (fn != "get_pvol_us") {
+    if (lubridate::is.interval(datetime)) {
+      timerange <-
+        lubridate::floor_date(
+          seq(lubridate::int_start(datetime),
+            lubridate::int_end(datetime) + lubridate::minutes(5),
+            by = "5 mins"
+          ),
+          "5 mins"
+        )
+      datetime <- timerange[timerange %within% datetime]
+      polar_volumes <- purrr::map(datetime, safe_get_pvol, radar = radar, ...)
+      return(polar_volumes)
+    } else {
+      get(fn)(radar, lubridate::floor_date(datetime,"5 mins"), ...)
     }
-    return(polar_volumes)
+  } else {
+    # For now then US data is request the interval if forwarded
+    # get_pvol_us supports intervals
+    get(fn)(radar, datetime, ...)
   }
-  if (length(radar) != 1) {
-    return(purrr::map(radar, get_pvol, datetime = datetime, ...))
-  }
-
-  fn <- select_get_pvol_function(radar)
-  get(fn)(radar, datetime, ...)
 }
 
 
 # Helper function to find the function for a specific radar
 select_get_pvol_function <- function(radar) {
+  if (is_nexrad(radar)) {
+    return("get_pvol_us")
+  }
   cntry_code <- substr(radar, 1, 2) # nolint
   fun <- (dplyr::case_when(
     cntry_code == "nl" ~ "get_pvol_nl",

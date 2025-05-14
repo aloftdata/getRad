@@ -229,8 +229,18 @@ is_odim<-function(x){
     }
   rlang::is_character(x) & !is.na(x) & grepl("^[a-zA-Z]{5}$",x)
 }
+is_nexrad <- function(x) {
+  if (length(x) < 1) return(FALSE)
+  rlang::is_character(x) & !is.na(x) & grepl("^[A-Za-z]{4}$", x)
+}
+is_odim_nexrad <- function(x) {
+  is_odim(x) | is_nexrad(x)
+}
 is_odim_scalar<-function(x){
   rlang::is_scalar_character(x) && all(is_odim(x))
+}
+is_odim_nexrad_scalar <- function(x) {
+  rlang::is_scalar_character(x) && is_odim_nexrad(x)
 }
 check_odim<-function(x){
   if(!all(is_odim(x)))
@@ -242,6 +252,15 @@ check_odim<-function(x){
     )
   }
 }
+check_odim_nexrad <- function(x) {
+  if (!all(is_odim_nexrad(x))) {
+    cli::cli_abort(
+      "Each element of {.arg radar} must be either a 5-letter ODIM code
+      or a 4-letter NEXRAD ICAO code.",
+      class = "getRad_error_radar_not_odim_nexrad")
+  }
+  invisible(TRUE)
+}
 check_odim_scalar<-function(x){
   if(!is_odim_scalar(x))
     cli::cli_abort(
@@ -250,7 +269,14 @@ check_odim_scalar<-function(x){
     class = "getRad_error_radar_not_single_odim_string"
   )
 }
-
+check_odim_nexrad_scalar <- function(x) {
+  if (!is_odim_nexrad_scalar(x)) {
+    cli::cli_abort(
+      "Radar must be exactly one 5-letter ODIM code or one 4-letter NEXRAD code.",
+      class = "getRad_error_radar_not_single_odim_nexrad")
+  }
+  invisible(TRUE)
+}
 #' Create an .onload function to set package options during load
 #'
 #' - getRad.key_prefix is the default prefix used when setting or getting

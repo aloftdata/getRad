@@ -11,7 +11,8 @@
 #' @examples
 #' string_extract("Hello World", "o W")
 string_extract <- function(string, pattern) {
-  regmatches(string, regexpr(pattern, text = string, perl = TRUE))
+  regmatches(string, regexpr(pattern, text = string, perl = TRUE)) |>
+    as.character() # avoid returning class glue
 }
 
 #' Replace a pattern in a string with a replacement

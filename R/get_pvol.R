@@ -28,7 +28,7 @@
 #' )
 #' }
 get_pvol <- function(radar = NULL, datetime = NULL, ...) {
-  check_odim(radar)
+  check_odim_nexrad(radar)
   if(anyDuplicated(radar))
   {
     cli::cli_abort(
@@ -93,6 +93,7 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
 
 # Helper function to find the function for a specific radar
 select_get_pvol_function <- function(radar) {
+  if (is_nexrad(radar)) return("get_pvol_us")
   cntry_code <- substr(radar, 1, 2) # nolint
   fun <- (dplyr::case_when(
     cntry_code == "nl" ~ "get_pvol_nl",

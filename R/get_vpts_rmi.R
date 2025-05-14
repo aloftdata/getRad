@@ -78,7 +78,7 @@ get_vpts_rmi <- function(radar_odim_code,
   enriched_vpts <-
     dplyr::left_join(combined_vpts,
                      radar_metadata,
-                     by = dplyr::join_by(radar == odimcode))
+                     by = dplyr::join_by("radar" == "odimcode"))
 
   return(enriched_vpts)
 }

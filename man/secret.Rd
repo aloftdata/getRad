@@ -17,8 +17,8 @@ get_secret(name)
 the system will prompt the user.}
 }
 \value{
-\code{set_secret()} returns \code{TRUE} when a secret has successfully been set.
-\code{get_secret()} returns the secret as a character string.
+\code{set_secret()} returns \code{TRUE} when a secret has successfully been
+set. \code{get_secret()} returns the secret as a character string.
 }
 \description{
 Some services require credentials to access data. This function uses

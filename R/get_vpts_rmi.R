@@ -48,15 +48,17 @@ get_vpts_rmi <- function(radar_odim_code,
     purrr::map(rmi_files, \(lines) tail(lines, -4)) |>
     purrr::map(parse_rmi) |>
     # Add the source_file column
-    purrr::map2(rmi_files, ~dplyr::mutate(.x,
-                               source_file =
-                                 basename(get_rmi_sourcefile(.y)))) |>
+    purrr::map2(rmi_files, ~ dplyr::mutate(.x,
+      source_file =
+        basename(get_rmi_sourcefile(.y))
+    )) |>
     # Add the radar column from the file path
-    purrr::map2(resolving_rmi_urls, ~dplyr::mutate(.x,
-                                   radar = string_extract(.y,
-                                                          "(?<=vbird\\/)[a-z]+")
-                                   )
-                ) |>
+    purrr::map2(resolving_rmi_urls, ~ dplyr::mutate(.x,
+      radar = string_extract(
+        .y,
+        "(?<=vbird\\/)[a-z]+"
+      )
+    )) |>
     purrr::list_rbind()
 
   # Enrich with metadata from `weather_radars()`, but only from the `main`

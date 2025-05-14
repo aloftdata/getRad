@@ -1,3 +1,17 @@
+test_that("weather_radars source `argument`", {
+  expect_error(weather_radars(1),
+    class = "getRad_error_weather_radar_source_not_character"
+  )
+  expect_error(weather_radars(character()),
+    class = "getRad_error_weather_radar_source_not_character"
+  )
+  expect_error(weather_radars(c("asdf", NA)),
+    class = "getRad_error_weather_radar_source_not_character"
+  )
+  expect_error(weather_radars(c("opera", "nextrad")),
+    class = "getRad_error_weather_radar_source_not_valid"
+  )
+})
 test_that("weather_radars returns a tibble", {
   skip_if_offline(host = "eumetnet.eu")
   if (!exists("weather_radar_metadata")) {
@@ -25,7 +39,7 @@ test_that("weather_radars returns a tibble with expected columns", {
   ## Right number of columns
   expect_length(
     weather_radar_metadata,
-    29
+    31
   )
 
   ## Right columns, in a certain order
@@ -33,6 +47,7 @@ test_that("weather_radars returns a tibble with expected columns", {
     ignore.order = FALSE,
     weather_radar_metadata,
     c(
+      "radar",
       "number",
       "country",
       "countryid",
@@ -61,6 +76,7 @@ test_that("weather_radars returns a tibble with expected columns", {
       "finishyear",
       "singlerrr",
       "compositerrr",
+      "origin",
       "source"
     )
   )
@@ -75,6 +91,7 @@ test_that("weather_radars returns tibble with correct data types", {
   expect_identical(
     purrr::map(weather_radar_metadata, class),
     list(
+      radar = "character",
       number = "integer",
       country = "character",
       countryid = "character",
@@ -103,6 +120,7 @@ test_that("weather_radars returns tibble with correct data types", {
       finishyear = "integer",
       singlerrr = "logical",
       compositerrr = "logical",
+      origin = "character",
       source = "character"
     )
   )
@@ -167,7 +185,7 @@ test_that("weather_radars() should return a source column", {
 
   ## Does it contain only the values `main` and `archive`?
   expect_in(
-    weather_radar_metadata$source,
+    weather_radar_metadata$origin,
     c("main", "archive")
   )
 })
@@ -211,4 +229,26 @@ test_that("weather_radars() doesn't return empty strings, but NA instead", {
       )
     )
   )
+})
+test_that("weather_radars nexrad downloads", {
+  skip_if_offline(host = "ncei.noaa.gov")
+
+  expect_named(
+    weather_radars(
+      "nexrad",
+      c(
+        "ncdcid", "icao", "wban", "name", "country", "st", "county",
+        "elev", "utc", "stntype", "radar", "latitude", "longitude",
+        "location", "heightantenna", "source"
+      )
+    )
+  )
+  expect_gt(nrow(weather_radars("nexrad")), 170)
+})
+
+test_that("weather_radars nexrad downloads", {
+  skip_if_offline(host = "ncei.noaa.gov")
+  skip_if_offline(host = "eumetnet.eu")
+
+  expect_identical(weather_radars(c("opera", "nexrad")), weather_radars("all"))
 })

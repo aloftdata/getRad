@@ -2,20 +2,43 @@
 % Please edit documentation in R/weather_radars.R
 \name{weather_radars}
 \alias{weather_radars}
-\title{Get weather radar data}
+\title{Get weather radar metadata}
 \usage{
-weather_radars()
+weather_radars(source = c("opera"), use_cache = TRUE, ...)
+}
+\arguments{
+\item{source}{Source of the metadata. \code{"opera"}, \code{"nexrad"} or \code{"all"}.}
+
+\item{use_cache}{Logical indicating whether to use the cache. Default is
+\code{TRUE}. If \code{FALSE} the cache is ignored and the file is fetched anew.
+This can also be useful if you want to force a refresh of the cache.}
+
+\item{...}{Additional arguments passed on to reading functions per source,
+currently not used.}
 }
 \value{
-A tibble containing weather radar metadata
+A tibble with weather radar metadata. In all cases the column \code{source} is
+added to indicate the source of the data and \code{radar} to show the radar identifiers
+used in other functions like \code{\link[=get_pvol]{get_pvol()}} and \code{\link[=get_vpts]{get_vpts()}}.
 }
 \description{
-The \code{weather_radars()} function is used to retreive weather radar metadata
-from the \href{https://www.eumetnet.eu/observations/weather-radar-network/}{OPERA network}.
-The retrieved data is returned as a tibble.
+Gets weather radar metadata from \href{https://www.eumetnet.eu/activities/observations-programme/current-activities/opera/}{OPERA}
+and/or \href{https://www.ncei.noaa.gov/products/radar/next-generation-weather-radar}{NEXRAD}.
+}
+\details{
+The source files for this function are:
+\itemize{
+\item For \code{opera}: \href{http://eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_DB.json}{OPERA_RADARS_DB.json}
+and \href{http://eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_ARH_DB.json}{OPERA_RADARS_ARH_DB.json}.
+\item For \code{nexrad}: \href{https://www.ncei.noaa.gov/access/homr/file/nexrad-stations.txt}{nexrad-stations.txt}.
+}
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-weather_radars()
+# Get radar metadata from OPERA
+weather_radars(source = "opera")
+
+# Get radar metadata from NEXRAD
+weather_radars(source = "nexrad")
 \dontshow{\}) # examplesIf}
 }

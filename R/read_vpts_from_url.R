@@ -1,24 +1,21 @@
-#' Reading vpts files from a vector of urls
+#' Reading VPTS files from a vector of URLs
 #'
-#' This is a simple helper to read a vector of urls as vpts files using vroom
+#' This is a simple helper to read a vector of URLs as VPTS files using vroom
 #' and httr2. This wrapper makes use of purrr to create requests that can be
 #' handled in parallel with our own custom retry settings and user agent.
 #'
+#' @details
 #' Apart from parallelisation and these custom settings, this could also be
-#' handled by simple call to `vroom::vroom(file = urls)`
+#' handled by simple call to `vroom::vroom(file = urls)`.
 #'
-#' This function also includes column specifications for the vpts csv data
+#' This function also includes column specifications for the VPTS-CSV data
 #' standard. However, [bioRad::as.vpts()] currently doesn't support factors,
 #' thus any fields sent to that function need to be parsed as character vectors.
 #'
-#' @param urls A character vector of urls to vpts files.
-#' @param use_cache Logical. If TRUE, the response will be cached in package
-#'   cache. If `FALSE` the cache is ignored and the file is fetched from the
-#'   url. This can be useful if you want to force a refresh of the cache.
-#'
-#' @return A list of tibbles, one for each url.
+#' @param urls Character vector of URLs to VPTS files.
+#' @inheritParams req_cache_getrad
+#' @return A list of tibbles, one for each URL.
 #' @noRd
-#'
 #' @examples
 #' c(
 #'   "https://aloftdata.s3-eu-west-1.amazonaws.com/baltrad/daily/bejab/2024/bejab_vpts_20240305.csv",
@@ -38,23 +35,7 @@ read_vpts_from_url <- function(urls, use_cache = TRUE) {
     # Set retry conditions
     purrr::map(req_retry_getrad) |>
     # Optionally cache the responses
-    (\(request_list) if (use_cache) {
-      purrr::map(
-        request_list,
-        \(request) {
-          httr2::req_cache(request,
-            path = file.path(
-              tools::R_user_dir("getRad", "cache"),
-              "httr2"
-            ),
-            max_age = getOption("getRad.max_cache_age_seconds"),
-            max_size = getOption("getRad.max_cache_size_bytes")
-          )
-        }
-      )
-    } else {
-      request_list
-    })() |>
+    purrr::map(\(req) req_cache_getrad(req, use_cache = use_cache)) |>
     # Perform the requests in parallel
     httr2::req_perform_parallel() |>
     # Fetch the response bodies and parse it using vroom

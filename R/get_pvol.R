@@ -10,9 +10,9 @@
 #' @param radar Name of the radar (odim code) as a character string (e.g.
 #'   `"nlhrw"` or `"fikor"`).
 #' @param datetime Either:
-#'   - A single [`POSIXct`][base::DateTimeClasses], for which the nearest data
-#'   file is downloaded.
-#'   - A [lubridate::interval()], between which all data files are downloaded.
+#'   - A single [`POSIXct`][base::DateTimeClasses], for which the most representative data
+#'   file is downloaded. In most cases this will be the time before.
+#'   - A [lubridate::interval()] or two [`POSIXct`][base::DateTimeClasses], between which all data files with a reference time in the interval are downloaded.
 #' @param ... Additional arguments passed on to reading functions, for example
 #'   `param = "all"` to the [bioRad::read_pvolfile()].
 #' @return Either a polar volume or a list of polar volumes. See
@@ -38,11 +38,10 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
   }
   if (is.null(datetime) ||
       !inherits(datetime, c("POSIXct", "Interval")) ||
-      anyDuplicated(datetime) ||
-      (any((as.numeric(datetime) %% 300) != 0) && inherits(datetime, "POSIXct"))) {
+      !rlang::is_scalar_vector(datetime)
+      ) {
     cli::cli_abort("The argument {.arg datetime} to the {.fn get_pvol} function
-                   should be a POSIXct without duplications. All timestamps
-                   should be rounded to 5 minutes intervals.",
+                   should be a single {.cls POSIXct} or a {.cls interval}.",
       class = "getRad_error_time_not_correct"
     )
   }
@@ -95,7 +94,9 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
 
 # Helper function to find the function for a specific radar
 select_get_pvol_function <- function(radar) {
-  if (is_nexrad(radar)) return("get_pvol_us")
+  if (is_nexrad(radar)) {
+    return("get_pvol_us")
+    }
   cntry_code <- substr(radar, 1, 2) # nolint
   fun <- (dplyr::case_when(
     cntry_code == "nl" ~ "get_pvol_nl",

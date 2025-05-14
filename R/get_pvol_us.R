@@ -74,10 +74,11 @@ get_pvol_us <- function(radar, time, ...) {
 #' Fine the most representative key for a timestamps radar combination within the nexrad network
 #'
 #' @param datetime a POSIXct datetime of length one
-#' @param radar A radar of lenght one
+#' @param radar A radar of length one
 #'
 #' @returns a character with the name of the key
 #'
+#' @noRd
 #' @examples
 #' .most_representative_nexrad_key(lubridate::as_datetime("2024-5-9 14:44:00"), "KBBX")
 .most_representative_nexrad_key <- function(datetime, radar) {

@@ -12,9 +12,9 @@ get_pvol(radar = NULL, datetime = NULL, ...)
 
 \item{datetime}{Either:
 \itemize{
-\item A single \code{\link[base:DateTimeClasses]{POSIXct}}, for which the nearest data
-file is downloaded.
-\item A \code{\link[lubridate:interval]{lubridate::interval()}}, between which all data files are downloaded.
+\item A single \code{\link[base:DateTimeClasses]{POSIXct}}, for which the most representative data
+file is downloaded. In most cases this will be the time before.
+\item A \code{\link[lubridate:interval]{lubridate::interval()}} or two \code{\link[base:DateTimeClasses]{POSIXct}}, between which all data files with a reference time in the interval are downloaded.
 }}
 
 \item{...}{Additional arguments passed on to reading functions, for example

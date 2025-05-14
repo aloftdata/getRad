@@ -176,6 +176,13 @@ test_that("get_vpts() can fetch data from a single radar source", {
   )
 })
 
+test_that("get_vpts() returns a single vpts object per radar", {
+  expect_length(
+    get_vpts(radar = c("bejab", "nldhl"), datetime = "2023-01-01", source = "baltrad"),
+    2L
+  )
+})
+
 test_that("get_vpts() returns columns of the expected type and order", {
   skip_if_offline()
 

@@ -133,8 +133,7 @@ get_vpts <- function(radar,
     )
   }
   # Parse the provided date argument to a lubridate interval
-  ## If the date is a single date, convert it to an interval by adding a whole
-  ## day, minus a second
+  ## If the date is a single date, convert it to an interval
   if (!inherits(datetime, "Interval")) {
     datetime_converted <- lubridate::as_datetime(datetime)
     ### If time information is provided

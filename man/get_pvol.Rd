@@ -17,9 +17,8 @@ file is downloaded.
 \item A \code{\link[lubridate:interval]{lubridate::interval()}}, between which all data files are downloaded.
 }}
 
-\item{...}{Additional arguments passed on to the individual reading
-functions, for example \code{param="all"} to the \code{\link[bioRad:read_pvolfile]{bioRad::read_pvolfile()}}
-function.}
+\item{...}{Additional arguments passed on to reading functions, for example
+\code{param = "all"} to the \code{\link[bioRad:read_pvolfile]{bioRad::read_pvolfile()}}.}
 }
 \value{
 Either a polar volume or a list of polar volumes. See

@@ -4,7 +4,7 @@
 #'
 #' @return A tibble with the parsed VPTS data.
 #'
-#' @examples
+#' @examplesIf interactive()
 #' get_vpts_rmi("bejab",
 #'              lubridate::interval("20200119", "20200124"))
 get_vpts_rmi <- function(radar_odim_code,

@@ -1,11 +1,11 @@
-#' Get polar volume (PVOL) data from supported countries
+#' Get polar volume (PVOL) data from supported sources
 #'
-#' Gets polar volume data for supported countries and returns it as a (list of)
-#' [polar volume objects][bioRad::summary.pvol].
+#' Gets polar volume data from supported sources and returns it as a (list of)
+#' [polar volume objects][bioRad::summary.pvol]. The source is automatically
+#' detected based on the provided `radar`.
 #'
 #' @details
-#' For more details on supported countries, see
-#' `vignette("supported_countries")`.
+#' For more details on supported sources, see `vignette("supported_sources")`.
 #'
 #' @param radar Name of the radar (odim code) as a character string (e.g.
 #'   `"nlhrw"` or `"fikor"`).

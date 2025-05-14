@@ -46,9 +46,7 @@ as a (list of) of \link[bioRad:summary.vpts]{vpts objects} or a
 \code{\link[dplyr:reexports]{dplyr::tibble()}}.
 }
 \details{
-By default, data from the \href{https://aloftdata.eu/browse/}{Aloft bucket} are
-retrieved from \url{https://aloftdata.s3-eu-west-1.amazonaws.com}. This can be changed by
-setting \code{options(getRad.aloft_data_url)} to any desired url.
+For more details on supported sources, see \code{vignette("supported_sources")}.
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

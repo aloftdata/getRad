@@ -1,5 +1,5 @@
 Package: getRad
-Title: Access and Standardize Radar Data
+Title: Download Radar Data for Biological Research
 Version: 0.1.0.9001
 Authors@R: c(
     person("Bart", "Kranstauber", , "b.kranstauber@uva.nl", role = c("aut", "cre"),
@@ -7,12 +7,23 @@ Authors@R: c(
     person("Pieter", "Huybrechts", , "pieter.huybrechts@inbo.be", role = "aut",
            comment = c(ORCID = "0000-0002-6658-6062", affiliation = "Research Institute for Nature and Forest (INBO)")),
     person("Peter", "Desmet", , "peter.desmet@inbo.be", role = "aut",
-           comment = c(ORCID = "0000-0002-8442-8025", affiliation = "Research Institute for Nature and Forest (INBO)"))
+           comment = c(ORCID = "0000-0002-8442-8025", affiliation = "Research Institute for Nature and Forest (INBO)")),
+    person("Cecilia", "Nilsson", , "cecilia.nilsson@biol.lu.se", role = "ctb",
+           comment = c(ORCID = "0000-0001-8957-4411", affiliation = "Lund University")),
+    person("Alexander", "Tedeschi", , "at744@cornell.edu", role = "ctb",
+           comment =  c(ORCID = "0000-0003-0772-6931", affiliation = "Cornell Lab of Ornithology")),
+    person("University of Amsterdam", role = "cph",
+           comment = c(ROR = "04dkp9463")),      
+    person("Biodiversa+", role = "fnd",
+           comment = "https://hirad.science/")
   )
-Description: This package facilitates downloading radar data for
-    biological research. Currently the main functionality is downloading
-    polar volume data from open repositories of European countries.
+Description: Load polar volume and vertical profile data for aeroecological 
+    research directly into R. With 'getRad' you can access data from several
+    sources in Europe and the US and standardize it to faciliate further 
+    exploration in tools such as 'bioRad'.
 License: MIT + file LICENSE
+URL: https://github.com/aloftdata/getRad, https://aloftdata.github.io/getRad/
+BugReports: https://github.com/aloftdata/getRad/issues
 Depends: 
     R (>= 4.1.0)
 Imports: 
@@ -27,8 +38,6 @@ Imports:
     rlang,
     tools,
     xml2
-URL: https://github.com/aloftdata/getRad, https://aloftdata.github.io/getRad/
-BugReports: https://github.com/aloftdata/getRad/issues
 Suggests:
     askpass,
     htmltools,

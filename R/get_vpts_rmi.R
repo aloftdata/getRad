@@ -10,7 +10,7 @@
 get_vpts_rmi <- function(radar_odim_code,
                          rounded_interval) {
 
-  ## Build the potential path for the rmi fwf
+  # Build the potential path for the rmi fwf files
 
   rmi_data_url <- "https://opendata.meteo.be/ftp/observations/radar/vbird"
 
@@ -26,8 +26,8 @@ get_vpts_rmi <- function(radar_odim_code,
     .sep = "/"
   )
 
-  # Check if the urls exist, if not, then RMI doens't have data for that
-  # radar/datetime combo
+  ## Check if the urls exist, if not, then RMI doens't have data for that
+  ## radar/datetime combo
 
   if (purrr::none(rmi_urls, url_exists)) {
     cli::cli_abort(
@@ -36,8 +36,8 @@ get_vpts_rmi <- function(radar_odim_code,
     )
   }
 
-  # For every url that exists, parse the VPTS: skip over any days with a missing
-  # file
+  ## For every url that exists, parse the VPTS: skip over any days with a
+  ## missing file
   resolving_rmi_urls <- rmi_urls[purrr::map_lgl(rmi_urls, url_exists)]
   rmi_files <-
     read_lines_from_url(resolving_rmi_urls)

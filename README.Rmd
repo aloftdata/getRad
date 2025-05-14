@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 [![CRAN status](https://www.r-pkg.org/badges/version/getRad)](https://CRAN.R-project.org/package=getRad)
 [![R-CMD-check](https://github.com/aloftdata/getRad/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/aloftdata/getRad/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/aloftdata/getRad/branch/main/graph/badge.svg)](https://app.codecov.io/gh/aloftdata/getRad/)
-[![repo status](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![repo status](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 <!-- badges: end -->
 
 The goal of `getRad` is to provide a unified interface to radar data for biological research. This is done by downloading data from repositories and loading it directly into R. Currently the functionality if focused around volume data from weather radars. However in the longer term it might also support vertical profile information, vertically integrated profile information and possibly data from other radars. 

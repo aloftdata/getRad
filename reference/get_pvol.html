@@ -62,9 +62,11 @@ detected based on the provided <code>radar</code>.</p>
 
 
 <dt id="arg-datetime">datetime<a class="anchor" aria-label="anchor" href="#arg-datetime"></a></dt>
-<dd><p>Either:</p><ul><li><p>A single <code><a href="https://rdrr.io/r/base/DateTimeClasses.html" class="external-link">POSIXct</a></code>, for which the most representative data
-file is downloaded. In most cases this will be the time before.</p></li>
-<li><p>A <code><a href="https://lubridate.tidyverse.org/reference/interval.html" class="external-link">lubridate::interval()</a></code> or two <code><a href="https://rdrr.io/r/base/DateTimeClasses.html" class="external-link">POSIXct</a></code>, between which all data files with a reference time in the interval are downloaded.</p></li>
+<dd><p>Either:</p><ul><li><p>A single <code><a href="https://rdrr.io/r/base/DateTimeClasses.html" class="external-link">POSIXct</a></code>, for which the most
+representative data file is downloaded. In most cases this will be the time
+before.</p></li>
+<li><p>A <code><a href="https://lubridate.tidyverse.org/reference/interval.html" class="external-link">lubridate::interval()</a></code> or two <code><a href="https://rdrr.io/r/base/DateTimeClasses.html" class="external-link">POSIXct</a></code>,
+between which all data files are downloaded.</p></li>
 </ul></dd>
 
 
@@ -86,8 +88,10 @@ file is downloaded. In most cases this will be the time before.</p></li>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="co"># Get PVOL data for a single radar and datetime</span></span></span>
 <span class="r-in"><span><span class="fu">get_pvol</span><span class="op">(</span><span class="st">"deess"</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">get_pvol</span><span class="op">(</span><span class="st">"czska"</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Get PVOL data for multipe radars and a single datetime</span></span></span>
 <span class="r-in"><span><span class="fu">get_pvol</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"deess"</span>, <span class="st">"dehnr"</span>, <span class="st">"fianj"</span>, <span class="st">"czska"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>

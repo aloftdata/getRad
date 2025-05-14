@@ -4,6 +4,7 @@
 #' [Aloft bucket](https://aloftdata.eu/browse/), based on the `coverage.csv`
 #' file in that bucket. By default this file is cached for 6 hours.
 #'
+#' @details
 #' ```{r get url to fetch coverage from, echo = FALSE, results = FALSE}
 #' cov_url <- paste(
 #'   getOption("getRad.aloft_data_url"), "coverage.csv", sep = "/"

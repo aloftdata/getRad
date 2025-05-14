@@ -2,6 +2,7 @@
 #'
 #' Gets VPTS data from the Aloft bucket.
 #'
+#' @details
 #' ```{r aloft_data_url, echo = FALSE, results = FALSE}
 #' data_url <- getOption("getRad.aloft_data_url")
 #' ```
@@ -17,6 +18,7 @@
 #' - Adds a column with the radar source.
 #' - Overwrites the radar column with the radar_odim_code, all other values for
 #' this column are considered in error.
+#'
 #' @param radar_odim_code Radar ODIM code.
 #' @param rounded_interval Interval to fetch data for, rounded to nearest day.
 #' @param source Source of the data. One of `baltrad`, `uva` or `ecog-04003`.

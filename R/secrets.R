@@ -1,38 +1,9 @@
-#' @export
-#' @rdname secret
-get_secret <- function(name) {
-  rlang::check_installed("keyring", "to manage secrets in getRad")
-  if (!rlang::is_scalar_character(name)) {
-    cli::cli_abort("{.arg name} should be a scalar character",
-      class = "getRad_error_get_secret_no_scalar_character"
-    )
-  }
-  sname <- paste0(
-    getOption("getRad.key_prefix",
-      default = cli::cli_abort("The option `getRad.key_prefix` is not found",
-        class = "getRad_error_key_prefix_not_found_getting"
-      )
-    ), name
-  )
-  if (!(sname %in% keyring::key_list(sname)$service)) {
-    cli::cli_abort(
-      c(
-        x = "The {.arg {sname}} secret is not in the keyring.",
-        i = 'Please use {.code set_secret("{name}")} to store the secret.'
-      ),
-      class = "getRad_error_secret_not_found"
-    )
-  }
-  keyring::key_get(sname)
-}
-
-#' Setting and retrieving secrets from the keyring
+#' Set or get secrets from the keyring
 #'
-#' @param name Name of the secret to set or retrieve as a scalar character
-#'   (e.g. `"nl_api_key"`).
-#' @param secret Optionally a character string with the secret, alternatively
-#'   the system will prompt the user.
+#' Some services require credentials to access data. This function uses
+#' keyring to safely store those credentials on your computer.
 #'
+#' @details
 #' When working with a cluster it might be advantageous to use a specific
 #' keyring, this can be done by setting the `keyring_backend` option in R.
 #'
@@ -40,8 +11,12 @@ get_secret <- function(name) {
 #' stored. If you want to use multiple keys for the same api you can manipulate
 #' this option.
 #'
-#' @return `get_secret` returns a character string, `set_secret` `TRUE` if
-#'   successful.
+#' @param name Name of the secret to set or get as a character (e.g.
+#'   `"nl_api_key"`).
+#' @param secret Optionally a character string with the secret, alternatively
+#'   the system will prompt the user.
+#' @return `set_secret()` returns `TRUE` when a secret has successfully been set.
+#'   `get_secret()` returns the secret as a character string.
 #' @rdname secret
 #' @export
 set_secret <- function(name, secret = NULL) {
@@ -79,3 +54,32 @@ list_secrets <- list(
     i = "On the refered page also an public token is available for exploratory use this could be a easy option."
   )
 )
+
+#' @export
+#' @rdname secret
+get_secret <- function(name) {
+  rlang::check_installed("keyring", "to manage secrets in getRad")
+  if (!rlang::is_scalar_character(name)) {
+    cli::cli_abort("{.arg name} should be a scalar character",
+                   class = "getRad_error_get_secret_no_scalar_character"
+    )
+  }
+  sname <- paste0(
+    getOption("getRad.key_prefix",
+              default = cli::cli_abort("The option `getRad.key_prefix` is not found",
+                                       class = "getRad_error_key_prefix_not_found_getting"
+              )
+    ), name
+  )
+  if (!(sname %in% keyring::key_list(sname)$service)) {
+    cli::cli_abort(
+      c(
+        x = "The {.arg {sname}} secret is not in the keyring.",
+        i = 'Please use {.code set_secret("{name}")} to store the secret.'
+      ),
+      class = "getRad_error_secret_not_found"
+    )
+  }
+  keyring::key_get(sname)
+}
+

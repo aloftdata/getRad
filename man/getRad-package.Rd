@@ -4,9 +4,9 @@
 \name{getRad-package}
 \alias{getRad}
 \alias{getRad-package}
-\title{getRad: Access and Standardize Radar Data}
+\title{getRad: Download Radar Data for Biological Research}
 \description{
-Download radar data for biological research. Currently the main functionality is downloading polar volume and vertical profile data and from open repositories of European countries.
+Load polar volume and vertical profile data for aeroecological research directly into R. With 'getRad' you can access data from several sources in Europe and the US and standardize it to faciliate further exploration in tools such as 'bioRad'.
 }
 \seealso{
 Useful links:

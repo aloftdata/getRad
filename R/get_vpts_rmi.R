@@ -125,6 +125,8 @@ parse_rmi <- function(lines) {
     n = get_n(lines),
     n_dbz = get_n_dbz(lines),
     n_all = get_n_all(lines),
-    n_dbz_all = get_n_dbz(lines)
+    n_dbz_all = get_n_dbz(lines),
+    sd_vvp_threshold = 2,
+    rcs = calc_single_mean_rcs(.data$eta, .data$dens)
   )
 }

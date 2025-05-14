@@ -105,6 +105,29 @@ end_of_day <- function(date){
     lubridate::dseconds(1)
 }
 
+#' Calculate the mean of the radar cross section
+#'
+#' bioRad::as.vpts() only uses the first value for rcs provided, so while we can
+#' calculate it by eta/dens, it makes sense to only use the most common value
+#' when transforming to vpts objects.
+#'
+#' This function drops NA, NaN and Inf for calculating the mean.
+#'
+#' @param eta Animal reflectivity
+#' @param dens Animal density
+#'
+#' @return A numeric value representing the mean radar cross section (rcs).
+#' @noRd
+#'
+#' @examples
+calc_single_mean_rcs <- function(eta,dens){
+  rcs <- eta/dens
+  # Omit NA, NaN and Inf
+  rcs[is.nan(rcs) | is.infinite(rcs)] <- NA
+  # Get the mean as bioRad::as.vpts() only uses the first value anyway.
+  mean(rcs, na.rm = TRUE)
+}
+
 #' Set the list names to the unique value of the radar column
 #'
 #' @param vpts_df_list List of vpts data frames.

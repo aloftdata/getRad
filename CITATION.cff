@@ -231,16 +231,16 @@ references:
   title: xml2
   abstract: 'xml2: Parse XML'
   notes: Imports
-  url: https://xml2.r-lib.org/
+  url: https://xml2.r-lib.org
   repository: https://CRAN.R-project.org/package=xml2
   authors:
   - family-names: Wickham
     given-names: Hadley
-    email: hadley@posit.co
   - family-names: Hester
     given-names: Jim
   - family-names: Ooms
     given-names: Jeroen
+    email: jeroenooms@gmail.com
   year: '2025'
   doi: 10.32614/CRAN.package.xml2
 - type: software
@@ -347,7 +347,6 @@ references:
   - family-names: Pau
     given-names: Gregoire
   year: '2025'
-  doi: 10.18129/B9.bioc.rhdf5
 - type: software
   title: rnaturalearth
   abstract: 'rnaturalearth: World Map Data from Natural Earth'
@@ -468,19 +467,4 @@ references:
     given-names: Winston
   year: '2025'
   doi: 10.32614/CRAN.package.withr
-- type: software
-  title: xml2
-  abstract: 'xml2: Parse XML'
-  notes: Suggests
-  url: https://xml2.r-lib.org
-  repository: https://CRAN.R-project.org/package=xml2
-  authors:
-  - family-names: Wickham
-    given-names: Hadley
-  - family-names: Hester
-    given-names: Jim
-  - family-names: Ooms
-    given-names: Jeroen
-    email: jeroenooms@gmail.com
-  year: '2025'
-  doi: 10.32614/CRAN.package.xml2
+

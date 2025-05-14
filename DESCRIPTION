@@ -41,6 +41,7 @@ Suggests:
     sf,
     testthat (>= 3.0.0),
     tidyr,
+    vol2birdR,
     withr
 VignetteBuilder: 
     knitr

@@ -180,17 +180,57 @@ get_vpts <- function(radar,
   #   ) |>
   #   radar_to_name()
 
+  # fetched_vpts <-
+  #   switch(source,
+  #     c(
+  #       rmi = get_vpts_rmi(radar, rounded_interval),
+  #       # For every value of the source argument in get_vpts_aloft(),
+  #       # generate an expression and link it to it's source
+  #       purrr::set_names(
+  #         rep(
+  #           purrr::map(
+  #             selected_radars,
+  #             ~ get_vpts_aloft(.x,
+  #               rounded_interval = rounded_interval,
+  #               source = selected_source
+  #             )
+  #           ),
+  #           length(eval(formals("get_vpts_aloft")$source))
+  #         ),
+  #         nm = eval(formals("get_vpts_aloft")$source)
+  #       )
+  #     )
+  #   )
+
   fetched_vpts <-
     switch(source,
-           c(rmi = get_vpts_rmi(radar, rounded_interval),
-             purrr::set_names(
-               purrr::map(selected_radars,
-                          ~ get_vpts_aloft(.x,
-                                           rounded_interval = rounded_interval,
-                                           source = selected_source,
-                                           coverage = coverage)),
-               nm = c("uva", "ecog-04003", "rmi")
-             )))
+             rmi =
+             purrr::map(radar, ~ get_vpts_rmi(.x, rounded_interval)),
+             baltrad = purrr::map(
+               selected_radars,
+               ~ get_vpts_aloft(
+                 .x,
+                 rounded_interval = rounded_interval,
+                 source = selected_source
+               )
+             ),
+             uva = purrr::map(
+               selected_radars,
+               ~ get_vpts_aloft(
+                 .x,
+                 rounded_interval = rounded_interval,
+                 source = selected_source
+               )
+             ),
+             `ecog-04003` = purrr::map(
+               selected_radars,
+               ~ get_vpts_aloft(
+                 .x,
+                 rounded_interval = rounded_interval,
+                 source = selected_source
+             )
+             )
+    ) |> radar_to_name()
 
   # Drop any results outside the requested interval
   filtered_vpts <-

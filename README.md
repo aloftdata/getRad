@@ -45,10 +45,8 @@ Download a polar volume, and then plot it using `bioRad`:
 ``` r
 library(getRad)
 library(bioRad)
-#> Welcome to bioRad version 0.9.1.9000
-#> using vol2birdR version 1.0.5 (MistNet not installed)
-# Plot insect movements in Finland (Mäkinen et al. 2022)
-pvol <- get_pvol("fianj", as.POSIXct("2012-5-17 14:15", tz = "UTC"))
+# Plot daytime insect movements in Finland (Mäkinen et al. 2022)
+pvol <- get_pvol("fianj", as.POSIXct("2012-05-17 14:00", tz = "UTC"))
 plot(project_as_ppi(get_scan(pvol, 0), range_max = 75000))
 ```
 
@@ -68,23 +66,50 @@ plot(calculate_vp(pvol, h_layer = 50, n_layer = 40))
 
 <img src="man/figures/README-example-2.png" width="100%" />
 
+``` r
+
+# Plot nocturnal migration in Finland
+pvol <- get_pvol("fianj", as.POSIXct("2012-05-11 23:00", tz = "UTC"))
+plot(project_as_ppi(get_scan(pvol, 0), range_max = 75000))
+```
+
+<img src="man/figures/README-example-3.png" width="100%" />
+
+``` r
+plot(calculate_vp(pvol, h_layer = 50, n_layer = 40))
+#> Running vol2birdSetUp
+#> Warning: correlation coefficient missing, dropping scan 4 ...
+#> Warning: correlation coefficient missing, dropping scan 7 ...
+#> Warning: correlation coefficient missing, dropping scan 9 ...
+#> Warning: correlation coefficient missing, dropping scan 10 ...
+#> Warning: correlation coefficient missing, dropping scan 11 ...
+#> Warning: correlation coefficient missing, dropping scan 12 ...
+#> Warning: radial velocities will be dealiased...
+```
+
+<img src="man/figures/README-example-4.png" width="100%" />
+
 Download a vertical profile time series from the [Aloft
 bucket](https://aloftdata.eu/browse/):
 
 ``` r
+
+# Plot VPTS data for two radars
 vpts_list <- get_vpts(
-  radar = c("bewid", "deess"),
+  radar = c("bejab", "deess"),
   datetime = lubridate::interval(
-    lubridate::as_datetime("2016-10-03 16:00:00"), 
-    lubridate::as_datetime("2016-10-05 10:00:00")
+    lubridate::as_datetime("2021-10-03 16:00:00"), 
+    lubridate::as_datetime("2021-10-05 10:00:00")
   ),
-  source = "ecog-04003"
+  source = "baltrad"
 )
 par(mfrow = 2:1)
 for(i in names(vpts_list))
   plot(regularize_vpts(vpts_list[[i]]), main = i)
-#> projecting on 300 seconds interval grid...
-#> projecting on 900 seconds interval grid...
+#> Warning in regularize_vpts(vpts_list[[i]]): Dropped 337 profiles with duplicate
+#> datetime values
+#> Warning in regularize_vpts(vpts_list[[i]]): Dropped 338 profiles with duplicate
+#> datetime values
 ```
 
 <img src="man/figures/README-vpts-1.png" width="100%" />

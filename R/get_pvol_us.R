@@ -1,4 +1,3 @@
-.nexrad_cache <- new.env(parent = emptyenv()) # initiate cache
 
 get_pvol_us <- function(radar, time, ...) {
   if (!inherits(time, "POSIXct")) {
@@ -6,9 +5,6 @@ get_pvol_us <- function(radar, time, ...) {
   }
 
   key <- .most_representative_nexrad_key(time, radar)
-  if (exists(key, envir = .nexrad_cache, inherits = FALSE)) {
-    return(.nexrad_cache[[key]])
-  }
   url <- nexrad_key_to_url(key)
 
   tmp <- file.path(tempdir(), basename(key))
@@ -25,7 +21,6 @@ get_pvol_us <- function(radar, time, ...) {
   )
   pvol <- bioRad::read_pvolfile(tmp, ...)
   unlink(tmp)
-  .nexrad_cache[[key]] <- pvol # cache keys to avoid duplicate downloads
   pvol
 }
 

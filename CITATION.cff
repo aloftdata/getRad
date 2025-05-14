@@ -228,6 +228,22 @@ references:
     address: Vienna, Austria
   year: '2025'
 - type: software
+  title: xml2
+  abstract: 'xml2: Parse XML'
+  notes: Imports
+  url: https://xml2.r-lib.org/
+  repository: https://CRAN.R-project.org/package=xml2
+  authors:
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+  - family-names: Hester
+    given-names: Jim
+  - family-names: Ooms
+    given-names: Jeroen
+  year: '2025'
+  doi: 10.32614/CRAN.package.xml2
+- type: software
   title: askpass
   abstract: 'askpass: Password Entry Utilities for R, Git, and SSH'
   notes: Suggests
@@ -331,6 +347,7 @@ references:
   - family-names: Pau
     given-names: Gregoire
   year: '2025'
+  doi: 10.18129/B9.bioc.rhdf5
 - type: software
   title: rnaturalearth
   abstract: 'rnaturalearth: World Map Data from Natural Earth'
@@ -411,6 +428,22 @@ references:
   year: '2025'
   doi: 10.32614/CRAN.package.tidyr
 - type: software
+  title: vol2birdR
+  abstract: 'vol2birdR: Vertical Profiles of Biological Signals in Weather Radar Data'
+  notes: Suggests
+  url: https://github.com/adokter/vol2birdR/
+  repository: https://CRAN.R-project.org/package=vol2birdR
+  authors:
+  - family-names: Henja
+    given-names: Anders
+    email: anders.henja@gmail.com
+  - family-names: Dokter
+    given-names: Adriaan M.
+    email: vol2birdr@cornell.edu
+    orcid: https://orcid.org/0000-0001-6573-066X
+  year: '2025'
+  doi: 10.32614/CRAN.package.vol2birdR
+- type: software
   title: withr
   abstract: 'withr: Run Code ''With'' Temporarily Modified Global State'
   notes: Suggests
@@ -451,4 +484,3 @@ references:
     email: jeroenooms@gmail.com
   year: '2025'
   doi: 10.32614/CRAN.package.xml2
-

@@ -36,7 +36,8 @@ Imports:
     purrr,
     vroom,
     rlang,
-    tools
+    tools,
+    xml2
 Suggests:
     askpass,
     htmltools,
@@ -49,8 +50,8 @@ Suggests:
     sf,
     testthat (>= 3.0.0),
     tidyr,
-    withr,
-    xml2
+    vol2birdR,
+    withr
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3

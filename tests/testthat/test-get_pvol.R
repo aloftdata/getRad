@@ -2,18 +2,18 @@
 # files
 
 test_that("get_pvol radar argument", {
-  expect_error(get_pvol(), class = "getRad_error_radar_not_odim_string")
+  expect_error(get_pvol(), class = "getRad_error_radar_not_odim_nexrad")
   expect_error(
     get_pvol(1L, datetime = as.POSIXct(Sys.Date())),
-    class = "getRad_error_radar_not_odim_string"
+    class = "getRad_error_radar_not_odim_nexrad"
   )
   expect_error(
     get_pvol("nldhlu", datetime = as.POSIXct(Sys.Date())),
-    class = "getRad_error_radar_not_odim_string"
+    class = "getRad_error_radar_not_odim_nexrad"
   )
   expect_error(
     get_pvol(c("nlhrw", "nldhlu"), datetime = as.POSIXct(Sys.Date())),
-    class = "getRad_error_radar_not_odim_string"
+    class = "getRad_error_radar_not_odim_nexrad"
   )
   expect_error(
     get_pvol(c("nlhrw", "nldhl", "nlhrw"), datetime = as.POSIXct(Sys.Date())),
@@ -22,13 +22,6 @@ test_that("get_pvol radar argument", {
   expect_error(
     get_pvol("nnhrw", datetime = as.POSIXct(Sys.Date())),
     class = "getRad_error_no_function_for_radar_with_country_code"
-  )
-  expect_error(
-    get_pvol("nlhrw", c(
-      lubridate::interval(as.POSIXct(Sys.Date()), as.POSIXct(Sys.Date()) + 200),
-      lubridate::interval(as.POSIXct(Sys.Date()) + 1000, as.POSIXct(Sys.Date()) + 1300)
-    )),
-    class = "getRad_error_multiple_intervals_provided"
   )
 })
 
@@ -50,12 +43,9 @@ test_that("get_pvol time argument", {
   )
   expect_error(
     get_pvol("nlhrw", datetime = as.POSIXct(Sys.Date())[c(1, 1)]),
-    class = "getRad_error_time_not_correct"
+    class = "getRad_error_duplicated_timestamps"
   )
-  expect_error(
-    get_pvol("nlhrw", datetime = as.POSIXct(Sys.Date()) + 1),
-    class = "getRad_error_time_not_correct"
-  )
+
 })
 
 test_that("multiple radars work", {
@@ -99,38 +89,9 @@ test_that("multiple timestamps work", {
   expect_true(all(unlist(lapply(pvl, bioRad::is.pvol))))
   expect_identical(
     lapply(pvl, \(x) x$datetime),
-    as.list(multiple_timestamps)
+    as.list(seq(min(multiple_timestamps), max(multiple_timestamps),"5 mins"))
   )
 })
-
-
-test_that("interval works", {
-  skip_if_offline()
-  int <-
-    lubridate::interval(
-      paste(
-        lubridate::today(tzone = "UTC"),
-        "00:45:00"
-      ),
-      paste(
-        lubridate::today(tzone = "UTC"),
-        "00:55:00"
-      )
-    )
-  expect_type(
-    pvl <- get_pvol(
-      c("fianj"),
-      datetime = int
-    ),
-    "list"
-  )
-  expect_true(all(unlist(lapply(pvl, bioRad::is.pvol))))
-  expect_identical(
-    lapply(pvl, \(x) x$datetime),
-    as.list(seq(lubridate::int_start(int), lubridate::int_end(int), "5 mins"))
-  )
-})
-
 
 test_that("multiple timestamps and radars work", {
   skip_if_offline()
@@ -156,10 +117,10 @@ test_that("multiple timestamps and radars work", {
   expect_true(all(unlist(lapply(pvl, bioRad::is.pvol))))
   expect_identical(
     lapply(pvl, \(x) x$datetime),
-    as.list(rep(multiple_timestamps, each = 2))
+    as.list(rep(seq(min(multiple_timestamps), max(multiple_timestamps),"5 mins"),  2))
   )
   expect_identical(
     lapply(pvl, \(x) x$radar),
-    as.list(rep(multiple_radars, 2))
+    as.list(rep(multiple_radars,each=3))
   )
 })

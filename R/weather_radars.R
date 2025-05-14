@@ -134,7 +134,7 @@ weather_radars_opera <- function(use_cache = TRUE, ...) {
       compositerrr = yes_no_as_logical(.data$compositerrr),
       radar = .data$odimcode
     ) |>
-    dplyr::select(.data$radar, dplyr::everything()) |>
+    dplyr::select("radar", dplyr::everything()) |>
     # Sort data for consistent git diffs
     dplyr::arrange(.data$country, .data$number, .data$startyear)
 }

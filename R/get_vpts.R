@@ -54,7 +54,7 @@
 #' # Return a tibble instead of a vpts object
 #' get_vpts(
 #'   radar = "chlem",
-#'   date = "2023-03-10",
+#'   datetime = "2023-03-10",
 #'   source = "baltrad",
 #'   return_type = "tibble"
 #' )

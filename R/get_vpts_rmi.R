@@ -14,24 +14,16 @@ get_vpts_rmi <- function(radar_odim_code,
 
   rmi_data_url <- "https://opendata.meteo.be/ftp/observations/radar/vbird"
 
-  ## extract the years in the interval
-  years_in_interval <-
-    seq(lubridate::year(lubridate::int_start(rounded_interval)),
-        lubridate::year(lubridate::int_end(rounded_interval)))
-
-  yyyymmdd_in_interval <-
-    seq(lubridate::int_start(rounded_interval),
-      lubridate::int_end(rounded_interval),
-      by = "day"
-    ) |>
-    format("%Y%m%d")
-
-  rmi_urls <- paste(
+  rmi_urls <- glue::glue(
     rmi_data_url,
     radar_odim_code,
-    years_in_interval,
-    paste0(radar_odim_code, "_vpts_", yyyymmdd_in_interval, ".txt"),
-    sep = "/"
+    "{lubridate::year(year_seq)}",
+    "{radar_odim_code}_vpts_{format(year_seq, '%Y%m%d')}.txt",
+    year_seq = seq(lubridate::int_start(rounded_interval),
+                   lubridate::int_end(rounded_interval),
+                   by = "day"
+    ),
+    .sep = "/"
   )
 
   # Check if the urls exist, if not, then RMI doens't have data for that

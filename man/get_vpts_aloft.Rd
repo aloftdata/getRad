@@ -7,7 +7,7 @@
 get_vpts_aloft(
   radar_odim_code,
   rounded_interval,
-  source,
+  source = c("baltrad", "uva", "ecog-04003"),
   coverage = aloft_data_coverage()
 )
 }

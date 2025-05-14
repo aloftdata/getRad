@@ -26,8 +26,8 @@ downloaded.
 \item A \code{\link[lubridate:interval]{lubridate::interval()}}, between which all data files are downloaded.
 }}
 
-\item{source}{Source of the data. One of \code{"baltrad"}, \code{"uva"} or
-\code{"ecog-04003"}. Only one source can be queried at a time. If no source is
+\item{source}{Source of the data. One of \code{"baltrad"}, \code{"uva"}, \code{"ecog-04003"}
+or \code{"rmi"}. Only one source can be queried at a time. If no source is
 provided \code{baltrad} is used.}
 
 \item{return_type}{Type of object that should be returned. Either:

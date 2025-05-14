@@ -1,5 +1,5 @@
 time_utc <- lubridate::floor_date(Sys.time() - lubridate::hours(12), "5 mins")
-dt_int   <- lubridate::interval(time_utc, time_utc + lubridate::minutes(10))
+dt_int <- lubridate::interval(time_utc, time_utc + lubridate::minutes(10))
 
 test_that("NEXRAD polar volume can be downloaded", {
   skip_if_offline(host = "noaa-nexrad-level2.s3.amazonaws.com")

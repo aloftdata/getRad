@@ -26,5 +26,13 @@ Authors:
   \item Peter Desmet \email{peter.desmet@inbo.be} (\href{https://orcid.org/0000-0002-8442-8025}{ORCID}) (Research Institute for Nature and Forest (INBO))
 }
 
+Other contributors:
+\itemize{
+  \item Cecilia Nilsson \email{cecilia.nilsson@biol.lu.se} (\href{https://orcid.org/0000-0001-8957-4411}{ORCID}) (Lund University) [contributor]
+  \item Alexander Tedeschi \email{at744@cornell.edu} (\href{https://orcid.org/0000-0003-0772-6931}{ORCID}) (Cornell Lab of Ornithology) [contributor]
+  \item University of Amsterdam (04dkp9463) [copyright holder]
+  \item Biodiversa+ (https://hirad.science/) [funder]
+}
+
 }
 \keyword{internal}

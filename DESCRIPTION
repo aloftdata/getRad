@@ -7,7 +7,15 @@ Authors@R: c(
     person("Pieter", "Huybrechts", , "pieter.huybrechts@inbo.be", role = "aut",
            comment = c(ORCID = "0000-0002-6658-6062", affiliation = "Research Institute for Nature and Forest (INBO)")),
     person("Peter", "Desmet", , "peter.desmet@inbo.be", role = "aut",
-           comment = c(ORCID = "0000-0002-8442-8025", affiliation = "Research Institute for Nature and Forest (INBO)"))
+           comment = c(ORCID = "0000-0002-8442-8025", affiliation = "Research Institute for Nature and Forest (INBO)")),
+    person("Cecilia", "Nilsson", , "cecilia.nilsson@biol.lu.se", role = "ctb",
+           comment = c(ORCID = "0000-0001-8957-4411", affiliation = "Lund University")),
+    person("Alexander", "Tedeschi", , "at744@cornell.edu", role = "ctb",
+           comment =  c(ORCID = "0000-0003-0772-6931", affiliation = "Cornell Lab of Ornithology")),
+    person("University of Amsterdam", role = "cph",
+           comment = c(ROR = "04dkp9463")),      
+    person("Biodiversa+", role = "fnd",
+           comment = "https://hirad.science/")
   )
 Description: Load polar volume and vertical profile data for aeroecological 
     research directly into R. With 'getRad' you can access data from several

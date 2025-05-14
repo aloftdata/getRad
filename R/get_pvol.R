@@ -3,18 +3,18 @@
 #' Gets polar volume data for supported countries and returns it as a (list of)
 #' [polar volume objects][bioRad::summary.pvol].
 #'
+#' @details
+#' For more details on supported countries, see
+#' `vignette("supported_countries")`.
+#'
 #' @param radar Name of the radar (odim code) as a character string (e.g.
 #'   `"nlhrw"` or `"fikor"`).
 #' @param datetime Either:
 #'   - A single [`POSIXct`][base::DateTimeClasses], for which the nearest data
 #'   file is downloaded.
 #'   - A [lubridate::interval()], between which all data files are downloaded.
-#' @param ... Additional arguments passed on to the individual reading
-#'   functions, for example `param="all"` to the [bioRad::read_pvolfile()]
-#'   function.
-#' @details
-#' For more details on supported countries, see
-#' `vignette("supported_countries")`.
+#' @param ... Additional arguments passed on to reading functions, for example
+#'   `param = "all"` to the [bioRad::read_pvolfile()].
 #' @return Either a polar volume or a list of polar volumes. See
 #'   [bioRad::summary.pvol()] for details.
 #' @export

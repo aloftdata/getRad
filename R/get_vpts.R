@@ -1,8 +1,8 @@
 #' Get vertical profile time series (VPTS) data from supported sources
 #'
 #' Gets vertical profile time series data from supported sources and returns it
-#' as a (list of) of [vpts objects][bioRad::summary.vpts] or a [dplyr::tibble()]
-#' .
+#' as a (list of) of [vpts objects][bioRad::summary.vpts] or a
+#' [dplyr::tibble()].
 #'
 #' @inheritParams get_pvol
 #' @inherit get_vpts_aloft details

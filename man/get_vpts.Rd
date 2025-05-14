@@ -42,8 +42,8 @@ Either a vpts object, a list of vpts objects or a tibble. See
 }
 \description{
 Gets vertical profile time series data from supported sources and returns it
-as a (list of) of \link[bioRad:summary.vpts]{vpts objects} or a \code{\link[dplyr:reexports]{dplyr::tibble()}}
-.
+as a (list of) of \link[bioRad:summary.vpts]{vpts objects} or a
+\code{\link[dplyr:reexports]{dplyr::tibble()}}.
 }
 \details{
 By default, data from the \href{https://aloftdata.eu/browse/}{Aloft bucket} are

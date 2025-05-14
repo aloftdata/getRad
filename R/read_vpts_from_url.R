@@ -4,6 +4,7 @@
 #' and httr2. This wrapper makes use of purrr to create requests that can be
 #' handled in parallel with our own custom retry settings and user agent.
 #'
+#' @details
 #' Apart from parallelisation and these custom settings, this could also be
 #' handled by simple call to `vroom::vroom(file = urls)`.
 #'

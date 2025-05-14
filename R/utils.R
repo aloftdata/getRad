@@ -200,8 +200,9 @@ req_user_agent_getrad <- function(req) {
 #' This function retries the request if the response status is 429. It retries
 #' the request 15 times with a backoff of 2 times the square root of the number
 #' of tries It retries on failure.
-#' @param req `httr2` request.
-#' @param transient_statuses Vector of status codes that are considered
+#'
+#' @param req A `httr2` request.
+#' @param transient_statuses A vector of status codes that are considered
 #'   transient and should be retried.
 #' @param max_tries The maximum number of times to retry the request.
 #' @returns A `httr2` request.

@@ -10,18 +10,22 @@
 #' @param radar Name of the radar (odim code) as a character string (e.g.
 #'   `"nlhrw"` or `"fikor"`).
 #' @param datetime Either:
-#'   - A single [`POSIXct`][base::DateTimeClasses], for which the most representative data
-#'   file is downloaded. In most cases this will be the time before.
-#'   - A [lubridate::interval()] or two [`POSIXct`][base::DateTimeClasses], between which all data files with a reference time in the interval are downloaded.
+#'   - A single [`POSIXct`][base::DateTimeClasses], for which the most
+#'   representative data file is downloaded. In most cases this will be the time
+#'   before.
+#'   - A [lubridate::interval()] or two [`POSIXct`][base::DateTimeClasses],
+#'   between which all data files are downloaded.
 #' @param ... Additional arguments passed on to reading functions, for example
 #'   `param = "all"` to the [bioRad::read_pvolfile()].
-#' @return Either a polar volume or a list of polar volumes when requesting an interval. See
+#' @return Either a polar volume or a list of polar volumes. See
 #'   [bioRad::summary.pvol()] for details.
 #' @export
 #' @examples
 #' \dontrun{
+#' # Get PVOL data for a single radar and datetime
 #' get_pvol("deess", as.POSIXct(Sys.Date()))
-#' get_pvol("czska", as.POSIXct(Sys.Date()))
+#'
+#' # Get PVOL data for multipe radars and a single datetime
 #' get_pvol(
 #'   c("deess", "dehnr", "fianj", "czska"),
 #'   as.POSIXct(Sys.Date())

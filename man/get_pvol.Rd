@@ -12,9 +12,11 @@ get_pvol(radar = NULL, datetime = NULL, ...)
 
 \item{datetime}{Either:
 \itemize{
-\item A single \code{\link[base:DateTimeClasses]{POSIXct}}, for which the most representative data
-file is downloaded. In most cases this will be the time before.
-\item A \code{\link[lubridate:interval]{lubridate::interval()}} or two \code{\link[base:DateTimeClasses]{POSIXct}}, between which all data files with a reference time in the interval are downloaded.
+\item A single \code{\link[base:DateTimeClasses]{POSIXct}}, for which the most
+representative data file is downloaded. In most cases this will be the time
+before.
+\item A \code{\link[lubridate:interval]{lubridate::interval()}} or two \code{\link[base:DateTimeClasses]{POSIXct}},
+between which all data files are downloaded.
 }}
 
 \item{...}{Additional arguments passed on to reading functions, for example
@@ -34,8 +36,10 @@ For more details on supported sources, see \code{vignette("supported_sources")}.
 }
 \examples{
 \dontrun{
+# Get PVOL data for a single radar and datetime
 get_pvol("deess", as.POSIXct(Sys.Date()))
-get_pvol("czska", as.POSIXct(Sys.Date()))
+
+# Get PVOL data for multipe radars and a single datetime
 get_pvol(
   c("deess", "dehnr", "fianj", "czska"),
   as.POSIXct(Sys.Date())

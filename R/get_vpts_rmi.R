@@ -46,8 +46,9 @@ get_vpts_rmi <- function(radar_odim_code,
 
   # For every url that exists, parse the VPTS: skip over any days with a missing
   # file
+  resolving_rmi_urls <- rmi_urls[purrr::map_lgl(rmi_urls, url_exists)]
   rmi_files <-
-    read_lines_from_url(rmi_urls[purrr::map_lgl(rmi_urls, url_exists)])
+    read_lines_from_url(resolving_rmi_urls)
 
 
   combined_vpts <-
@@ -59,7 +60,7 @@ get_vpts_rmi <- function(radar_odim_code,
                                source_file =
                                  basename(get_rmi_sourcefile(.y)))) |>
     # Add the radar column from the file path
-    purrr::map2(rmi_urls, ~dplyr::mutate(.x,
+    purrr::map2(resolving_rmi_urls, ~dplyr::mutate(.x,
                                    radar = string_extract(.y,
                                                           "(?<=vbird\\/)[a-z]+")
                                    )

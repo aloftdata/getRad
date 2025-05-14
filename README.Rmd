@@ -43,18 +43,18 @@ devtools::install_github("aloftdata/getRad")
 
 Download a polar volume, and then plot it using `bioRad`:
 
-```{r example}
+```{r example, message = FALSE}
 library(getRad)
 library(bioRad)
 # Plot insect movements in Finland (Mäkinen et al. 2022)
-pvol <- get_pvol("fianj", as.POSIXct("2012-5-17 14:15", tz = "UTC"))
+pvol <- get_pvol("fianj", as.POSIXct("2012-5-17 14:00", tz = "UTC"))
 plot(project_as_ppi(get_scan(pvol, 0), range_max = 75000))
 plot(calculate_vp(pvol, h_layer = 50, n_layer = 40))
 ```
 
 Download a vertical profile time series from the [Aloft bucket](https://aloftdata.eu/browse/):
 
-```{r vpts}
+```{r vpts, message = FALSE}
 vpts_list <- get_vpts(
   radar = c("bewid", "deess"),
   datetime = lubridate::interval(

@@ -110,13 +110,8 @@ get_vpts <- function(radar,
     )
   }
 
-  # Rename radar & source arguments so it's clear that it can contain multiple
-  # radars
-  selected_radars <- radar
-  selected_source <- source
-
   # Check that the provided radar argument is a character vector
-  if (!is.character(selected_radars)) {
+  if (!is.character(radar)) {
     cli::cli_abort(
       "Radar argument must be a character vector.",
       class = "getRad_error_radar_not_character"

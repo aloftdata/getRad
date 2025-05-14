@@ -25,7 +25,8 @@ Imports:
     purrr (>= 1.0.0),
     vroom,
     rlang,
-    tools
+    tools,
+    utils
 URL: https://github.com/aloftdata/getRad, https://aloftdata.github.io/getRad/
 BugReports: https://github.com/aloftdata/getRad/issues
 Suggests:

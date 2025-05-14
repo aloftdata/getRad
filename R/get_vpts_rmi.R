@@ -116,7 +116,7 @@ parse_rmi <- function(lines) {
     w = get_w(lines),
     ff = get_ff(lines),
     dd = get_dd(lines),
-    sd_vpp = get_sd_vpp(lines),
+    sd_vvp = get_sd_vvp(lines),
     gap = get_gap(lines),
     dbz = get_dbz(lines),
     eta = get_eta(lines),

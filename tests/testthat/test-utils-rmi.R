@@ -57,9 +57,9 @@ test_that("get_dd() returns the expected value", {
   )
 })
 
-test_that("get_sd_vpp() returns the expected value", {
+test_that("get_sd_vvp() returns the expected value", {
   expect_identical(
-    get_sd_vpp(fwf_text[6]),
+    get_sd_vvp(fwf_text[6]),
     1.49
   )
 })

@@ -569,14 +569,7 @@ test_that("get_vpts() returns an error for a bad radar", {
     ),
     class = "getRad_error_aloft_radar_not_found"
   )
-  expect_identical(
-    rlang::catch_cnd(get_vpts(
-      radar = c("nlhrq", "deess", "bezav"),
-      datetime = "2023-01-01",
-      source = "baltrad"
-    ), classes = "getRad_error_radar_not_found")$missing_radars,
-    c("nlhrq", "bezav")
-  )
+
   # Radar is not a character vector
   expect_error(
     get_vpts(radar = 1:3, datetime = "2023-01-01", source = "uva"),

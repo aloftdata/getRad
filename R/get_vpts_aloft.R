@@ -44,11 +44,11 @@ get_vpts_aloft <- function(radar_odim_code,
 
   # Check if the requested radars are present in the coverage
   if (!all(radar_odim_code %in% coverage$radar)) {
-    missing_radar<-radar_odim_code[!radar_odim_code %in% coverage$radar]
+    missing_radar <- radar_odim_code[!radar_odim_code %in% coverage$radar]
     cli::cli_abort(
       "Radar not found in ALOFT coverage:
       {missing_radar}.",
-      missing_radar=missing_radar,
+      missing_radar = missing_radar,
       class = "getRad_error_aloft_radar_not_found"
     )
   }
@@ -76,7 +76,7 @@ get_vpts_aloft <- function(radar_odim_code,
       .data$source %in% selected_source,
       .data$radar %in% radar_odim_code
     ) |>
-    dplyr::pull(radar)
+    dplyr::pull("radar")
   missing_radars <- setdiff(radar_odim_code, found_radars)
 
   if (!all(radar_odim_code %in% coverage$radar)) {
@@ -97,7 +97,7 @@ get_vpts_aloft <- function(radar_odim_code,
     # Replace hdf5 with daily to fetch vpts files instead of hdf5 files
     string_replace("hdf5", "daily") |>
     # Construct the filename using glue mapping over every path.
-    purrr::map_chr(\(path){
+    purrr::map_chr(\(path) {
       glue::glue(
         "{dir}/{radar}_vpts_{year}{month}{day}.csv",
         dir = string_extract(path, ".+/.+/.+/[0-9]{4}"),

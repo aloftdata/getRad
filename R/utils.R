@@ -228,6 +228,10 @@ is_odim<-function(x){
     }
   rlang::is_character(x) & !is.na(x) & grepl("^[a-zA-Z]{5}$",x)
 }
+is_nexrad <- function(x) {
+  if (!is.character(x)) return(rep(FALSE, length(x)))
+  !is.na(x) & grepl("^[A-Z]{4}$", x) & x %in% nexrad_stations$icao
+}
 is_odim_scalar<-function(x){
   rlang::is_scalar_character(x) && all(is_odim(x))
 }
@@ -240,6 +244,15 @@ check_odim<-function(x){
       class = "getRad_error_radar_not_odim_string"
     )
   }
+}
+check_nexrad <- function(x) {
+  if (!all(is_nexrad(x))) {
+    cli::cli_abort(
+      "Please provide one or more NEXRAD radars as 4-letter ICAO codes.",
+      class = "getRad_error_radar_not_nexrad_string"
+    )
+  }
+  invisible(TRUE)
 }
 check_odim_scalar<-function(x){
   if(!is_odim_scalar(x))

@@ -1,16 +1,26 @@
-time <- lubridate::ymd_hms("2024-05-12 04:10:00", tz = "UTC")
+time_utc <- lubridate::floor_date(Sys.time() - lubridate::hours(12), "5 mins")
+dt_int   <- lubridate::interval(time_utc, time_utc + lubridate::hours(1))
 
-test_that("get_pvol_us downloads and reads a pvol", {
-    skip_if_offline()
-    pvol <- getRad::get_pvol("KABR", time)
-    expect_true(inherits(pvol, "pvol"))
+test_that("NEXRAD polar volume can be downloaded", {
+  skip_if_offline(host = "noaa-nexrad-level2.s3.amazonaws.com")
+  expect_s3_class(
+    getRad::get_pvol("KABR", time_utc),
+    "pvol"
+  )
 })
 
-nexrad_stations <- read_fwf(
-  "~/Downloads/nexrad-stations.txt",          # keep raw txt in data-raw/
-  fwf_cols(icao = c(10, 13)),              # start = 10, end = 13  (1-indexed)
-  skip = 2,                                # drop the header + dashes
-  col_types = "c",                         # all character
-  trim_ws = TRUE
-) |>
-  filter(grepl("^[A-Z]{4}$", icao))        # sanity check
+test_that("Mixed radar vector (single timestamp)", {
+  skip_if_offline() 
+  pvols <- getRad::get_pvol(c("KABR", "czska"), time_utc)
+  expect_true(is.list(pvols))
+  expect_gt(length(pvols), 0)
+  expect_true(all(purrr::map_lgl(pvols, ~ inherits(.x, "pvol"))))
+})
+
+test_that("Mixed radar vector + 1-hour interval", {
+  skip_if_offline() 
+  pvols <- getRad::get_pvol(c("KABR", "czska"), dt_int)
+  expect_true(is.list(pvols))
+  expect_gt(length(pvols), 0)
+  expect_true(all(purrr::map_lgl(pvols, ~ inherits(.x, "pvol"))))
+})

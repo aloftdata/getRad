@@ -72,8 +72,10 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
     }
   }
 
+  safe_get_pvol <- purrr::possibly(get_pvol, otherwise = NULL, quiet = TRUE)
+
   if (length(datetime) != 1) {
-    polar_volumes <- (purrr::map(datetime, get_pvol, radar = radar, ...))
+    polar_volumes <- (purrr::map(datetime, safe_get_pvol, radar = radar, ...))
     if (length(radar) != 1) {
       # in case multiple radars are requested the results of the recursive call
       # is a list of polar volumes, to prevent a nested list this unlist
@@ -83,7 +85,7 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
     return(polar_volumes)
   }
   if (length(radar) != 1) {
-    return(purrr::map(radar, get_pvol, datetime = datetime, ...))
+    return(purrr::map(radar, safe_get_pvol, datetime = datetime, ...))
   }
 
   fn <- select_get_pvol_function(radar)

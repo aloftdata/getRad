@@ -1,3 +1,5 @@
+.nexrad_cache <- new.env(parent = emptyenv()) #initiate cache
+
 get_pvol_us <- function(radar, time, ...) {
 
     rlang::check_installed(
@@ -9,6 +11,9 @@ get_pvol_us <- function(radar, time, ...) {
     cli::cli_abort("{.arg time} must be POSIXct.", class = "getRad_error_us_time_not_posix")
 
   key <- .nearest_nexrad_key(time, radar)
+    if (exists(key, envir = .nexrad_cache, inherits = FALSE)) {
+    return(.nexrad_cache[[key]])
+  }
   url <- paste0("https://noaa-nexrad-level2.s3.amazonaws.com/", key)
   tmp <- file.path(tempdir(), basename(key))
 
@@ -22,6 +27,7 @@ get_pvol_us <- function(radar, time, ...) {
   )
   pvol <- bioRad::read_pvolfile(tmp, ...)
   unlink(tmp)
+  .nexrad_cache[[key]] <- pvol  #cache keys to avoid duplicate downloads
   pvol
 }
 
@@ -57,11 +63,13 @@ get_pvol_us <- function(radar, time, ...) {
   keys <- keys[!grepl("_MDM(\\.gz)?$", keys)]
   ts   <- lubridate::ymd_hms(sub(".*([0-9]{8}_[0-9]{6}).*", "\\1", keys),
                              tz = "UTC", quiet = TRUE)
-  prior <- which(ts <= datetime)
-  if (!length(prior))
-    cli::cli_abort("No earlier scan found for {.val {radar}} at that time.",
-                   class = "getRad_error_us_no_prior_scan")
-  keys[prior[which.max(ts[prior])]]
+  if (!length(ts)) {
+    cli::cli_abort(
+      "No scans found for {.val {radar}} near {.val {format(datetime, '%F %T %Z')}}",
+      class = "getRad_error_us_no_scan_found"
+    )
+  }
+  keys[which.min(abs(difftime(ts, datetime, units = "secs")))]
 }
 
 nexrad_key_to_url <- function(key) {

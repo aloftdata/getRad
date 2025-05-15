@@ -1,76 +1,4 @@
-get_datetime <- function(lines, start = 0, stop = 13) {
-  substr(lines, start, stop) |>
-    lubridate::ymd_hm()
-}
-get_height <- function(lines, start = 14, stop = 18) {
-  substr(lines, start, stop) |>
-    parse_integer()
-}
-get_u <- function(lines, start = 19, stop = 25) {
-  substr(lines, start, stop) |>
-    parse_numeric()
-}
-get_v <- function(lines, start = 26, stop = 32) {
-  substr(lines, start, stop) |>
-    parse_numeric()
-}
-get_w <- function(lines, start = 33, stop = 40) {
-  substr(lines, start, stop) |>
-    parse_numeric()
-}
-get_ff <- function(lines, start = 41, stop = 46) {
-  substr(lines, start, stop) |>
-    parse_numeric()
-}
-get_dd <- function(lines, start = 47, stop = 52) {
-  substr(lines, start, stop) |>
-    parse_numeric()
-}
-get_sd_vvp <- function(lines, start = 53, stop = 60) {
-  substr(lines, start, stop) |>
-    parse_numeric()
-}
-get_gap <- function(lines, start = 61, stop = 61) {
-  substr(lines, start, stop) |>
-    as.logical()
-}
-get_dbz <- function(lines, start = 62, stop = 69) {
-  substr(lines, start, stop) |>
-    parse_numeric()
-}
-get_eta <- function(lines, start = 70, stop = 75) {
-  substr(lines, start, stop) |>
-    parse_numeric()
-}
-get_dens <- function(lines, start = 76, stop = 82) {
-  substr(lines, start, stop) |>
-    parse_numeric()
-}
 
-get_dbzh <- function(lines, start = 83, stop = 90) {
-  substr(lines, start, stop) |>
-    parse_numeric()
-}
-
-get_n <- function(lines, start = 91, stop = 96) {
-  substr(lines, start, stop) |>
-    parse_integer()
-}
-
-get_n_dbz <- function(lines, start = 97, stop = 102) {
-  substr(lines, start, stop) |>
-    parse_integer()
-}
-
-get_n_all <- function(lines, start = 103, stop = 107) {
-  substr(lines, start, stop) |>
-    parse_integer()
-}
-
-get_n_dbz_all <- function(lines, start = 109, stop = 114) {
-  substr(lines, start, stop) |>
-    parse_integer()
-}
 
 parse_numeric <- function(x) {
   string_squish(x) |>
@@ -82,6 +10,65 @@ parse_integer <- function(x) {
     replace_nan_numeric() |>
     as.integer()
 }
+
+
+# Function factory to create helpers to parse RMI VPTS --------------------
+
+#' Create a helper function to create helpers to parse RMI VPTS data
+#'
+#' To simplify `get_vpts_rmi()` we use a helper per field to fetch the
+#' information in a vectorised manner.
+#'
+#' @param start_value String position where to start reading the value, this is
+#'   actually the end position of the previous field as the fwf file is alligned
+#'   on the end of the columns.
+#' @param stop_value String position where to stop reading the value, this is
+#'   actually the start position of the next field as the fwf file is alligned
+#'   on the end of the columns.
+#' @param parser A function to parse/coerce the value to a R class.
+#' @param ... Additional arguments to pass to the parser function.
+#'
+#' @return A function that takes a character vector and returns a parsed value.
+#' @noRd
+#'
+#' @examplesIf interactive()
+#' get_datetime <- create_rmi_helper(0, 13, lubridate::ymd_hm)
+create_rmi_helper <- function(start_value, stop_value, parser, ...){
+  rmi_helper <- function(lines, start = start_value, stop = stop_value){
+    do.call(parser, list(substr(lines, start, stop), ...))
+  }
+  return(rmi_helper)
+}
+
+## A list of specifications to create functions from.
+specs <- list(
+  get_datetime = list(start = 0, stop = 13, parser = lubridate::ymd_hm),
+  get_height = list(start = 14, stop = 18, parser = parse_integer),
+  get_u = list(start = 19, stop = 25, parser = parse_numeric),
+  get_v = list(start = 26, stop = 32, parser = parse_numeric),
+  get_w = list(start = 33, stop = 40, parser = parse_numeric),
+  get_ff = list(start = 41, stop = 46, parser = parse_numeric),
+  get_dd = list(start = 47, stop = 52, parser = parse_numeric),
+  get_sd_vvp = list(start = 53, stop = 60, parser = parse_numeric),
+  get_gap = list(start = 61, stop = 61, parser = as.logical),
+  get_dbz = list(start = 62, stop = 69, parser = parse_numeric),
+  get_eta = list(start = 70, stop = 75, parser = parse_numeric),
+  get_dens = list(start = 76, stop = 82, parser = parse_numeric),
+  get_dbzh = list(start = 83, stop = 90, parser = parse_numeric),
+  get_n = list(start = 91, stop = 96, parser = parse_integer),
+  get_n_dbz = list(start = 97, stop = 102, parser = parse_integer),
+  get_n_all = list(start = 103, stop = 107, parser = parse_integer),
+  get_n_dbz_all = list(start = 109, stop = 114, parser = parse_integer)
+)
+
+## Actually generate the helper functions
+helpers <- purrr::map(
+  specs, \(spec){
+    do.call(create_rmi_helper, spec)
+  }
+)
+
+purrr::walk2(names(helpers), helpers, ~assign(.x, .y, envir = rlang::env_parent()))
 
 #' Get the source file name from the RMI vpts metadata header
 #'

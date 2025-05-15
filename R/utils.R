@@ -44,7 +44,7 @@ string_replace <- function(string, pattern, replacement) {
 #' @noRd
 #' @examples
 #' round_interval(lubridate::interval("20230104 143204", "20240402 001206"))
-round_interval <- function(x, unit = "day"){
+round_interval <- function(x, unit = "day") {
   lubridate::interval(
     lubridate::floor_date(lubridate::int_start(x), unit),
     lubridate::ceiling_date(lubridate::int_end(x), unit)
@@ -60,7 +60,7 @@ round_interval <- function(x, unit = "day"){
 #' @examples
 #' end_of_day("2016-03-05")
 #' end_of_day("2020-07-12 11:01:33")
-end_of_day <- function(date){
+end_of_day <- function(date) {
   lubridate::floor_date(lubridate::as_datetime(date), "day") +
     lubridate::ddays(1) -
     lubridate::dseconds(1)
@@ -172,7 +172,7 @@ req_user_agent_getrad <- function(req) {
 req_retry_getrad <- function(req,
                              transient_statuses = c(429),
                              max_tries = 15,
-                             retry_on_failure = TRUE){
+                             retry_on_failure = TRUE) {
   httr2::req_retry(
     req,
     max_tries = max_tries,
@@ -194,14 +194,19 @@ req_retry_getrad <- function(req,
 req_cache_getrad <- function(req,
                              use_cache = TRUE,
                              max_age = getOption("getRad.max_cache_age_seconds",
-                                                 default = 6 * 60 * 60),
+                               default = 6 * 60 * 60
+                             ),
                              max_n = getOption("getRad.max_cache_n",
-                                               default = Inf),
+                               default = Inf
+                             ),
                              max_size = getOption("getRad.max_cache_size_bytes",
-                                                  default = 1024 * 1024 * 1024),
-                             ...){
+                               default = 1024 * 1024 * 1024
+                             ),
+                             ...) {
   # If caching is disabled, return early.
-  if(!use_cache){return(req)}
+  if (!use_cache) {
+    return(req)
+  }
 
   httr2::req_cache(
     req,
@@ -223,28 +228,29 @@ req_cache_getrad <- function(req,
 #' @returns A logical the same length as `x` or an error if it does not match
 #'   in the check functions.
 #' @noRd
-is_odim<-function(x){
-  if(length(x)<1){
+is_odim <- function(x) {
+  if (length(x) < 1) {
     return(FALSE)
-    }
-  rlang::is_character(x) & !is.na(x) & grepl("^[a-zA-Z]{5}$",x)
+  }
+  rlang::is_character(x) & !is.na(x) & grepl("^[a-zA-Z]{5}$", x)
 }
 is_nexrad <- function(x) {
-  if (length(x) < 1) return(FALSE)
+  if (length(x) < 1) {
+    return(FALSE)
+  }
   rlang::is_character(x) & !is.na(x) & grepl("^[A-Za-z]{4}$", x)
 }
 is_odim_nexrad <- function(x) {
   is_odim(x) | is_nexrad(x)
 }
-is_odim_scalar<-function(x){
+is_odim_scalar <- function(x) {
   rlang::is_scalar_character(x) && all(is_odim(x))
 }
 is_odim_nexrad_scalar <- function(x) {
   rlang::is_scalar_character(x) && is_odim_nexrad(x)
 }
-check_odim<-function(x){
-  if(!all(is_odim(x)))
-  {
+check_odim <- function(x) {
+  if (!all(is_odim(x))) {
     cli::cli_abort(
       "Please provide one or more radars as a character vector.
       Consisting of 5 characters each to match an odim code.",
@@ -257,23 +263,26 @@ check_odim_nexrad <- function(x) {
     cli::cli_abort(
       "Each element of {.arg radar} must be either a 5-letter ODIM code
       or a 4-letter NEXRAD ICAO code.",
-      class = "getRad_error_radar_not_odim_nexrad")
+      class = "getRad_error_radar_not_odim_nexrad"
+    )
   }
   invisible(TRUE)
 }
-check_odim_scalar<-function(x){
-  if(!is_odim_scalar(x))
+check_odim_scalar <- function(x) {
+  if (!is_odim_scalar(x)) {
     cli::cli_abort(
-    "Please provide radar as a character vector of length 1.
+      "Please provide radar as a character vector of length 1.
     Consisting of 5 characters to match an odim code.",
-    class = "getRad_error_radar_not_single_odim_string"
-  )
+      class = "getRad_error_radar_not_single_odim_string"
+    )
+  }
 }
 check_odim_nexrad_scalar <- function(x) {
   if (!is_odim_nexrad_scalar(x)) {
     cli::cli_abort(
       "Radar must be exactly one 5-letter ODIM code or one 4-letter NEXRAD code.",
-      class = "getRad_error_radar_not_single_odim_nexrad")
+      class = "getRad_error_radar_not_single_odim_nexrad"
+    )
   }
   invisible(TRUE)
 }

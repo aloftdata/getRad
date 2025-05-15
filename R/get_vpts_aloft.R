@@ -44,11 +44,11 @@ get_vpts_aloft <- function(radar_odim_code,
 
   # Check if the requested radars are present in the coverage
   if (!all(radar_odim_code %in% coverage$radar)) {
-    missing_radar<-radar_odim_code[!radar_odim_code %in% coverage$radar]
+    missing_radar <- radar_odim_code[!radar_odim_code %in% coverage$radar]
     cli::cli_abort(
       "Radar not found in ALOFT coverage:
       {missing_radar}.",
-      missing_radar=missing_radar,
+      missing_radar = missing_radar,
       class = "getRad_error_aloft_radar_not_found"
     )
   }

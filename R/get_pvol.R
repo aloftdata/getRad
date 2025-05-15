@@ -40,10 +40,11 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
     )
   }
   if (inherits(datetime, "POSIXct") && length(datetime) == 2) {
-    if(any(duplicated(datetime))){
+    if (any(duplicated(datetime))) {
       cli::cli_abort("When providing two {.cls POSIXct} as a {.arg datetime}
                      they should differ to represent an inverval.",
-                     class = "getRad_error_duplicated_timestamps")
+        class = "getRad_error_duplicated_timestamps"
+      )
     }
     datetime <- lubridate::interval(min(datetime), max(datetime))
   }
@@ -101,7 +102,7 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
       polar_volumes <- purrr::map(datetime, safe_get_pvol, radar = radar, ...)
       return(polar_volumes)
     } else {
-      get(fn)(radar, lubridate::floor_date(datetime,"5 mins"), ...)
+      get(fn)(radar, lubridate::floor_date(datetime, "5 mins"), ...)
     }
   } else {
     # For now then US data is request the interval if forwarded

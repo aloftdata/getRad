@@ -48,11 +48,6 @@ parse_integer <- function(x) {
 #' To simplify `get_vpts_rmi()` we use a helper per field to fetch the
 #' information in a vectorised manner.
 #'
-#' Defining these functions here and loading them into the package environment
-#' has the advantage of making it much easier to actually test the generated
-#' helpers individually without having to keep track of the column positions
-#' in both the test file as well as in `parse_rmi()` in `get_vpts_rmi()`.
-#'
 #' @param start_value String position where to start reading the value, this is
 #'   actually the end position of the previous field as the fwf file is alligned
 #'   on the end of the columns.
@@ -73,36 +68,95 @@ create_rmi_helper <- function(start_value, stop_value, parser) {
   return(rmi_helper)
 }
 
-## A list of specifications to create functions from.
-specs <- list(
-  get_datetime = list(start = 0, stop = 13, parser = lubridate::ymd_hm),
-  get_height = list(start = 14, stop = 18, parser = parse_integer),
-  get_u = list(start = 19, stop = 25, parser = parse_numeric),
-  get_v = list(start = 26, stop = 32, parser = parse_numeric),
-  get_w = list(start = 33, stop = 40, parser = parse_numeric),
-  get_ff = list(start = 41, stop = 46, parser = parse_numeric),
-  get_dd = list(start = 47, stop = 52, parser = parse_numeric),
-  get_sd_vvp = list(start = 53, stop = 60, parser = parse_numeric),
-  get_gap = list(start = 61, stop = 61, parser = as.logical),
-  get_dbz = list(start = 62, stop = 69, parser = parse_numeric),
-  get_eta = list(start = 70, stop = 75, parser = parse_numeric),
-  get_dens = list(start = 76, stop = 82, parser = parse_numeric),
-  get_dbzh = list(start = 83, stop = 90, parser = parse_numeric),
-  get_n = list(start = 91, stop = 96, parser = parse_integer),
-  get_n_dbz = list(start = 97, stop = 102, parser = parse_integer),
-  get_n_all = list(start = 103, stop = 107, parser = parse_integer),
-  get_n_dbz_all = list(start = 109, stop = 114, parser = parse_integer)
-)
+# Helper to actually parse a RMI fwf VPTS file ----------------------------
 
-## Actually generate the helper functions
-helpers <- purrr::map(
-  specs, \(spec){
-    do.call(create_rmi_helper, spec)
-  }
-)
+#' Parse RMI VPTS data.
+#'
+#' This function parses the RMI VPTS data from a character vector containing
+#' the lines of the file.
+#'
+#' Internally this function generates a number of helper functions to parse the
+#' different fields in the VPTS data. The helper functions are generated
+#' using the `create_rmi_helper()` function based on the specifications
+#' provided in the `specs` list.
+#'
+#' @param lines A character vector containing the lines of the RMI VPTS file.
+#'
+#' @return A tibble with the parsed VPTS data.
+#' @noRd
+#'
+#' @examples
+#'
+#' read_lines_from_url(file.path(
+#'   "https://opendata.meteo.be/",
+#'   "ftp",
+#'   "observations",
+#'   "radar",
+#'   "vbird",
+#'   "bejab",
+#'   "2020",
+#'   "bejab_vpts_20200124.txt"
+#' )) |>
+#'   unlist() |> # read_lines_from_url() returns a list
+#'   tail(-4) |> # skip the metadata
+#'   parse_rmi()
+parse_rmi <- function(lines) {
+  ## A list of specifications to create helper functions from. This is where the
+  ## column locations within the fwf file are defined.
+  specs <- list(
+    get_datetime = list(start = 0, stop = 13, parser = lubridate::ymd_hm),
+    get_height = list(start = 14, stop = 18, parser = parse_integer),
+    get_u = list(start = 19, stop = 25, parser = parse_numeric),
+    get_v = list(start = 26, stop = 32, parser = parse_numeric),
+    get_w = list(start = 33, stop = 40, parser = parse_numeric),
+    get_ff = list(start = 41, stop = 46, parser = parse_numeric),
+    get_dd = list(start = 47, stop = 52, parser = parse_numeric),
+    get_sd_vvp = list(start = 53, stop = 60, parser = parse_numeric),
+    get_gap = list(start = 61, stop = 61, parser = as.logical),
+    get_dbz = list(start = 62, stop = 69, parser = parse_numeric),
+    get_eta = list(start = 70, stop = 75, parser = parse_numeric),
+    get_dens = list(start = 76, stop = 82, parser = parse_numeric),
+    get_dbzh = list(start = 83, stop = 90, parser = parse_numeric),
+    get_n = list(start = 91, stop = 96, parser = parse_integer),
+    get_n_dbz = list(start = 97, stop = 102, parser = parse_integer),
+    get_n_all = list(start = 103, stop = 107, parser = parse_integer),
+    get_n_dbz_all = list(start = 109, stop = 114, parser = parse_integer)
+  )
 
-purrr::walk2(names(helpers), helpers, ~ assign(.x, .y, envir = rlang::env_parent()))
-
+  with(
+    # With this list of helper functions:
+    purrr::map(
+      specs, \(spec){
+        do.call(create_rmi_helper, spec)
+      }
+    ),
+    # Run this chunk (and use the helpers to parse the fwf file):
+    {
+      dplyr::tibble(
+        source = "rmi",
+        datetime = get_datetime(lines),
+        height = get_height(lines),
+        u = get_u(lines),
+        v = get_v(lines),
+        w = get_w(lines),
+        ff = get_ff(lines),
+        dd = get_dd(lines),
+        sd_vvp = get_sd_vvp(lines),
+        gap = get_gap(lines),
+        dbz = get_dbz(lines),
+        eta = get_eta(lines),
+        dens = get_dens(lines),
+        dbzh = get_dbzh(lines),
+        n = get_n(lines),
+        n_dbz = get_n_dbz(lines),
+        n_all = get_n_all(lines),
+        n_dbz_all = get_n_dbz(lines),
+        sd_vvp_threshold = 2,
+        rcs = calc_single_mean_rcs(.data$eta, .data$dens)
+      )
+    }
+  )
+}
 
 # Other RMI helpers -------------------------------------------------------
 

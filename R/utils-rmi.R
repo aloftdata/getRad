@@ -20,27 +20,6 @@ parse_numeric <- function(x) {
     replace_nan_numeric()
 }
 
-#' Parse integer values from RMI VPTS data
-#'
-#' This function is used to parse integer values from the RMI VPTS data. It
-#' removes any leading or trailing whitespace and replaces "NaN" with NA.
-#'
-#' @param x A character vector containing the integer values to be parsed.
-#'
-#' @return An integer vector with the parsed values.
-#' @noRd
-#'
-#' @examples
-#' parse_integer("   42 ")
-#' parse_integer("-4")
-#' parse_integer("nan    ")
-#' parse_integer("nan")
-parse_integer <- function(x) {
-  string_squish(x) |>
-    replace_nan_numeric() |>
-    as.integer()
-}
-
 # Function factory to create helpers to parse RMI VPTS --------------------
 
 #' Create a helper function to create helpers to parse RMI VPTS data
@@ -105,7 +84,7 @@ parse_rmi <- function(lines) {
   ## column locations within the fwf file are defined.
   specs <- list(
     get_datetime = list(start = 0, stop = 13, parser = lubridate::ymd_hm),
-    get_height = list(start = 14, stop = 18, parser = parse_integer),
+    get_height = list(start = 14, stop = 18, parser = parse_numeric),
     get_u = list(start = 19, stop = 25, parser = parse_numeric),
     get_v = list(start = 26, stop = 32, parser = parse_numeric),
     get_w = list(start = 33, stop = 40, parser = parse_numeric),
@@ -117,10 +96,10 @@ parse_rmi <- function(lines) {
     get_eta = list(start = 70, stop = 75, parser = parse_numeric),
     get_dens = list(start = 76, stop = 82, parser = parse_numeric),
     get_dbzh = list(start = 83, stop = 90, parser = parse_numeric),
-    get_n = list(start = 91, stop = 96, parser = parse_integer),
-    get_n_dbz = list(start = 97, stop = 102, parser = parse_integer),
-    get_n_all = list(start = 103, stop = 107, parser = parse_integer),
-    get_n_dbz_all = list(start = 109, stop = 114, parser = parse_integer)
+    get_n = list(start = 91, stop = 96, parser = parse_numeric),
+    get_n_dbz = list(start = 97, stop = 102, parser = parse_numeric),
+    get_n_all = list(start = 103, stop = 107, parser = parse_numeric),
+    get_n_dbz_all = list(start = 109, stop = 114, parser = parse_numeric)
   )
 
   with(

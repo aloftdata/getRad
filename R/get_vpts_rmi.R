@@ -5,11 +5,12 @@
 #' @return A tibble with the parsed VPTS data.
 #'
 #' @examplesIf interactive()
-#' get_vpts_rmi("bejab",
-#'              lubridate::interval("20200119", "20200124"))
+#' get_vpts_rmi(
+#'   "bejab",
+#'   lubridate::interval("20200119", "20200124")
+#' )
 get_vpts_rmi <- function(radar_odim_code,
                          rounded_interval) {
-
   # Build the potential path for the rmi fwf files
 
   rmi_data_url <- "https://opendata.meteo.be/ftp/observations/radar/vbird"
@@ -20,8 +21,8 @@ get_vpts_rmi <- function(radar_odim_code,
     "{lubridate::year(year_seq)}",
     "{radar_odim_code}_vpts_{format(year_seq, '%Y%m%d')}.txt",
     year_seq = seq(lubridate::int_start(rounded_interval),
-                   lubridate::int_end(rounded_interval),
-                   by = "day"
+      lubridate::int_end(rounded_interval),
+      by = "day"
     ),
     .sep = "/"
   )
@@ -79,8 +80,9 @@ get_vpts_rmi <- function(radar_odim_code,
 
   enriched_vpts <-
     dplyr::left_join(combined_vpts,
-                     radar_metadata,
-                     by = dplyr::join_by("radar" == "odimcode"))
+      radar_metadata,
+      by = dplyr::join_by("radar" == "odimcode")
+    )
 
   return(enriched_vpts)
 }
@@ -95,17 +97,19 @@ get_vpts_rmi <- function(radar_odim_code,
 #'
 #' @examples
 #'
-#' read_lines_from_url(file.path("https://opendata.meteo.be/",
-#'                               "ftp",
-#'                               "observations",
-#'                               "radar",
-#'                               "vbird",
-#'                               "bejab",
-#'                               "2020",
-#'                               "bejab_vpts_20200124.txt")) |>
-#'     unlist() |> # read_lines_from_url() returns a list
-#'     tail(-4) |> # skip the metadata
-#'     parse_rmi()
+#' read_lines_from_url(file.path(
+#'   "https://opendata.meteo.be/",
+#'   "ftp",
+#'   "observations",
+#'   "radar",
+#'   "vbird",
+#'   "bejab",
+#'   "2020",
+#'   "bejab_vpts_20200124.txt"
+#' )) |>
+#'   unlist() |> # read_lines_from_url() returns a list
+#'   tail(-4) |> # skip the metadata
+#'   parse_rmi()
 parse_rmi <- function(lines) {
   dplyr::tibble(
     source = "rmi",

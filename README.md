@@ -97,14 +97,15 @@ bucket](https://aloftdata.eu/browse/):
 vpts_list <- get_vpts(
   radar = c("bejab", "deess"),
   datetime = lubridate::interval(
-    lubridate::as_datetime("2021-10-03 16:00:00"), 
+    lubridate::as_datetime("2021-10-03 16:00:00"),
     lubridate::as_datetime("2021-10-05 10:00:00")
   ),
   source = "baltrad"
 )
 par(mfrow = 2:1)
-for(i in names(vpts_list))
+for (i in names(vpts_list)) {
   plot(regularize_vpts(vpts_list[[i]]), main = i)
+}
 ```
 
 <img src="man/figures/README-vpts-1.png" width="100%" />

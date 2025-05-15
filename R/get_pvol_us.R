@@ -64,7 +64,7 @@ get_pvol_us <- function(radar, time, ...) {
         `continuation-token` = token
       ) |>
       req_cache_getrad(use_cache = use_cache) |>
-    httr2::req_perform() |>
+      httr2::req_perform() |>
       httr2::resp_body_xml()
 
     keys <- c(keys, xml2::xml_text(xml2::xml_find_all(xml, ".//s3:Key", ns)))

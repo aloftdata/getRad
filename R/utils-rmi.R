@@ -96,7 +96,7 @@ helpers <- purrr::map(
   }
 )
 
-purrr::walk2(names(helpers), helpers, ~assign(.x, .y, envir = rlang::env_parent()))
+purrr::walk2(names(helpers), helpers, ~ assign(.x, .y, envir = rlang::env_parent()))
 
 
 # Other RMI helpers -------------------------------------------------------

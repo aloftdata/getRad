@@ -45,7 +45,6 @@ test_that("get_pvol time argument", {
     get_pvol("nlhrw", datetime = as.POSIXct(Sys.Date())[c(1, 1)]),
     class = "getRad_error_duplicated_timestamps"
   )
-
 })
 
 test_that("multiple radars work", {
@@ -89,7 +88,7 @@ test_that("multiple timestamps work", {
   expect_true(all(unlist(lapply(pvl, bioRad::is.pvol))))
   expect_identical(
     lapply(pvl, \(x) x$datetime),
-    as.list(seq(min(multiple_timestamps), max(multiple_timestamps),"5 mins"))
+    as.list(seq(min(multiple_timestamps), max(multiple_timestamps), "5 mins"))
   )
 })
 
@@ -117,10 +116,10 @@ test_that("multiple timestamps and radars work", {
   expect_true(all(unlist(lapply(pvl, bioRad::is.pvol))))
   expect_identical(
     lapply(pvl, \(x) x$datetime),
-    as.list(rep(seq(min(multiple_timestamps), max(multiple_timestamps),"5 mins"),  2))
+    as.list(rep(seq(min(multiple_timestamps), max(multiple_timestamps), "5 mins"), 2))
   )
   expect_identical(
     lapply(pvl, \(x) x$radar),
-    as.list(rep(multiple_radars,each=3))
+    as.list(rep(multiple_radars, each = 3))
   )
 })

@@ -71,7 +71,10 @@ rmi_data_coverage <- function(radar = NULL, year = NULL) {
   radar_year_combos <-
     purrr::map(
       found_radars,
-      \(radar) get_element_regex(get_html(file.path(base_url, radar)), "[0-9]{4}")
+      \(radar) get_element_regex(
+        get_html(file.path(base_url, radar)),
+        "[0-9]{4}"
+      )
     ) |>
     purrr::set_names(found_radars)
 
@@ -112,9 +115,11 @@ rmi_data_coverage <- function(radar = NULL, year = NULL) {
     }) |>
     tibble::enframe(name = "radar", value = "years") |>
     tidyr::unnest_wider(col = "years") |>
-    tidyr::pivot_longer(cols = -"radar",
-                        names_to = "year",
-                        values_to = "file") |>
+    tidyr::pivot_longer(
+      cols = -"radar",
+      names_to = "year",
+      values_to = "file"
+    ) |>
     tidyr::unnest_longer("file") |>
     dplyr::mutate(
       file = unlist(file),

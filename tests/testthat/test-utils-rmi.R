@@ -114,5 +114,16 @@ test_that("parse_rmi() returns the expected values", {
   expect_identical(
     parsed_rmi[1,"n_dbz_all"][[1]],
     3233L
+
+  expect_identical(
+    parsed_rmi[1,"sd_vvp_threshold"][[1]],
+    2
+  )
+
+  # Allow floating point errors.
+  expect_equal(
+    parsed_rmi[1,"rcs"][[1]],
+    10.98804,
+    tolerance = 0.00001
   )
 })

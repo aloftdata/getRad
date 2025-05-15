@@ -25,9 +25,9 @@
 #' # Get PVOL data for a single radar and datetime
 #' get_pvol("deess", as.POSIXct(Sys.Date()))
 #'
-#' # Get PVOL data for multipe radars and a single datetime
+#' # Get PVOL data for multiple radars and a single datetime
 #' get_pvol(
-#'   c("deess", "dehnr", "fianj", "czska"),
+#'   c("deess", "dehnr", "fianj", "czska", "KABR"),
 #'   as.POSIXct(Sys.Date())
 #' )
 #' }

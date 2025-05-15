@@ -1,16 +1,45 @@
+# Helpers to parse/coerce values from RMI FWF VPTS ------------------------
 
-
+#' Parse numeric values from RMI VPTS data
+#'
+#' This function is used to parse numeric values from the RMI VPTS data. It
+#' removes any leading or trailing whitespace and replaces "NaN" with NA.
+#'
+#' @param x A character vector containing the numeric values to be parsed.
+#'
+#' @return A numeric vector with the parsed values.
+#' @noRd
+#'
+#' @examples
+#' parse_numeric("   42 ")
+#' parse_numeric("  -0.775942      ")
+#' parse_numeric("nan")
+#' parse_numeric("    nan")
 parse_numeric <- function(x) {
   string_squish(x) |>
     replace_nan_numeric()
 }
 
+#' Parse integer values from RMI VPTS data
+#'
+#' This function is used to parse integer values from the RMI VPTS data. It
+#' removes any leading or trailing whitespace and replaces "NaN" with NA.
+#'
+#' @param x A character vector containing the integer values to be parsed.
+#'
+#' @return An integer vector with the parsed values.
+#' @noRd
+#'
+#' @examples
+#' parse_integer("   42 ")
+#' parse_integer("-4")
+#' parse_integer("nan    ")
+#' parse_integer("nan")
 parse_integer <- function(x) {
   string_squish(x) |>
     replace_nan_numeric() |>
     as.integer()
 }
-
 
 # Function factory to create helpers to parse RMI VPTS --------------------
 
@@ -69,7 +98,10 @@ helpers <- purrr::map(
 
 purrr::walk2(names(helpers), helpers, ~assign(.x, .y, envir = rlang::env_parent()))
 
-#' Get the source file name from the RMI vpts metadata header
+
+# Other RMI helpers -------------------------------------------------------
+
+#' Get the source file name from the RMI VPTS metadata header
 #'
 #' @param lines A character vector containing the lines of the RMI vpts file.
 #'

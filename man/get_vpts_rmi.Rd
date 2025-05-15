@@ -19,8 +19,10 @@ Get VPTS RMI
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-get_vpts_rmi("bejab",
-             lubridate::interval("20200119", "20200124"))
+get_vpts_rmi(
+  "bejab",
+  lubridate::interval("20200119", "20200124")
+)
 \dontshow{\}) # examplesIf}
 }
 \keyword{internal}

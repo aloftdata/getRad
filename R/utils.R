@@ -396,34 +396,6 @@ read_lines_from_url <- function(urls, use_cache = TRUE) {
     ))
 }
 
-#' Check if a URL exists
-#'
-#' This function sends a HEAD request to check if a URL exists. It returns
-#' `TRUE` if the URL exists and `FALSE` if it does not.
-#'
-#' @param url Single URLs as a character to check for existence.
-#' @return Logical value indicating whether the URL exists (TRUE) or not
-#'   (FALSE).
-#' @noRd
-url_exists <- purrr::possibly(
-  function(url) {
-    url_does_not_exist <- httr2::request(url) |>
-      req_user_agent_getrad() |>
-      # Retry, but give up quickly
-      httr2::req_retry(
-        max_tries = 30,
-        max_seconds = 10
-      ) |>
-      httr2::req_method("HEAD") |>
-      httr2::req_perform() |>
-      httr2::resp_is_error()
-
-    return(!url_does_not_exist)
-  },
-  otherwise = FALSE, quiet = TRUE
-)
-
-
 check_odim_nexrad_scalar <- function(x) {
   if (!is_odim_nexrad_scalar(x)) {
     cli::cli_abort(

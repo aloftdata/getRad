@@ -11,37 +11,43 @@
 #' )
 get_vpts_rmi <- function(radar_odim_code,
                          rounded_interval) {
-  # Build the potential path for the rmi fwf files
 
-  rmi_data_url <- "https://opendata.meteo.be/ftp/observations/radar/vbird"
-
-  rmi_urls <- glue::glue(
-    rmi_data_url,
-    radar_odim_code,
-    "{lubridate::year(year_seq)}",
-    "{radar_odim_code}_vpts_{format(year_seq, '%Y%m%d')}.txt",
-    year_seq = seq(lubridate::int_start(rounded_interval),
-      lubridate::int_end(rounded_interval),
-      by = "day"
-    ),
-    .sep = "/"
+  # Check the coverage for data availability
+  coverage <- rmi_data_coverage(
+    radar = radar_odim_code,
+    year = seq(
+      lubridate::year(lubridate::int_start(rounded_interval)),
+      lubridate::year(lubridate::int_end(rounded_interval))
+    )
   )
 
-  ## Check if the urls exist, if not, then RMI doens't have data for that
-  ## radar/datetime combo
+  # Check if the requested date radar combination is present in the coverage
+  filtered_coverage <- dplyr::filter(
+    coverage,
+    .data$radar %in% radar_odim_code,
+    .data$date %within% rounded_interval
+  )
+  at_least_one_radar_date_combination_exists <- nrow(filtered_coverage) > 0
 
-  if (purrr::none(rmi_urls, url_exists)) {
+  if (!at_least_one_radar_date_combination_exists) {
     cli::cli_abort(
-      "No data found for the requested radar(s) and date(s) on RMI.",
+      "No data found for the requested radar(s) and date(s).",
       class = "getRad_error_date_not_found"
     )
   }
 
-  ## For every url that exists, parse the VPTS: skip over any days with a
-  ## missing file
-  resolving_rmi_urls <- rmi_urls[purrr::map_lgl(rmi_urls, url_exists)]
-  rmi_files <-
-    read_lines_from_url(resolving_rmi_urls)
+  # Build the potential path for the rmi fwf files
+
+  rmi_data_url <- "https://opendata.meteo.be/ftp/observations/radar/vbird"
+
+  rmi_urls <- file.path(
+    "https://opendata.meteo.be/ftp",
+    filtered_coverage$directory,
+    filtered_coverage$file
+  )
+
+  ## For every rmi url, parse the VPTS
+  rmi_files <- read_lines_from_url(rmi_urls)
 
   combined_vpts <-
     # drop the header for parsing
@@ -53,7 +59,7 @@ get_vpts_rmi <- function(radar_odim_code,
         basename(get_rmi_sourcefile(.y))
     )) |>
     # Add the radar column from the file path
-    purrr::map2(resolving_rmi_urls, ~ dplyr::mutate(.x,
+    purrr::map2(rmi_urls, ~ dplyr::mutate(.x,
       radar = string_extract(
         .y,
         "(?<=vbird\\/)[a-z]+"

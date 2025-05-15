@@ -61,8 +61,8 @@ parse_integer <- function(x) {
 #'
 #' @examplesIf interactive()
 #' get_datetime <- create_rmi_helper(0, 13, lubridate::ymd_hm)
-create_rmi_helper <- function(start_value, stop_value, parser){
-  rmi_helper <- function(lines, start = start_value, stop = stop_value){
+create_rmi_helper <- function(start_value, stop_value, parser) {
+  rmi_helper <- function(lines, start = start_value, stop = stop_value) {
     do.call(parser, list(substr(lines, start, stop)))
   }
   return(rmi_helper)

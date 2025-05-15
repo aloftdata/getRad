@@ -383,8 +383,11 @@ fetch_from_url_raw <- function(urls, use_cache = TRUE) {
 #' @noRd
 #' @examples
 #' read_lines_from_url(
-#'     file.path("https://raw.githubusercontent.com/philspil66",
-#'               "Super-Star-Trek/refs/heads/main/superstartrek.bas"))
+#'   file.path(
+#'     "https://raw.githubusercontent.com/philspil66",
+#'     "Super-Star-Trek/refs/heads/main/superstartrek.bas"
+#'   )
+#' )
 read_lines_from_url <- function(urls, use_cache = TRUE) {
   fetch_from_url_raw(urls, use_cache = use_cache) |>
     I() |>
@@ -407,8 +410,10 @@ url_exists <- purrr::possibly(
     url_does_not_exist <- httr2::request(url) |>
       req_user_agent_getrad() |>
       # Retry, but give up quickly
-      httr2::req_retry(max_seconds = 2,
-                       max_tries = 3) |>
+      httr2::req_retry(
+        max_seconds = 2,
+        max_tries = 3
+      ) |>
       httr2::req_method("HEAD") |>
       httr2::req_perform() |>
       httr2::resp_is_error()

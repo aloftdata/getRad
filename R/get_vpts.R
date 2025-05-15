@@ -177,7 +177,8 @@ get_vpts <- function(radar,
       .x,
       rounded_interval = rounded_interval,
       source = source
-    ))) |> radar_to_name()
+    ))
+    ) |> radar_to_name()
 
 
   # Drop any results outside the requested interval

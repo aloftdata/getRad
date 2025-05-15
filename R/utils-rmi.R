@@ -26,16 +26,15 @@ parse_integer <- function(x) {
 #'   actually the start position of the next field as the fwf file is alligned
 #'   on the end of the columns.
 #' @param parser A function to parse/coerce the value to a R class.
-#' @param ... Additional arguments to pass to the parser function.
 #'
 #' @return A function that takes a character vector and returns a parsed value.
 #' @noRd
 #'
 #' @examplesIf interactive()
 #' get_datetime <- create_rmi_helper(0, 13, lubridate::ymd_hm)
-create_rmi_helper <- function(start_value, stop_value, parser, ...){
+create_rmi_helper <- function(start_value, stop_value, parser){
   rmi_helper <- function(lines, start = start_value, stop = stop_value){
-    do.call(parser, list(substr(lines, start, stop), ...))
+    do.call(parser, list(substr(lines, start, stop)))
   }
   return(rmi_helper)
 }

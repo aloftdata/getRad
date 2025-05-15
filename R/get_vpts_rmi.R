@@ -43,7 +43,6 @@ get_vpts_rmi <- function(radar_odim_code,
   rmi_files <-
     read_lines_from_url(resolving_rmi_urls)
 
-
   combined_vpts <-
     # drop the header for parsing
     purrr::map(rmi_files, \(lines) tail(lines, -4)) |>
@@ -84,8 +83,5 @@ get_vpts_rmi <- function(radar_odim_code,
       by = dplyr::join_by("radar" == "odimcode")
     )
 
-  return(enriched_vpts)
+  enriched_vpts
 }
-
-
-

@@ -1,86 +1,30 @@
 skip_if_offline(host = "opendata.meteo.be")
 
-test_that("get_datetime() returns the expected value", {
-  fwf_text <- get0(
-    "fwf_text",
-    ifnotfound = vroom::vroom_lines(
-      file.path(
-        "https://opendata.meteo.be/ftp/observations",
-        "radar/vbird",
-        "bejab",
-        "2020",
-        "bejab_vpts_20200124.txt"
-      )
-    )
-  )
-
+test_that("parse_numeric() properly returns NaN",{
   expect_identical(
-    get_datetime(fwf_text[6]),
-    lubridate::ymd("2020-01-24", tz = "UTC")
-  )
-})
-
-test_that("get_height() returns the expected value", {
-  fwf_text <- get0(
-    "fwf_text",
-    ifnotfound = vroom::vroom_lines(
-      file.path(
-        "https://opendata.meteo.be/ftp/observations",
-        "radar/vbird",
-        "bejab",
-        "2020",
-        "bejab_vpts_20200124.txt"
-      )
-    )
-  )
-
-  expect_identical(
-    get_height(fwf_text[6]),
-    200L
-  )
-})
-
-test_that("get_u() returns the expected value", {
-  fwf_text <- get0(
-    "fwf_text",
-    ifnotfound = vroom::vroom_lines(
-      file.path(
-        "https://opendata.meteo.be/ftp/observations",
-        "radar/vbird",
-        "bejab",
-        "2020",
-        "bejab_vpts_20200124.txt"
-      )
-    )
-  )
-
-  expect_identical(
-    get_u(fwf_text[6]),
-    0.58
-  )
-})
-
-test_that("get_u() can convert `'nan'` to NaN", {
-  fwf_text <- get0(
-    "fwf_text",
-    ifnotfound = vroom::vroom_lines(
-      file.path(
-        "https://opendata.meteo.be/ftp/observations",
-        "radar/vbird",
-        "bejab",
-        "2020",
-        "bejab_vpts_20200124.txt"
-      )
-    )
-  )
-
-  expect_identical(
-    get_u(fwf_text[5]),
+    parse_numeric("nan"),
     NaN
   )
 })
 
-test_that("get_v() returns the expected value", {
+test_that("parse_numeric() returns a numeric",{
+  expect_true(is.numeric(parse_numeric("42.336")))
+})
+
+test_that("parse_integer() properly returns NaN",{
+  expect_identical(
+    parse_integer("nan"),
+    NaN
+  )
+})
+
+test_that("parse_integer() returns an integer",{
+  expect_true(is.integer(parse_integer("42")))
+})
+
+test_that("parse_rmi() returns the expected values", {
+  skip_if_offline(host = "opendata.meteo.be")
+
   fwf_text <- get0(
     "fwf_text",
     ifnotfound = vroom::vroom_lines(
@@ -91,276 +35,95 @@ test_that("get_v() returns the expected value", {
         "2020",
         "bejab_vpts_20200124.txt"
       )
-    )
+    ) |>
+    # drop metadata header
+    tail(-4)
+  )
+
+  parsed_rmi <- parse_rmi(fwf_text)
+
+  expect_identical(
+    parsed_rmi[1,"datetime"][[1]],
+    lubridate::ymd("2020-01-24", tz = "UTC")
   )
 
   expect_identical(
-    get_v(fwf_text[6]),
+    parsed_rmi[2,"height"][[1]],
+    200L
+  )
+
+  expect_identical(
+    parsed_rmi[2,"u"][[1]],
+    0.58
+  )
+
+  expect_identical(
+    parsed_rmi[2,"v"][[1]],
     1.29
   )
-})
-
-test_that("get_w() returns the expected value", {
-  fwf_text <- get0(
-    "fwf_text",
-    ifnotfound = vroom::vroom_lines(
-      file.path(
-        "https://opendata.meteo.be/ftp/observations",
-        "radar/vbird",
-        "bejab",
-        "2020",
-        "bejab_vpts_20200124.txt"
-      )
-    )
-  )
 
   expect_identical(
-    get_w(fwf_text[6]),
+    parsed_rmi[2,"w"][[1]],
     6.25
   )
-})
-
-test_that("get_ff() returns the expected value", {
-  fwf_text <- get0(
-    "fwf_text",
-    ifnotfound = vroom::vroom_lines(
-      file.path(
-        "https://opendata.meteo.be/ftp/observations",
-        "radar/vbird",
-        "bejab",
-        "2020",
-        "bejab_vpts_20200124.txt"
-      )
-    )
-  )
 
   expect_identical(
-    get_ff(fwf_text[6]),
+    parsed_rmi[2,"ff"][[1]],
     1.42
   )
-})
-
-test_that("get_dd() returns the expected value", {
-  fwf_text <- get0(
-    "fwf_text",
-    ifnotfound = vroom::vroom_lines(
-      file.path(
-        "https://opendata.meteo.be/ftp/observations",
-        "radar/vbird",
-        "bejab",
-        "2020",
-        "bejab_vpts_20200124.txt"
-      )
-    )
-  )
 
   expect_identical(
-    get_dd(fwf_text[6]),
+    parsed_rmi[2,"dd"][[1]],
     24.3
   )
-})
-
-test_that("get_sd_vvp() returns the expected value", {
-  fwf_text <- get0(
-    "fwf_text",
-    ifnotfound = vroom::vroom_lines(
-      file.path(
-        "https://opendata.meteo.be/ftp/observations",
-        "radar/vbird",
-        "bejab",
-        "2020",
-        "bejab_vpts_20200124.txt"
-      )
-    )
-  )
 
   expect_identical(
-    get_sd_vvp(fwf_text[6]),
+    parsed_rmi[2,"sd_vvp"][[1]],
     1.49
   )
-})
-
-test_that("get_gap() returns the expected value", {
-  fwf_text <- get0(
-    "fwf_text",
-    ifnotfound = vroom::vroom_lines(
-      file.path(
-        "https://opendata.meteo.be/ftp/observations",
-        "radar/vbird",
-        "bejab",
-        "2020",
-        "bejab_vpts_20200124.txt"
-      )
-    )
-  )
 
   expect_identical(
-    get_gap(fwf_text[6]),
+    parsed_rmi[2,"gap"][[1]],
     FALSE
   )
-})
-
-test_that("get_dbz() returns the expected value", {
-  fwf_text <- get0(
-    "fwf_text",
-    ifnotfound = vroom::vroom_lines(
-      file.path(
-        "https://opendata.meteo.be/ftp/observations",
-        "radar/vbird",
-        "bejab",
-        "2020",
-        "bejab_vpts_20200124.txt"
-      )
-    )
-  )
 
   expect_identical(
-    get_dbz(fwf_text[6]),
+    parsed_rmi[2,"dbz"][[1]],
     -10.38
   )
-})
-
-test_that("get_eta() returns the expected value", {
-  fwf_text <- get0(
-    "fwf_text",
-    ifnotfound = vroom::vroom_lines(
-      file.path(
-        "https://opendata.meteo.be/ftp/observations",
-        "radar/vbird",
-        "bejab",
-        "2020",
-        "bejab_vpts_20200124.txt"
-      )
-    )
-  )
 
   expect_identical(
-    get_eta(fwf_text[6]),
+    parsed_rmi[2,"eta"][[1]],
     32.2
   )
-})
 
-test_that("get_dens() returns the expected value", {
-  fwf_text <- get0(
-    "fwf_text",
-    ifnotfound = vroom::vroom_lines(
-      file.path(
-        "https://opendata.meteo.be/ftp/observations",
-        "radar/vbird",
-        "bejab",
-        "2020",
-        "bejab_vpts_20200124.txt"
-      )
-    )
+  expect_identical(
+    parsed_rmi[819,"dens"][[1]],
+    0.54
   )
 
   expect_identical(
-    get_dens(fwf_text[6]),
-    0
+    parsed_rmi[3,"dbzh"][[1]],
+    -6.170
   )
 
   expect_identical(
-    get_dens(fwf_text[3680]),
-    11.10
-  )
-})
-
-test_that("get_dbzh() returns the expected value", {
-  fwf_text <- get0(
-    "fwf_text",
-    ifnotfound = vroom::vroom_lines(
-      file.path(
-        "https://opendata.meteo.be/ftp/observations",
-        "radar/vbird",
-        "bejab",
-        "2020",
-        "bejab_vpts_20200124.txt"
-      )
-    )
-  )
-
-  expect_identical(
-    get_dbzh(fwf_text[5]),
-    26.95
-  )
-})
-
-test_that("get_n() returns the expected value", {
-  fwf_text <- get0(
-    "fwf_text",
-    ifnotfound = vroom::vroom_lines(
-      file.path(
-        "https://opendata.meteo.be/ftp/observations",
-        "radar/vbird",
-        "bejab",
-        "2020",
-        "bejab_vpts_20200124.txt"
-      )
-    )
-  )
-
-  expect_identical(
-    get_n(fwf_text[6]),
+    parsed_rmi[2,"n"][[1]],
     1044L
   )
-})
-
-test_that("get_n_dbz() returns the expected value", {
-  fwf_text <- get0(
-    "fwf_text",
-    ifnotfound = vroom::vroom_lines(
-      file.path(
-        "https://opendata.meteo.be/ftp/observations",
-        "radar/vbird",
-        "bejab",
-        "2020",
-        "bejab_vpts_20200124.txt"
-      )
-    )
-  )
 
   expect_identical(
-    get_n_dbz(fwf_text[5]),
+    parsed_rmi[1,"n_dbz"][[1]],
     829L
   )
-})
-
-test_that("get_n_all() returns the expected value", {
-  fwf_text <- get0(
-    "fwf_text",
-    ifnotfound = vroom::vroom_lines(
-      file.path(
-        "https://opendata.meteo.be/ftp/observations",
-        "radar/vbird",
-        "bejab",
-        "2020",
-        "bejab_vpts_20200124.txt"
-      )
-    )
-  )
 
   expect_identical(
-    get_n_all(fwf_text[5]),
+    parsed_rmi[1,"n_all"][[1]],
     1593L
   )
-})
-
-test_that("get_n_dbz_all() returns the expected value", {
-  fwf_text <- get0(
-    "fwf_text",
-    ifnotfound = vroom::vroom_lines(
-      file.path(
-        "https://opendata.meteo.be/ftp/observations",
-        "radar/vbird",
-        "bejab",
-        "2020",
-        "bejab_vpts_20200124.txt"
-      )
-    )
-  )
 
   expect_identical(
-    get_n_dbz_all(fwf_text[5]),
+    parsed_rmi[1,"n_dbz_all"][[1]],
     3233L
   )
 })

@@ -110,7 +110,7 @@ weather_radars_opera <- function(use_cache = TRUE, ...) {
       )
     ) |>
     # Move source column to end
-    dplyr::relocate(origin, .after = dplyr::last_col()) |>
+    dplyr::relocate("origin", .after = dplyr::last_col()) |>
     # convert column types to expected values, non fitting values are returned
     # as NA without warning
     dplyr::mutate(
@@ -134,7 +134,7 @@ weather_radars_opera <- function(use_cache = TRUE, ...) {
       compositerrr = yes_no_as_logical(.data$compositerrr),
       radar = .data$odimcode
     ) |>
-    dplyr::select(.data$radar, dplyr::everything()) |>
+    dplyr::select("radar", dplyr::everything()) |>
     # Sort data for consistent git diffs
     dplyr::arrange(.data$country, .data$number, .data$startyear)
 }
@@ -164,23 +164,24 @@ weather_radars_nexrad <- function(use_cache = TRUE, ...) {
       )
     ) |>
     dplyr::mutate(
-      radar = icao,
-      latitude = lat, longitude = lon,
-      country = capwords(tolower(country)),
+      radar = .data$icao,
+      latitude = .data$lat,
+      longitude = .data$lon,
+      country = capwords(tolower(.data$country)),
       location = capwords(sub(
         " wfo", " WFO",
         sub(
           " ab", " AB",
           sub(
             " faa", " FAA",
-            sub(" jfk", " JFK", sub(" afb", " AFB", tolower(name)))
+            sub(" jfk", " JFK", sub(" afb", " AFB", tolower(.data$name)))
           )
         )
       )),
-      heightantenna = elev / 3.28083989
+      heightantenna = .data$elev / 3.28083989
     ) |>
-    dplyr::select(-lat, -lon) |>
-    dplyr::select(radar, dplyr::everything())
+    dplyr::select(-dplyr::all_of(c("lat", "lon"))) |>
+    dplyr::select("radar", dplyr::everything())
 }
 
 # from base::chartr examples

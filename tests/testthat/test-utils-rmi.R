@@ -38,7 +38,7 @@ test_that("parse_rmi() returns the expected values", {
 
   expect_identical(
     parsed_rmi[2,"height"][[1]],
-    200L
+    200
   )
 
   expect_identical(
@@ -98,22 +98,23 @@ test_that("parse_rmi() returns the expected values", {
 
   expect_identical(
     parsed_rmi[2,"n"][[1]],
-    1044L
+    1044
   )
 
   expect_identical(
     parsed_rmi[1,"n_dbz"][[1]],
-    829L
+    829
   )
 
   expect_identical(
     parsed_rmi[1,"n_all"][[1]],
-    1593L
+    1593
   )
 
   expect_identical(
     parsed_rmi[1,"n_dbz_all"][[1]],
-    3233L
+    3233
+  )
 
   expect_identical(
     parsed_rmi[1,"sd_vvp_threshold"][[1]],

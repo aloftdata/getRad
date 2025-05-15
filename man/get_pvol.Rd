@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_pvol.R
 \name{get_pvol}
 \alias{get_pvol}
-\title{Get polar volume (PVOL) data from supported countries}
+\title{Get polar volume (PVOL) data from supported sources}
 \usage{
 get_pvol(radar = NULL, datetime = NULL, ...)
 }
@@ -12,9 +12,11 @@ get_pvol(radar = NULL, datetime = NULL, ...)
 
 \item{datetime}{Either:
 \itemize{
-\item A single \code{\link[base:DateTimeClasses]{POSIXct}}, for which the nearest data
-file is downloaded.
-\item A \code{\link[lubridate:interval]{lubridate::interval()}}, between which all data files are downloaded.
+\item A single \code{\link[base:DateTimeClasses]{POSIXct}}, for which the most
+representative data file is downloaded. In most cases this will be the time
+before.
+\item A \code{\link[lubridate:interval]{lubridate::interval()}} or two \code{\link[base:DateTimeClasses]{POSIXct}},
+between which all data files are downloaded.
 }}
 
 \item{...}{Additional arguments passed on to reading functions, for example
@@ -25,17 +27,19 @@ Either a polar volume or a list of polar volumes. See
 \code{\link[bioRad:summary.pvol]{bioRad::summary.pvol()}} for details.
 }
 \description{
-Gets polar volume data for supported countries and returns it as a (list of)
-\link[bioRad:summary.pvol]{polar volume objects}.
+Gets polar volume data from supported sources and returns it as a (list of)
+\link[bioRad:summary.pvol]{polar volume objects}. The source is automatically
+detected based on the provided \code{radar}.
 }
 \details{
-For more details on supported countries, see
-\code{vignette("supported_countries")}.
+For more details on supported sources, see \code{vignette("supported_sources")}.
 }
 \examples{
 \dontrun{
+# Get PVOL data for a single radar and datetime
 get_pvol("deess", as.POSIXct(Sys.Date()))
-get_pvol("czska", as.POSIXct(Sys.Date()))
+
+# Get PVOL data for multipe radars and a single datetime
 get_pvol(
   c("deess", "dehnr", "fianj", "czska"),
   as.POSIXct(Sys.Date())

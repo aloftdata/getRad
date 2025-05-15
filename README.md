@@ -10,57 +10,104 @@ status](https://www.r-pkg.org/badges/version/getRad)](https://CRAN.R-project.org
 [![R-CMD-check](https://github.com/aloftdata/getRad/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/aloftdata/getRad/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/aloftdata/getRad/branch/main/graph/badge.svg)](https://app.codecov.io/gh/aloftdata/getRad/)
 [![repo
-status](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+status](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 <!-- badges: end -->
 
-The goal of `getRad` is to provide a unified interface to radar data for
-biological research. This is done by downloading data from repositories
-and loading it directly into R. Currently the functionality if focused
-around volume data from weather radars. However in the longer term it
-might also support vertical profile information, vertically integrated
-profile information and possibly data from other radars.
+getRad is an R package that provides a unified interface to download
+radar data for biological and aeroecological research. It gives access
+to both polar volume radar data and [vertical profile
+data](https://aloftdata.eu/vpts-csv/) from [different
+sources](https://aloftdata.github.io/getRad/articles/supported_sources.html)
+and loads it directly into R. getRad also facilitates further
+exploration of the data by other tools such as
+[bioRad](https://adokter.github.io/bioRad) by standardizing the data.
 
 ## Installation
 
-You can install the development version of `getRad` from
-[GitHub](https://github.com/) with:
+Install the latest released version from CRAN:
+
+``` r
+install.packages("getRad")
+```
+
+Or the development version from
+[GitHub](https://github.com/aloftdata/getRad):
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("aloftdata/getRad")
 ```
 
-For the time being the package is not yet released on CRAN.
-
 ## Usage
 
-Here are some examples of volume data with biological information that
-can be downloaded
+Download a polar volume, and then plot it using `bioRad`:
 
 ``` r
 library(getRad)
 library(bioRad)
-#> Welcome to bioRad version 0.8.1
-#> Attempting to load MistNet from: /home/bart/R/x86_64-pc-linux-gnu-library/4.4/vol2birdR/lib 
-#> MistNet successfully initialized.
-#> using vol2birdR version 1.0.2 (MistNet installed)
-# Plot insect movements in Finland (Mäkinen et al. 2022)
-pvol<-get_pvol("fianj", as.POSIXct("2012-5-17 14:15", tz="UTC"))
-plot(project_as_ppi(get_scan(pvol,0), range_max = 75000))
+# Plot daytime insect movements in Finland (Mäkinen et al. 2022)
+pvol <- get_pvol("fianj", as.POSIXct("2012-05-17 14:00", tz = "UTC"))
+plot(project_as_ppi(get_scan(pvol, 0), range_max = 75000))
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />
 
 ``` r
-
-# Spring migration in Estonia
-pvol<-get_pvol("nlhrw", as.POSIXct("2023-3-19 22:15", tz="UTC+1"))
 plot(calculate_vp(pvol, h_layer = 50, n_layer = 40))
 #> Running vol2birdSetUp
+#> Warning: correlation coefficient missing, dropping scan 4 ...
+#> Warning: correlation coefficient missing, dropping scan 7 ...
+#> Warning: correlation coefficient missing, dropping scan 9 ...
+#> Warning: correlation coefficient missing, dropping scan 10 ...
+#> Warning: correlation coefficient missing, dropping scan 11 ...
+#> Warning: correlation coefficient missing, dropping scan 12 ...
 #> Warning: radial velocities will be dealiased...
 ```
 
 <img src="man/figures/README-example-2.png" width="100%" />
+
+``` r
+
+# Plot nocturnal migration in Finland
+pvol <- get_pvol("fianj", as.POSIXct("2012-05-11 23:00", tz = "UTC"))
+plot(project_as_ppi(get_scan(pvol, 0), range_max = 75000))
+```
+
+<img src="man/figures/README-example-3.png" width="100%" />
+
+``` r
+plot(calculate_vp(pvol, h_layer = 50, n_layer = 40))
+#> Running vol2birdSetUp
+#> Warning: correlation coefficient missing, dropping scan 4 ...
+#> Warning: correlation coefficient missing, dropping scan 7 ...
+#> Warning: correlation coefficient missing, dropping scan 9 ...
+#> Warning: correlation coefficient missing, dropping scan 10 ...
+#> Warning: correlation coefficient missing, dropping scan 11 ...
+#> Warning: correlation coefficient missing, dropping scan 12 ...
+#> Warning: radial velocities will be dealiased...
+```
+
+<img src="man/figures/README-example-4.png" width="100%" />
+
+Download a vertical profile time series from the [Aloft
+bucket](https://aloftdata.eu/browse/):
+
+``` r
+# Plot VPTS data for two radars
+vpts_list <- get_vpts(
+  radar = c("bejab", "deess"),
+  datetime = lubridate::interval(
+    lubridate::as_datetime("2021-10-03 16:00:00"), 
+    lubridate::as_datetime("2021-10-05 10:00:00")
+  ),
+  source = "baltrad"
+)
+par(mfrow = 2:1)
+for(i in names(vpts_list))
+  plot(regularize_vpts(vpts_list[[i]]), main = i)
+```
+
+<img src="man/figures/README-vpts-1.png" width="100%" />
 
 ## Meta
 
@@ -69,8 +116,8 @@ plot(calculate_vp(pvol, h_layer = 50, n_layer = 40))
   including bug reports.
 - License: MIT
 - Get [citation
-  information](https://aloftdata.github.io/getRad/authors.html#citation) for
-  getRad in R doing `citation("getRad")`.
+  information](https://aloftdata.github.io/getRad/authors.html#citation)
+  for getRad in R doing `citation("getRad")`.
 - Please note that this project is released with a [Contributor Code of
   Conduct](https://aloftdata.github.io/getRad/CODE_OF_CONDUCT.html). By
   participating in this project you agree to abide by its terms.

@@ -4,6 +4,9 @@
 #' as a (list of) of [vpts objects][bioRad::summary.vpts] or a
 #' [dplyr::tibble()].
 #'
+#' @details
+#' For more details on supported sources, see `vignette("supported_sources")`.
+#'
 #' @inheritParams get_pvol
 #' @inherit get_vpts_aloft details
 #' @param datetime Either:
@@ -52,7 +55,7 @@
 #' # Return a tibble instead of a vpts object
 #' get_vpts(
 #'   radar = "chlem",
-#'   date = "2023-03-10",
+#'   datetime = "2023-03-10",
 #'   source = "baltrad",
 #'   return_type = "tibble"
 #' )

@@ -40,6 +40,8 @@ test_that("get_vpts() can return vpts data as a tibble or vpts object", {
     "list"
   )
 
+  # Skip if the RMI can not be reached.
+  skip_if_offline("opendata.meteo.be")
   returned_vpts_object_rmi <-
     get0(
       "returned_vpts_object",

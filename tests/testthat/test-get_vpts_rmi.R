@@ -1,5 +1,5 @@
 test_that("get_vpts_rmi() can return vpts data for a single radar", {
-  skip_if_offline()
+  skip_if_offline("opendata.meteo.be")
 
   rmi_vpts_tbl <-
     get_vpts_rmi(
@@ -20,7 +20,7 @@ test_that("get_vpts_rmi() can return vpts data for a single radar", {
 })
 
 test_that("get_vpts_rmi() returns the expected columns", {
-  skip_if_offline()
+  skip_if_offline("opendata.meteo.be")
 
   expected_columns <- c(
     "source",
@@ -64,7 +64,7 @@ test_that("get_vpts_rmi() returns the expected columns", {
 })
 
 test_that("get_vpts_rmi() supports intervals passing a year boundary", {
-  skip_if_offline()
+  skip_if_offline("opendata.meteo.be")
 
   rmi_vpts_tbl_multi_year <-
     get_vpts_rmi(
@@ -86,7 +86,7 @@ test_that("get_vpts_rmi() supports intervals passing a year boundary", {
 })
 
 test_that("get_vpts_rmi() returns rmi as the source", {
-  skip_if_offline()
+  skip_if_offline("opendata.meteo.be")
 
   rmi_vpts_tbl <-
     get_vpts_rmi(
@@ -101,7 +101,7 @@ test_that("get_vpts_rmi() returns rmi as the source", {
 })
 
 test_that("get_vpts_rmi() returns error if radar date combo is not found", {
-  skip_if_offline()
+  skip_if_offline("opendata.meteo.be")
 
   expect_error(
     get_vpts_rmi("bejab",

@@ -7,7 +7,7 @@ get_html <- function(url, use_cache = TRUE) {
     httr2::resp_body_html()
 }
 
-get_element_regex <- function(html, regex){
+get_element_regex <- function(html, regex) {
   html |>
     xml2::xml_find_all(".//a") |>
     xml2::xml_text() |>
@@ -15,19 +15,54 @@ get_element_regex <- function(html, regex){
     (\(vec) vec[!is.na(vec)])()
 }
 
-rmi_data_coverage <- function(radar, year) {
+rmi_data_coverage <- function(radar = NULL, year = NULL) {
   base_url <-
     "https://opendata.meteo.be/ftp/observations/radar/vbird"
 
-  purrr::map(
-    found_radars <- get_element_regex(get_html(base_url), "[a-z]{5}(?=\\/)"),
-    \(radar) get_element_regex(get_html(file.path(base_url, radar)), "[0-9]{4}")
-  ) |>
-    purrr::set_names(found_radars) |>
+  found_radars <- get_element_regex(get_html(base_url), "[a-z]{5}(?=\\/)")
+
+  if (missing(radar)) {
+    radar <- found_radars
+  }
+
+  if (missing(year)) {
+    use_year_filter <- FALSE
+  } else {
+    use_year_filter <- TRUE
+  }
+
+  if (any(!radar %in% found_radars)) {
+    cli::cli_abort("Requested radar {radar[!radar %in% found_radars]} not
+                   present in RMI coverage")
+  }
+
+  radar_year_combos <-
+    purrr::map(
+      found_radars,
+      \(radar) get_element_regex(get_html(file.path(base_url, radar)), "[0-9]{4}")
+    ) |>
+    purrr::set_names(found_radars)
+
+  years_covered_by_rmi <- as.integer(unique(unlist(radar_year_combos)))
+
+  if (!year %in% years_covered_by_rmi && use_year_filter) {
+    cli::cli_abort("Requested year {year} is not present in RMI coverage")
+  }
+
+  radar_year_combos |>
     # Only keep the radars in the radar argument
     (\(list) list[radar])() |>
     # Only keep the years in the year argument
-    purrr::map(\(radar_years) radar_years[radar_years %in% year]) |>
+    (\(years_per_radar) {
+      if (use_year_filter) {
+        purrr::map(
+          years_per_radar,
+          \(radar_years) radar_years[radar_years %in% year]
+        )
+      } else {
+        years_per_radar
+      }
+    })() |>
     (\(years_per_radar)    {
       purrr::map2(
         years_per_radar,
@@ -44,7 +79,9 @@ rmi_data_coverage <- function(radar, year) {
     }) |>
     tibble::enframe(name = "radar", value = "years") |>
     tidyr::unnest_wider(col = "years") |>
-    tidyr::pivot_longer(cols = -"radar", names_to = "year", values_to = "file") |>
+    tidyr::pivot_longer(cols = -"radar",
+                        names_to = "year",
+                        values_to = "file") |>
     tidyr::unnest_longer("file") |>
     dplyr::mutate(
       file = unlist(file),

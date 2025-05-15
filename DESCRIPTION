@@ -36,6 +36,7 @@ Imports:
     lubridate,
     purrr (>= 1.0.0),
     rlang,
+    tibble,
     tidyr,
     tools,
     utils,

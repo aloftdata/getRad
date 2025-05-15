@@ -1,4 +1,4 @@
-skip_if_offline()
+skip_if_offline(host = "opendata.meteo.be")
 
 test_that("get_datetime() returns the expected value", {
   fwf_text <- get0(

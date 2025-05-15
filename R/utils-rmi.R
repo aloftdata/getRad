@@ -48,6 +48,11 @@ parse_integer <- function(x) {
 #' To simplify `get_vpts_rmi()` we use a helper per field to fetch the
 #' information in a vectorised manner.
 #'
+#' Defining these functions here and loading them into the package environment
+#' has the advantage of making it much easier to actually test the generated
+#' helpers individually without having to keep track of the column positions
+#' in both the test file as well as in `parse_rmi()` in `get_vpts_rmi()`.
+#'
 #' @param start_value String position where to start reading the value, this is
 #'   actually the end position of the previous field as the fwf file is alligned
 #'   on the end of the columns.

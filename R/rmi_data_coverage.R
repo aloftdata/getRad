@@ -15,15 +15,19 @@ get_element_regex <- function(html, regex){
     (\(vec) vec[!is.na(vec)])()
 }
 
-rmi_data_coverage <- function(use_cache = TRUE) {
+rmi_data_coverage <- function(radar, year) {
   base_url <-
     "https://opendata.meteo.be/ftp/observations/radar/vbird"
 
   purrr::map(
-    found_radars <- get_element_regex(get_html(base_url, use_cache), "[a-z]{5}(?=\\/)"),
-    \(radar) get_element_regex(get_html(file.path(base_url, radar), use_cache), "[0-9]{4}")
+    found_radars <- get_element_regex(get_html(base_url), "[a-z]{5}(?=\\/)"),
+    \(radar) get_element_regex(get_html(file.path(base_url, radar)), "[0-9]{4}")
   ) |>
     purrr::set_names(found_radars) |>
+    # Only keep the radars in the radar argument
+    (\(list) list[radar])() |>
+    # Only keep the years in the year argument
+    purrr::map(\(radar_years) radar_years[radar_years %in% year]) |>
     (\(years_per_radar)    {
       purrr::map2(
         years_per_radar,
@@ -33,7 +37,7 @@ rmi_data_coverage <- function(use_cache = TRUE) {
     })() |>
     purrr::map(\(year_url) {
       purrr::map(year_url, ~ get_element_regex(
-        get_html(.x, use_cache),
+        get_html(.x),
         "[a-z]{5}_vpts_.+"
       )) |>
         purrr::set_names(basename(year_url))

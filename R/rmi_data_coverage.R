@@ -1,3 +1,11 @@
+#' Get HTML from a URL
+#'
+#' @param url URL to get the HTML from.
+#' @param use_cache Logical. If `TRUE`, use the cache. If `FALSE`, do not use
+#'   the cache.
+#'
+#' @return HTML content from the URL as a xml2 html object.
+#' @noRd
 get_html <- function(url, use_cache = TRUE) {
   httr2::request(url) |>
     req_user_agent_getrad() |>
@@ -7,6 +15,13 @@ get_html <- function(url, use_cache = TRUE) {
     httr2::resp_body_html()
 }
 
+#' Get an html element using regex selection from a html object.
+#'
+#' @param html html object from the `xml2` package.
+#' @param regex regex to select the element.
+#'
+#' @return A character vector with the selected elements.
+#' @noRd
 get_element_regex <- function(html, regex) {
   html |>
     xml2::xml_find_all(".//a") |>

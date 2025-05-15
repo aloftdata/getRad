@@ -91,9 +91,9 @@ between which all data files are downloaded.</p></li>
 <span class="r-in"><span><span class="co"># Get PVOL data for a single radar and datetime</span></span></span>
 <span class="r-in"><span><span class="fu">get_pvol</span><span class="op">(</span><span class="st">"deess"</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Get PVOL data for multipe radars and a single datetime</span></span></span>
+<span class="r-in"><span><span class="co"># Get PVOL data for multiple radars and a single datetime</span></span></span>
 <span class="r-in"><span><span class="fu">get_pvol</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"deess"</span>, <span class="st">"dehnr"</span>, <span class="st">"fianj"</span>, <span class="st">"czska"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"deess"</span>, <span class="st">"dehnr"</span>, <span class="st">"fianj"</span>, <span class="st">"czska"</span>, <span class="st">"KABR"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>

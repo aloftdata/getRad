@@ -45,8 +45,9 @@ rmi_data_coverage <- function(radar = NULL, year = NULL) {
 
   years_covered_by_rmi <- as.integer(unique(unlist(radar_year_combos)))
 
-  if (!year %in% years_covered_by_rmi && use_year_filter) {
-    cli::cli_abort("Requested year {year} is not present in RMI coverage")
+  if (!all(year %in% years_covered_by_rmi) && use_year_filter) {
+    cli::cli_abort("Requested year {year[!year %in% years_covered_by_rmi]} is
+                   not present in RMI coverage")
   }
 
   radar_year_combos |>

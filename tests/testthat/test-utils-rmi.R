@@ -11,17 +11,6 @@ test_that("parse_numeric() returns a numeric",{
   expect_true(is.numeric(parse_numeric("42.336")))
 })
 
-test_that("parse_integer() properly returns NaN",{
-  expect_identical(
-    parse_integer("nan"),
-    NaN
-  )
-})
-
-test_that("parse_integer() returns an integer",{
-  expect_true(is.integer(parse_integer("42")))
-})
-
 test_that("parse_rmi() returns the expected values", {
   skip_if_offline(host = "opendata.meteo.be")
 

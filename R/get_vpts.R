@@ -206,21 +206,20 @@ get_vpts <- function(radar,
   ## Depending on the value of the `return_type` argument, do some final
   ## formatting or conversion
   return_object <-
-  switch(return_type,
-    tibble = purrr::list_rbind(filtered_vpts),
-    vpts = (\(filtered_vpts) {
-      filtered_vpts_no_source <-
-        purrr::map(filtered_vpts, \(df) dplyr::select(df, -source))
-      vpts_list <- purrr::map(filtered_vpts_no_source, bioRad::as.vpts)
-      # If we are only returning a single radar, don't return a list
-      if (length(vpts_list) == 1) {
-        return(purrr::chuck(vpts_list, 1))
-      } else {
-        return(vpts_list)
-      }
-    })(filtered_vpts)
-  )
+    switch(return_type,
+      tibble = purrr::list_rbind(filtered_vpts),
+      vpts = (\(filtered_vpts) {
+        filtered_vpts_no_source <-
+          purrr::map(filtered_vpts, \(df) dplyr::select(df, -source))
+        vpts_list <- purrr::map(filtered_vpts_no_source, bioRad::as.vpts)
+        # If we are only returning a single radar, don't return a list
+        if (length(vpts_list) == 1) {
+          return(purrr::chuck(vpts_list, 1))
+        } else {
+          return(vpts_list)
+        }
+      })(filtered_vpts)
+    )
   # Return the converted/formatted object
   return(return_object)
-
 }

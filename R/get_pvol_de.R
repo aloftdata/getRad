@@ -25,10 +25,10 @@ get_pvol_de <- function(radar, time, ...) {
     dplyr::mutate(file = res) |>
     tidyr::unnest(file) |>
     dplyr::filter(file != "../") |>
-    dplyr::mutate(filestd=sub('stqual-','',file))|>
-    tidyr::separate_wider_delim('filestd',
+    dplyr::mutate(filestd = sub("stqual-", "", file)) |>
+    tidyr::separate_wider_delim("filestd",
       delim = "-", cols_remove = FALSE,
-      names = c("ras",  "sweep", "time_chr", "radar", "odim", "h5")
+      names = c("ras", "sweep", "time_chr", "radar", "odim", "h5")
     ) |>
     dplyr::mutate(
       time_pos = strptime(time_chr, "%Y%m%d%H%M%S", tz = "UTC")
@@ -84,8 +84,10 @@ get_pvol_de <- function(radar, time, ...) {
     dplyr::mutate(
       scan = purrr::map2(scan, param, ~ list_to_scan(.x, .y))
     )
-  pvol <- list_to_pvol(files_to_get$scan, time = time, radar = radar,
-                       source=glue::glue("NOD:{radar},CMT:constructed from opendata.dwd.de"))
+  pvol <- list_to_pvol(files_to_get$scan,
+    time = time, radar = radar,
+    source = glue::glue("NOD:{radar},CMT:constructed from opendata.dwd.de")
+  )
   return(pvol)
 }
 
@@ -99,7 +101,7 @@ list_to_pvol <- function(x, time, radar,
   output$datetime <- time
   output$scans <- x
 
-   output$attributes <- purrr::chuck(x, 1, "attributes")
+  output$attributes <- purrr::chuck(x, 1, "attributes")
   output$attributes$what[c("starttime", "startdate", "endtime", "enddate")] <- NULL
   output$attributes$what$date <- min(purrr::map_chr(x, ~ purrr::chuck(.x, "attributes", "what", "startdate")))
   output$attributes$what$time <- min(purrr::map_chr(x, ~ purrr::chuck(.x, "attributes", "what", "starttime")))

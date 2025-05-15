@@ -362,7 +362,6 @@ test_that("get_vpts() supports POSIXct dates", {
     unique(as.Date((radar_interval$datetime))),
     as.Date("2025-05-07")
   )
-
 })
 
 test_that("get_vpts() only returns the data for the requested day", {

@@ -411,8 +411,8 @@ url_exists <- purrr::possibly(
       req_user_agent_getrad() |>
       # Retry, but give up quickly
       httr2::req_retry(
-        max_seconds = 2,
-        max_tries = 3
+        max_tries = 30,
+        max_seconds = 10
       ) |>
       httr2::req_method("HEAD") |>
       httr2::req_perform() |>

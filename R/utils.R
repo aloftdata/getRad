@@ -118,8 +118,6 @@ end_of_day <- function(date) {
 #'
 #' @return A numeric value representing the mean radar cross section (rcs).
 #' @noRd
-#'
-#' @examples
 calc_single_mean_rcs <- function(eta, dens) {
   rcs <- eta / dens
   # Omit NA, NaN and Inf

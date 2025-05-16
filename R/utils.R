@@ -366,22 +366,33 @@ replace_nan_numeric <- function(string) {
 #'  requests. Default is `TRUE`.
 #' @return A list of raw response bodies from the URLs.
 #' @noRd
-fetch_from_url_raw <- function(urls, use_cache = TRUE) {
-  purrr::map(urls, httr2::request) |>
+fetch_from_url_raw <- function(urls, use_cache = TRUE, parallel = TRUE) {
+  data_request <- purrr::map(urls, httr2::request) |>
     # Identify ourselves in the request
     purrr::map(req_user_agent_getrad) |>
     # Set retry conditions
     purrr::map(req_retry_getrad) |>
     # Set throttling so we don't overwhelm data sources
-    purrr::map(\(req) {httr2::req_throttle(req,
-                                           capacity = 30,
-                                           fill_time_s = 30)}) |>
+    purrr::map(\(req) {
+      httr2::req_throttle(req,
+        capacity = 30,
+        fill_time_s = 40
+      )
+    }) |>
     # Optionally cache the responses
-    purrr::map(req_cache_getrad) |>
-    # Perform the requests in parallel
-    httr2::req_perform_parallel(progress = interactive()) |>
-    # Fetch the response bodies
-    purrr::map(httr2::resp_body_raw)
+    purrr::map(req_cache_getrad)
+  # Perform the requests in parallel or sequentially
+  if (parallel) {
+    data_response <-
+      data_request |>
+      httr2::req_perform_parallel(progress = interactive())
+  } else {
+    data_response <-
+      data_request |>
+      httr2::req_perform_sequential()
+  }
+  # Fetch the response bodies
+  purrr::map(data_response, httr2::resp_body_raw)
 }
 
 #' Read lines from a list of URLs and return them as a list of character
@@ -400,8 +411,8 @@ fetch_from_url_raw <- function(urls, use_cache = TRUE) {
 #'     "Super-Star-Trek/refs/heads/main/superstartrek.bas"
 #'   )
 #' )
-read_lines_from_url <- function(urls, use_cache = TRUE) {
-  fetch_from_url_raw(urls, use_cache = use_cache) |>
+read_lines_from_url <- function(urls, use_cache = TRUE, parallel = TRUE) {
+  fetch_from_url_raw(urls, use_cache = use_cache, parallel) |>
     I() |>
     purrr::map(~ vroom::vroom_lines(.x,
       progress = FALSE

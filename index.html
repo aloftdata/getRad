@@ -81,15 +81,7 @@
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://adriaandokter.com/bioRad/reference/project_as_ppi.html" class="external-link">project_as_ppi</a></span><span class="op">(</span><span class="fu"><a href="https://adriaandokter.com/bioRad/reference/get_scan.html" class="external-link">get_scan</a></span><span class="op">(</span><span class="va">pvol</span>, <span class="fl">0</span><span class="op">)</span>, range_max <span class="op">=</span> <span class="fl">75000</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-example-1.png" width="100%"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://adriaandokter.com/bioRad/reference/calculate_vp.html" class="external-link">calculate_vp</a></span><span class="op">(</span><span class="va">pvol</span>, h_layer <span class="op">=</span> <span class="fl">50</span>, n_layer <span class="op">=</span> <span class="fl">40</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Running vol2birdSetUp</span></span>
-<span><span class="co">#&gt; Warning: correlation coefficient missing, dropping scan 4 ...</span></span>
-<span><span class="co">#&gt; Warning: correlation coefficient missing, dropping scan 7 ...</span></span>
-<span><span class="co">#&gt; Warning: correlation coefficient missing, dropping scan 9 ...</span></span>
-<span><span class="co">#&gt; Warning: correlation coefficient missing, dropping scan 10 ...</span></span>
-<span><span class="co">#&gt; Warning: correlation coefficient missing, dropping scan 11 ...</span></span>
-<span><span class="co">#&gt; Warning: correlation coefficient missing, dropping scan 12 ...</span></span>
-<span><span class="co">#&gt; Warning: radial velocities will be dealiased...</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://adriaandokter.com/bioRad/reference/calculate_vp.html" class="external-link">calculate_vp</a></span><span class="op">(</span><span class="va">pvol</span>, h_layer <span class="op">=</span> <span class="fl">50</span>, n_layer <span class="op">=</span> <span class="fl">40</span>, warning <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-example-2.png" width="100%"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
@@ -98,15 +90,7 @@
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://adriaandokter.com/bioRad/reference/project_as_ppi.html" class="external-link">project_as_ppi</a></span><span class="op">(</span><span class="fu"><a href="https://adriaandokter.com/bioRad/reference/get_scan.html" class="external-link">get_scan</a></span><span class="op">(</span><span class="va">pvol</span>, <span class="fl">0</span><span class="op">)</span>, range_max <span class="op">=</span> <span class="fl">75000</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-example-3.png" width="100%"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://adriaandokter.com/bioRad/reference/calculate_vp.html" class="external-link">calculate_vp</a></span><span class="op">(</span><span class="va">pvol</span>, h_layer <span class="op">=</span> <span class="fl">50</span>, n_layer <span class="op">=</span> <span class="fl">40</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Running vol2birdSetUp</span></span>
-<span><span class="co">#&gt; Warning: correlation coefficient missing, dropping scan 4 ...</span></span>
-<span><span class="co">#&gt; Warning: correlation coefficient missing, dropping scan 7 ...</span></span>
-<span><span class="co">#&gt; Warning: correlation coefficient missing, dropping scan 9 ...</span></span>
-<span><span class="co">#&gt; Warning: correlation coefficient missing, dropping scan 10 ...</span></span>
-<span><span class="co">#&gt; Warning: correlation coefficient missing, dropping scan 11 ...</span></span>
-<span><span class="co">#&gt; Warning: correlation coefficient missing, dropping scan 12 ...</span></span>
-<span><span class="co">#&gt; Warning: radial velocities will be dealiased...</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://adriaandokter.com/bioRad/reference/calculate_vp.html" class="external-link">calculate_vp</a></span><span class="op">(</span><span class="va">pvol</span>, h_layer <span class="op">=</span> <span class="fl">50</span>, n_layer <span class="op">=</span> <span class="fl">40</span>, warning <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-example-4.png" width="100%"></p>
 <p>Download a vertical profile time series from the <a href="https://aloftdata.eu/browse/" class="external-link">Aloft bucket</a>:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">

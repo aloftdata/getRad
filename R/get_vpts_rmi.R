@@ -54,8 +54,7 @@ get_vpts_rmi <- function(radar_odim_code,
     # Add the source_file column
     purrr::map2(rmi_files, ~ dplyr::mutate(.x,
       source_file =
-        basename(get_rmi_sourcefile(.y))
-    )) |>
+        basename(get_rmi_sourcefile(.y)))) |>
     # Add the radar column from the file path
     purrr::map2(rmi_urls, ~ dplyr::mutate(.x,
       radar = string_extract(

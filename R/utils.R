@@ -363,7 +363,9 @@ fetch_from_url_raw <- function(urls, use_cache = TRUE) {
     # Set retry conditions
     purrr::map(req_retry_getrad) |>
     # Set throttling so we don't overwhelm data sources
-    purrr::map(httr2::req_throttle, capacity = 30) |>
+    purrr::map(\(req) {httr2::req_throttle(req,
+                                           capacity = 30,
+                                           fill_time_s = 30)}) |>
     # Optionally cache the responses
     purrr::map(req_cache_getrad) |>
     # Perform the requests in parallel

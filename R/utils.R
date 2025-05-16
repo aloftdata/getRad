@@ -398,6 +398,38 @@ read_lines_from_url <- function(urls, use_cache = TRUE) {
     ))
 }
 
+#' Get HTML from a URL
+#'
+#' @param url URL to get the HTML from.
+#' @param use_cache Logical. If `TRUE`, use the cache. If `FALSE`, do not use
+#'   the cache.
+#'
+#' @return HTML content from the URL as a xml2 html object.
+#' @noRd
+get_html <- function(url, use_cache = TRUE) {
+  httr2::request(url) |>
+    req_user_agent_getrad() |>
+    req_retry_getrad() |>
+    req_cache_getrad(use_cache = use_cache) |>
+    httr2::req_perform() |>
+    httr2::resp_body_html()
+}
+
+#' Get an html element using regex selection from a html object.
+#'
+#' @param html html object from the `xml2` package.
+#' @param regex regex to select the element.
+#'
+#' @return A character vector with the selected elements.
+#' @noRd
+get_element_regex <- function(html, regex) {
+  html |>
+    xml2::xml_find_all(".//a") |>
+    xml2::xml_text() |>
+    string_extract(regex) |>
+    (\(vec) vec[!is.na(vec)])()
+}
+
 check_odim_nexrad_scalar <- function(x) {
   if (!is_odim_nexrad_scalar(x)) {
     cli::cli_abort(

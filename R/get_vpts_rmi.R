@@ -38,8 +38,6 @@ get_vpts_rmi <- function(radar_odim_code,
 
   # Build the potential path for the rmi fwf files
 
-  rmi_data_url <- "https://opendata.meteo.be/ftp/observations/radar/vbird"
-
   rmi_urls <- file.path(
     "https://opendata.meteo.be/ftp",
     filtered_coverage$directory,

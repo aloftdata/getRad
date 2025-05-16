@@ -338,6 +338,16 @@ check_odim_scalar <- function(x) {
   }
 }
 
+check_odim_nexrad_scalar <- function(x) {
+  if (!is_odim_nexrad_scalar(x)) {
+    cli::cli_abort(
+      "Radar must be exactly one 5-letter ODIM code or one 4-letter NEXRAD code.",
+      class = "getRad_error_radar_not_single_odim_nexrad"
+    )
+  }
+  invisible(TRUE)
+}
+
 #' Replace "nan" with NaN in a string
 #'
 #' @param string Character vector that may contain `"nan"` values.
@@ -430,15 +440,6 @@ get_element_regex <- function(html, regex) {
     (\(vec) vec[!is.na(vec)])()
 }
 
-check_odim_nexrad_scalar <- function(x) {
-  if (!is_odim_nexrad_scalar(x)) {
-    cli::cli_abort(
-      "Radar must be exactly one 5-letter ODIM code or one 4-letter NEXRAD code.",
-      class = "getRad_error_radar_not_single_odim_nexrad"
-    )
-  }
-  invisible(TRUE)
-}
 #' Create an .onload function to set package options during load
 #'
 #' - getRad.key_prefix is the default prefix used when setting or getting

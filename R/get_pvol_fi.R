@@ -1,4 +1,4 @@
-get_pvol_fi <- function(radar, time, ...) {
+get_pvol_fi <- function(radar, time, ..., call = rlang::caller_env()) {
   rlang::check_installed("rhdf5", "to maniplate the `h5` files from the Finish data repository")
   req <- httr2::request(
     getOption(
@@ -15,8 +15,8 @@ get_pvol_fi <- function(radar, time, ...) {
     )
 
   req <- req |>
-    httr2::req_perform(path = tempfile(fileext = ".h5"))
-  rlang::check_installed("rhdf5", "To adjust the polar volume files for Finish data.")
+    httr2::req_perform(path = tempfile(fileext = ".h5"), error_call = call)
+  rlang::check_installed("rhdf5", "To adjust the polar volume files for Finish data.", call = call)
   hdf_connection <- rhdf5::H5Fopen(req$body)
   group <- rhdf5::H5Gopen(hdf_connection, "what")
   rhdf5::h5writeAttribute("PVOL", group, "object")

@@ -1,13 +1,15 @@
-#' Get VPTS RMI
+#' Get VPTS data from RMI
+#'
+#' Get VPTS data from [RMI_DATASET_CROW](
+#' https://opendata.meteo.be/geonetwork/srv/eng/catalog.search#/metadata/RMI_DATASET_CROW).
+#'
 #' @inheritParams get_vpts_aloft
+#' @return A tibble with vpts data.
 #' @keywords internal
-#'
-#' @return A tibble with the parsed VPTS data.
-#'
 #' @examplesIf interactive()
 #' get_vpts_rmi(
-#'   "bejab",
-#'   lubridate::interval("20200119", "20200124")
+#'   radar_odim_code = "bejab",
+#'   rounded_interval = lubridate::interval("20200119", "20200124")
 #' )
 get_vpts_rmi <- function(radar_odim_code,
                          rounded_interval) {

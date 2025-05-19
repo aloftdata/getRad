@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_vpts_rmi.R
 \name{get_vpts_rmi}
 \alias{get_vpts_rmi}
-\title{Get VPTS RMI}
+\title{Get VPTS data from RMI}
 \usage{
 get_vpts_rmi(radar_odim_code, rounded_interval)
 }
@@ -12,16 +12,16 @@ get_vpts_rmi(radar_odim_code, rounded_interval)
 \item{rounded_interval}{Interval to fetch data for, rounded to nearest day.}
 }
 \value{
-A tibble with the parsed VPTS data.
+A tibble with vpts data.
 }
 \description{
-Get VPTS RMI
+Get VPTS data from \href{https://opendata.meteo.be/geonetwork/srv/eng/catalog.search#/metadata/RMI_DATASET_CROW}{RMI_DATASET_CROW}.
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 get_vpts_rmi(
-  "bejab",
-  lubridate::interval("20200119", "20200124")
+  radar_odim_code = "bejab",
+  rounded_interval = lubridate::interval("20200119", "20200124")
 )
 \dontshow{\}) # examplesIf}
 }

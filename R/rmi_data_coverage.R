@@ -16,6 +16,11 @@
 #' # For several radars for a single year
 #' rmi_data_coverage(radar = c("frave", "bezav", "nlhrw"), year = 2024)
 rmi_data_coverage <- function(radar = NULL, year = NULL) {
+  rlang::check_installed(
+    c("tidyr"),
+    "to read coverage date from RMI"
+  )
+
   base_url <-
     "https://opendata.meteo.be/ftp/observations/radar/vbird"
 

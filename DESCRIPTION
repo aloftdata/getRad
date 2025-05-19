@@ -37,7 +37,6 @@ Imports:
     purrr (>= 1.0.0),
     rlang,
     tibble,
-    tidyr,
     tools,
     utils,
     vroom,
@@ -53,6 +52,7 @@ Suggests:
     rnaturalearthdata,
     sf,
     testthat (>= 3.0.0),
+    tidyr,
     vol2birdR,
     withr
 VignetteBuilder: 

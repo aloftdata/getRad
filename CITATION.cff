@@ -82,8 +82,8 @@ references:
     given-names: Stijn
     email: stijnvanhoey@gmail.com
     orcid: https://orcid.org/0000-0001-6413-3185
-  doi: 10.32614/CRAN.package.bioRad
   year: '2025'
+  doi: 10.32614/CRAN.package.bioRad
 - type: software
   title: cli
   abstract: 'cli: Helpers for Developing Command Line Interfaces'
@@ -121,6 +121,7 @@ references:
     orcid: https://orcid.org/0000-0003-4777-038X
   year: '2025'
   doi: 10.32614/CRAN.package.dplyr
+  version: '>= 1.1.0'
 - type: software
   title: glue
   abstract: 'glue: Interpreted String Literals'
@@ -182,6 +183,58 @@ references:
     email: lionel@posit.co
   year: '2025'
   doi: 10.32614/CRAN.package.purrr
+  version: '>= 1.0.0'
+- type: software
+  title: rlang
+  abstract: 'rlang: Functions for Base Types and Core R and ''Tidyverse'' Features'
+  notes: Imports
+  url: https://rlang.r-lib.org
+  repository: https://CRAN.R-project.org/package=rlang
+  authors:
+  - family-names: Henry
+    given-names: Lionel
+    email: lionel@posit.co
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+  year: '2025'
+  doi: 10.32614/CRAN.package.rlang
+- type: software
+  title: tibble
+  abstract: 'tibble: Simple Data Frames'
+  notes: Imports
+  url: https://tibble.tidyverse.org/
+  repository: https://CRAN.R-project.org/package=tibble
+  authors:
+  - family-names: Müller
+    given-names: Kirill
+    email: kirill@cynkra.com
+    orcid: https://orcid.org/0000-0002-1416-3412
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@rstudio.com
+  year: '2025'
+  doi: 10.32614/CRAN.package.tibble
+- type: software
+  title: tools
+  abstract: 'R: A Language and Environment for Statistical Computing'
+  notes: Imports
+  authors:
+  - name: R Core Team
+  institution:
+    name: R Foundation for Statistical Computing
+    address: Vienna, Austria
+  year: '2025'
+- type: software
+  title: utils
+  abstract: 'R: A Language and Environment for Statistical Computing'
+  notes: Imports
+  authors:
+  - name: R Core Team
+  institution:
+    name: R Foundation for Statistical Computing
+    address: Vienna, Austria
+  year: '2025'
 - type: software
   title: vroom
   abstract: 'vroom: Read and Write Rectangular Text Data Quickly'
@@ -203,44 +256,19 @@ references:
   year: '2025'
   doi: 10.32614/CRAN.package.vroom
 - type: software
-  title: rlang
-  abstract: 'rlang: Functions for Base Types and Core R and ''Tidyverse'' Features'
-  notes: Imports
-  url: https://rlang.r-lib.org
-  repository: https://CRAN.R-project.org/package=rlang
-  authors:
-  - family-names: Henry
-    given-names: Lionel
-    email: lionel@posit.co
-  - family-names: Wickham
-    given-names: Hadley
-    email: hadley@posit.co
-  year: '2025'
-  doi: 10.32614/CRAN.package.rlang
-- type: software
-  title: tools
-  abstract: 'R: A Language and Environment for Statistical Computing'
-  notes: Imports
-  authors:
-  - name: R Core Team
-  institution:
-    name: R Foundation for Statistical Computing
-    address: Vienna, Austria
-  year: '2025'
-- type: software
   title: xml2
   abstract: 'xml2: Parse XML'
   notes: Imports
-  url: https://xml2.r-lib.org
+  url: https://xml2.r-lib.org/
   repository: https://CRAN.R-project.org/package=xml2
   authors:
   - family-names: Wickham
     given-names: Hadley
+    email: hadley@posit.co
   - family-names: Hester
     given-names: Jim
   - family-names: Ooms
     given-names: Jeroen
-    email: jeroenooms@gmail.com
   year: '2025'
   doi: 10.32614/CRAN.package.xml2
 - type: software
@@ -347,6 +375,7 @@ references:
   - family-names: Pau
     given-names: Gregoire
   year: '2025'
+  doi: 10.18129/B9.bioc.rhdf5
 - type: software
   title: rnaturalearth
   abstract: 'rnaturalearth: World Map Data from Natural Earth'

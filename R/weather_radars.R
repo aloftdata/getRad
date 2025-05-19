@@ -56,7 +56,8 @@ weather_radars <- function(source = c("opera"), use_cache = TRUE, ...) {
     "nexrad" = weather_radars_nexrad(use_cache = use_cache, ...)
   ) |> dplyr::mutate(source = source)
 }
-weather_radars_opera <- function(use_cache = TRUE, ...) {
+weather_radars_opera <- function(use_cache = TRUE, ...,
+                                 call = rlang::caller_env()) {
   # Build the url where the JSON files are hosted on eumetnet
 
   # Read source JSON files from OPERA
@@ -88,7 +89,7 @@ weather_radars_opera <- function(use_cache = TRUE, ...) {
       req_user_agent_getrad() |>
       req_retry_getrad() |>
       req_cache_getrad(use_cache = use_cache) |>
-      httr2::req_perform() |>
+      httr2::req_perform(error_call = call) |>
       # The object is actually returned as text/plain
       httr2::resp_body_json(check_type = FALSE) |>
       # As tibble so it displays more nicely
@@ -139,12 +140,13 @@ weather_radars_opera <- function(use_cache = TRUE, ...) {
     dplyr::arrange(.data$country, .data$number, .data$startyear)
 }
 
-weather_radars_nexrad <- function(use_cache = TRUE, ...) {
+weather_radars_nexrad <- function(use_cache = TRUE, ...,
+                                  call = rlang::caller_env()) {
   #  https://www.ncei.noaa.gov/access/homr/reports
   file_content <- httr2::request("https://www.ncei.noaa.gov/access/homr/file/nexrad-stations.txt") |>
     req_user_agent_getrad() |>
     req_cache_getrad(use_cache = TRUE) |>
-    httr2::req_perform() |>
+    httr2::req_perform(error_call = call) |>
     httr2::resp_body_string()
   # First parse first lines to find column widths and headers
   tmp <- file_content |>

@@ -8,7 +8,7 @@ get_pvol_de <- function(radar, time, ...,
   rlang::check_installed(
     c("xml2", "lubridate", "tidyr"),
     "to import data from German weather radars",
-    call=call
+    call = call
   )
   urls <- c(
     glue::glue("https://opendata.dwd.de/weather/radar/sites/sweep_vol_{c('z','v')}/{substr(radar,3,5)}/hdf5/filter_simple/"),
@@ -18,7 +18,7 @@ get_pvol_de <- function(radar, time, ...,
   res <- lapply(urls, function(x) {
     httr2::request(x) |>
       req_user_agent_getrad() |>
-      httr2::req_perform() |>
+      httr2::req_perform(error_call = call) |>
       httr2::resp_body_html() |>
       xml2::xml_find_all("//a/@href") |>
       xml2::xml_text()
@@ -45,7 +45,7 @@ get_pvol_de <- function(radar, time, ...,
   if (nrow(files_to_get) != 50) {
     cli::cli_abort("The server returned an unexpected number of files",
       class = "getRad_error_germany_unexpected_number_of_files",
-      call=call
+      call = call
     )
   }
 

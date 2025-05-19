@@ -4,15 +4,15 @@
 #'
 #' @param radar Optional. Character vector of radars to get coverage for.
 #' @param year Optional. Integer vector of years to get coverage for.
-#'
 #' @return A tibble with RMI data coverage.
 #' @noRd
-#'
 #' @examplesIf interactive()
 #' # Get coverage for all radars and years
 #' rmi_data_coverage()
+#'
 #' # For a single radar, for a few years
 #' rmi_data_coverage(radar = "behel", year = c(2020, 2021))
+#'
 #' # For several radars for a single year
 #' rmi_data_coverage(radar = c("frave", "bezav", "nlhrw"), year = 2024)
 rmi_data_coverage <- function(radar = NULL, year = NULL) {

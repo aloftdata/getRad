@@ -32,36 +32,31 @@ string_replace <- function(string, pattern, replacement) {
   sub(pattern, replacement, string, perl = TRUE)
 }
 
-
-#' Replace all occurrences of a pattern in a string with a replacement.
+#' Replace all occurrences of a pattern in a string with a replacement
 #'
 #' This function uses regular expressions to replace all occurrences of a
 #' pattern in a string with a specified replacement. This is a base replacement
-#' of stringr::str_replace_all()
+#' of stringr::str_replace_all().
 #'
 #' @param string The input string.
 #' @param pattern The pattern to search for in the string.
 #' @param replacement The replacement string.
-#'
 #' @return The modified string with all occurrences of the pattern replaced.
 #' @noRd
-#'
 #' @examples
 #' string_replace_all("starwars", "wars", "trek")
 string_replace_all <- function(string, pattern, replacement) {
   gsub(pattern, replacement, string, perl = TRUE)
 }
 
-#' Remove all whitespace from a string from both ends.
+#' Remove all whitespace from a string from both ends
 #'
 #' This function uses regular expressions to remove all whitespace from a
-#' string. This is a base replacement of stringr::str_squish()
+#' string. This is a base replacement of stringr::str_squish().
 #'
 #' @param string The input string.
-#'
 #' @return A string with all whitespace removed from both ends.
 #' @noRd
-#'
 #' @examples
 #' string_squish("  aoosh  ")
 #' string_squish(" A sentence with extra whitespace.   ")
@@ -111,11 +106,10 @@ end_of_day <- function(date) {
 #' calculate it by eta/dens, it makes sense to only use the most common value
 #' when transforming to vpts objects.
 #'
-#' This function drops NA, NaN and Inf for calculating the mean.
+#' This function drops `NA`, `NaN` and `Inf` for calculating the mean.
 #'
-#' @param eta Animal reflectivity
-#' @param dens Animal density
-#'
+#' @param eta Animal reflectivity,
+#' @param dens Animal density.
 #' @return A numeric value representing the mean radar cross section (rcs).
 #' @noRd
 calc_single_mean_rcs <- function(eta, dens) {
@@ -152,9 +146,7 @@ radar_to_name <- function(vpts_df_list) {
 #' @param x Character vector.
 #' @return An integer vector.
 #' @seealso [as_numeric_shh()] [as_logical_shh()]
-#'
 #' @noRd
-#'
 #' @examples
 #' as_integer_shh(c("1", "2", "3"))
 as_integer_shh <- function(x) {
@@ -424,7 +416,6 @@ read_lines_from_url <- function(urls, use_cache = TRUE, parallel = TRUE) {
 #' @param url URL to get the HTML from.
 #' @param use_cache Logical. If `TRUE`, use the cache. If `FALSE`, do not use
 #'   the cache.
-#'
 #' @return HTML content from the URL as a xml2 html object.
 #' @noRd
 get_html <- function(url, use_cache = TRUE) {
@@ -440,7 +431,6 @@ get_html <- function(url, use_cache = TRUE) {
 #'
 #' @param html html object from the `xml2` package.
 #' @param regex regex to select the element.
-#'
 #' @return A character vector with the selected elements.
 #' @noRd
 get_element_regex <- function(html, regex) {

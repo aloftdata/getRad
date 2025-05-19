@@ -1,4 +1,4 @@
-# Helpers to parse/coerce values from RMI FWF VPTS ------------------------
+# Helpers to parse/coerce values from RMI fixed width VPTS files
 
 #' Parse numeric values from RMI VPTS data
 #'
@@ -6,10 +6,8 @@
 #' removes any leading or trailing whitespace and replaces "NaN" with NA.
 #'
 #' @param x A character vector containing the numeric values to be parsed.
-#'
 #' @return A numeric vector with the parsed values.
 #' @noRd
-#'
 #' @examples
 #' parse_numeric("   42 ")
 #' parse_numeric("  -0.775942      ")
@@ -20,7 +18,7 @@ parse_numeric <- function(x) {
     replace_nan_numeric()
 }
 
-# Function factory to create helpers to parse RMI VPTS --------------------
+# Function factory to create helpers to parse RMI VPTS
 
 #' Create a helper function to create helpers to parse RMI VPTS data
 #'
@@ -28,16 +26,14 @@ parse_numeric <- function(x) {
 #' information in a vectorised manner.
 #'
 #' @param start_value String position where to start reading the value, this is
-#'   actually the end position of the previous field as the fwf file is alligned
+#'   actually the end position of the previous field as the fwf file is aligned
 #'   on the end of the columns.
 #' @param stop_value String position where to stop reading the value, this is
-#'   actually the start position of the next field as the fwf file is alligned
+#'   actually the start position of the next field as the fwf file is aligned
 #'   on the end of the columns.
 #' @param parser A function to parse/coerce the value to a R class.
-#'
 #' @return A function that takes a character vector and returns a parsed value.
 #' @noRd
-#'
 #' @examplesIf interactive()
 #' get_datetime <- create_rmi_helper(0, 13, lubridate::ymd_hm)
 create_rmi_helper <- function(start_value, stop_value, parser) {
@@ -47,9 +43,9 @@ create_rmi_helper <- function(start_value, stop_value, parser) {
   return(rmi_helper)
 }
 
-# Helper to actually parse a RMI fwf VPTS file ----------------------------
+# Helper to actually parse a RMI fixed width VPTS file
 
-#' Parse RMI VPTS data.
+#' Parse RMI VPTS data
 #'
 #' This function parses the RMI VPTS data from a character vector containing
 #' the lines of the file.
@@ -60,12 +56,9 @@ create_rmi_helper <- function(start_value, stop_value, parser) {
 #' provided in the `specs` list.
 #'
 #' @param lines A character vector containing the lines of the RMI VPTS file.
-#'
 #' @return A tibble with the parsed VPTS data.
 #' @noRd
-#'
 #' @examples
-#'
 #' read_lines_from_url(file.path(
 #'   "https://opendata.meteo.be/",
 #'   "ftp",
@@ -137,15 +130,13 @@ parse_rmi <- function(lines) {
   )
 }
 
-# Other RMI helpers -------------------------------------------------------
+# Other RMI helpers
 
 #' Get the source file name from the RMI VPTS metadata header
 #'
 #' @param lines A character vector containing the lines of the RMI vpts file.
-#'
 #' @return A character string representing the source file name.
 #' @noRd
-#'
 #' @examples
 #' vroom::vroom_lines("https://opendata.meteo.be/ftp/observations/radar/vbird/bejab/2020/bejab_vpts_20200124.txt") |>
 #'   get_rmi_sourcefile()

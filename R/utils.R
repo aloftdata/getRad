@@ -249,39 +249,45 @@ is_odim_scalar <- function(x) {
 is_odim_nexrad_scalar <- function(x) {
   rlang::is_scalar_character(x) && is_odim_nexrad(x)
 }
-check_odim <- function(x) {
+check_odim <- function(x, arg = rlang::caller_arg(x),
+                       call = rlang::caller_env()) {
   if (!all(is_odim(x))) {
     cli::cli_abort(
       "Please provide one or more radars as a character vector.
       Consisting of 5 characters each to match an odim code.",
-      class = "getRad_error_radar_not_odim_string"
+      class = "getRad_error_radar_not_odim_string", call = call
     )
   }
 }
-check_odim_nexrad <- function(x) {
+check_odim_nexrad <- function(x, arg = rlang::caller_arg(x),
+                              call = rlang::caller_env()) {
   if (!all(is_odim_nexrad(x))) {
     cli::cli_abort(
-      "Each element of {.arg radar} must be either a 5-letter ODIM code
+      "Each element of {.arg {arg}} must be either a 5-letter ODIM code
       or a 4-letter NEXRAD ICAO code.",
-      class = "getRad_error_radar_not_odim_nexrad"
+      class = "getRad_error_radar_not_odim_nexrad",
+      call = call
     )
   }
   invisible(TRUE)
 }
-check_odim_scalar <- function(x) {
+check_odim_scalar <- function(x, arg = rlang::caller_arg(x),
+                              call = rlang::caller_env()) {
   if (!is_odim_scalar(x)) {
     cli::cli_abort(
-      "Please provide radar as a character vector of length 1.
+      "Please provide {.arg {arg}} as a character vector of length 1.
     Consisting of 5 characters to match an odim code.",
-      class = "getRad_error_radar_not_single_odim_string"
+      class = "getRad_error_radar_not_single_odim_string",
+      call = call
     )
   }
 }
-check_odim_nexrad_scalar <- function(x) {
+check_odim_nexrad_scalar <- function(x, arg = rlang::caller_arg(x),
+                                     call = rlang::caller_env()) {
   if (!is_odim_nexrad_scalar(x)) {
     cli::cli_abort(
       "Radar must be exactly one 5-letter ODIM code or one 4-letter NEXRAD code.",
-      class = "getRad_error_radar_not_single_odim_nexrad"
+      class = "getRad_error_radar_not_single_odim_nexrad", call = call
     )
   }
   invisible(TRUE)

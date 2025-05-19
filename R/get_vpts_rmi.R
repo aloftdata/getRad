@@ -4,7 +4,7 @@
 #' https://opendata.meteo.be/geonetwork/srv/eng/catalog.search#/metadata/RMI_DATASET_CROW).
 #'
 #' @inheritParams get_vpts_aloft
-#' @return A tibble with vpts data.
+#' @return A tibble with VPTS data.
 #' @keywords internal
 #' @examplesIf interactive()
 #' get_vpts_rmi(

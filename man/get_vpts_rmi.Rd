@@ -12,7 +12,7 @@ get_vpts_rmi(radar_odim_code, rounded_interval)
 \item{rounded_interval}{Interval to fetch data for, rounded to nearest day.}
 }
 \value{
-A tibble with vpts data.
+A tibble with VPTS data.
 }
 \description{
 Get VPTS data from \href{https://opendata.meteo.be/geonetwork/srv/eng/catalog.search#/metadata/RMI_DATASET_CROW}{RMI_DATASET_CROW}.

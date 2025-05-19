@@ -22,7 +22,7 @@ get_vpts_aloft(
 If not provided, it will be fetched from via the internet.}
 }
 \value{
-A list of vpts data frames.
+A tibble with VPTS data.
 }
 \description{
 Gets VPTS data from the Aloft bucket.

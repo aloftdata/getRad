@@ -9,7 +9,9 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%"
+  out.width = "100%",
+  warning = FALSE,
+  message = FALSE
 )
 ```
 
@@ -43,23 +45,23 @@ devtools::install_github("aloftdata/getRad")
 
 Download a polar volume, and then plot it using `bioRad`:
 
-```{r example, message = FALSE, warning = FALSE}
+```{r example}
 library(getRad)
 library(bioRad)
 # Plot daytime insect movements in Finland (Mäkinen et al. 2022)
 pvol <- get_pvol("fianj", as.POSIXct("2012-05-17 14:00", tz = "UTC"))
 plot(project_as_ppi(get_scan(pvol, 0), range_max = 75000))
-plot(calculate_vp(pvol, h_layer = 50, n_layer = 40))
+plot(calculate_vp(pvol, h_layer = 50, n_layer = 40, warning = FALSE))
 
 # Plot nocturnal migration in Finland
 pvol <- get_pvol("fianj", as.POSIXct("2012-05-11 23:00", tz = "UTC"))
 plot(project_as_ppi(get_scan(pvol, 0), range_max = 75000))
-plot(calculate_vp(pvol, h_layer = 50, n_layer = 40))
+plot(calculate_vp(pvol, h_layer = 50, n_layer = 40, warning = FALSE))
 ```
 
 Download a vertical profile time series from the [Aloft bucket](https://aloftdata.eu/browse/):
 
-```{r vpts, message = FALSE, warning = FALSE}
+```{r vpts}
 # Plot VPTS data for two radars
 vpts_list <- get_vpts(
   radar = c("bejab", "deess"),

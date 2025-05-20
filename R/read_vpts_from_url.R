@@ -8,7 +8,7 @@
 #' Apart from parallelisation and these custom settings, this could also be
 #' handled by simple call to `vroom::vroom(file = urls)`.
 #'
-#' This function also includes column specifications for the VPTS-CSV data
+#' This function also includes column specifications for the VPTS CSV data
 #' standard. However, [bioRad::as.vpts()] currently doesn't support factors,
 #' thus any fields sent to that function need to be parsed as character vectors.
 #'
@@ -29,19 +29,7 @@ read_vpts_from_url <- function(urls, use_cache = TRUE) {
   ## and wouldn't declare our custom user agent or allow us to set retry
   ## criteria
 
-  purrr::map(urls, httr2::request) |>
-    # Identify ourselves in the request
-    purrr::map(req_user_agent_getrad) |>
-    # Set retry conditions
-    purrr::map(req_retry_getrad) |>
-    # Optionally cache the responses
-    purrr::map(\(req) req_cache_getrad(req, use_cache = use_cache)) |>
-    # Perform the requests in parallel
-    httr2::req_perform_parallel() |>
-    # Fetch the response bodies and parse it using vroom
-    ## A helper in bioRad (validate_vpts()) that we call indirectly via
-    # " bioRad::as.vpts() currently doesn't support factors: bioRad v0.8.1
-    purrr::map(httr2::resp_body_raw) |>
+  fetch_from_url_raw(urls, use_cache = use_cache) |>
     purrr::map(~ vroom::vroom(
       delim = ",",
       I(.x),

@@ -14,7 +14,7 @@ req_cache_getrad(
 )
 }
 \arguments{
-\item{req}{A \code{httr2} request.}
+\item{req}{\code{httr2} request.}
 
 \item{use_cache}{Logical indicating whether to use the cache. Default is
 \code{TRUE}. If \code{FALSE} the cache is ignored and the file is fetched anew.

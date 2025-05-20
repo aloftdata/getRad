@@ -7,7 +7,7 @@
 get_vpts(
   radar,
   datetime,
-  source = c("baltrad", "uva", "ecog-04003"),
+  source = c("baltrad", "uva", "ecog-04003", "rmi"),
   return_type = c("vpts", "tibble")
 )
 }
@@ -26,8 +26,8 @@ downloaded.
 \item A \code{\link[lubridate:interval]{lubridate::interval()}}, between which all data files are downloaded.
 }}
 
-\item{source}{Source of the data. One of \code{"baltrad"}, \code{"uva"} or
-\code{"ecog-04003"}. Only one source can be queried at a time. If no source is
+\item{source}{Source of the data. One of \code{"baltrad"}, \code{"uva"}, \code{"ecog-04003"}
+or \code{"rmi"}. Only one source can be queried at a time. If no source is
 provided \code{baltrad} is used.}
 
 \item{return_type}{Type of object that should be returned. Either:
@@ -52,6 +52,7 @@ For more details on supported sources, see \code{vignette("supported_sources")}.
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Get VPTS data for a single radar and date
 get_vpts(radar = "bejab", datetime = "2023-01-01", source = "baltrad")
+get_vpts(radar = "bejab", datetime = "2020-01-19", source = "rmi")
 
 # Get VPTS data for multiple radars and a single date
 get_vpts(

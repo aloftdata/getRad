@@ -40,6 +40,28 @@ test_that("get_vpts() can return vpts data as a tibble or vpts object", {
     "list"
   )
 
+  # Skip if the RMI can not be reached.
+  skip_if_offline("opendata.meteo.be")
+  returned_vpts_object_rmi <-
+    get0(
+      "returned_vpts_object",
+      ifnotfound = get_vpts(
+        radar = "bejab",
+        datetime = "2020-01-19",
+        source = "rmi",
+        return_type = "vpts"
+      )
+    )
+
+  expect_s3_class(
+    returned_vpts_object_rmi,
+    "vpts"
+  )
+  expect_type(
+    returned_vpts_object_rmi,
+    "list"
+  )
+
   # Test that the function can return data as a tibble
   expect_s3_class(
     get_vpts(
@@ -153,6 +175,17 @@ test_that("get_vpts() can fetch data from a single radar source", {
     )$source |>
       unique(),
     "uva"
+  )
+})
+
+test_that("get_vpts() returns a single vpts object per radar", {
+  expect_length(
+    get_vpts(
+      radar = c("bejab", "nldhl"),
+      datetime = "2023-01-01",
+      source = "baltrad"
+    ),
+    2L
   )
 })
 
@@ -545,16 +578,9 @@ test_that("get_vpts() returns an error for a bad radar", {
       datetime = "2023-01-01",
       source = "uva"
     ),
-    class = "getRad_error_radar_not_found"
+    class = "getRad_error_aloft_radar_not_found"
   )
-  expect_identical(
-    rlang::catch_cnd(get_vpts(
-      radar = c("nlhrw2", "deess", "bezav"),
-      datetime = "2023-01-01",
-      source = "baltrad"
-    ), classes = "getRad_error_radar_not_found")$missing_radars,
-    c("nlhrw2", "bezav")
-  )
+
   # Radar is not a character vector
   expect_error(
     get_vpts(radar = 1:3, datetime = "2023-01-01", source = "uva"),

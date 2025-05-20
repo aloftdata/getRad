@@ -101,23 +101,12 @@ To get an overview of weather radar metadata, use `weather_radars()`.
 
 ## Vertical profile time series (VPTS) data
 
-`get_vpts()` can read vertical profile data from the following sources. These
-sources correspond to different processing pipelines. They can, for example, use 
-polar volumnes that have been processed and filtered in different ways, for more 
-details see [Shamoun-Baranes et al. 2020](https://doi.org/10.1175/BAMS-D-21-0196.1).
-Multiple sources can thus contain data from from the same radar and time periods. 
- 
+`get_vpts()` can read vertical profile data from the following sources. These sources correspond to different processing pipelines. They can, for example, use polar volumnes that have been processed and filtered in different ways, for more details see [Shamoun-Baranes et al. (2020)](https://doi.org/10.1175/BAMS-D-21-0196.1). Multiple sources can thus contain data from from the same radar and time periods.
 
 ### baltrad, uva, ecog-04003
 
-These data are stored on the Aloft bucket. The `baltrad` source covers most radars
-and longest time series, however data quality is more variable as polar volumes are
-sometimes filtered for biological signals before processing to vertical profiles.
-`uva` and `ecog-04003` are more curated datasets. 
-See [details](https://aloftdata.eu/faq/#what-data-are-in-the-bucket).
+These data are stored on the Aloft bucket. The `baltrad` source covers most radars and longest time series, however data quality is more variable as polar volumes are sometimes filtered for biological signals before processing to vertical profiles. `uva` and `ecog-04003` are more curated datasets. See [details](https://aloftdata.eu/faq/#what-data-are-in-the-bucket).
 
 ### rmi
 
-These data are provided by the Royal Meteorological Institute of Belgium (RMI). 
-This dataset is restricted to Belgium and some radars in the surrounding countries. 
-See [details](https://opendata.meteo.be/geonetwork/srv/eng/catalog.search#/metadata/RMI_DATASET_CROW).
+These data are provided by the Royal Meteorological Institute of Belgium (RMI). This dataset is restricted to Belgium and some radars in the surrounding countries. See [details](https://opendata.meteo.be/geonetwork/srv/eng/catalog.search#/metadata/RMI_DATASET_CROW).

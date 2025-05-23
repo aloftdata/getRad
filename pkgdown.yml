@@ -3,7 +3,7 @@ pkgdown: 2.1.2
 pkgdown_sha: ~
 articles:
   supported_sources: supported_sources.html
-last_built: 2025-05-19T12:44Z
+last_built: 2025-05-23T09:06Z
 urls:
   reference: https://aloftdata.github.io/getRad/reference
   article: https://aloftdata.github.io/getRad/articles

@@ -113,7 +113,7 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
 
 
 # Helper function to find the function for a specific radar
-select_get_pvol_function <- function(radar) {
+select_get_pvol_function <- function(radar, call=rlang::caller_env()) {
   if (is_nexrad(radar)) {
     return("get_pvol_us")
   }
@@ -129,8 +129,9 @@ select_get_pvol_function <- function(radar) {
   ))
   if (rlang::is_na(fun)) {
     cli::cli_abort(
-      "No suitable function exist downloading from the radar {radar}",
-      class = "getRad_error_no_function_for_radar_with_country_code"
+      "No suitable function exist downloading from the radar {.val {radar}}",
+      class = "getRad_error_no_function_for_radar_with_country_code",
+      call=call
     )
   }
   return(fun)

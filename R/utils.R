@@ -249,7 +249,7 @@ is_odim_scalar <- function(x) {
 is_odim_nexrad_scalar <- function(x) {
   rlang::is_scalar_character(x) && is_odim_nexrad(x)
 }
-check_odim <- function(x, arg = rlang::caller_arg(x),
+check_odim <- function(x, ..., arg = rlang::caller_arg(x),
                        call = rlang::caller_env()) {
   if (!all(is_odim(x))) {
     cli::cli_abort(
@@ -259,7 +259,7 @@ check_odim <- function(x, arg = rlang::caller_arg(x),
     )
   }
 }
-check_odim_nexrad <- function(x, arg = rlang::caller_arg(x),
+check_odim_nexrad <- function(x, ..., arg = rlang::caller_arg(x),
                               call = rlang::caller_env()) {
   if (!all(is_odim_nexrad(x))) {
     cli::cli_abort(
@@ -271,7 +271,7 @@ check_odim_nexrad <- function(x, arg = rlang::caller_arg(x),
   }
   invisible(TRUE)
 }
-check_odim_scalar <- function(x, arg = rlang::caller_arg(x),
+check_odim_scalar <- function(x, ..., arg = rlang::caller_arg(x),
                               call = rlang::caller_env()) {
   if (!is_odim_scalar(x)) {
     cli::cli_abort(
@@ -282,7 +282,7 @@ check_odim_scalar <- function(x, arg = rlang::caller_arg(x),
     )
   }
 }
-check_odim_nexrad_scalar <- function(x, arg = rlang::caller_arg(x),
+check_odim_nexrad_scalar <- function(x, ..., arg = rlang::caller_arg(x),
                                      call = rlang::caller_env()) {
   if (!is_odim_nexrad_scalar(x)) {
     cli::cli_abort(

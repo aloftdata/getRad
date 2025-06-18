@@ -113,7 +113,7 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
 
 
 # Helper function to find the function for a specific radar
-select_get_pvol_function <- function(radar, call=rlang::caller_env()) {
+select_get_pvol_function <- function(radar, ..., call=rlang::caller_env()) {
   if (is_nexrad(radar)) {
     return("get_pvol_us")
   }

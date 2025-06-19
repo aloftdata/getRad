@@ -51,7 +51,7 @@ get_vpts_rmi <- function(radar_odim_code,
 
   combined_vpts <-
     # drop the header for parsing
-    purrr::map(rmi_files, \(lines) tail(lines, -4)) |>
+    purrr::map(rmi_files, \(lines) utils::tail(lines, -4)) |>
     purrr::map(parse_rmi) |>
     # Add the source_file column
     purrr::map2(rmi_files, ~ dplyr::mutate(.x,

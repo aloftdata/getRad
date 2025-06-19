@@ -70,7 +70,7 @@ create_rmi_helper <- function(start_value, stop_value, parser) {
 #'   "bejab_vpts_20200124.txt"
 #' )) |>
 #'   unlist() |> # read_lines_from_url() returns a list
-#'   tail(-4) |> # skip the metadata
+#'   utils::tail(-4) |> # skip the metadata
 #'   parse_rmi()
 parse_rmi <- function(lines) {
   ## A list of specifications to create helper functions from. This is where the

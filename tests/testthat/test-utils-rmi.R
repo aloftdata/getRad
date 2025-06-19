@@ -26,7 +26,7 @@ test_that("parse_rmi() returns the expected values", {
       )
     ) |>
     # drop metadata header
-    tail(-4)
+    utils::tail(-4)
   )
 
   parsed_rmi <- parse_rmi(fwf_text)

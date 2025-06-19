@@ -43,7 +43,7 @@ dplyr::tibble()."></head><body>
 
     <div class="ref-description section level2">
     <p>Gets vertical profile time series data from supported sources and returns it
-as a (list of) of <a href="https://adriaandokter.com/bioRad/reference/summary.vpts.html" class="external-link">vpts objects</a> or a
+as a (list of) of <a href="http://adriaandokter.com/bioRad/reference/summary.vpts.html" class="external-link">vpts objects</a> or a
 <code><a href="https://dplyr.tidyverse.org/reference/reexports.html" class="external-link">dplyr::tibble()</a></code>.</p>
     </div>
 
@@ -52,7 +52,7 @@ as a (list of) of <a href="https://adriaandokter.com/bioRad/reference/summary.vp
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_vpts</span><span class="op">(</span></span>
 <span>  <span class="va">radar</span>,</span>
 <span>  <span class="va">datetime</span>,</span>
-<span>  source <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"baltrad"</span>, <span class="st">"uva"</span>, <span class="st">"ecog-04003"</span><span class="op">)</span>,</span>
+<span>  source <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"baltrad"</span>, <span class="st">"uva"</span>, <span class="st">"ecog-04003"</span>, <span class="st">"rmi"</span><span class="op">)</span>,</span>
 <span>  return_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"vpts"</span>, <span class="st">"tibble"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -78,8 +78,8 @@ downloaded.</p></li>
 
 
 <dt id="arg-source">source<a class="anchor" aria-label="anchor" href="#arg-source"></a></dt>
-<dd><p>Source of the data. One of <code>"baltrad"</code>, <code>"uva"</code> or
-<code>"ecog-04003"</code>. Only one source can be queried at a time. If no source is
+<dd><p>Source of the data. One of <code>"baltrad"</code>, <code>"uva"</code>, <code>"ecog-04003"</code>
+or <code>"rmi"</code>. Only one source can be queried at a time. If no source is
 provided <code>baltrad</code> is used.</p></dd>
 
 
@@ -92,7 +92,7 @@ provided <code>baltrad</code> is used.</p></dd>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>Either a vpts object, a list of vpts objects or a tibble. See
-<a href="https://adriaandokter.com/bioRad/reference/summary.vpts.html" class="external-link">bioRad::summary.vpts</a> for details.</p>
+<a href="http://adriaandokter.com/bioRad/reference/summary.vpts.html" class="external-link">bioRad::summary.vpts</a> for details.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -104,6 +104,7 @@ provided <code>baltrad</code> is used.</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># interactive()</span></span></span>
 <span class="r-in"><span><span class="co"># Get VPTS data for a single radar and date</span></span></span>
 <span class="r-in"><span><span class="fu">get_vpts</span><span class="op">(</span>radar <span class="op">=</span> <span class="st">"bejab"</span>, datetime <span class="op">=</span> <span class="st">"2023-01-01"</span>, source <span class="op">=</span> <span class="st">"baltrad"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">get_vpts</span><span class="op">(</span>radar <span class="op">=</span> <span class="st">"bejab"</span>, datetime <span class="op">=</span> <span class="st">"2020-01-19"</span>, source <span class="op">=</span> <span class="st">"rmi"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get VPTS data for multiple radars and a single date</span></span></span>
 <span class="r-in"><span><span class="fu">get_vpts</span><span class="op">(</span></span></span>
@@ -145,7 +146,7 @@ provided <code>baltrad</code> is used.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

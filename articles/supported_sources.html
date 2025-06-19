@@ -80,17 +80,26 @@ sources. See the map for details.</p>
 <h2 id="vertical-profile-time-series-vpts-data">Vertical profile time series (VPTS) data<a class="anchor" aria-label="anchor" href="#vertical-profile-time-series-vpts-data"></a>
 </h2>
 <p><code><a href="../reference/get_vpts.html">get_vpts()</a></code> can read vertical profile data from the
-following sources:</p>
+following sources. These sources correspond to different processing
+pipelines. They can, for example, use polar volumnes that have been
+processed and filtered in different ways, for more details see <a href="https://doi.org/10.1175/BAMS-D-21-0196.1" class="external-link">Shamoun-Baranes et
+al. (2020)</a>. Multiple sources can thus contain data from from the
+same radar and time periods.</p>
 <div class="section level3">
 <h3 id="baltrad-uva-ecog-04003">baltrad, uva, ecog-04003<a class="anchor" aria-label="anchor" href="#baltrad-uva-ecog-04003"></a>
 </h3>
-<p>These data are stored on the Aloft bucket. See <a href="https://aloftdata.eu/faq/#what-data-are-in-the-bucket" class="external-link">details</a>.</p>
+<p>These data are stored on the Aloft bucket. The <code>baltrad</code>
+source covers most radars and longest time series, however data quality
+is more variable as polar volumes are sometimes filtered for biological
+signals before processing to vertical profiles. <code>uva</code> and
+<code>ecog-04003</code> are more curated datasets. See <a href="https://aloftdata.eu/faq/#what-data-are-in-the-bucket" class="external-link">details</a>.</p>
 </div>
 <div class="section level3">
 <h3 id="rmi">rmi<a class="anchor" aria-label="anchor" href="#rmi"></a>
 </h3>
 <p>These data are provided by the Royal Meteorological Institute of
-Belgium (RMI). See <a href="https://opendata.meteo.be/geonetwork/srv/eng/catalog.search#/metadata/RMI_DATASET_CROW" class="external-link">details</a>.</p>
+Belgium (RMI). This dataset is restricted to Belgium and some radars in
+the surrounding countries. See <a href="https://opendata.meteo.be/geonetwork/srv/eng/catalog.search#/metadata/RMI_DATASET_CROW" class="external-link">details</a>.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -104,7 +113,7 @@ Belgium (RMI). See <a href="https://opendata.meteo.be/geonetwork/srv/eng/catalog
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>

@@ -46,7 +46,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_vpts_aloft</span><span class="op">(</span></span>
 <span>  <span class="va">radar_odim_code</span>,</span>
 <span>  <span class="va">rounded_interval</span>,</span>
-<span>  <span class="va">source</span>,</span>
+<span>  source <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"baltrad"</span>, <span class="st">"uva"</span>, <span class="st">"ecog-04003"</span><span class="op">)</span>,</span>
 <span>  coverage <span class="op">=</span> <span class="fu"><a href="aloft_data_coverage.html">aloft_data_coverage</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -74,7 +74,7 @@ If not provided, it will be fetched from via the internet.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A list of vpts data frames.</p>
+    <p>A tibble with VPTS data.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -87,7 +87,7 @@ setting <code>options(getRad.aloft_data_url)</code> to any desired url.</p>
 
 
 <ul><li><p>Constructs the S3 paths for the VPTS files based on the input.</p></li>
-<li><p>Performs parallel HTTP requests to fetch the VPTS-CSV data.</p></li>
+<li><p>Performs parallel HTTP requests to fetch the VPTS CSV data.</p></li>
 <li><p>Parses the response bodies with some assumptions about the column classes.</p></li>
 <li><p>Adds a column with the radar source.</p></li>
 <li><p>Overwrites the radar column with the radar_odim_code, all other values for
@@ -114,7 +114,7 @@ this column are considered in error.</p></li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

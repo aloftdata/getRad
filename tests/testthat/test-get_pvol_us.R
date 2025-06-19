@@ -9,6 +9,15 @@ test_that("NEXRAD polar volume can be downloaded", {
   )
 })
 
+test_that("NEXRAD polar volume correct time is downloaded", {
+  skip_if_offline(host = "noaa-nexrad-level2.s3.amazonaws.com")
+  t<-as.POSIXct("2025-1-10 18:00:00", tz="UTC")
+  suppressMessages(expect_identical(
+    getRad::get_pvol("KABX", t)$datetime,
+  as.POSIXct("2025-01-10 17:58:13", tz="UTC")
+  ))
+})
+
 test_that("Mixed radar vector (single timestamp)", {
   skip_if_offline()
   pvols <- getRad::get_pvol(c("KABR", "czska"), time_utc)

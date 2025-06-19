@@ -17,8 +17,8 @@
 #'   - A vector of datetimes or dates, between which all data files are
 #'   downloaded.
 #'   - A [lubridate::interval()], between which all data files are downloaded.
-#' @param source Source of the data. One of `"baltrad"`, `"uva"` or
-#'   `"ecog-04003"`. Only one source can be queried at a time. If no source is
+#' @param source Source of the data. One of `"baltrad"`, `"uva"`, `"ecog-04003"`
+#'   or `"rmi"`. Only one source can be queried at a time. If no source is
 #'   provided `baltrad` is used.
 #' @param return_type Type of object that should be returned. Either:
 #'   - `"vpts"`: vpts object(s) (default).
@@ -29,6 +29,7 @@
 #' @examplesIf interactive()
 #' # Get VPTS data for a single radar and date
 #' get_vpts(radar = "bejab", datetime = "2023-01-01", source = "baltrad")
+#' get_vpts(radar = "bejab", datetime = "2020-01-19", source = "rmi")
 #'
 #' # Get VPTS data for multiple radars and a single date
 #' get_vpts(
@@ -60,7 +61,7 @@
 #' )
 get_vpts <- function(radar,
                      datetime,
-                     source = c("baltrad", "uva", "ecog-04003"),
+                     source = c("baltrad", "uva", "ecog-04003", "rmi"),
                      return_type = c("vpts", "tibble")) {
   # Check source argument
   ## If no source is provided, set "baltrad" as default
@@ -112,13 +113,8 @@ get_vpts <- function(radar,
     )
   }
 
-  # Rename radar & source arguments so it's clear that it can contain multiple
-  # radars
-  selected_radars <- radar
-  selected_source <- source
-
   # Check that the provided radar argument is a character vector
-  if (!is.character(selected_radars)) {
+  if (!is.character(radar)) {
     cli::cli_abort(
       "Radar argument must be a character vector.",
       class = "getRad_error_radar_not_character"
@@ -135,8 +131,7 @@ get_vpts <- function(radar,
     )
   }
   # Parse the provided date argument to a lubridate interval
-  ## If the date is a single date, convert it to an interval by adding a whole
-  ## day, minus a second
+  ## If the date is a single date, convert it to an interval
   if (!inherits(datetime, "Interval")) {
     datetime_converted <- lubridate::as_datetime(datetime)
     ### If time information is provided
@@ -165,47 +160,30 @@ get_vpts <- function(radar,
     date_interval <- datetime
   }
 
-  ## We need to round the interval because coverage only has daily resolution
+  ## We need to round the interval because the helpers always fetch data a day
+  ## at a time
   rounded_interval <- round_interval(date_interval, "day")
 
-  # Discover what data is available for the requested radar and time interval
-  coverage <- aloft_data_coverage(use_cache = TRUE)
+  # Query the selected radars by directing to the correct get_vpts_* helper
+  # based on source.
 
-  # Check if the requested radars are present in the coverage
-  found_radars <-
-    dplyr::filter(
-      coverage,
-      .data$source %in% selected_source,
-      .data$radar %in% selected_radars
-    ) |>
-    dplyr::pull(radar)
-  missing_radars <- setdiff(selected_radars, found_radars)
+  fetched_vpts <-
+    switch(dplyr::case_when(
+      source == "rmi" ~ "rmi",
+      source %in% eval(formals("get_vpts_aloft")$source) ~ "aloft"
+    ),
+    rmi = purrr::map(radar, ~ get_vpts_rmi(.x, rounded_interval)),
+    aloft = purrr::map(radar, ~ get_vpts_aloft(
+      .x,
+      rounded_interval = rounded_interval,
+      source = source
+    ))
+    ) |> radar_to_name()
 
-  if (!all(selected_radars %in% coverage$radar)) {
-    cli::cli_abort(
-      "{length(missing_radars)} Radar{?s} not found in {source} coverage:
-      {glue::backtick(missing_radars)}",
-      missing_radars = missing_radars,
-      class = "getRad_error_radar_not_found"
-    )
-  }
-
-  # Query the selected radars and fetched coverage for aloft vpts data.
-  vpts_from_s3 <-
-    purrr::map(
-      selected_radars,
-      ~ get_vpts_aloft(
-        .x,
-        rounded_interval = rounded_interval,
-        source = selected_source,
-        coverage = coverage
-      )
-    ) |>
-    radar_to_name()
 
   # Drop any results outside the requested interval
   filtered_vpts <-
-    vpts_from_s3 |>
+    fetched_vpts |>
     purrr::map(
       \(df) {
         dplyr::mutate(df,

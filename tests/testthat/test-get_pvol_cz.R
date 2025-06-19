@@ -6,7 +6,7 @@ test_that("Check if the available attributes changed", {
       httr2::resp_body_html() |>
       xml2::xml_find_all("//a/@href") |>
       xml2::xml_text() |>
-      tail(-1), c(
+      utils::tail(-1), c(
       "vol_phidp/", "vol_rhohv/", "vol_u/", "vol_v/", "vol_w/", "vol_z/",
       "vol_zdr/"
     )

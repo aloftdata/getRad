@@ -13,7 +13,7 @@
 #'
 #' @section Inner working:
 #' - Constructs the S3 paths for the VPTS files based on the input.
-#' - Performs parallel HTTP requests to fetch the VPTS-CSV data.
+#' - Performs parallel HTTP requests to fetch the VPTS CSV data.
 #' - Parses the response bodies with some assumptions about the column classes.
 #' - Adds a column with the radar source.
 #' - Overwrites the radar column with the radar_odim_code, all other values for
@@ -24,7 +24,7 @@
 #' @param source Source of the data. One of `baltrad`, `uva` or `ecog-04003`.
 #' @param coverage A data frame containing the coverage of the Aloft bucket.
 #'   If not provided, it will be fetched from via the internet.
-#' @return A list of vpts data frames.
+#' @return A tibble with VPTS data.
 #' @keywords internal
 #' @examplesIf interactive()
 #' get_vpts_aloft(
@@ -34,7 +34,7 @@
 #' )
 get_vpts_aloft <- function(radar_odim_code,
                            rounded_interval,
-                           source,
+                           source = c("baltrad", "uva", "ecog-04003"),
                            coverage = aloft_data_coverage()) {
   # rename source argument for readability
   selected_source <- source
@@ -69,6 +69,25 @@ get_vpts_aloft <- function(radar_odim_code,
     )
   }
 
+  # Check if the requested radars are present in the coverage for the source.
+  found_radars <-
+    dplyr::filter(
+      coverage,
+      .data$source %in% selected_source,
+      .data$radar %in% radar_odim_code
+    ) |>
+    dplyr::pull("radar")
+  missing_radars <- setdiff(radar_odim_code, found_radars)
+
+  if (!all(radar_odim_code %in% coverage$radar)) {
+    cli::cli_abort(
+      "{length(missing_radars)} Radar{?s} not found in {source} coverage:
+      {glue::backtick(missing_radars)}",
+      missing_radars = missing_radars,
+      class = "getRad_error_radar_not_found"
+    )
+  }
+
   # Filter the coverage data to the selected radars and time interval and
   # convert into paths on the aloft s3 storage
   ## We need to use the rounded interval because coverage only has daily
@@ -78,7 +97,7 @@ get_vpts_aloft <- function(radar_odim_code,
     # Replace hdf5 with daily to fetch vpts files instead of hdf5 files
     string_replace("hdf5", "daily") |>
     # Construct the filename using glue mapping over every path.
-    purrr::map_chr(\(path){
+    purrr::map_chr(\(path) {
       glue::glue(
         "{dir}/{radar}_vpts_{year}{month}{day}.csv",
         dir = string_extract(path, ".+/.+/.+/[0-9]{4}"),

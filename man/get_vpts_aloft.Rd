@@ -7,7 +7,7 @@
 get_vpts_aloft(
   radar_odim_code,
   rounded_interval,
-  source,
+  source = c("baltrad", "uva", "ecog-04003"),
   coverage = aloft_data_coverage()
 )
 }
@@ -22,7 +22,7 @@ get_vpts_aloft(
 If not provided, it will be fetched from via the internet.}
 }
 \value{
-A list of vpts data frames.
+A tibble with VPTS data.
 }
 \description{
 Gets VPTS data from the Aloft bucket.
@@ -36,7 +36,7 @@ setting \code{options(getRad.aloft_data_url)} to any desired url.
 
 \itemize{
 \item Constructs the S3 paths for the VPTS files based on the input.
-\item Performs parallel HTTP requests to fetch the VPTS-CSV data.
+\item Performs parallel HTTP requests to fetch the VPTS CSV data.
 \item Parses the response bodies with some assumptions about the column classes.
 \item Adds a column with the radar source.
 \item Overwrites the radar column with the radar_odim_code, all other values for

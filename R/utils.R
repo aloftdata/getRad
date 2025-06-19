@@ -11,7 +11,8 @@
 #' @examples
 #' string_extract("Hello World", "o W")
 string_extract <- function(string, pattern) {
-  regmatches(string, regexpr(pattern, text = string, perl = TRUE))
+  regmatches(string, regexpr(pattern, text = string, perl = TRUE)) |>
+    as.character() # avoid returning class glue
 }
 
 #' Replace a pattern in a string with a replacement
@@ -29,6 +30,39 @@ string_extract <- function(string, pattern) {
 #' string_replace("I'm looking for radars", "radar", "bird")
 string_replace <- function(string, pattern, replacement) {
   sub(pattern, replacement, string, perl = TRUE)
+}
+
+#' Replace all occurrences of a pattern in a string with a replacement
+#'
+#' This function uses regular expressions to replace all occurrences of a
+#' pattern in a string with a specified replacement. This is a base replacement
+#' of stringr::str_replace_all().
+#'
+#' @param string The input string.
+#' @param pattern The pattern to search for in the string.
+#' @param replacement The replacement string.
+#' @return The modified string with all occurrences of the pattern replaced.
+#' @noRd
+#' @examples
+#' string_replace_all("starwars", "wars", "trek")
+string_replace_all <- function(string, pattern, replacement) {
+  gsub(pattern, replacement, string, perl = TRUE)
+}
+
+#' Remove all whitespace from a string from both ends
+#'
+#' This function uses regular expressions to remove all whitespace from a
+#' string. This is a base replacement of stringr::str_squish().
+#'
+#' @param string The input string.
+#' @return A string with all whitespace removed from both ends.
+#' @noRd
+#' @examples
+#' string_squish("  aoosh  ")
+#' string_squish(" A sentence with extra whitespace.   ")
+string_squish <- function(string) {
+  string_replace_all(string, "^\\s+", "") |>
+    string_replace_all("\\s+$", "")
 }
 
 #' Round a lubridate interval
@@ -53,7 +87,7 @@ round_interval <- function(x, unit = "day") {
 
 #' Get the end of the day for a given datetime
 #'
-#' @param date A datetime object or a character string that can be coerced to a
+#' @param date Datetime object or a character string that can be coerced to a
 #'   datetime object.
 #' @return A datetime object representing the end of the day.
 #' @noRd
@@ -66,9 +100,29 @@ end_of_day <- function(date) {
     lubridate::dseconds(1)
 }
 
+#' Calculate the mean of the radar cross section
+#'
+#' bioRad::as.vpts() only uses the first value for rcs provided, so while we can
+#' calculate it by eta/dens, it makes sense to only use the most common value
+#' when transforming to vpts objects.
+#'
+#' This function drops `NA`, `NaN` and `Inf` for calculating the mean.
+#'
+#' @param eta Animal reflectivity,
+#' @param dens Animal density.
+#' @return A numeric value representing the mean radar cross section (rcs).
+#' @noRd
+calc_single_mean_rcs <- function(eta, dens) {
+  rcs <- eta / dens
+  # Omit NA, NaN and Inf
+  rcs[is.nan(rcs) | is.infinite(rcs)] <- NA
+  # Get the mean as bioRad::as.vpts() only uses the first value anyway.
+  mean(rcs, na.rm = TRUE)
+}
+
 #' Set the list names to the unique value of the radar column
 #'
-#' @param vpts_df_list A list of vpts data frames.
+#' @param vpts_df_list List of vpts data frames.
 #' @return A list of vpts data frames with the names set to the unique value of
 #'   the radar column of the data frames.
 #' @noRd
@@ -89,12 +143,10 @@ radar_to_name <- function(vpts_df_list) {
 #' This function does not perform coercion, but conversion. For coercion see
 #' vctrs::vec_cast().
 #'
-#' @param x A character vector.
+#' @param x Character vector.
 #' @return An integer vector.
 #' @seealso [as_numeric_shh()] [as_logical_shh()]
-#'
 #' @noRd
-#'
 #' @examples
 #' as_integer_shh(c("1", "2", "3"))
 as_integer_shh <- function(x) {
@@ -106,7 +158,7 @@ as_integer_shh <- function(x) {
 
 #' Convert a character vector containing `Ỳ`, `N` and `NA` to a logical vector.
 #'
-#' @param x A character vector only containing `Y`, `N` and `NA`. Any other
+#' @param x Character vector only containing `Y`, `N` and `NA`. Any other
 #'   values will be silenty converted to `NA`.
 #' @return A logical vector.
 #' @noRd
@@ -136,7 +188,7 @@ yes_no_as_logical <- function(x) {
 #' This function does not perform coercion, but conversion. For coercion see
 #' vctrs::vec_cast().
 #'
-#' @param x A character vector.
+#' @param x Character vector.
 #' @return A numeric vector.
 #' @noRd
 #' @examples
@@ -150,7 +202,7 @@ as_numeric_shh <- function(x) {
 
 #' Function to set the user agent to a getRad specific one in an httr2 request
 #'
-#' @param req A `httr2` request.
+#' @param req `httr2` request.
 #' @returns A `httr2` request.
 #' @noRd
 req_user_agent_getrad <- function(req) {
@@ -185,7 +237,7 @@ req_retry_getrad <- function(req,
 #' Function to set the cache for a getRad specific httr2 request
 #'
 #' @inheritParams httr2::req_cache
-#' @param req A `httr2` request.
+#' @param req `httr2` request.
 #' @param use_cache Logical indicating whether to use the cache. Default is
 #'   `TRUE`. If `FALSE` the cache is ignored and the file is fetched anew.
 #'    This can also be useful if you want to force a refresh of the cache.
@@ -282,6 +334,7 @@ check_odim_scalar <- function(x, ..., arg = rlang::caller_arg(x),
     )
   }
 }
+
 check_odim_nexrad_scalar <- function(x, ..., arg = rlang::caller_arg(x),
                                      call = rlang::caller_env()) {
   if (!is_odim_nexrad_scalar(x)) {
@@ -292,6 +345,108 @@ check_odim_nexrad_scalar <- function(x, ..., arg = rlang::caller_arg(x),
   }
   invisible(TRUE)
 }
+
+#' Replace "nan" with NaN in a string
+#'
+#' @param string Character vector that may contain `"nan"` values.
+#' @return A numeric vector where `"nan"` values are replaced with NaN.
+#' @noRd
+#' @examples
+#' replace_nan_numeric(c("44", "-95.6", "nan", 88))
+replace_nan_numeric <- function(string) {
+  as.numeric(replace(string, string == "nan", NaN))
+}
+
+#' Fetch data from a list of URLs and return the raw response bodies
+#'
+#' @param url Character vector of URLs to fetch data from.
+#' @param use_cache Logical value indicating whether to use caching for the
+#'  requests. Default is `TRUE`.
+#' @return A list of raw response bodies from the URLs.
+#' @noRd
+fetch_from_url_raw <- function(urls, use_cache = TRUE, parallel = TRUE) {
+  data_request <- purrr::map(urls, httr2::request) |>
+    # Identify ourselves in the request
+    purrr::map(req_user_agent_getrad) |>
+    # Set retry conditions
+    purrr::map(req_retry_getrad) |>
+    # Set throttling so we don't overwhelm data sources
+    purrr::map(\(req) {
+      httr2::req_throttle(req,
+        capacity = 30,
+        fill_time_s = 40
+      )
+    }) |>
+    # Optionally cache the responses
+    purrr::map(req_cache_getrad)
+  # Perform the requests in parallel or sequentially
+  if (parallel) {
+    data_response <-
+      data_request |>
+      httr2::req_perform_parallel(progress = interactive())
+  } else {
+    data_response <-
+      data_request |>
+      httr2::req_perform_sequential()
+  }
+  # Fetch the response bodies
+  purrr::map(data_response, httr2::resp_body_raw)
+}
+
+#' Read lines from a list of URLs and return them as a list of character
+#' vectors
+#'
+#' @param urls Character vector of URLs to read lines from.
+#' @param use_cache Logical value indicating whether to use caching for the
+#'   requests.
+#' @return A list of character vectors, each containing the lines read from the
+#'  corresponding URL.
+#' @noRd
+#' @examples
+#' read_lines_from_url(
+#'   file.path(
+#'     "https://raw.githubusercontent.com/philspil66",
+#'     "Super-Star-Trek/refs/heads/main/superstartrek.bas"
+#'   )
+#' )
+read_lines_from_url <- function(urls, use_cache = TRUE, parallel = TRUE) {
+  fetch_from_url_raw(urls, use_cache = use_cache, parallel) |>
+    I() |>
+    purrr::map(~ vroom::vroom_lines(.x,
+      progress = FALSE
+    ))
+}
+
+#' Get HTML from a URL
+#'
+#' @param url URL to get the HTML from.
+#' @param use_cache Logical. If `TRUE`, use the cache. If `FALSE`, do not use
+#'   the cache.
+#' @return HTML content from the URL as a xml2 html object.
+#' @noRd
+get_html <- function(url, use_cache = TRUE) {
+  httr2::request(url) |>
+    req_user_agent_getrad() |>
+    req_retry_getrad() |>
+    req_cache_getrad(use_cache = use_cache) |>
+    httr2::req_perform() |>
+    httr2::resp_body_html()
+}
+
+#' Get an html element using regex selection from a html object.
+#'
+#' @param html html object from the `xml2` package.
+#' @param regex regex to select the element.
+#' @return A character vector with the selected elements.
+#' @noRd
+get_element_regex <- function(html, regex) {
+  html |>
+    xml2::xml_find_all(".//a") |>
+    xml2::xml_text() |>
+    string_extract(regex) |>
+    (\(vec) vec[!is.na(vec)])()
+}
+
 #' Create an .onload function to set package options during load
 #'
 #' - getRad.key_prefix is the default prefix used when setting or getting

@@ -22,7 +22,7 @@ added to indicate the source of the data and \code{radar} to show the radar iden
 used in other functions like \code{\link[=get_pvol]{get_pvol()}} and \code{\link[=get_vpts]{get_vpts()}}.
 }
 \description{
-Gets weather radar metadata from \href{https://www.eumetnet.eu/activities/observations-programme/current-activities/opera/}{OPERA}
+Gets weather radar metadata from \href{https://www.eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/index.html}{OPERA}
 and/or \href{https://www.ncei.noaa.gov/products/radar/next-generation-weather-radar}{NEXRAD}.
 }
 \details{

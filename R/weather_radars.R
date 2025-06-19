@@ -1,7 +1,7 @@
 #' Get weather radar metadata
 #'
 #' Gets weather radar metadata from [OPERA](
-#' https://www.eumetnet.eu/activities/observations-programme/current-activities/opera/)
+#' https://www.eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/index.html)
 #' and/or [NEXRAD](
 #' https://www.ncei.noaa.gov/products/radar/next-generation-weather-radar).
 #'

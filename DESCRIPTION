@@ -11,32 +11,35 @@ Authors@R: c(
     person("Cecilia", "Nilsson", , "cecilia.nilsson@biol.lu.se", role = "ctb",
            comment = c(ORCID = "0000-0001-8957-4411", affiliation = "Lund University")),
     person("Alexander", "Tedeschi", , "at744@cornell.edu", role = "ctb",
-           comment =  c(ORCID = "0000-0003-0772-6931", affiliation = "Cornell Lab of Ornithology")),
+           comment = c(ORCID = "0000-0003-0772-6931", affiliation = "Cornell Lab of Ornithology")),
     person("University of Amsterdam", role = "cph",
-           comment = c(ROR = "04dkp9463")),      
+           comment = c(ROR = "04dkp9463")),
     person("Biodiversa+", role = "fnd",
            comment = "https://hirad.science/")
   )
-Description: Load polar volume and vertical profile data for aeroecological 
-    research directly into R. With 'getRad' you can access data from several
-    sources in Europe and the US and standardize it to faciliate further 
-    exploration in tools such as 'bioRad'.
+Description: Load polar volume and vertical profile data for
+    aeroecological research directly into R. With 'getRad' you can access
+    data from several sources in Europe and the US and standardize it to
+    faciliate further exploration in tools such as 'bioRad'.
 License: MIT + file LICENSE
-URL: https://github.com/aloftdata/getRad, https://aloftdata.github.io/getRad/
+URL: https://github.com/aloftdata/getRad,
+    https://aloftdata.github.io/getRad/
 BugReports: https://github.com/aloftdata/getRad/issues
 Depends: 
     R (>= 4.1.0)
 Imports: 
     bioRad,
     cli,
-    dplyr,
+    dplyr (>= 1.1.0),
     glue,
     httr2 (>= 1.1.1),
     lubridate,
-    purrr,
-    vroom,
+    purrr (>= 1.0.0),
     rlang,
+    tibble,
     tools,
+    utils,
+    vroom,
     xml2
 Suggests:
     askpass,

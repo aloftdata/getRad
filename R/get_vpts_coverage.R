@@ -27,6 +27,7 @@ get_vpts_coverage<-function(source=c("baltrad", "uva", "ecog-04003", "rmi"),...)
   if(length(source)==0){
     cli::cli_abort("Source should atleast have one value.", class="getRad_error_length_zero")
   }
+  # Note for future this function can possibly be made faster by grouping all calls to aloft
   switch(source,
              "rmi"=get_vpts_coverage_rmi(...),
                get_vpts_coverage_aloft(...) |>

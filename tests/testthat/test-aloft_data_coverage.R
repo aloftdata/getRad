@@ -1,17 +1,17 @@
-test_that("aloft_data_coverage() returns a tibble", {
+test_that("get_vpts_coverage_aloft() returns a tibble", {
   skip_if_offline()
 
   expect_s3_class(
-    aloft_data_coverage(),
+    get_vpts_coverage_aloft(),
     "tbl_df"
   )
 })
 
-test_that("aloft_data_coverage() returns the expected columns", {
+test_that("get_vpts_coverage_aloft() returns the expected columns", {
   skip_if_offline()
 
   expect_named(
-    aloft_data_coverage(),
+    get_vpts_coverage_aloft(),
     c("directory", "file_count", "source", "radar", "date")
   )
 })

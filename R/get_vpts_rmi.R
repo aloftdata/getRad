@@ -14,7 +14,7 @@
 get_vpts_rmi <- function(radar_odim_code,
                          rounded_interval) {
   # Check the coverage for data availability
-  coverage <- rmi_data_coverage(
+  coverage <- get_vpts_data_coverage_rmi(
     radar = radar_odim_code,
     year = seq(
       lubridate::year(lubridate::int_start(rounded_interval)),

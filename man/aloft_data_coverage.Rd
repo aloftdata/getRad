@@ -4,12 +4,16 @@
 \alias{aloft_data_coverage}
 \title{Get coverage of Aloft bucket}
 \usage{
-aloft_data_coverage(use_cache = TRUE)
+aloft_data_coverage(use_cache = TRUE, ..., call = rlang::caller_env())
 }
 \arguments{
 \item{use_cache}{Logical indicating whether to use the cache. Default is
 \code{TRUE}. If \code{FALSE} the cache is ignored and the file is fetched anew.
 This can also be useful if you want to force a refresh of the cache.}
+
+\item{...}{Additional arguments passed to \code{httr2::req_cache()}.}
+
+\item{call}{A call used for error messaging}
 }
 \value{
 A data frame of the coverage file on the Aloft bucket.

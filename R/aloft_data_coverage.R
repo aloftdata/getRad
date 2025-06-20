@@ -4,6 +4,8 @@
 #' [Aloft bucket](https://aloftdata.eu/browse/), based on the `coverage.csv`
 #' file in that bucket. By default this file is cached for 6 hours.
 #'
+#' @param call A call used for error messaging
+#'
 #' @details
 #' ```{r get url to fetch coverage from, echo = FALSE, results = FALSE}
 #' cov_url <- paste(
@@ -16,7 +18,6 @@
 #'
 #' @inheritParams req_cache_getrad
 #' @return A data frame of the coverage file on the Aloft bucket.
-#' @export
 #' @examplesIf interactive()
 #' aloft_data_coverage()
 aloft_data_coverage <- function(use_cache = TRUE, ..., call = rlang::caller_env()) {

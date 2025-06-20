@@ -1,6 +1,6 @@
 get_pvol_us <- function(radar, datetime, ..., call = rlang::caller_env()) {
   if (!inherits(datetime, c("Interval", "POSIXct"))) {
-    cli::cli_abort("{.arg datetime} must be POSIXct or Interval.",
+    cli::cli_abort("{.arg datetime} must be {.cls POSIXct} or {.cls Interval}.",
       class = "getRad_error_us_time_not_posix", call = call
     )
   }

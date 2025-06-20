@@ -80,7 +80,7 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
 
   if (lubridate::is.interval(datetime)) {
     if (lubridate::as.duration(datetime) > lubridate::hours(1)) {
-      cli::cli_warn("The interval specified for {.arg datetime} () likely results
+      cli::cli_warn("The interval specified for {.arg datetime} ({.val {lubridate::int_start(datetime)}}-{.val {lubridate::int_end(datetime)}}) likely results
                     in many polar volumes, when loading that may polar
                     volumes at the same time computational issues frequently
                     occur.",

@@ -113,7 +113,7 @@ get_pvol_us <- function(radar, time, ...) {
   if (lubridate::is.interval(datetime)) {
     keys[ts %within% datetime]
   } else {
-    keys[max(which(datetime < ts))]
+    keys[max(which(ts < datetime))]
   }
 }
 

@@ -74,7 +74,7 @@ get_vpts <- function(radar,
       glue::glue(
         "Please provide a value for the source argument:
         possible values are {possible_sources}.",
-        possible_sources = glue::glue_collapse(glue::backtick(source),
+        possible_sources = glue::glue_collapse(glue::backtick(eval(rlang::fn_fmls()$source)),
           sep = ", ",
           last = " or "
         )
@@ -126,7 +126,7 @@ get_vpts <- function(radar,
     !lubridate::is.timepoint(datetime) &&
     !lubridate::is.interval(datetime)) {
     cli::cli_abort(
-      "{.arg datetime} argument must be a character, POSIXct, Date, or Interval object.",
+      "{.arg datetime} argument must be a {.cls character}, {.cls POSIXct}, {.cls Date}, or {.cls Interval} object.",
       class = "getRad_error_date_parsable"
     )
   }

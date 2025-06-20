@@ -8,14 +8,14 @@
 #' @noRd
 #' @examplesIf interactive()
 #' # Get coverage for all radars and years
-#' rmi_data_coverage()
+#' get_vpts_coverage_rmi()
 #'
 #' # For a single radar, for a few years
-#' rmi_data_coverage(radar = "behel", year = c(2020, 2021))
+#' get_vpts_coverage_rmi(radar = "behel", year = c(2020, 2021))
 #'
 #' # For several radars for a single year
-#' rmi_data_coverage(radar = c("frave", "bezav", "nlhrw"), year = 2024)
-rmi_data_coverage <- function(radar = NULL, year = NULL, ..., call = rlang::caller_env()) {
+#' get_vpts_coverage_rmi(radar = c("frave", "bezav", "nlhrw"), year = 2024)
+get_vpts_coverage_rmi <- function(radar = NULL, year = NULL, ..., call = rlang::caller_env()) {
   rlang::check_installed(
     c("tidyr"),
     "to read coverage date from RMI",
@@ -98,6 +98,7 @@ rmi_data_coverage <- function(radar = NULL, year = NULL, ..., call = rlang::call
     ) |>
     tidyr::unnest_longer("file") |>
     dplyr::mutate(
+      source = "rmi",
       file = unlist(file),
       date = lubridate::ymd(string_extract(file, "[0-9]{8}(?=\\.txt)")),
       directory = file.path(
@@ -106,5 +107,6 @@ rmi_data_coverage <- function(radar = NULL, year = NULL, ..., call = rlang::call
         year
       )
     ) |>
-    dplyr::select("directory", "file", "radar", "date")
+    dplyr::select("directory", "file", "radar", "date",
+                  "source")
 }

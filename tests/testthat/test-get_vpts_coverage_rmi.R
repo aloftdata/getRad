@@ -13,7 +13,8 @@ test_that("get_vpts_coverage_rmi() returns expected columns", {
       "directory",
       "file",
       "radar",
-      "date"
+      "date",
+      "source"
     )
   )
 })

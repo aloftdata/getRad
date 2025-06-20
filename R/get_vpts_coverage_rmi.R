@@ -98,6 +98,7 @@ get_vpts_coverage_rmi <- function(radar = NULL, year = NULL, ..., call = rlang::
     ) |>
     tidyr::unnest_longer("file") |>
     dplyr::mutate(
+      source = "rmi",
       file = unlist(file),
       date = lubridate::ymd(string_extract(file, "[0-9]{8}(?=\\.txt)")),
       directory = file.path(
@@ -106,5 +107,6 @@ get_vpts_coverage_rmi <- function(radar = NULL, year = NULL, ..., call = rlang::
         year
       )
     ) |>
-    dplyr::select("directory", "file", "radar", "date")
+    dplyr::select("directory", "file", "radar", "date",
+                  "source")
 }

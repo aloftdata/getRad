@@ -1,10 +1,11 @@
 #' Get coverage for vpts from various sources
 #'
-#' @inheritParams get_vpts source
+#' @inheritParams get_vpts
+#' @param ... Arguments passed on to internal functions.
 #'
 #' @returns A `data.frame` or `tibble` with at least three columns, `source`, `radar` and `date` to indicate the combination for which data exists
 #'
-#' #' @details
+#' @details
 #' ```{r get url to fetch coverage from, echo = FALSE, results = FALSE}
 #' cov_url <- paste(
 #'   getOption("getRad.aloft_data_url"), "coverage.csv", sep = "/"
@@ -16,7 +17,7 @@
 #'
 #' @export
 #'
-#' @examples
+#' @examplesIf interactive()
 #' get_vpts_coverage()
 get_vpts_coverage<-function(source=c("baltrad", "uva", "ecog-04003", "rmi"),...){
   source<-rlang::arg_match(source, multiple =TRUE)

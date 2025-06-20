@@ -53,7 +53,8 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
     !rlang::is_scalar_vector(datetime)
   ) {
     cli::cli_abort("The argument {.arg datetime} to the {.fn get_pvol} function
-                   should be a single {.cls POSIXct} or a {.cls interval}.",
+                   should be a single {.cls POSIXct} or a {.cls interval}.
+                   The later can also be specified by two {.cls POSIXct}.",
       class = "getRad_error_time_not_correct"
     )
   }

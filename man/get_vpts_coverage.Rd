@@ -4,10 +4,15 @@
 \alias{get_vpts_coverage}
 \title{Get coverage for vpts from various sources}
 \usage{
-get_vpts_coverage(source = c("baltrad", "uva", "ecog-04003", "rmi"))
+get_vpts_coverage(source = c("baltrad", "uva", "ecog-04003", "rmi"), ...)
 }
 \value{
-A \code{data.frame} or \code{tibble}
+A \code{data.frame} or \code{tibble} with at least three columns, \code{source}, \code{radar} and \code{date} to indicate the combination for which data exists
+
+#' @details
+
+The coverage file for aloft is fetched from \url{https://aloftdata.s3-eu-west-1.amazonaws.com/coverage.csv}. This can be changed by
+setting \code{options(getRad.aloft_data_url)} to any desired url.
 }
 \description{
 Get coverage for vpts from various sources

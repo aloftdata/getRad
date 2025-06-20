@@ -18,7 +18,7 @@
 #'
 #' @examples
 #' get_vpts_coverage()
-get_vpts_coverage<-function(source=c("baltrad", "uva", "ecog-04003", "rmi",...)){
+get_vpts_coverage<-function(source=c("baltrad", "uva", "ecog-04003", "rmi"),...){
   source<-rlang::arg_match(source, multiple =TRUE)
   if(length(source)>1L){
     return(dplyr::bind_rows(lapply(source, get_vpts_coverage,...)))
@@ -26,12 +26,11 @@ get_vpts_coverage<-function(source=c("baltrad", "uva", "ecog-04003", "rmi",...))
   if(length(source)==0){
     cli::cli_abort("Source should atleast have one value.", class="getRad_error_length_zero")
   }
-  dplyr::case_match(source,
-             "rmi" ~ list(get_vpts_coverage_rmi(...)),
-             c("baltrad", "uva", "ecog-04003") ~
-               list(get_vpts_coverage_aloft(...) |>
-                      dplyr::filter(source==!!source))
-             )[[1]] |>
+  switch(source,
+             "rmi"=get_vpts_coverage_rmi(...),
+               get_vpts_coverage_aloft(...) |>
+                      dplyr::filter(source==!!source)
+             ) |>
     dplyr::relocate(source, radar, date)
 
 }

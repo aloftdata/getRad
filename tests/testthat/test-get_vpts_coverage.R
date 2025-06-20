@@ -20,3 +20,15 @@ test_that("format as expect for rmi", {
   expect_s3_class(data$date, "Date")
   expect_true(all(is_odim(data$radar)))
 })
+
+
+test_that("combined retrieval works", {
+  skip_if_offline("opendata.meteo.be")
+
+  data <- get_vpts_coverage(c("rmi","ecog-04003"))
+  expect_true(all(c("source", "radar", "date") %in% names(data)))
+  expect_s3_class(data$date, "Date")
+  expect_identical(unique(data$source),c("rmi","ecog-04003"))
+  expect_true(all(is_odim(data$radar)))
+})
+

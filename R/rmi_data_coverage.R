@@ -15,16 +15,17 @@
 #'
 #' # For several radars for a single year
 #' rmi_data_coverage(radar = c("frave", "bezav", "nlhrw"), year = 2024)
-rmi_data_coverage <- function(radar = NULL, year = NULL, ..., call=rlang::caller_env()) {
+rmi_data_coverage <- function(radar = NULL, year = NULL, ..., call = rlang::caller_env()) {
   rlang::check_installed(
     c("tidyr"),
-    "to read coverage date from RMI", call=call
+    "to read coverage date from RMI",
+    call = call
   )
 
   base_url <-
     "https://opendata.meteo.be/ftp/observations/radar/vbird"
 
-  found_radars <- get_element_regex(get_html(base_url, call=call), "[a-z]{5}(?=\\/)")
+  found_radars <- get_element_regex(get_html(base_url, call = call), "[a-z]{5}(?=\\/)")
 
   if (missing(radar)) {
     radar <- found_radars
@@ -38,14 +39,14 @@ rmi_data_coverage <- function(radar = NULL, year = NULL, ..., call=rlang::caller
 
   if (any(!radar %in% found_radars)) {
     cli::cli_abort("Requested radar {radar[!radar %in% found_radars]} not
-                   present in RMI coverage", call=call)
+                   present in RMI coverage", call = call)
   }
 
   radar_year_combos <-
     purrr::map(
       found_radars,
       \(radar) get_element_regex(
-        get_html(file.path(base_url, radar), call=call),
+        get_html(file.path(base_url, radar), call = call),
         "[0-9]{4}"
       )
     ) |>
@@ -56,7 +57,8 @@ rmi_data_coverage <- function(radar = NULL, year = NULL, ..., call=rlang::caller
   if (!all(year %in% years_covered_by_rmi) && use_year_filter) {
     cli::cli_abort("Requested year {year[!year %in% years_covered_by_rmi]}
      not present in RMI coverage",
-                   class = "getRad_error_date_not_found", call=call)
+      class = "getRad_error_date_not_found", call = call
+    )
   }
 
   radar_year_combos |>
@@ -82,7 +84,7 @@ rmi_data_coverage <- function(radar = NULL, year = NULL, ..., call=rlang::caller
     })() |>
     purrr::map(\(year_url) {
       purrr::map(year_url, ~ get_element_regex(
-        get_html(.x, call=call),
+        get_html(.x, call = call),
         "[a-z]{5}_vpts_.+"
       )) |>
         purrr::set_names(basename(year_url))

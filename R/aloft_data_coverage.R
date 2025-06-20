@@ -19,7 +19,7 @@
 #' @export
 #' @examplesIf interactive()
 #' aloft_data_coverage()
-aloft_data_coverage <- function(use_cache = TRUE) {
+aloft_data_coverage <- function(use_cache = TRUE, ..., call=rlang::caller_env()) {
   # Discover what data is available for the requested radar and time interval
   aloft_data_url <- getOption("getRad.aloft_data_url")
   coverage_raw <-
@@ -29,7 +29,7 @@ aloft_data_coverage <- function(use_cache = TRUE) {
     req_retry_getrad() |>
     req_cache_getrad(use_cache = use_cache) |>
     httr2::req_progress(type = "down") |>
-    httr2::req_perform() |>
+    httr2::req_perform(error_call = call) |>
     httr2::resp_body_raw()
 
   coverage <-

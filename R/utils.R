@@ -424,12 +424,12 @@ read_lines_from_url <- function(urls, use_cache = TRUE, parallel = TRUE) {
 #'   the cache.
 #' @return HTML content from the URL as a xml2 html object.
 #' @noRd
-get_html <- function(url, use_cache = TRUE) {
+get_html <- function(url, use_cache = TRUE, ..., call=rlang::caller_env()) {
   httr2::request(url) |>
     req_user_agent_getrad() |>
     req_retry_getrad() |>
     req_cache_getrad(use_cache = use_cache) |>
-    httr2::req_perform() |>
+    httr2::req_perform(error_call = call) |>
     httr2::resp_body_html()
 }
 

@@ -1,5 +1,5 @@
 get_pvol_fi <- function(radar, time, ..., call = rlang::caller_env()) {
-  rlang::check_installed("rhdf5", "to maniplate the `h5` files from the Finish data repository")
+  rlang::check_installed("rhdf5", "to maniplate the `h5` files from the Finish data repository", call=call)
   req <- httr2::request(
     getOption(
       "getRad.fi_url",

@@ -126,8 +126,8 @@ list_to_scan <- function(x, param) {
 
 read_scan <- function(file, scan = "dataset1",
                       param = "all", radar = "",
-                      datetime = "", geo = list(), attributes = "") {
-  rlang::check_installed("rhdf5")
+                      datetime = "", geo = list(), attributes = "", ..., call=rlang::caller_env()) {
+  rlang::check_installed("rhdf5", call=call)
   h5struct <- rhdf5::h5ls(file, all = TRUE)
   groups <- h5struct[h5struct$group == paste("/", scan, sep = ""), ]$name
   groups <- groups[grep("data", groups)]
@@ -199,8 +199,8 @@ read_scan <- function(file, scan = "dataset1",
   class(output) <- "scan"
   output
 }
-rr <- function(file, quantity = "/", radar, datetime, geo, dtype) {
-  rlang::check_installed("rhdf5")
+rr <- function(file, quantity = "/", radar, datetime, geo, dtype,..., call=rlang::caller_env()) {
+  rlang::check_installed("rhdf5", call=call)
   data <- rhdf5::h5read(file, quantity)$data
 
   storage.mode(data) <- "numeric"

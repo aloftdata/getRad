@@ -97,7 +97,7 @@ browsable(
 )
 ```
 
-To get an overview of weather radar metadata, use `weather_radars()`.
+To get an overview of weather radar metadata, use `get_weather_radars()`.
 
 ## Vertical profile time series (VPTS) data
 

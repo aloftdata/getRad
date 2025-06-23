@@ -23,11 +23,11 @@
 #' @export
 #' @examplesIf interactive()
 #' # Get radar metadata from OPERA
-#' weather_radars(source = "opera")
+#' get_weather_radars(source = "opera")
 #'
 #' # Get radar metadata from NEXRAD
-#' weather_radars(source = "nexrad")
-weather_radars <- function(source = c("opera"), use_cache = TRUE, ...) {
+#' get_weather_radars(source = "nexrad")
+get_weather_radars <- function(source = c("opera"), use_cache = TRUE, ...) {
   if (!rlang::is_character(source) || any(is.na(source)) || length(source) == 0) {
     cli::cli_abort("{.arg source} is not valid, it should be an {.cls character}
                    vector with a length of atleast one not contain NA values.",
@@ -48,15 +48,15 @@ weather_radars <- function(source = c("opera"), use_cache = TRUE, ...) {
     )
   }
   if (!rlang::is_scalar_character(source)) {
-    t <- purrr::map(source, ~ weather_radars(source = .x, use_cache = use_cache, ...)) |> dplyr::bind_rows()
+    t <- purrr::map(source, ~ get_weather_radars(source = .x, use_cache = use_cache, ...)) |> dplyr::bind_rows()
     return(t)
   }
   switch(source,
-    "opera" = weather_radars_opera(use_cache = use_cache, ...),
-    "nexrad" = weather_radars_nexrad(use_cache = use_cache, ...)
+    "opera" = get_weather_radars_opera(use_cache = use_cache, ...),
+    "nexrad" = get_weather_radars_nexrad(use_cache = use_cache, ...)
   ) |> dplyr::mutate(source = source)
 }
-weather_radars_opera <- function(use_cache = TRUE, ...,
+get_weather_radars_opera <- function(use_cache = TRUE, ...,
                                  call = rlang::caller_env()) {
   # Build the url where the JSON files are hosted on eumetnet
 
@@ -140,7 +140,7 @@ weather_radars_opera <- function(use_cache = TRUE, ...,
     dplyr::arrange(.data$country, .data$number, .data$startyear)
 }
 
-weather_radars_nexrad <- function(use_cache = TRUE, ...,
+get_weather_radars_nexrad <- function(use_cache = TRUE, ...,
                                   call = rlang::caller_env()) {
   #  https://www.ncei.noaa.gov/access/homr/reports
   file_content <- httr2::request("https://www.ncei.noaa.gov/access/homr/file/nexrad-stations.txt") |>

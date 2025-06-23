@@ -21,7 +21,6 @@ require(dplyr)
 library(htmltools)
 ```
 ```{r data}
-
 cvr <- get_vpts_coverage()
 wr <- get_weather_radars("opera") |>
   group_by(radar) |>
@@ -65,12 +64,17 @@ for (i in unique(cvr$source)) {
   ll <- NULL
   if (any(is.na(res$longitude))) {
     ll <- p(glue::glue("One or more radars were omited from the map as no location is found in the opera archive ({glue::glue_collapse(paste0('`',res$radar[is.na(res$longitude)],'`'), ', ', last = ' and ' )})."))
-    }
+  }
   res <- res |> filter(!is.na(longitude))
   lft <- leaflet() |>
     addTiles() |>
-    addCircleMarkers(lng = res$longitude, lat = res$latitude, label = res$radar, 
-                     popup = popupGraph(res$grph))
+    addCircleMarkers(
+      lng = res$longitude,
+      lat = res$latitude,
+      label = res$radar,
+      clusterOptions = markerClusterOptions(maxClusterRadius = 30),
+      popup = popupGraph(res$grph)
+    )
   html <- c(html, list(h3(i), lft, ll))
 }
 tagList(html)

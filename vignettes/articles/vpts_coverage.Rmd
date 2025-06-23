@@ -9,7 +9,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-Various sources of VPTS coverage different coverage, meaning different radars and time periods are included. Here we visualize per radar and data source the temporal coverage. If you click on a radar on the map a plot shows the percentage of days where data has been found per month.
+Various sources of VPTS coverage different coverage, meaning different radars and time periods are included. Here we visualize per radar and data source the temporal coverage. If you click on a radar on the map a plot shows the percentage of days where data has been found per month. Note that this article gets generated irregularly and is up to date until `r  Sys.Date()`.
 
 ```{r setup, message=FALSE}
 library(getRad)

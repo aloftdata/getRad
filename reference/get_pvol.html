@@ -82,7 +82,13 @@ between which all data files are downloaded.</p></li>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>For more details on supported sources, see <code><a href="../articles/supported_sources.html">vignette("supported_sources")</a></code>.</p>
+    <p>For more details on supported sources, see <code><a href="../articles/supported_sources.html">vignette("supported_sources")</a></code>. Within
+supported countries there might also be temporal restrictions on the radars that
+are operational. For example, radars with the <code>status</code> <code>0</code> in <code>get_weather_radars("opera")</code>
+are currently not operational.</p>
+<p>Not all radars in the nexrad archive can be read successfully. Radars associated
+with the Terminal Doppler Weather Radar (TDWR) program can not be read. These can
+be identified using the <code>stntype</code> column in <code>get_weather_radars("nexrad")</code>.</p>
     </div>
 
     <div class="section level2">

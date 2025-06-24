@@ -33,6 +33,6 @@ get_vpts_coverage<-function(source=c("baltrad", "uva", "ecog-04003", "rmi"),...)
                get_vpts_coverage_aloft(...) |>
                       dplyr::filter(source==!!source)
              ) |>
-    dplyr::relocate(source, radar, date)
+    dplyr::relocate("source", "radar", "date")
 
 }

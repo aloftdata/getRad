@@ -15,16 +15,20 @@ test_that("get_weather_radars source `argument`", {
 test_that("get_weather_radars returns a tibble", {
   skip_if_offline(host = "eumetnet.eu")
   if (!exists("weather_radar_metadata")) {
-    weather_radar_metadata <- get_weather_radars()
+    weather_radar_metadata <- get_weather_radars(return_type="tibble")
   }
-
   expect_s3_class(weather_radar_metadata, "tbl_df")
+})
+
+test_that("get_weather_radars returns a sf by default", {
+  skip_if_offline(host = "eumetnet.eu")
+  expect_s3_class(get_weather_radars(), "sf")
 })
 
 test_that("get_weather_radars returns non-empty tibble", {
   skip_if_offline(host = "eumetnet.eu")
   if (!exists("weather_radar_metadata")) {
-    weather_radar_metadata <- get_weather_radars()
+    weather_radar_metadata <- get_weather_radars(return_type="tibble")
   }
 
   expect_true(nrow(weather_radar_metadata) > 0, "Expected non-empty tibble")
@@ -33,7 +37,7 @@ test_that("get_weather_radars returns non-empty tibble", {
 test_that("get_weather_radars returns a tibble with expected columns", {
   skip_if_offline(host = "eumetnet.eu")
   if (!exists("weather_radar_metadata")) {
-    weather_radar_metadata <- get_weather_radars()
+    weather_radar_metadata <- get_weather_radars(return_type="tibble")
   }
 
   ## Right number of columns
@@ -85,7 +89,7 @@ test_that("get_weather_radars returns a tibble with expected columns", {
 test_that("get_weather_radars returns tibble with correct data types", {
   skip_if_offline(host = "eumetnet.eu")
   if (!exists("weather_radar_metadata")) {
-    weather_radar_metadata <- get_weather_radars()
+    weather_radar_metadata <- get_weather_radars(return_type="tibble")
   }
 
   expect_identical(
@@ -130,7 +134,7 @@ test_that("get_weather_radars() should return a table with records from main and
   skip_if_offline(host = "eumetnet.eu")
 
   if (!exists("weather_radar_metadata")) {
-    weather_radar_metadata <- get_weather_radars()
+    weather_radar_metadata <- get_weather_radars(return_type="tibble")
   }
 
   ## Count the number of records in both main and archive source
@@ -175,7 +179,7 @@ test_that("get_weather_radars() should return a source column", {
   skip_if_offline(host = "eumetnet.eu")
 
   if (!exists("weather_radar_metadata")) {
-    weather_radar_metadata <- get_weather_radars()
+    weather_radar_metadata <- get_weather_radars(return_type="tibble")
   }
 
   ## Is the source column present?
@@ -193,7 +197,7 @@ test_that("get_weather_radars() doesn't return empty strings, but NA instead", {
   skip_if_offline(host = "eumetnet.eu")
 
   if (!exists("weather_radar_metadata")) {
-    weather_radar_metadata <- get_weather_radars()
+    weather_radar_metadata <- get_weather_radars(return_type="tibble")
   }
 
   ## Are there any empty strings in the tibble?
@@ -235,15 +239,15 @@ test_that("get_weather_radars nexrad downloads", {
 
   expect_named(
     get_weather_radars(
-      "nexrad",
+      "nexrad",return_type="tibble"),
       c(
-        "ncdcid", "icao", "wban", "name", "country", "st", "county",
-        "elev", "utc", "stntype", "radar", "latitude", "longitude",
-        "location", "heightantenna", "source"
+        'radar', 'ncdcid', 'icao', 'wban', 'name', 'country', 'st',
+        'county', 'elev', 'utc', 'stntype', 'latitude', 'longitude',
+        'location', 'heightantenna', 'source'
       )
-    )
+
   )
-  expect_gt(nrow(get_weather_radars("nexrad")), 170)
+  expect_gt(nrow(get_weather_radars("nexrad",return_type="tibble")), 170)
 })
 
 test_that("get_weather_radars nexrad downloads", {
@@ -251,4 +255,14 @@ test_that("get_weather_radars nexrad downloads", {
   skip_if_offline(host = "eumetnet.eu")
 
   expect_identical(get_weather_radars(c("opera", "nexrad")), get_weather_radars("all"))
+})
+
+
+
+test_that("get_weather_radars is the same for both return types (besides geometry)", {
+  skip_if_offline(host = "ncei.noaa.gov")
+  skip_if_offline(host = "eumetnet.eu")
+
+  expect_identical(get_weather_radars(c("opera", "nexrad"), return_type = "sf") |> sf::st_drop_geometry(),
+                   get_weather_radars("all",return_type = "tibble"))
 })

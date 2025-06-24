@@ -5,7 +5,15 @@
 #' detected based on the provided `radar`.
 #'
 #' @details
-#' For more details on supported sources, see `vignette("supported_sources")`.
+#' For more details on supported sources, see `vignette("supported_sources")`. Within
+#' supported countries there might also be temporal restrictions on the radars that
+#' are operational. For example, radars with the `status` `0` in `get_weather_radars("opera")`
+#' are currently not operational.
+#'
+#' Not all radars in the nexrad archive can be read successfully. Radars associated
+#' with the Terminal Doppler Weather Radar (TDWR) program can not be read. These can
+#' be identified using the `stntype` column in `get_weather_radars("nexrad")`.
+#'
 #'
 #' @param radar Name of the radar (odim code) as a character string (e.g.
 #'   `"nlhrw"` or `"fikor"`).

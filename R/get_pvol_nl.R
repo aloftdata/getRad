@@ -22,6 +22,7 @@ get_pvol_nl <- function(radar, time, ...,
         ))
       ) |>
       httr2::req_url_path_append("/url") |>
+      req_retry_getrad(max_tries = 5) |>
       httr2::req_headers(Authorization = get_secret("nl_api_key")) |>
       httr2::req_perform(error_call = call),
     httr2_http_403 = function(cnd) {

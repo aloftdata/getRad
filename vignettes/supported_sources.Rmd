@@ -101,7 +101,7 @@ To get an overview of weather radar metadata, use `get_weather_radars()`.
 
 ## Vertical profile time series (VPTS) data
 
-`get_vpts()` can read vertical profile data from the following sources. These sources correspond to different processing pipelines. They can, for example, use polar volumnes that have been processed and filtered in different ways, for more details see [Shamoun-Baranes et al. (2020)](https://doi.org/10.1175/BAMS-D-21-0196.1). Multiple sources can thus contain data from from the same radar and time periods. For an overview of the coverage available use `get_vpts_coverage`.
+`get_vpts()` can read vertical profile data from the following sources. These sources correspond to different processing pipelines. They can, for example, use polar volumnes that have been processed and filtered in different ways, for more details see [Shamoun-Baranes et al. (2020)](https://doi.org/10.1175/BAMS-D-21-0196.1). Multiple sources can thus contain data from from the same radar and time periods. For an overview of the coverage available use `get_vpts_coverage()` or explore the [article](https://aloftdata.github.io/getRad/articles/vpts_coverage.html) on the getRad webpage.
 
 ### baltrad, uva, ecog-04003
 

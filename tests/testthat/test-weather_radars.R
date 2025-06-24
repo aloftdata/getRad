@@ -16,6 +16,7 @@ test_that("get_weather_radars returns a tibble", {
   skip_if_offline(host = "eumetnet.eu")
   if (!exists("weather_radar_metadata")) {
     weather_radar_metadata <- get_weather_radars(return_type="tibble")
+
   }
   expect_s3_class(weather_radar_metadata, "tbl_df")
 })
@@ -38,6 +39,7 @@ test_that("get_weather_radars returns a tibble with expected columns", {
   skip_if_offline(host = "eumetnet.eu")
   if (!exists("weather_radar_metadata")) {
     weather_radar_metadata <- get_weather_radars(return_type="tibble")
+
   }
 
   ## Right number of columns
@@ -135,6 +137,7 @@ test_that("get_weather_radars() should return a table with records from main and
 
   if (!exists("weather_radar_metadata")) {
     weather_radar_metadata <- get_weather_radars(return_type="tibble")
+
   }
 
   ## Count the number of records in both main and archive source
@@ -265,4 +268,5 @@ test_that("get_weather_radars is the same for both return types (besides geometr
 
   expect_identical(get_weather_radars(c("opera", "nexrad"), return_type = "sf") |> sf::st_drop_geometry(),
                    get_weather_radars("all",return_type = "tibble"))
+
 })

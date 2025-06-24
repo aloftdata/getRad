@@ -211,7 +211,7 @@ get_vpts <- function(radar,
       tibble = purrr::list_rbind(filtered_vpts),
       vpts = (\(filtered_vpts) {
         filtered_vpts_no_source <-
-          purrr::map(filtered_vpts, \(df) dplyr::select(df, -source),,  .purrr_error_call = cl)
+          purrr::map(filtered_vpts, \(df) dplyr::select(df, -source),  .purrr_error_call = cl)
         vpts_list <- purrr::map(filtered_vpts_no_source, bioRad::as.vpts)
         # If we are only returning a single radar, don't return a list
         if (length(vpts_list) == 1) {

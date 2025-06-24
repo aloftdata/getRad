@@ -32,7 +32,14 @@ Gets polar volume data from supported sources and returns it as a (list of)
 detected based on the provided \code{radar}.
 }
 \details{
-For more details on supported sources, see \code{vignette("supported_sources")}.
+For more details on supported sources, see \code{vignette("supported_sources")}. Within
+supported countries there might also be temporal restrictions on the radars that
+are operational. For example, radars with the \code{status} \code{0} in \code{get_weather_radars("opera")}
+are currently not operational.
+
+Not all radars in the nexrad archive can be read successfully. Radars associated
+with the Terminal Doppler Weather Radar (TDWR) program can not be read. These can
+be identified using the \code{stntype} column in \code{get_weather_radars("nexrad")}.
 }
 \examples{
 \dontrun{

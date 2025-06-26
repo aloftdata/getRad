@@ -9,7 +9,10 @@ knitr::opts_chunk$set(
 )
 ```
 
-Various sources of VPTS coverage different coverage, meaning different radars and time periods are included. Here we visualize per radar and data source the temporal coverage. If you click on a radar on the map a plot shows the percentage of days where data has been found per month. Note that this article gets generated irregularly and is up to date until `r  Sys.Date()`.
+Various sources of VPTS coverage different coverage, meaning different radars and time periods are included. Here we visualize per radar and data source the temporal coverage.
+If you click on a radar on the map a plot shows the percentage of days where data has been found per month.
+Note that this article gets generated irregularly and is up to date until `r  Sys.Date()`. 
+For a more detailed description of the data in aloft and its pitfalls see the [FAQ](https://aloftdata.eu/faq/).
 
 ```{r setup, message=FALSE}
 library(getRad)
@@ -49,7 +52,7 @@ for (i in unique(cvr$source)) {
     group_by(radar) |>
     summarize(grph = list(ggplot(data = pick(everything())) +
       geom_tile(aes(x = month, y = year, fill = (n / n_max) * 100)) +
-      scale_fill_viridis_c("Coverage", limits = c(0, 100), breaks = (0:5) * 20, labels = paste0((0:5) * 20, " [%]")) +
+      scale_fill_viridis_c("Coverage", limits = c(0, 100), breaks = (0:5) * 20, labels = paste0((0:5) * 20, " [%]"), direction=-1) +
       theme_minimal() +
       scale_y_continuous("Year", breaks = years, limits = range(years) + c(-.51, .51)) +
       theme(

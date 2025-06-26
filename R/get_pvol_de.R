@@ -1,4 +1,5 @@
-get_pvol_de <- function(radar, time, ...) {
+get_pvol_de <- function(radar, time, ...,
+                        call = rlang::caller_env()) {
   time_pos <- base <- iter <- param <- resp <- time_chr <- NULL
   # https://opendata.dwd.de/weather/radar/sites
   # https://opendata.dwd.de/weather/radar/sites/sweep_vol_z/hnr/hdf5/filter_simple/ras07-stqual-vol5minng01_sweeph5onem_dbzh_00-2024061011155700-hnr-10339-hd5
@@ -6,7 +7,8 @@ get_pvol_de <- function(radar, time, ...) {
   time <- lubridate::with_tz(time, "UTC")
   rlang::check_installed(
     c("xml2", "lubridate", "tidyr"),
-    "to import data from German weather radars"
+    "to import data from German weather radars",
+    call = call
   )
   urls <- c(
     glue::glue("https://opendata.dwd.de/weather/radar/sites/sweep_vol_{c('z','v')}/{substr(radar,3,5)}/hdf5/filter_simple/"),
@@ -16,7 +18,7 @@ get_pvol_de <- function(radar, time, ...) {
   res <- lapply(urls, function(x) {
     httr2::request(x) |>
       req_user_agent_getrad() |>
-      httr2::req_perform() |>
+      httr2::req_perform(error_call = call) |>
       httr2::resp_body_html() |>
       xml2::xml_find_all("//a/@href") |>
       xml2::xml_text()
@@ -42,7 +44,8 @@ get_pvol_de <- function(radar, time, ...) {
     ))
   if (nrow(files_to_get) != 50) {
     cli::cli_abort("The server returned an unexpected number of files",
-      class = "getRad_error_germany_unexpected_number_of_files"
+      class = "getRad_error_germany_unexpected_number_of_files",
+      call = call
     )
   }
 
@@ -123,8 +126,8 @@ list_to_scan <- function(x, param) {
 
 read_scan <- function(file, scan = "dataset1",
                       param = "all", radar = "",
-                      datetime = "", geo = list(), attributes = "") {
-  rlang::check_installed("rhdf5")
+                      datetime = "", geo = list(), attributes = "", ..., call = rlang::caller_env()) {
+  rlang::check_installed("rhdf5", call = call)
   h5struct <- rhdf5::h5ls(file, all = TRUE)
   groups <- h5struct[h5struct$group == paste("/", scan, sep = ""), ]$name
   groups <- groups[grep("data", groups)]
@@ -196,8 +199,8 @@ read_scan <- function(file, scan = "dataset1",
   class(output) <- "scan"
   output
 }
-rr <- function(file, quantity = "/", radar, datetime, geo, dtype) {
-  rlang::check_installed("rhdf5")
+rr <- function(file, quantity = "/", radar, datetime, geo, dtype, ..., call = rlang::caller_env()) {
+  rlang::check_installed("rhdf5", call = call)
   data <- rhdf5::h5read(file, quantity)$data
 
   storage.mode(data) <- "numeric"

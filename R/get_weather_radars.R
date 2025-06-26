@@ -64,7 +64,9 @@ get_weather_radars <- function(source = c("opera"), return_type=c("sf","tibble")
     "nexrad" = get_weather_radars_nexrad(use_cache = use_cache, ...)
   ) |> dplyr::mutate(source = source)
   switch (return_type,
-   "sf"  = sf::st_as_sf(res, coords = c('longitude','latitude'), crs=4326, na.fail = FALSE, remove=FALSE),
+   "sf"  = {
+     rlang::check_installed('sf','For `get_weather_radars()` to return and `sf` the package `sf` is required. Alternatively use `return_type="tibble"`.')
+     sf::st_as_sf(res, coords = c('longitude','latitude'), crs=4326, na.fail = FALSE, remove=FALSE)},
    "tibble" =res
   )
 }

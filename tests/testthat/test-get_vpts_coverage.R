@@ -3,6 +3,7 @@ test_that("Source argument as expected", {
   expect_error(get_vpts_coverage(source = "asdf"), ' not "asdf"')
   expect_error(get_vpts_coverage(source = character()), class = "getRad_error_length_zero")
 })
+
 test_that("format as expect for aloft", {
   skip_if_offline()
 

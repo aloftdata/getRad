@@ -22,20 +22,50 @@
 #' get_vpts_coverage()
 get_vpts_coverage <- function(source = c("baltrad", "uva", "ecog-04003", "rmi"),
                               ...) {
+  # Allow multiple sources, but only default values.
   source <- rlang::arg_match(source, multiple = TRUE)
-  if (length(source) > 1L) {
-    return(dplyr::bind_rows(lapply(source, get_vpts_coverage, ...)))
-  }
+
   if (length(source) == 0) {
     cli::cli_abort("Source should atleast have one value.",
       class = "getRad_error_length_zero"
     )
   }
-  # Note for future this function can possibly be made faster by grouping all calls to aloft
-  switch(source,
-    "rmi" = get_vpts_coverage_rmi(...),
-    get_vpts_coverage_aloft(...) |>
-      dplyr::filter(source == !!source)
-  ) |>
+
+  # Create a mapping of sources to helper functions.
+  # fn_map <- list(
+  #   rmi = get_vpts_coverage_rmi,
+  #   baltrad = get_vpts_coverage_aloft,
+  #   uva = get_vpts_coverage_aloft,
+  #   "ecog-04003" = get_vpts_coverage_aloft
+  # )
+  fn_map <-
+    # List all coverage helpers, and get the default values of their source column.
+    # If not present, infer the source value from the helper name
+    ls("package:getRad", pattern = "get_vpts") |>
+    string_extract("get_vpts_(?!coverage).+") |>
+    # purrr::map(~ purrr::set_names(.x, string_replace(.x, "(?<=get_vpts)_", "_coverage_"))) |>
+    purrr::set_names() |>
+    purrr::imap(~ {
+      source_value <- eval(formals(.x)$source)
+      if (is.null(source_value)) {
+        string_extract(.y, "(?<=get_vpts_).+")
+      } else {
+        source_value
+      }
+    }) |>
+    # Set the names to the coverage helper
+    purrr::imap(~ purrr::set_names(.x, string_replace(.y, "(?<=get_vpts)_", "_coverage_"))) |>
+    purrr::flatten() |>
+    # Create a list of source value : helper_function pairs
+    purrr::imap(~ purrr::set_names(rep(.y, length(.x)), .x)) |>
+    purrr::flatten() |>
+    # Get the function instead of just it's symbol, so we can use them.
+    purrr::map(get)
+
+  # Run the helpers, but every helper only once.
+  purrr::map(fn_map[source][!duplicated(fn_map[source])], \(helper_fn) helper_fn(...)) |>
+    dplyr::bind_rows() |>
+    dplyr::filter(source %in% !!source) |>
     dplyr::relocate("source", "radar", "date")
+
 }

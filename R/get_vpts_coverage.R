@@ -1,6 +1,7 @@
 #' Get coverage for vpts from various sources
 #'
-#' @inheritParams get_vpts
+#' @param source Source of the data. One or more of `"baltrad"`, `"uva"`,
+#'   `"ecog-04003"` or `"rmi"`. If no source is provided `baltrad` is used.
 #' @param ... Arguments passed on to internal functions.
 #'
 #' @returns A `data.frame` or `tibble` with at least three columns, `source`,
@@ -22,20 +23,34 @@
 #' get_vpts_coverage()
 get_vpts_coverage <- function(source = c("baltrad", "uva", "ecog-04003", "rmi"),
                               ...) {
-  source <- rlang::arg_match(source, multiple = TRUE)
-  if (length(source) > 1L) {
-    return(dplyr::bind_rows(lapply(source, get_vpts_coverage, ...)))
+  if (missing(source)) {
+    # If no source is provided, use baltred.
+    source <- "baltrad"
+  } else {
+    # Allow multiple sources, but only default values.
+    source <- rlang::arg_match(source, multiple = TRUE)
   }
+
   if (length(source) == 0) {
     cli::cli_abort("Source should atleast have one value.",
       class = "getRad_error_length_zero"
     )
   }
-  # Note for future this function can possibly be made faster by grouping all calls to aloft
-  switch(source,
-    "rmi" = get_vpts_coverage_rmi(...),
-    get_vpts_coverage_aloft(...) |>
-      dplyr::filter(source == !!source)
+
+  # Create a mapping of sources to helper functions.
+  fn_map <- list(
+    rmi = get_vpts_coverage_rmi,
+    baltrad = get_vpts_coverage_aloft,
+    uva = get_vpts_coverage_aloft,
+    "ecog-04003" = get_vpts_coverage_aloft
+  )
+
+  # Run the helpers, but every helper only once.
+  purrr::map(
+    fn_map[source][!duplicated(fn_map[source])],
+    \(helper_fn) helper_fn(...)
   ) |>
+    dplyr::bind_rows() |>
+    dplyr::filter(source %in% !!source) |>
     dplyr::relocate("source", "radar", "date")
 }

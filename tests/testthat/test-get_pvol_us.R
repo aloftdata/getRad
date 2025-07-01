@@ -22,6 +22,12 @@ test_that("NEXRAD polar volume correct time is downloaded", {
     getRad::get_pvol("KAMA", t)$datetime,
     as.POSIXct("2023-01-10 20:55:53", tz = "UTC")
   ))
+  # with exact time match
+  t <- as.POSIXct("2025-1-10 17:58:13", tz = "UTC")
+  suppressMessages(expect_identical(
+    getRad::get_pvol("KABX", t)$datetime,
+    as.POSIXct("2025-01-10 17:58:13", tz = "UTC")
+  ))
 })
 
 test_that("Mixed radar vector (single timestamp)", {

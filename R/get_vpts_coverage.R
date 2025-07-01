@@ -23,8 +23,13 @@
 #' get_vpts_coverage()
 get_vpts_coverage <- function(source = c("baltrad", "uva", "ecog-04003", "rmi"),
                               ...) {
-  # Allow multiple sources, but only default values.
-  source <- rlang::arg_match(source, multiple = TRUE)
+  if(missing(source))
+    # If no source is provided, use baltred.
+    source <- "baltrad"
+  else {
+    # Allow multiple sources, but only default values.
+    source <- rlang::arg_match(source, multiple = TRUE)
+  }
 
   if (length(source) == 0) {
     cli::cli_abort("Source should atleast have one value.",

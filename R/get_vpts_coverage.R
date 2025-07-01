@@ -44,11 +44,10 @@ get_vpts_coverage <- function(source = c("baltrad", "uva", "ecog-04003", "rmi"),
   #   uva = get_vpts_coverage_aloft,
   #   "ecog-04003" = get_vpts_coverage_aloft
   # )
-  fn_map <-
-    # List all coverage helpers, and get the default values of their source column.
-    # If not present, infer the source value from the helper name
-    # list the get_vpts helper names
-    get_vpts_helper_names <-
+
+  # List all coverage helpers, and get the default values of their source
+  # column. If not present, infer the source value from the helper name
+  get_vpts_helper_names <-
     ls("package:getRad", pattern = "get_vpts") |>
     string_extract("get_vpts_(?!coverage).+")
   # Infer the coverage helper names
@@ -71,7 +70,8 @@ get_vpts_coverage <- function(source = c("baltrad", "uva", "ecog-04003", "rmi"),
     purrr::map(get)
 
   # Run the helpers, but every helper only once.
-  purrr::map(fn_map[source][!duplicated(fn_map[source])], \(helper_fn) helper_fn(...)) |>
+  purrr::map(fn_map[source][!duplicated(fn_map[source])],
+             \(helper_fn) helper_fn(...)) |>
     dplyr::bind_rows() |>
     dplyr::filter(source %in% !!source) |>
     dplyr::relocate("source", "radar", "date")

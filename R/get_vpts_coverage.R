@@ -41,25 +41,27 @@ get_vpts_coverage <- function(source = c("baltrad", "uva", "ecog-04003", "rmi"),
   fn_map <-
     # List all coverage helpers, and get the default values of their source column.
     # If not present, infer the source value from the helper name
+    # list the get_vpts helper names
+    get_vpts_helper_names <-
     ls("package:getRad", pattern = "get_vpts") |>
-    string_extract("get_vpts_(?!coverage).+") |>
-    # purrr::map(~ purrr::set_names(.x, string_replace(.x, "(?<=get_vpts)_", "_coverage_"))) |>
-    purrr::set_names() |>
-    purrr::imap(~ {
-      source_value <- eval(formals(.x)$source)
-      if (is.null(source_value)) {
-        string_extract(.y, "(?<=get_vpts_).+")
-      } else {
-        source_value
-      }
-    }) |>
-    # Set the names to the coverage helper
-    purrr::imap(~ purrr::set_names(.x, string_replace(.y, "(?<=get_vpts)_", "_coverage_"))) |>
-    purrr::flatten() |>
+    string_extract("get_vpts_(?!coverage).+")
+  # Infer the coverage helper names
+  get_vpts_coverage_names <-
+    string_replace(get_vpts_helper_names, "(?<=get_vpts)_", "_coverage_")
+
+  fn_map <- purrr::map(get_vpts_helper_names, ~ {
+    source_value <- eval(formals(.x)$source)
+    if (is.null(source_value)) {
+      string_extract(.x, "(?<=get_vpts_).+")
+    } else {
+      source_value
+    }
+  }) |>
+    purrr::set_names(get_vpts_coverage_names) |>
     # Create a list of source value : helper_function pairs
     purrr::imap(~ purrr::set_names(rep(.y, length(.x)), .x)) |>
     purrr::flatten() |>
-    # Get the function instead of just it's symbol, so we can use them.
+    # Get the function instead of just its name
     purrr::map(get)
 
   # Run the helpers, but every helper only once.
@@ -67,5 +69,4 @@ get_vpts_coverage <- function(source = c("baltrad", "uva", "ecog-04003", "rmi"),
     dplyr::bind_rows() |>
     dplyr::filter(source %in% !!source) |>
     dplyr::relocate("source", "radar", "date")
-
 }

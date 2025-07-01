@@ -7,21 +7,22 @@
 get_vpts_coverage(source = c("baltrad", "uva", "ecog-04003", "rmi"), ...)
 }
 \arguments{
-\item{source}{Source of the data. One of \code{"baltrad"}, \code{"uva"}, \code{"ecog-04003"}
-or \code{"rmi"}. Only one source can be queried at a time. If no source is
-provided \code{baltrad} is used.}
+\item{source}{Source of the data. One or more of \code{"baltrad"}, \code{"uva"},
+\code{"ecog-04003"} or \code{"rmi"}. Only one source can be queried at a time. If no
+source is provided \code{baltrad} is used.}
 
 \item{...}{Arguments passed on to internal functions.}
 }
 \value{
-A \code{data.frame} or \code{tibble} with at least three columns, \code{source}, \code{radar} and \code{date} to indicate the combination for which data exists
+A \code{data.frame} or \code{tibble} with at least three columns, \code{source},
+\code{radar} and \code{date} to indicate the combination for which data exists
 }
 \description{
 Get coverage for vpts from various sources
 }
 \details{
-The coverage file for aloft is fetched from \url{https://aloftdata.s3-eu-west-1.amazonaws.com/coverage.csv}. This can be changed by
-setting \code{options(getRad.aloft_data_url)} to any desired url.
+The coverage file for aloft is fetched from \url{https://aloftdata.s3-eu-west-1.amazonaws.com/coverage.csv}. This can be
+changed by setting \code{options(getRad.aloft_data_url)} to any desired url.
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

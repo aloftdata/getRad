@@ -33,3 +33,9 @@ test_that("combined retrieval works", {
   expect_true(all(is_odim(data$radar)))
 })
 
+test_that("get_vpts_coverage() returns 'baltrad' as a default source",{
+  expect_identical(
+    unique(get_vpts_coverage()$source),
+    "baltrad"
+  )
+})

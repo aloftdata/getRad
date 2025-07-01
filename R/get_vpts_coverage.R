@@ -1,6 +1,7 @@
 #' Get coverage for vpts from various sources
 #'
-#' @inheritParams get_vpts
+#' @param source Source of the data. One or more of `"baltrad"`, `"uva"`,
+#'   `"ecog-04003"` or `"rmi"`. If no source is provided `baltrad` is used.
 #' @param ... Arguments passed on to internal functions.
 #'
 #' @returns A `data.frame` or `tibble` with at least three columns, `source`,

@@ -48,7 +48,8 @@ cl <- rlang::caller_env(0)
   # Run the helpers, but every helper only once.
   purrr::map(
     fn_map[source][!duplicated(fn_map[source])],
-    \(helper_fn) helper_fn(...)
+    \(helper_fn) helper_fn(...),
+    .purrr_error_call = cl
   ) |>
     dplyr::bind_rows() |>
     dplyr::filter(source %in% !!source) |>

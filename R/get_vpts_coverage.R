@@ -44,7 +44,7 @@ get_vpts_coverage <- function(source = c("baltrad", "uva", "ecog-04003", "rmi"),
     uva = get_vpts_coverage_aloft,
     "ecog-04003" = get_vpts_coverage_aloft
   )
-
+cl <- rlang::caller_env(0)
   # Run the helpers, but every helper only once.
   purrr::map(
     fn_map[source][!duplicated(fn_map[source])],

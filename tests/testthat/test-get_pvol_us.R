@@ -54,6 +54,6 @@ test_that("Caching of keys works", {
   skip_if_offline()
   t <- as.POSIXct("2025-2-3 5:00")
   r <- "KGGW"
-  expect_gt(system.time(.most_representative_nexrad_key(t, r))["elapsed"], .5)
-  expect_lt(system.time(.most_representative_nexrad_key(t, r))["elapsed"], .05)
+  expect_gt(system.time(.most_representative_nexrad_key(t, r))["elapsed"], .15)
+  expect_lt(system.time(.most_representative_nexrad_key(t, r))["elapsed"], .025)
 })

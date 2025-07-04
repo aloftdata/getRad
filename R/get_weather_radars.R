@@ -15,19 +15,23 @@
 #'
 #' @inheritParams req_cache_getrad
 #' @param source Source of the metadata. `"opera"`, `"nexrad"` or `"all"`.
+#' @param return_type Type of object that should be returned. Either:
+#'   - `"sf"`: a [sf::st_sf()] object (default).
+#'   - `"tibble"`: a [dplyr::tibble()].
 #' @param ... Additional arguments passed on to reading functions per source,
 #'   currently not used.
-#' @return A tibble with weather radar metadata. In all cases the column `source` is
+#' @return A sf or tibble with weather radar metadata. In all cases the column `source` is
 #' added to indicate the source of the data and `radar` to show the radar identifiers
 #'  used in other functions like [get_pvol()] and [get_vpts()].
 #' @export
 #' @examplesIf interactive()
 #' # Get radar metadata from OPERA
-#' weather_radars(source = "opera")
+#' get_weather_radars(source = "opera")
 #'
 #' # Get radar metadata from NEXRAD
-#' weather_radars(source = "nexrad")
-weather_radars <- function(source = c("opera"), use_cache = TRUE, ...) {
+#' get_weather_radars(source = "nexrad")
+get_weather_radars <- function(source = c("opera"), return_type=c("sf","tibble"),
+                               use_cache = TRUE, ...) {
   if (!rlang::is_character(source) || any(is.na(source)) || length(source) == 0) {
     cli::cli_abort("{.arg source} is not valid, it should be an {.cls character}
                    vector with a length of atleast one not contain NA values.",
@@ -48,15 +52,26 @@ weather_radars <- function(source = c("opera"), use_cache = TRUE, ...) {
     )
   }
   if (!rlang::is_scalar_character(source)) {
-    t <- purrr::map(source, ~ weather_radars(source = .x, use_cache = use_cache, ...)) |> dplyr::bind_rows()
+    t <- purrr::map(source, ~ get_weather_radars(source = .x,
+                                                 return_type = return_type,
+                                                 use_cache = use_cache, ...)) |>
+      dplyr::bind_rows()
     return(t)
   }
-  switch(source,
-    "opera" = weather_radars_opera(use_cache = use_cache, ...),
-    "nexrad" = weather_radars_nexrad(use_cache = use_cache, ...)
+  return_type <- rlang::arg_match(return_type)
+  res<-switch(source,
+    "opera" = get_weather_radars_opera(use_cache = use_cache, ...),
+    "nexrad" = get_weather_radars_nexrad(use_cache = use_cache, ...)
   ) |> dplyr::mutate(source = source)
+  switch (return_type,
+   "sf"  = {
+     rlang::check_installed('sf','For `get_weather_radars()` to return and `sf` the package `sf` is required. Alternatively use `return_type="tibble"`.')
+     sf::st_as_sf(res, coords = c('longitude','latitude'), crs=4326, na.fail = FALSE, remove=FALSE)},
+   "tibble" =res
+  )
 }
-weather_radars_opera <- function(use_cache = TRUE, ...) {
+get_weather_radars_opera <- function(use_cache = TRUE, ...,
+                                 call = rlang::caller_env()) {
   # Build the url where the JSON files are hosted on eumetnet
 
   # Read source JSON files from OPERA
@@ -88,7 +103,7 @@ weather_radars_opera <- function(use_cache = TRUE, ...) {
       req_user_agent_getrad() |>
       req_retry_getrad() |>
       req_cache_getrad(use_cache = use_cache) |>
-      httr2::req_perform() |>
+      httr2::req_perform(error_call = call) |>
       # The object is actually returned as text/plain
       httr2::resp_body_json(check_type = FALSE) |>
       # As tibble so it displays more nicely
@@ -139,12 +154,13 @@ weather_radars_opera <- function(use_cache = TRUE, ...) {
     dplyr::arrange(.data$country, .data$number, .data$startyear)
 }
 
-weather_radars_nexrad <- function(use_cache = TRUE, ...) {
+get_weather_radars_nexrad <- function(use_cache = TRUE, ...,
+                                  call = rlang::caller_env()) {
   #  https://www.ncei.noaa.gov/access/homr/reports
   file_content <- httr2::request("https://www.ncei.noaa.gov/access/homr/file/nexrad-stations.txt") |>
     req_user_agent_getrad() |>
     req_cache_getrad(use_cache = TRUE) |>
-    httr2::req_perform() |>
+    httr2::req_perform(error_call = call) |>
     httr2::resp_body_string()
   # First parse first lines to find column widths and headers
   tmp <- file_content |>

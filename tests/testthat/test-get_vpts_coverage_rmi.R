@@ -1,27 +1,28 @@
-test_that("rmi_data_coverage() returns a tibble", {
+test_that("get_vpts_coverage_rmi() returns a tibble", {
   skip_if_offline("opendata.meteo.be")
 
-  expect_s3_class(rmi_data_coverage(), "tbl_df")
+  expect_s3_class(get_vpts_coverage_rmi(), "tbl_df")
 })
 
-test_that("rmi_data_coverage() returns expected columns", {
+test_that("get_vpts_coverage_rmi() returns expected columns", {
   skip_if_offline("opendata.meteo.be")
 
   expect_named(
-    rmi_data_coverage(),
+    get_vpts_coverage_rmi(),
     c(
       "directory",
       "file",
       "radar",
-      "date"
+      "date",
+      "source"
     )
   )
 })
 
-test_that("rmi_data_coverage() returns known radars and years", {
+test_that("get_vpts_coverage_rmi() returns known radars and years", {
   skip_if_offline("opendata.meteo.be")
 
-  cov <- rmi_data_coverage()
+  cov <- get_vpts_coverage_rmi()
   expect_in(
     cov$radar,
     c(
@@ -44,20 +45,20 @@ test_that("rmi_data_coverage() returns known radars and years", {
   )
 })
 
-test_that("rmi_data_coverage() allows selection on year", {
+test_that("get_vpts_coverage_rmi() allows selection on year", {
   skip_if_offline("opendata.meteo.be")
 
   expect_identical(
-    unique(lubridate::year(rmi_data_coverage(year = 2022)$date)),
+    unique(lubridate::year(get_vpts_coverage_rmi(year = 2022)$date)),
     2022
   )
 })
 
-test_that("rmi_data_coverage() allows selection on radar", {
+test_that("get_vpts_coverage_rmi() allows selection on radar", {
   skip_if_offline("opendata.meteo.be")
 
   expect_identical(
-    unique(rmi_data_coverage(radar = "bejab")$radar),
+    unique(get_vpts_coverage_rmi(radar = "bejab")$radar),
     "bejab"
   )
 })

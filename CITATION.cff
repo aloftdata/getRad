@@ -85,6 +85,18 @@ references:
   year: '2025'
   doi: 10.32614/CRAN.package.bioRad
 - type: software
+  title: cachem
+  abstract: 'cachem: Cache R Objects with Automatic Pruning'
+  notes: Imports
+  url: https://cachem.r-lib.org/
+  repository: https://CRAN.R-project.org/package=cachem
+  authors:
+  - family-names: Chang
+    given-names: Winston
+    email: winston@posit.co
+  year: '2025'
+  doi: 10.32614/CRAN.package.cachem
+- type: software
   title: cli
   abstract: 'cli: Helpers for Developing Command Line Interfaces'
   notes: Imports
@@ -259,16 +271,16 @@ references:
   title: xml2
   abstract: 'xml2: Parse XML'
   notes: Imports
-  url: https://xml2.r-lib.org/
+  url: https://xml2.r-lib.org
   repository: https://CRAN.R-project.org/package=xml2
   authors:
   - family-names: Wickham
     given-names: Hadley
-    email: hadley@posit.co
   - family-names: Hester
     given-names: Jim
   - family-names: Ooms
     given-names: Jeroen
+    email: jeroenooms@gmail.com
   year: '2025'
   doi: 10.32614/CRAN.package.xml2
 - type: software

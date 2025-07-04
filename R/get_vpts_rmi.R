@@ -13,9 +13,8 @@
 #' )
 get_vpts_rmi <- function(radar_odim_code,
                          rounded_interval) {
-
   # Check the coverage for data availability
-  coverage <- rmi_data_coverage(
+  coverage <- get_vpts_coverage_rmi(
     radar = radar_odim_code,
     year = seq(
       lubridate::year(lubridate::int_start(rounded_interval)),
@@ -56,7 +55,8 @@ get_vpts_rmi <- function(radar_odim_code,
     # Add the source_file column
     purrr::map2(rmi_files, ~ dplyr::mutate(.x,
       source_file =
-        basename(get_rmi_sourcefile(.y)))) |>
+        basename(get_rmi_sourcefile(.y))
+    )) |>
     # Add the radar column from the file path
     purrr::map2(rmi_urls, ~ dplyr::mutate(.x,
       radar = string_extract(
@@ -67,10 +67,10 @@ get_vpts_rmi <- function(radar_odim_code,
     purrr::list_rbind()
 
   # Enrich with metadata from `weather_radars()`, but only from the `main`
-  # source to avoid duplicating rows
+  # origin to avoid duplicating rows
   radar_metadata <-
-    weather_radars() |>
-    dplyr::filter(.data$source == "main") |>
+    get_weather_radars(return_type = "tibble", source="opera") |>
+    dplyr::filter(.data$origin == "main") |>
     dplyr::mutate(.data$odimcode,
       radar_latitude = .data$latitude,
       radar_longitude = .data$longitude,

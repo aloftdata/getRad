@@ -3,9 +3,10 @@ dt_int <- lubridate::interval(time_utc, time_utc + lubridate::minutes(9))
 
 test_that("NEXRAD polar volume can be downloaded", {
   skip_if_offline(host = "noaa-nexrad-level2.s3.amazonaws.com")
-  suppressMessages(expect_s3_class(
-    getRad::get_pvol("KABR", time_utc),
-    "pvol"
+  suppressMessages(
+    expect_s3_class(
+      getRad::get_pvol("KABR", time_utc),
+      "pvol"
   ))
 })
 

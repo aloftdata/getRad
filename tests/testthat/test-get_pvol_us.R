@@ -3,10 +3,10 @@ dt_int <- lubridate::interval(time_utc, time_utc + lubridate::minutes(9))
 
 test_that("NEXRAD polar volume can be downloaded", {
   skip_if_offline(host = "noaa-nexrad-level2.s3.amazonaws.com")
-  expect_s3_class(
+  suppressMessages(expect_s3_class(
     getRad::get_pvol("KABR", time_utc),
     "pvol"
-  )
+  ))
 })
 
 test_that("NEXRAD polar volume correct time is downloaded", {
@@ -32,7 +32,7 @@ test_that("NEXRAD polar volume correct time is downloaded", {
 
 test_that("Mixed radar vector (single timestamp)", {
   skip_if_offline()
-  pvols <- getRad::get_pvol(c("KABR", "czska"), time_utc)
+  suppressMessages(pvols <- getRad::get_pvol(c("KABR", "czska"), time_utc))
   expect_true(is.list(pvols))
   expect_gt(length(pvols), 0)
   expect_true(all(purrr::map_lgl(pvols, ~ inherits(.x, "pvol"))))
@@ -43,8 +43,16 @@ test_that("Correct error is given when no near data is found", {
 
 test_that("Mixed radar vector + 9 minute interval", {
   skip_if_offline()
-  pvols <- getRad::get_pvol(c("KABR", "czska"), dt_int)
+  suppressMessages(pvols <- getRad::get_pvol(c("KABR", "czska"), dt_int))
   expect_true(is.list(pvols))
   expect_gt(length(pvols), 2)
   expect_true(all(purrr::map_lgl(pvols, ~ inherits(.x, "pvol"))))
+})
+test_that("Caching of keys works", {
+  skip_on_cran()
+  skip_if_offline()
+  t <- as.POSIXct("2025-2-3 5:00")
+  r <- "KGGW"
+  expect_gt(system.time(.most_representative_nexrad_key(t, r))["elapsed"], .5)
+  expect_lt(system.time(.most_representative_nexrad_key(t, r))["elapsed"], .05)
 })

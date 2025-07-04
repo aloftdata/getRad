@@ -127,5 +127,5 @@ get_pvol_us <- function(radar, datetime, ..., call = rlang::caller_env()) {
 }
 
 nexrad_key_to_url <- function(key) {
-  paste0(getOption("getRad.nexrad_data_url", default = "https://noaa-nexrad-level2.s3.amazonaws.com"), key)
+  paste0(getOption("getRad.nexrad_data_url", default = "https://noaa-nexrad-level2.s3.amazonaws.com"), '/',key)
 }

@@ -61,7 +61,8 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
     !rlang::is_scalar_vector(datetime)
   ) {
     cli::cli_abort("The argument {.arg datetime} to the {.fn get_pvol} function
-                   should be a single {.cls POSIXct} or a {.cls interval}.",
+                   should be a single {.cls POSIXct} or a {.cls interval}.
+                   The later can also be specified by two {.cls POSIXct}.",
       class = "getRad_error_time_not_correct"
     )
   }
@@ -87,7 +88,7 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
 
   if (lubridate::is.interval(datetime)) {
     if (lubridate::as.duration(datetime) > lubridate::hours(1)) {
-      cli::cli_warn("The interval specified for {.arg datetime} () likely results
+      cli::cli_warn("The interval specified for {.arg datetime} ({.val {lubridate::int_start(datetime)}}-{.val {lubridate::int_end(datetime)}}) likely results
                     in many polar volumes, when loading that may polar
                     volumes at the same time computational issues frequently
                     occur.",
@@ -110,18 +111,18 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
       polar_volumes <- purrr::map(datetime, safe_get_pvol, radar = radar, ...)
       return(polar_volumes)
     } else {
-      get(fn)(radar, lubridate::floor_date(datetime, "5 mins"), ...)
+      rlang::exec(fn, radar = radar, lubridate::floor_date(datetime, "5 mins"), ...)
     }
   } else {
     # For now then US data is request the interval if forwarded
     # get_pvol_us supports intervals
-    get(fn)(radar, datetime, ...)
+    rlang::exec(fn, radar = radar, datetime, ...)
   }
 }
 
 
 # Helper function to find the function for a specific radar
-select_get_pvol_function <- function(radar) {
+select_get_pvol_function <- function(radar, ..., call = rlang::caller_env()) {
   if (is_nexrad(radar)) {
     return("get_pvol_us")
   }
@@ -137,8 +138,9 @@ select_get_pvol_function <- function(radar) {
   ))
   if (rlang::is_na(fun)) {
     cli::cli_abort(
-      "No suitable function exist downloading from the radar {radar}",
-      class = "getRad_error_no_function_for_radar_with_country_code"
+      "No suitable function exist downloading from the radar {.val {radar}}",
+      class = "getRad_error_no_function_for_radar_with_country_code",
+      call = call
     )
   }
   return(fun)

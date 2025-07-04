@@ -57,7 +57,13 @@ get_pvol_us <- function(radar, datetime, ..., call = rlang::caller_env()) {
   host <- getOption("getRad.nexrad_data_url", default = "https://noaa-nexrad-level2.s3.amazonaws.com")
   keys <- character()
   token <- NULL
-
+  cache<-getOption("getRad.cache")
+  cache_key<-tolower(glue::glue("list_nexrad_keys_{radar}_{d}_{
+                        ifelse((d>=(Sys.Date()-1)),
+                        lubridate::floor_date(Sys.time(),'5 mins'),'historic')}"))
+  if(cache$exists(cache_key)){
+    return(cache$get(cache_key))
+  }
   repeat {
     xml <- httr2::request(host) |>
       req_user_agent_getrad() |>
@@ -75,6 +81,7 @@ get_pvol_us <- function(radar, datetime, ..., call = rlang::caller_env()) {
     }
     token <- xml2::xml_text(xml2::xml_find_first(xml, ".//s3:NextContinuationToken", ns))
   }
+  cache$set(key = cache_key, value = keys)
   keys
 }
 

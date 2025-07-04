@@ -41,7 +41,7 @@ get_pvol_us <- function(radar, datetime, ..., call = rlang::caller_env()) {
 #' @noRd
 #' @examples
 #' .list_nexrad_keys(as.Date("2025-3-4"), "KARX")
-.list_nexrad_keys <- function(date, radar, use_cache = T, call = rlang::caller_env()) {
+.list_nexrad_keys <- function(date, radar, ..., call = rlang::caller_env()) {
   d <- as.Date(date, tz = "UTC")
   if (!rlang::is_scalar_character(radar)) {
     cli::cli_abort("Radar should be a character of length one as otherwise not all
@@ -66,7 +66,6 @@ get_pvol_us <- function(radar, datetime, ..., call = rlang::caller_env()) {
         prefix = prefix,
         `continuation-token` = token
       ) |>
-      req_cache_getrad(use_cache = use_cache) |>
       httr2::req_perform(error_call = call) |>
       httr2::resp_body_xml()
 

@@ -2,7 +2,7 @@
   "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "identifier": "getRad",
-  "description": "Load polar volume and vertical profile data for aeroecological research directly into R. With 'getRad' you can access data from several sources in Europe and the US and standardize it to faciliate further exploration in tools such as 'bioRad'.",
+  "description": "Load polar volume and vertical profile data for aeroecological research directly into R. With 'getRad' you can access data from several sources in Europe and the US and standardize it to facilitate further exploration in tools such as 'bioRad'.",
   "name": "getRad: Download Radar Data for Biological Research",
   "relatedLink": "https://aloftdata.github.io/getRad/",
   "codeRepository": "https://github.com/aloftdata/getRad",
@@ -400,5 +400,5 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "4558.359KB"
+  "fileSize": "4558.36KB"
 }

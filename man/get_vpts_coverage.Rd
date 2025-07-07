@@ -11,7 +11,6 @@ get_vpts_coverage(source = c("baltrad", "uva", "ecog-04003", "rmi"), ...)
 \code{"ecog-04003"} or \code{"rmi"}. If no source is provided \code{baltrad} is used.
 Alternatively \code{"all"} can be used if data from all sources should be
 returned.}
-
 \item{...}{Arguments passed on to internal functions.}
 }
 \value{

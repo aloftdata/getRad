@@ -6,7 +6,7 @@
 \alias{getRad-package}
 \title{getRad: Download Radar Data for Biological Research}
 \description{
-Load polar volume and vertical profile data for aeroecological research directly into R. With 'getRad' you can access data from several sources in Europe and the US and standardize it to faciliate further exploration in tools such as 'bioRad'.
+Load polar volume and vertical profile data for aeroecological research directly into R. With 'getRad' you can access data from several sources in Europe and the US and standardize it to facilitate further exploration in tools such as 'bioRad'.
 }
 \seealso{
 Useful links:

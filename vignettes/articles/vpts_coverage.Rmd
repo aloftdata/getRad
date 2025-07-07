@@ -23,7 +23,7 @@ library(htmltools)
 ```
 
 ```{r data}
-cvr <- get_vpts_coverage(source = "all")n
+cvr <- get_vpts_coverage(source = "all")
 wr <- get_weather_radars("opera") |>
   group_by(radar) |>
   arrange(status) |>

@@ -47,12 +47,7 @@ and/or <a href="https://www.ncei.noaa.gov/products/radar/next-generation-weather
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_weather_radars</span><span class="op">(</span></span>
-<span>  source <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"opera"</span><span class="op">)</span>,</span>
-<span>  return_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sf"</span>, <span class="st">"tibble"</span><span class="op">)</span>,</span>
-<span>  use_cache <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_weather_radars</span><span class="op">(</span>source <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"opera"</span>, <span class="st">"nexrad"</span><span class="op">)</span>, use_cache <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -60,13 +55,8 @@ and/or <a href="https://www.ncei.noaa.gov/products/radar/next-generation-weather
 
 
 <dl><dt id="arg-source">source<a class="anchor" aria-label="anchor" href="#arg-source"></a></dt>
-<dd><p>Source of the metadata. <code>"opera"</code>, <code>"nexrad"</code> or <code>"all"</code>.</p></dd>
-
-
-<dt id="arg-return-type">return_type<a class="anchor" aria-label="anchor" href="#arg-return-type"></a></dt>
-<dd><p>Type of object that should be returned. Either:</p><ul><li><p><code>"sf"</code>: a <code><a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">sf::st_sf()</a></code> object (default).</p></li>
-<li><p><code>"tibble"</code>: a <code><a href="https://dplyr.tidyverse.org/reference/reexports.html" class="external-link">dplyr::tibble()</a></code>.</p></li>
-</ul></dd>
+<dd><p>Source of the metadata. <code>"opera"</code>, <code>"nexrad"</code> or <code>"all"</code>.
+If not provided, <code>"opera"</code> is used.</p></dd>
 
 
 <dt id="arg-use-cache">use_cache<a class="anchor" aria-label="anchor" href="#arg-use-cache"></a></dt>
@@ -88,8 +78,10 @@ used in other functions like <code><a href="get_pvol.html">get_pvol()</a></code>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The source files for this function are:</p><ul><li><p>For <code>opera</code>: <a href="http://eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_DB.json" class="external-link">OPERA_RADARS_DB.json</a>
-and <a href="http://eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_ARH_DB.json" class="external-link">OPERA_RADARS_ARH_DB.json</a>.</p></li>
+    <p>The source files for this function are:</p><ul><li><p>For <code>opera</code>: <a href="http://eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_DB.json" class="external-link">OPERA_RADARS_DB.json</a> (main/current)
+and <a href="http://eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_ARH_DB.json" class="external-link">OPERA_RADARS_ARH_DB.json</a> (archive).
+A column <code>origin</code> is added to indicate which file the metadata were derived
+from.</p></li>
 <li><p>For <code>nexrad</code>: <a href="https://www.ncei.noaa.gov/access/homr/file/nexrad-stations.txt" class="external-link">nexrad-stations.txt</a>.</p></li>
 </ul></div>
 

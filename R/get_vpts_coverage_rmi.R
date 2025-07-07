@@ -107,6 +107,8 @@ get_vpts_coverage_rmi <- function(radar = NULL, year = NULL, ..., call = rlang::
         year
       )
     ) |>
-    dplyr::select("directory", "file", "radar", "date",
-                  "source")
+    dplyr::select(
+      "directory", "file", "radar", "date",
+      "source"
+    )
 }

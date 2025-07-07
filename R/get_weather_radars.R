@@ -8,17 +8,16 @@
 #' @details
 #' The source files for this function are:
 #' - For `opera`: [OPERA_RADARS_DB.json](
-#' http://eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_DB.json)
+#' http://eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_DB.json) (main/current)
 #' and [OPERA_RADARS_ARH_DB.json](
-#' http://eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_ARH_DB.json).
+#' http://eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_ARH_DB.json) (archive).
+#' A column `origin` is added to indicate which file the metadata were derived
+#' from.
 #' - For `nexrad`: [nexrad-stations.txt](https://www.ncei.noaa.gov/access/homr/file/nexrad-stations.txt).
-#'
-#' For data from `opera` a column `origin` is added to indicate if the data is derived from the
-#' archive or from the current data.
 #'
 #' @inheritParams req_cache_getrad
 #' @param source Source of the metadata. `"opera"`, `"nexrad"` or `"all"`.
-#' If no value is provide `"opera"` is used.
+#'   If not provided, `"opera"` is used.
 #' @param ... Additional arguments passed on to reading functions per source,
 #'   currently not used.
 #' @return A sf or tibble with weather radar metadata. In all cases the column `source` is

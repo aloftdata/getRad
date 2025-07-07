@@ -1,4 +1,5 @@
-get_pvol_nl <- function(radar, time, ...) {
+get_pvol_nl <- function(radar, time, ...,
+                        call = rlang::caller_env()) {
   url <- dplyr::case_when(
     radar == "nlhrw" ~ "https://api.dataplatform.knmi.nl/open-data/v1/datasets/radar_volume_full_herwijnen/versions/1.0/files",
     radar == "nldhl" ~ "https://api.dataplatform.knmi.nl/open-data/v1/datasets/radar_volume_denhelder/versions/2.0/files",
@@ -7,7 +8,7 @@ get_pvol_nl <- function(radar, time, ...) {
   if (is.na(url)) {
     cli::cli_abort(
       message = "No suitable url exist for the radar {radar}",
-      class = "getRad_error_netherlands_no_url_for_radar"
+      class = "getRad_error_netherlands_no_url_for_radar", call = call
     )
   }
   # This request generate the temporary download url where the polar volume file can be retrieved
@@ -21,15 +22,16 @@ get_pvol_nl <- function(radar, time, ...) {
         ))
       ) |>
       httr2::req_url_path_append("/url") |>
+      req_retry_getrad(max_tries = 5) |>
       httr2::req_headers(Authorization = get_secret("nl_api_key")) |>
-      httr2::req_perform(),
+      httr2::req_perform(error_call = call),
     httr2_http_403 = function(cnd) {
       cli::cli_abort(
         c("There was an authorization error, possibly this relates to using an invalid API key",
           i = "Please check if you set the correct `nl_api_key` with {.code get_secret('nl_api_key')}"
         ),
         cnd = cnd,
-        class = "getRad_error_get_pvol_nl_authorization_failure"
+        class = "getRad_error_get_pvol_nl_authorization_failure", call = call
       )
     }
   )
@@ -37,7 +39,7 @@ get_pvol_nl <- function(radar, time, ...) {
   req <- httr2::resp_body_json(resp)$temporaryDownloadUrl |>
     httr2::req_url(req = resp$request) |>
     httr2::req_headers(Authorization = NULL) |>
-    httr2::req_perform(path = tempfile(fileext = ".h5"))
+    httr2::req_perform(path = tempfile(fileext = ".h5"), error_call = call)
   # Dutch files need to be converted to the odim format
   converter <- getOption("getRad.nl_converter", "KNMI_vol_h5_to_ODIM_h5")
   if (!file.exists(converter)) {
@@ -50,7 +52,7 @@ get_pvol_nl <- function(radar, time, ...) {
       i = "Please compile the binary and include it in the search path as a program named {.arg KNMI_vol_h5_to_ODIM_h5}",
       i = "On linux systems this can be done with the following command {.code h5cc KNMI_vol_h5_to_ODIM_h5.c -o KNMI_vol_h5_to_ODIM_h5}.",
       i = "If another name is used or the program is not in the search path use options to locate the program ({.run options(getRad.nl_converter='')})."
-    ), class = "getRad_error_no_nl_converter_found")
+    ), class = "getRad_error_no_nl_converter_found", call = call)
   }
   pvol_path <- paste0(req$body, ".odim.h5")
   system(paste(converter, pvol_path, req$body))

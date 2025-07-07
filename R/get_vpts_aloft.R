@@ -35,7 +35,7 @@
 get_vpts_aloft <- function(radar_odim_code,
                            rounded_interval,
                            source = c("baltrad", "uva", "ecog-04003"),
-                           coverage = aloft_data_coverage()) {
+                           coverage = get_vpts_coverage_aloft()) {
   # rename source argument for readability
   selected_source <- source
 

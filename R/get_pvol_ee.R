@@ -1,4 +1,5 @@
-get_pvol_ee <- function(radar, time, ...) {
+get_pvol_ee <- function(radar, time, ...,
+                        call = rlang::caller_env()) {
   json_list <- # This list object creates the correct json request
     list(filter = list(and = list(
       children = list(list(and = list(
@@ -36,7 +37,7 @@ get_pvol_ee <- function(radar, time, ...) {
     req_user_agent_getrad() |>
     httr2::req_body_json(json_list) |>
     req_retry_getrad() |>
-    httr2::req_perform() |>
+    httr2::req_perform(error_call = call) |>
     httr2::resp_body_json()
   if (files$numFound == 0 || length(files$documents) != 1) {
     cli::cli_abort("The expected number of files is not found",
@@ -48,7 +49,7 @@ get_pvol_ee <- function(radar, time, ...) {
     httr2::req_url_path_append(files$documents[[1]]$id) |>
     httr2::req_url_path_append("files/0") |>
     req_retry_getrad() |>
-    httr2::req_perform(path = tempfile(fileext = ".h5"))
+    httr2::req_perform(path = tempfile(fileext = ".h5"), error_call = call)
   pvol <- bioRad::read_pvolfile(req$body, ...)
   file.remove(req$body)
   return(pvol)

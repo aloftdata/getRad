@@ -22,6 +22,12 @@ test_that("NEXRAD polar volume correct time is downloaded", {
     getRad::get_pvol("KAMA", t)$datetime,
     as.POSIXct("2023-01-10 20:55:53", tz = "UTC")
   ))
+  # with exact time match
+  t <- as.POSIXct("2025-1-10 17:58:13", tz = "UTC")
+  suppressMessages(expect_identical(
+    getRad::get_pvol("KABX", t)$datetime,
+    as.POSIXct("2025-01-10 17:58:13", tz = "UTC")
+  ))
 })
 
 test_that("Mixed radar vector (single timestamp)", {
@@ -30,6 +36,9 @@ test_that("Mixed radar vector (single timestamp)", {
   expect_true(is.list(pvols))
   expect_gt(length(pvols), 0)
   expect_true(all(purrr::map_lgl(pvols, ~ inherits(.x, "pvol"))))
+})
+test_that("Correct error is given when no near data is found", {
+  expect_error(get_pvol("KABX", as.POSIXct("1970-1-1")), class = "getRad_error_us_no_scan_found")
 })
 
 test_that("Mixed radar vector + 9 minute interval", {

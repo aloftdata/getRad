@@ -1,5 +1,5 @@
 ---
-title: "Coverage of vpts data sources"
+title: "VPTS file coverage"
 ---
 
 ```{r pkgsetup, include = FALSE}
@@ -9,28 +9,26 @@ knitr::opts_chunk$set(
 )
 ```
 
-Various sources of VPTS coverage different coverage, meaning different radars and time periods are included. Here we visualize per radar and data source the temporal coverage.
-If you click on a radar on the map a plot shows the percentage of days where data has been found per month.
-Note that this article gets generated irregularly and is up to date until `r  Sys.Date()`. 
-For a more detailed description of the data in aloft and its pitfalls see the [FAQ](https://aloftdata.eu/faq/).
+Various sources of VPTS files cover different radars and time periods. Here we visualize the temporal coverage per radar and data source. If you click on a radar on the map a plot shows the percentage of days with available data per month. Note that this article gets generated irregularly and is up to date until `r  Sys.Date()`.
+
+For a more detailed description of the data in Aloft bucket and its pitfalls see the [FAQ](https://aloftdata.eu/faq/).
 
 ```{r setup, message=FALSE}
 library(getRad)
-
 require(leafpop)
 require(leaflet)
 require(ggplot2)
 require(dplyr)
 library(htmltools)
 ```
+
 ```{r data}
-cvr <- get_vpts_coverage()
+cvr <- get_vpts_coverage(source = "all")
 wr <- get_weather_radars("opera") |>
   group_by(radar) |>
   arrange(status) |>
   slice_tail(n = 1)
 ```
-
 
 
 ```{r}
@@ -52,7 +50,7 @@ for (i in unique(cvr$source)) {
     group_by(radar) |>
     summarize(grph = list(ggplot(data = pick(everything())) +
       geom_tile(aes(x = month, y = year, fill = (n / n_max) * 100)) +
-      scale_fill_viridis_c("Coverage", limits = c(0, 100), breaks = (0:5) * 20, labels = paste0((0:5) * 20, " [%]"), direction=-1) +
+      scale_fill_viridis_c("Coverage", limits = c(0, 100), breaks = (0:5) * 20, labels = paste0((0:5) * 20, " [%]"), direction = -1) +
       theme_minimal() +
       scale_y_continuous("Year", breaks = years, limits = range(years) + c(-.51, .51)) +
       theme(
@@ -66,7 +64,7 @@ for (i in unique(cvr$source)) {
   suppressWarnings(res |> left_join(wr, by = join_by(radar))) -> res
   ll <- NULL
   if (any(is.na(res$longitude))) {
-    ll <- p(glue::glue("One or more radars were omited from the map as no location is found in the opera archive ({glue::glue_collapse(paste0('`',res$radar[is.na(res$longitude)],'`'), ', ', last = ' and ' )})."))
+    ll <- p(glue::glue("The following radars were omitted from the map because they lack location information in OPERA: {glue::glue_collapse(res$radar[is.na(res$longitude)], ', ', last = ' and ' )}."))
   }
   res <- res |> filter(!is.na(longitude))
   lft <- leaflet() |>
@@ -78,7 +76,7 @@ for (i in unique(cvr$source)) {
       clusterOptions = markerClusterOptions(maxClusterRadius = 30),
       popup = popupGraph(res$grph)
     )
-  html <- c(html, list(h3(i), lft, ll))
+  html <- c(html, list(h3(paste0("Source: `", i, "`")), lft, ll))
 }
 tagList(html)
 ```

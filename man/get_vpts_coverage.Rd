@@ -2,27 +2,24 @@
 % Please edit documentation in R/get_vpts_coverage.R
 \name{get_vpts_coverage}
 \alias{get_vpts_coverage}
-\title{Get coverage for vpts from various sources}
+\title{Get VPTS file coverage from supported sources}
 \usage{
 get_vpts_coverage(source = c("baltrad", "uva", "ecog-04003", "rmi"), ...)
 }
 \arguments{
 \item{source}{Source of the data. One or more of \code{"baltrad"}, \code{"uva"},
-\code{"ecog-04003"} or \code{"rmi"}. If no source is provided \code{baltrad} is used.
+\code{"ecog-04003"} or \code{"rmi"}. If not provided, \code{"baltrad"} is used.
 Alternatively \code{"all"} can be used if data from all sources should be
 returned.}
+
 \item{...}{Arguments passed on to internal functions.}
 }
 \value{
 A \code{data.frame} or \code{tibble} with at least three columns, \code{source},
-\code{radar} and \code{date} to indicate the combination for which data exists
+\code{radar} and \code{date} to indicate the combination for which data exists.
 }
 \description{
-Get coverage for vpts from various sources
-}
-\details{
-The coverage file for aloft is fetched from \url{https://aloftdata.s3-eu-west-1.amazonaws.com/coverage.csv}. This can be
-changed by setting \code{options(getRad.aloft_data_url)} to any desired url.
+Gets the VPTS file coverage from supported sources per radar and date.
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

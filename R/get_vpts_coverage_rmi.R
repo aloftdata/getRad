@@ -1,6 +1,6 @@
-#' Get RMI data coverage
+#' Get VPTS file coverage from RMI
 #'
-#' This function retrieves the RMI data coverage for a given radar and year.
+#' Gets the VPTS file coverage from RMI for a given radar and year.
 #'
 #' @param radar Optional. Character vector of radars to get coverage for.
 #' @param year Optional. Integer vector of years to get coverage for.
@@ -15,7 +15,8 @@
 #'
 #' # For several radars for a single year
 #' get_vpts_coverage_rmi(radar = c("frave", "bezav", "nlhrw"), year = 2024)
-get_vpts_coverage_rmi <- function(radar = NULL, year = NULL, ..., call = rlang::caller_env()) {
+get_vpts_coverage_rmi <- function(radar = NULL, year = NULL, ...,
+                                  call = rlang::caller_env()) {
   rlang::check_installed(
     c("tidyr"),
     "to read coverage date from RMI",
@@ -107,8 +108,5 @@ get_vpts_coverage_rmi <- function(radar = NULL, year = NULL, ..., call = rlang::
         year
       )
     ) |>
-    dplyr::select(
-      "directory", "file", "radar", "date",
-      "source"
-    )
+    dplyr::select("directory", "file", "radar", "date", "source")
 }

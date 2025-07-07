@@ -3,10 +3,12 @@ dt_int <- lubridate::interval(time_utc, time_utc + lubridate::minutes(9))
 
 test_that("NEXRAD polar volume can be downloaded", {
   skip_if_offline(host = "noaa-nexrad-level2.s3.amazonaws.com")
-  expect_s3_class(
-    suppressMessages(getRad::get_pvol("KABR", time_utc)),
-    "pvol"
-  )
+  suppressMessages(
+    expect_s3_class(
+      getRad::get_pvol("KABR", time_utc),
+      "pvol"
+  ))
+
 })
 
 test_that("NEXRAD polar volume correct time is downloaded", {
@@ -47,4 +49,14 @@ test_that("Mixed radar vector + 9 minute interval", {
   expect_true(is.list(pvols))
   expect_gt(length(pvols), 2)
   expect_true(all(purrr::map_lgl(pvols, ~ inherits(.x, "pvol"))))
+})
+test_that("Caching of keys works", {
+  skip_on_cran()
+  skip_if_offline()
+  t <- as.POSIXct("2025-2-3 5:00")
+  r <- "KGGW"
+  expect_gt(system.time(.most_representative_nexrad_key(t, r))["elapsed"], .15)
+  expect_true(all(c("list_nexrad_keys_kggw_2025-02-04_historic", "list_nexrad_keys_kggw_2025-02-03_historic",
+                    "list_nexrad_keys_kggw_2025-02-02_historic") %in% getOption("getRad.cache")$keys()))
+  expect_lt(system.time(.most_representative_nexrad_key(t, r))["elapsed"], .025)
 })

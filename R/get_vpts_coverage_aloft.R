@@ -1,17 +1,10 @@
 #' Get VPTS file coverage from the Aloft bucket
 #'
-#' Gets the VPTS file coverage from the Aloft bucket. This is derived from the
-#' coverage file at `r cov_url`>, which gives the number of hdf5 files per
-#' directory in the bucket. By default this file is cached for 6 hours.
-#'
-#' @details
-#' The coverage file URL can be set to any desired URL:
-#'
-#' ```{r get url to fetch coverage from, echo = FALSE, results = FALSE}
-#' cov_url <- paste(
-#'   getOption("getRad.aloft_data_url"), "coverage.csv", sep = "/"
-#' )
-#' ```
+#' Gets the VPTS file coverage from the Aloft bucket. This is derived from a
+#' coverage file at
+#' <`r file.path(getOption("getRad.aloft_data_url"), "coverage.csv")`>, which
+#' gives the number of hdf5 files per directory in the bucket. By default this
+#' file is cached for 6 hours.
 #'
 #' @param call A call used for error messaging.
 #' @inheritParams req_cache_getrad

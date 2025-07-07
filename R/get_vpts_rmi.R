@@ -69,7 +69,7 @@ get_vpts_rmi <- function(radar_odim_code,
   # Enrich with metadata from `weather_radars()`, but only from the `main`
   # origin to avoid duplicating rows
   radar_metadata <-
-    get_weather_radars(return_type = "tibble", source="opera") |>
+    get_weather_radars(source = "opera") |>
     dplyr::filter(.data$origin == "main") |>
     dplyr::mutate(.data$odimcode,
       radar_latitude = .data$latitude,

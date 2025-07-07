@@ -8,8 +8,9 @@ test_that("get_weather_radars source `argument`", {
   expect_error(get_weather_radars(c("asdf", NA)),
     class = "getRad_error_weather_radar_source_not_character"
   )
-  expect_error(get_weather_radars(c("opera", "nextrad")),
-               "must be one of"
+  expect_error(
+    get_weather_radars(c("opera", "nextrad")),
+    "must be one of"
   )
 })
 

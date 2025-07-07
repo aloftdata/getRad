@@ -18,8 +18,8 @@
 #'   downloaded.
 #'   - A [lubridate::interval()], between which all data files are downloaded.
 #' @param source Source of the data. One of `"baltrad"`, `"uva"`, `"ecog-04003"`
-#'   or `"rmi"`. Only one source can be queried at a time. If no source is
-#'   provided `baltrad` is used.
+#'   or `"rmi"`. Only one source can be queried at a time. If not provided,
+#'   `"baltrad"` is used.
 #' @param return_type Type of object that should be returned. Either:
 #'   - `"vpts"`: vpts object(s) (default).
 #'   - `"tibble"`: a [dplyr::tibble()].

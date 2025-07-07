@@ -8,7 +8,7 @@ get_vpts_coverage(source = c("baltrad", "uva", "ecog-04003", "rmi"), ...)
 }
 \arguments{
 \item{source}{Source of the data. One or more of \code{"baltrad"}, \code{"uva"},
-\code{"ecog-04003"} or \code{"rmi"}. If no source is provided \code{baltrad} is used.}
+\code{"ecog-04003"} or \code{"rmi"}. If no source is provided, \code{"baltrad"} is used.}
 
 \item{...}{Arguments passed on to internal functions.}
 }

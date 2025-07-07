@@ -28,7 +28,7 @@ downloaded.
 
 \item{source}{Source of the data. One of \code{"baltrad"}, \code{"uva"}, \code{"ecog-04003"}
 or \code{"rmi"}. Only one source can be queried at a time. If no source is
-provided \code{baltrad} is used.}
+provided, \code{"baltrad"} is used.}
 
 \item{return_type}{Type of object that should be returned. Either:
 \itemize{

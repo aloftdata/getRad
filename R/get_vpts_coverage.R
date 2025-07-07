@@ -3,7 +3,7 @@
 #' Gets the VPTS file coverage from supported sources per radar and date.
 #'
 #' @param source Source of the data. One or more of `"baltrad"`, `"uva"`,
-#'   `"ecog-04003"` or `"rmi"`. If no source is provided `baltrad` is used.
+#'   `"ecog-04003"` or `"rmi"`. If not provided, `"baltrad"` is used.
 #' @param ... Arguments passed on to internal functions.
 #' @returns A `data.frame` or `tibble` with at least three columns, `source`,
 #'   `radar` and `date` to indicate the combination for which data exists.
@@ -13,7 +13,7 @@
 get_vpts_coverage <- function(source = c("baltrad", "uva", "ecog-04003", "rmi"),
                               ...) {
   if (missing(source)) {
-    # If no source is provided, use baltred.
+    # If no source is provided, use baltrad.
     source <- "baltrad"
   } else {
     # Allow multiple sources, but only default values.

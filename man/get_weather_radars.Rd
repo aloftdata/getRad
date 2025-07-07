@@ -4,21 +4,10 @@
 \alias{get_weather_radars}
 \title{Get weather radar metadata}
 \usage{
-get_weather_radars(
-  source = c("opera"),
-  return_type = c("sf", "tibble"),
-  use_cache = TRUE,
-  ...
-)
+get_weather_radars(source = c("opera"), use_cache = TRUE, ...)
 }
 \arguments{
 \item{source}{Source of the metadata. \code{"opera"}, \code{"nexrad"} or \code{"all"}.}
-
-\item{return_type}{Type of object that should be returned. Either:
-\itemize{
-\item \code{"sf"}: a \code{\link[sf:sf]{sf::st_sf()}} object (default).
-\item \code{"tibble"}: a \code{\link[dplyr:reexports]{dplyr::tibble()}}.
-}}
 
 \item{use_cache}{Logical indicating whether to use the cache. Default is
 \code{TRUE}. If \code{FALSE} the cache is ignored and the file is fetched anew.

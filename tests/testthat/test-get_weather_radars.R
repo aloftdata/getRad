@@ -12,14 +12,6 @@ test_that("get_weather_radars source `argument`", {
     class = "getRad_error_weather_radar_source_not_valid"
   )
 })
-test_that("get_weather_radars returns a tibble", {
-  skip_if_offline(host = "eumetnet.eu")
-  if (!exists("weather_radar_metadata")) {
-    weather_radar_metadata <- get_weather_radars(return_type="tibble")
-
-  }
-  expect_s3_class(weather_radar_metadata, "tbl_df")
-})
 
 test_that("get_weather_radars returns a sf by default", {
   skip_if_offline(host = "eumetnet.eu")
@@ -29,23 +21,22 @@ test_that("get_weather_radars returns a sf by default", {
 test_that("get_weather_radars returns non-empty tibble", {
   skip_if_offline(host = "eumetnet.eu")
   if (!exists("weather_radar_metadata")) {
-    weather_radar_metadata <- get_weather_radars(return_type="tibble")
+    weather_radar_metadata <- get_weather_radars()
   }
 
-  expect_true(nrow(weather_radar_metadata) > 0, "Expected non-empty tibble")
+  expect_true(nrow(weather_radar_metadata) > 0, "Expected non-empty sf")
 })
 
 test_that("get_weather_radars returns a tibble with expected columns", {
   skip_if_offline(host = "eumetnet.eu")
   if (!exists("weather_radar_metadata")) {
-    weather_radar_metadata <- get_weather_radars(return_type="tibble")
-
+    weather_radar_metadata <- get_weather_radars()
   }
 
   ## Right number of columns
   expect_length(
     weather_radar_metadata,
-    31
+    32
   )
 
   ## Right columns, in a certain order
@@ -83,15 +74,16 @@ test_that("get_weather_radars returns a tibble with expected columns", {
       "singlerrr",
       "compositerrr",
       "origin",
-      "source"
+      "source",
+      "geometry"
     )
   )
 })
 
-test_that("get_weather_radars returns tibble with correct data types", {
+test_that("get_weather_radars returns sf with correct data types", {
   skip_if_offline(host = "eumetnet.eu")
   if (!exists("weather_radar_metadata")) {
-    weather_radar_metadata <- get_weather_radars(return_type="tibble")
+    weather_radar_metadata <- get_weather_radars()
   }
 
   expect_identical(
@@ -127,7 +119,8 @@ test_that("get_weather_radars returns tibble with correct data types", {
       singlerrr = "logical",
       compositerrr = "logical",
       origin = "character",
-      source = "character"
+      source = "character",
+      geometry = c("sfc_POINT", "sfc")
     )
   )
 })
@@ -136,8 +129,7 @@ test_that("get_weather_radars() should return a table with records from main and
   skip_if_offline(host = "eumetnet.eu")
 
   if (!exists("weather_radar_metadata")) {
-    weather_radar_metadata <- get_weather_radars(return_type="tibble")
-
+    weather_radar_metadata <- get_weather_radars()
   }
 
   ## Count the number of records in both main and archive source
@@ -178,16 +170,16 @@ test_that("get_weather_radars() should return a table with records from main and
   )
 })
 
-test_that("get_weather_radars() should return a source column", {
+test_that("get_weather_radars() should return a origin column", {
   skip_if_offline(host = "eumetnet.eu")
 
   if (!exists("weather_radar_metadata")) {
-    weather_radar_metadata <- get_weather_radars(return_type="tibble")
+    weather_radar_metadata <- get_weather_radars()
   }
 
-  ## Is the source column present?
+  ## Is the origin column present?
   expect_true(
-    "source" %in% names(weather_radar_metadata)
+    "origin" %in% names(weather_radar_metadata)
   )
 
   ## Does it contain only the values `main` and `archive`?
@@ -200,13 +192,14 @@ test_that("get_weather_radars() doesn't return empty strings, but NA instead", {
   skip_if_offline(host = "eumetnet.eu")
 
   if (!exists("weather_radar_metadata")) {
-    weather_radar_metadata <- get_weather_radars(return_type="tibble")
+    weather_radar_metadata <- get_weather_radars()
   }
 
   ## Are there any empty strings in the tibble?
   ### Character columns
   expect_false(
     weather_radar_metadata |>
+      sf::st_drop_geometry() |>
       dplyr::summarise(
         dplyr::across(
           dplyr::where(is.character),
@@ -218,6 +211,7 @@ test_that("get_weather_radars() doesn't return empty strings, but NA instead", {
 
   ### Fail on the first character column that contains an empty string
   weather_radar_metadata |>
+    sf::st_drop_geometry() |>
     dplyr::summarise(
       dplyr::across(
         dplyr::where(is.character),
@@ -231,7 +225,7 @@ test_that("get_weather_radars() doesn't return empty strings, but NA instead", {
   expect_false(
     any(
       sapply(
-        weather_radar_metadata,
+        sf::st_drop_geometry(weather_radar_metadata),
         function(x) any(x == "", na.rm = TRUE)
       )
     )
@@ -242,15 +236,15 @@ test_that("get_weather_radars nexrad downloads", {
 
   expect_named(
     get_weather_radars(
-      "nexrad",return_type="tibble"),
-      c(
-        'radar', 'ncdcid', 'icao', 'wban', 'name', 'country', 'st',
-        'county', 'elev', 'utc', 'stntype', 'latitude', 'longitude',
-        'location', 'heightantenna', 'source'
-      )
-
+      "nexrad"
+    ),
+    c(
+      "radar", "ncdcid", "icao", "wban", "name", "country", "st",
+      "county", "elev", "utc", "stntype", "latitude", "longitude",
+      "location", "heightantenna", "source", "geometry"
+    )
   )
-  expect_gt(nrow(get_weather_radars("nexrad",return_type="tibble")), 170)
+  expect_gt(nrow(get_weather_radars("nexrad", return_type = "tibble")), 170)
 })
 
 test_that("get_weather_radars nexrad downloads", {
@@ -266,7 +260,8 @@ test_that("get_weather_radars is the same for both return types (besides geometr
   skip_if_offline(host = "ncei.noaa.gov")
   skip_if_offline(host = "eumetnet.eu")
 
-  expect_identical(get_weather_radars(c("opera", "nexrad"), return_type = "sf") |> sf::st_drop_geometry(),
-                   get_weather_radars("all",return_type = "tibble"))
-
+  expect_identical(
+    get_weather_radars(c("opera", "nexrad")),
+    get_weather_radars("all")
+  )
 })

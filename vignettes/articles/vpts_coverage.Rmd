@@ -1,5 +1,5 @@
 ---
-title: "Coverage of vpts data sources"
+title: "VPTS file coverage"
 ---
 
 ```{r pkgsetup, include = FALSE}
@@ -9,20 +9,19 @@ knitr::opts_chunk$set(
 )
 ```
 
-Various sources of VPTS coverage different coverage, meaning different radars and time periods are included. Here we visualize per radar and data source the temporal coverage.
-If you click on a radar on the map a plot shows the percentage of days where data has been found per month.
-Note that this article gets generated irregularly and is up to date until `r  Sys.Date()`. 
-For a more detailed description of the data in aloft and its pitfalls see the [FAQ](https://aloftdata.eu/faq/).
+Various sources of VPTS files cover different radars and time periods. Here we visualize the temporal coverage per radar and data source. If you click on a radar on the map a plot shows the percentage of days with available data per month. Note that this article gets generated irregularly and is up to date until `r  Sys.Date()`.
+
+For a more detailed description of the data in Aloft bucket and its pitfalls see the [FAQ](https://aloftdata.eu/faq/).
 
 ```{r setup, message=FALSE}
 library(getRad)
-
 require(leafpop)
 require(leaflet)
 require(ggplot2)
 require(dplyr)
 library(htmltools)
 ```
+
 ```{r data}
 cvr <- get_vpts_coverage()
 wr <- get_weather_radars("opera") |>
@@ -30,7 +29,6 @@ wr <- get_weather_radars("opera") |>
   arrange(status) |>
   slice_tail(n = 1)
 ```
-
 
 
 ```{r}

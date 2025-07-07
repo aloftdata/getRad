@@ -8,16 +8,16 @@
 #' @details
 #' The source files for this function are:
 #' - For `opera`: [OPERA_RADARS_DB.json](
-#' http://eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_DB.json)
+#' http://eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_DB.json) (main/current)
 #' and [OPERA_RADARS_ARH_DB.json](
-#' http://eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_ARH_DB.json).
+#' http://eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_ARH_DB.json) (archive).
+#' A column `origin` is added to indicate which file the metadata were derived
+#' from.
 #' - For `nexrad`: [nexrad-stations.txt](https://www.ncei.noaa.gov/access/homr/file/nexrad-stations.txt).
 #'
 #' @inheritParams req_cache_getrad
 #' @param source Source of the metadata. `"opera"`, `"nexrad"` or `"all"`.
-#' @param return_type Type of object that should be returned. Either:
-#'   - `"sf"`: a [sf::st_sf()] object (default).
-#'   - `"tibble"`: a [dplyr::tibble()].
+#'   If not provided, `"opera"` is used.
 #' @param ... Additional arguments passed on to reading functions per source,
 #'   currently not used.
 #' @return A sf or tibble with weather radar metadata. In all cases the column `source` is
@@ -30,7 +30,7 @@
 #'
 #' # Get radar metadata from NEXRAD
 #' get_weather_radars(source = "nexrad")
-get_weather_radars <- function(source = c("opera"), return_type=c("sf","tibble"),
+get_weather_radars <- function(source = c("opera", "nexrad"),
                                use_cache = TRUE, ...) {
   if (!rlang::is_character(source) || any(is.na(source)) || length(source) == 0) {
     cli::cli_abort("{.arg source} is not valid, it should be an {.cls character}
@@ -42,36 +42,32 @@ get_weather_radars <- function(source = c("opera"), return_type=c("sf","tibble")
   if ("all" %in% source) {
     source <- valid_source_options
   }
-  if (!all(s <- source %in% valid_source_options)) {
-    cli::cli_abort(
-      c(
-        x = "{.val {source[!s]}} {?is not a/are not} valid option{?s} for the {.arg source} argument.",
-        i = "{.val {valid_source_options}} are possible valid sources."
-      ),
-      class = "getRad_error_weather_radar_source_not_valid"
-    )
+  if (missing(source)) {
+    # If no source is provided, use baltred.
+    source <- "opera"
+  } else {
+    # Allow multiple sources, but only default values.
+    source <- rlang::arg_match(source, multiple = TRUE)
   }
+
   if (!rlang::is_scalar_character(source)) {
-    t <- purrr::map(source, ~ get_weather_radars(source = .x,
-                                                 return_type = return_type,
-                                                 use_cache = use_cache, ...)) |>
+    t <- purrr::map(source, ~ get_weather_radars(
+      source = .x,
+      return_type = return_type,
+      use_cache = use_cache, ...
+    )) |>
       dplyr::bind_rows()
     return(t)
   }
-  return_type <- rlang::arg_match(return_type)
-  res<-switch(source,
+  res <- switch(source,
     "opera" = get_weather_radars_opera(use_cache = use_cache, ...),
     "nexrad" = get_weather_radars_nexrad(use_cache = use_cache, ...)
   ) |> dplyr::mutate(source = source)
-  switch (return_type,
-   "sf"  = {
-     rlang::check_installed('sf','For `get_weather_radars()` to return and `sf` the package `sf` is required. Alternatively use `return_type="tibble"`.')
-     sf::st_as_sf(res, coords = c('longitude','latitude'), crs=4326, na.fail = FALSE, remove=FALSE)},
-   "tibble" =res
-  )
+  rlang::check_installed("sf", 'For `get_weather_radars()` to return and `sf` the package `sf` is required. Alternatively use `return_type="tibble"`.')
+  sf::st_as_sf(res, coords = c("longitude", "latitude"), crs = 4326, na.fail = FALSE, remove = FALSE)
 }
 get_weather_radars_opera <- function(use_cache = TRUE, ...,
-                                 call = rlang::caller_env()) {
+                                     call = rlang::caller_env()) {
   # Build the url where the JSON files are hosted on eumetnet
 
   # Read source JSON files from OPERA
@@ -155,7 +151,7 @@ get_weather_radars_opera <- function(use_cache = TRUE, ...,
 }
 
 get_weather_radars_nexrad <- function(use_cache = TRUE, ...,
-                                  call = rlang::caller_env()) {
+                                      call = rlang::caller_env()) {
   #  https://www.ncei.noaa.gov/access/homr/reports
   file_content <- httr2::request("https://www.ncei.noaa.gov/access/homr/file/nexrad-stations.txt") |>
     req_user_agent_getrad() |>

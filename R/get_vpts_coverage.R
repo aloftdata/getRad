@@ -1,24 +1,13 @@
-#' Get coverage for vpts from various sources
+#' Get VPTS file coverage from supported sources
+#'
+#' Gets the VPTS file coverage from supported sources per radar and date.
 #'
 #' @param source Source of the data. One or more of `"baltrad"`, `"uva"`,
 #'   `"ecog-04003"` or `"rmi"`. If no source is provided `baltrad` is used.
 #' @param ... Arguments passed on to internal functions.
-#'
 #' @returns A `data.frame` or `tibble` with at least three columns, `source`,
-#'   `radar` and `date` to indicate the combination for which data exists
-#'
-#' @details
-#' ```{r get url to fetch coverage from, echo = FALSE, results = FALSE}
-#' cov_url <- paste(
-#'   getOption("getRad.aloft_data_url"), "coverage.csv", sep = "/"
-#' )
-#' ```
-#'
-#' The coverage file for aloft is fetched from <`r cov_url`>. This can be
-#' changed by setting `options(getRad.aloft_data_url)` to any desired url.
-#'
+#'   `radar` and `date` to indicate the combination for which data exists.
 #' @export
-#'
 #' @examplesIf interactive()
 #' get_vpts_coverage()
 get_vpts_coverage <- function(source = c("baltrad", "uva", "ecog-04003", "rmi"),

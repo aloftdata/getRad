@@ -37,7 +37,6 @@
 #'   c("deess", "dehnr", "fianj", "czska", "KABR"),
 #'   as.POSIXct(Sys.Date())
 #' )
-
 get_pvol <- function(radar = NULL, datetime = NULL, ...) {
   check_odim_nexrad(radar)
   if (anyDuplicated(radar)) {

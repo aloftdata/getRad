@@ -1,26 +1,19 @@
-#' Get coverage of Aloft bucket
+#' Get VPTS file coverage from the Aloft bucket
 #'
-#' Retrieves an overview of the number of hdf5 files per directory in the
-#' [Aloft bucket](https://aloftdata.eu/browse/), based on the `coverage.csv`
-#' file in that bucket. By default this file is cached for 6 hours.
+#' Gets the VPTS file coverage from the Aloft bucket. This is derived from a
+#' coverage file at
+#' <`r file.path(getOption("getRad.aloft_data_url"), "coverage.csv")`>, which
+#' gives the number of hdf5 files per directory in the bucket. By default this
+#' file is cached for 6 hours.
 #'
-#' @param call A call used for error messaging
-#'
-#' @details
-#' ```{r get url to fetch coverage from, echo = FALSE, results = FALSE}
-#' cov_url <- paste(
-#'   getOption("getRad.aloft_data_url"), "coverage.csv", sep = "/"
-#' )
-#' ```
-#'
-#' The coverage file is fetched from <`r cov_url`>. This can be changed by
-#' setting `options(getRad.aloft_data_url)` to any desired url.
-#'
+#' @param call A call used for error messaging.
 #' @inheritParams req_cache_getrad
 #' @return A data frame of the coverage file on the Aloft bucket.
+#' @noRd
 #' @examplesIf interactive()
 #' get_vpts_coverage_aloft()
-get_vpts_coverage_aloft <- function(use_cache = TRUE, ..., call = rlang::caller_env()) {
+get_vpts_coverage_aloft <- function(use_cache = TRUE, ...,
+                                    call = rlang::caller_env()) {
   # Discover what data is available for the requested radar and time interval
   aloft_data_url <- getOption("getRad.aloft_data_url")
   coverage_raw <-

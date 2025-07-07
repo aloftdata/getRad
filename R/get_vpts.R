@@ -18,8 +18,8 @@
 #'   downloaded.
 #'   - A [lubridate::interval()], between which all data files are downloaded.
 #' @param source Source of the data. One of `"baltrad"`, `"uva"`, `"ecog-04003"`
-#'   or `"rmi"`. Only one source can be queried at a time. If no source is
-#'   provided `baltrad` is used.
+#'   or `"rmi"`. Only one source can be queried at a time. If not provided,
+#'   `"baltrad"` is used.
 #' @param return_type Type of object that should be returned. Either:
 #'   - `"vpts"`: vpts object(s) (default).
 #'   - `"tibble"`: a [dplyr::tibble()].
@@ -138,13 +138,26 @@ get_vpts <- function(radar,
     if (any(datetime_converted != lubridate::as_datetime(lubridate::as_date(datetime_converted))) ||
       inherits(datetime, "POSIXct")) {
       # timestamp like `datetime`
-      date_interval <-
-        lubridate::interval(
-          ### starting at the datetime itself
-          min(datetime_converted),
-          ### to the end of the day
-          max(datetime_converted)
-        )
+      if (length(datetime) == 1) {
+        # if only one timestamps is provided generate the 5 minute floored interval
+        date_interval <-
+          lubridate::interval(
+            ### starting at the nominal date time
+            lubridate::floor_date(datetime_converted, "5 mins"),
+            ### to the end of the 5 minutes interval
+            lubridate::floor_date(datetime_converted, "5 mins") +
+              lubridate::minutes(5) -
+              lubridate::milliseconds(1)
+          )
+      } else {
+        date_interval <-
+          lubridate::interval(
+            ### starting at the datetime itself
+            min(datetime_converted),
+            ### to the end of the day
+            max(datetime_converted)
+          )
+      }
       ### If only date information is provided
     } else {
       # date like `datetime`
@@ -162,7 +175,11 @@ get_vpts <- function(radar,
 
   ## We need to round the interval because the helpers always fetch data a day
   ## at a time
-  rounded_interval <- round_interval(date_interval, "day")
+  date_interval_utc <- lubridate::as.interval(
+    lubridate::with_tz(lubridate::int_start(date_interval), "UTC"),
+    lubridate::with_tz(lubridate::int_start(date_interval), "UTC")
+  )
+  rounded_interval <- round_interval(date_interval_utc, "day")
 
   # Query the selected radars by directing to the correct get_vpts_* helper
   # based on source.
@@ -172,12 +189,12 @@ get_vpts <- function(radar,
       source == "rmi" ~ "rmi",
       source %in% eval(formals("get_vpts_aloft")$source) ~ "aloft"
     ),
-    rmi = purrr::map(radar, ~ get_vpts_rmi(.x, rounded_interval),  .purrr_error_call = cl),
+    rmi = purrr::map(radar, ~ get_vpts_rmi(.x, rounded_interval), .purrr_error_call = cl),
     aloft = purrr::map(radar, ~ get_vpts_aloft(
       .x,
       rounded_interval = rounded_interval,
       source = source
-    ),  .purrr_error_call = cl)
+    ), .purrr_error_call = cl)
     ) |> radar_to_name()
 
 
@@ -189,7 +206,8 @@ get_vpts <- function(radar,
         dplyr::mutate(df,
           datetime = lubridate::as_datetime(.data$datetime)
         )
-      },  .purrr_error_call = cl
+      },
+      .purrr_error_call = cl
     ) |>
     purrr::map(
       \(df) {
@@ -197,9 +215,9 @@ get_vpts <- function(radar,
           df,
           .data$datetime %within% date_interval
         )
-      },  .purrr_error_call = cl
+      },
+      .purrr_error_call = cl
     )
-
   # Return the vpts data
   ## By default, return drop the source column and convert to a vpts object for
   ## usage in bioRAD
@@ -211,7 +229,7 @@ get_vpts <- function(radar,
       tibble = purrr::list_rbind(filtered_vpts),
       vpts = (\(filtered_vpts) {
         filtered_vpts_no_source <-
-          purrr::map(filtered_vpts, \(df) dplyr::select(df, -source),  .purrr_error_call = cl)
+          purrr::map(filtered_vpts, \(df) dplyr::select(df, -source), .purrr_error_call = cl)
         vpts_list <- purrr::map(filtered_vpts_no_source, bioRad::as.vpts)
         # If we are only returning a single radar, don't return a list
         if (length(vpts_list) == 1) {

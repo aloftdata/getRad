@@ -9,7 +9,7 @@ test_that("get_weather_radars source `argument`", {
     class = "getRad_error_weather_radar_source_not_character"
   )
   expect_error(get_weather_radars(c("opera", "nextrad")),
-    class = "getRad_error_weather_radar_source_not_valid"
+               "must be one of"
   )
 })
 

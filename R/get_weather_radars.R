@@ -13,8 +13,12 @@
 #' http://eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_ARH_DB.json).
 #' - For `nexrad`: [nexrad-stations.txt](https://www.ncei.noaa.gov/access/homr/file/nexrad-stations.txt).
 #'
+#' For data from `opera` a column `origin` is added to indicate if the data is derived from the
+#' archive or from the current data.
+#'
 #' @inheritParams req_cache_getrad
 #' @param source Source of the metadata. `"opera"`, `"nexrad"` or `"all"`.
+#' If no value is provide `"opera"` is used.
 #' @param ... Additional arguments passed on to reading functions per source,
 #'   currently not used.
 #' @return A sf or tibble with weather radar metadata. In all cases the column `source` is
@@ -27,7 +31,7 @@
 #'
 #' # Get radar metadata from NEXRAD
 #' get_weather_radars(source = "nexrad")
-get_weather_radars <- function(source = c("opera"),
+get_weather_radars <- function(source = c("opera", "nexrad"),
                                use_cache = TRUE, ...) {
   if (!rlang::is_character(source) || any(is.na(source)) || length(source) == 0) {
     cli::cli_abort("{.arg source} is not valid, it should be an {.cls character}
@@ -39,15 +43,14 @@ get_weather_radars <- function(source = c("opera"),
   if ("all" %in% source) {
     source <- valid_source_options
   }
-  if (!all(s <- source %in% valid_source_options)) {
-    cli::cli_abort(
-      c(
-        x = "{.val {source[!s]}} {?is not a/are not} valid option{?s} for the {.arg source} argument.",
-        i = "{.val {valid_source_options}} are possible valid sources."
-      ),
-      class = "getRad_error_weather_radar_source_not_valid"
-    )
+  if (missing(source)) {
+    # If no source is provided, use baltred.
+    source <- "opera"
+  } else {
+    # Allow multiple sources, but only default values.
+    source <- rlang::arg_match(source, multiple = TRUE)
   }
+
   if (!rlang::is_scalar_character(source)) {
     t <- purrr::map(source, ~ get_weather_radars(
       source = .x,

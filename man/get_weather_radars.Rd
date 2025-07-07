@@ -4,10 +4,11 @@
 \alias{get_weather_radars}
 \title{Get weather radar metadata}
 \usage{
-get_weather_radars(source = c("opera"), use_cache = TRUE, ...)
+get_weather_radars(source = c("opera", "nexrad"), use_cache = TRUE, ...)
 }
 \arguments{
-\item{source}{Source of the metadata. \code{"opera"}, \code{"nexrad"} or \code{"all"}.}
+\item{source}{Source of the metadata. \code{"opera"}, \code{"nexrad"} or \code{"all"}.
+If no value is provide \code{"opera"} is used.}
 
 \item{use_cache}{Logical indicating whether to use the cache. Default is
 \code{TRUE}. If \code{FALSE} the cache is ignored and the file is fetched anew.
@@ -32,6 +33,9 @@ The source files for this function are:
 and \href{http://eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_ARH_DB.json}{OPERA_RADARS_ARH_DB.json}.
 \item For \code{nexrad}: \href{https://www.ncei.noaa.gov/access/homr/file/nexrad-stations.txt}{nexrad-stations.txt}.
 }
+
+For data from \code{opera} a column \code{origin} is added to indicate if the data is derived from the
+archive or from the current data.
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

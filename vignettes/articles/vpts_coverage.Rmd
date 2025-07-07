@@ -9,7 +9,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-Various sources of VPTS files cover different radars and time periods. Here we visualize the temporal coverage per radar and data source. If you click on a radar on the map a plot shows the percentage of days with available data per month. Note that this article gets generated irregularly and is up to date until `r  Sys.Date()`.
+Various sources of VPTS files cover different radars and time periods. Here we visualize the temporal coverage per source and radar. If you click on a radar on the map a plot shows the percentage of days with available data per month. Note that this article gets generated irregularly and is up to date until `r  Sys.Date()`.
 
 For a more detailed description of the data in Aloft bucket and its pitfalls see the [FAQ](https://aloftdata.eu/faq/).
 
@@ -76,7 +76,7 @@ for (i in unique(cvr$source)) {
       clusterOptions = markerClusterOptions(maxClusterRadius = 30),
       popup = popupGraph(res$grph)
     )
-  html <- c(html, list(h3(paste0("Source: `", i, "`")), lft, ll))
+  html <- c(html, list(h3(i), lft, ll))
 }
 tagList(html)
 ```

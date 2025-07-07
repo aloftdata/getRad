@@ -602,3 +602,23 @@ test_that("get_vpts() returns an error for a bad time argument", {
     class = "getRad_error_date_parsable"
   )
 })
+test_that("`get_vpts` is tz insensitive", {
+  t <- as.POSIXct("2025-1-3 1:00:00", tz = "CET")
+  tUtc <- lubridate::with_tz(t, "UTC")
+  expect_identical(
+    get_vpts("nlhrw", lubridate::as.interval(t, t + lubridate::minutes(30))),
+    get_vpts("nlhrw", lubridate::as.interval(tUtc, tUtc + lubridate::minutes(30)))
+  )
+})
+
+test_that("`get_vpts` for a single time gets closest nominal time", {
+  t <- as.POSIXct("2025-1-3 1:00:00", tz = "CET")
+  expect_identical(
+    get_vpts("nlhrw", t),
+    get_vpts("nlhrw", t + lubridate::seconds(123))
+  )
+  expect_identical(
+    get_vpts("nlhrw", t + lubridate::seconds(4)),
+    get_vpts("nlhrw", t + lubridate::seconds(123))
+  )
+})

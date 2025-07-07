@@ -464,7 +464,9 @@ get_element_regex <- function(html, regex) {
   op.getRad <- list(
     getRad.key_prefix = "getRad_",
     getRad.user_agent = paste("R package getRad", getNamespaceVersion("getRad")),
-    getRad.aloft_data_url = "https://aloftdata.s3-eu-west-1.amazonaws.com"
+    getRad.aloft_data_url = "https://aloftdata.s3-eu-west-1.amazonaws.com",
+    getRad.nexrad_data_url = "https://noaa-nexrad-level2.s3.amazonaws.com",
+    getRad.cache = cachem::cache_mem(max_size = 128*1024^2, max_age = 60^2*24)
   )
   toset <- !(names(op.getRad) %in% names(op))
   if (any(toset)) options(op.getRad[toset])

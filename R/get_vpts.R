@@ -138,13 +138,26 @@ get_vpts <- function(radar,
     if (any(datetime_converted != lubridate::as_datetime(lubridate::as_date(datetime_converted))) ||
       inherits(datetime, "POSIXct")) {
       # timestamp like `datetime`
-      date_interval <-
-        lubridate::interval(
-          ### starting at the datetime itself
-          min(datetime_converted),
-          ### to the end of the day
-          max(datetime_converted)
-        )
+      if (length(datetime) == 1) {
+        # if only one timestamps is provided generate the 5 minute floored interval
+        date_interval <-
+          lubridate::interval(
+            ### starting at the nominal date time
+            lubridate::floor_date(datetime_converted, "5 mins"),
+            ### to the end of the 5 minutes interval
+            lubridate::floor_date(datetime_converted, "5 mins") +
+              lubridate::minutes(5) -
+              lubridate::milliseconds(1)
+          )
+      } else {
+        date_interval <-
+          lubridate::interval(
+            ### starting at the datetime itself
+            min(datetime_converted),
+            ### to the end of the day
+            max(datetime_converted)
+          )
+      }
       ### If only date information is provided
     } else {
       # date like `datetime`
@@ -162,7 +175,11 @@ get_vpts <- function(radar,
 
   ## We need to round the interval because the helpers always fetch data a day
   ## at a time
-  rounded_interval <- round_interval(date_interval, "day")
+  date_interval_utc <- lubridate::as.interval(
+    lubridate::with_tz(lubridate::int_start(date_interval), "UTC"),
+    lubridate::with_tz(lubridate::int_start(date_interval), "UTC")
+  )
+  rounded_interval <- round_interval(date_interval_utc, "day")
 
   # Query the selected radars by directing to the correct get_vpts_* helper
   # based on source.
@@ -201,7 +218,6 @@ get_vpts <- function(radar,
       },
       .purrr_error_call = cl
     )
-
   # Return the vpts data
   ## By default, return drop the source column and convert to a vpts object for
   ## usage in bioRAD

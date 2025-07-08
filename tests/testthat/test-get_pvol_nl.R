@@ -5,7 +5,7 @@ test_that("Pvol for the Netherlands can be downloaded", {
   withr::local_options(list("keyring_backend" = "env"))
   # get public key here https://developer.dataplatform.knmi.nl/open-data-api#token
   withr::local_envvar(
-    list("getRad_nl_api_key" = "eyJvcmciOiI1ZTU1NGUxOTI3NGE5NjAwMDEyYTNlYjEiLCJpZCI6ImE1OGI5NGZmMDY5NDRhZDNhZjFkMDBmNDBmNTQyNjBkIiwiaCI6Im11cm11cjEyOCJ9")
+    list("getRad_nl_api_key" = "eyJvcmciOiI1ZTU1NGUxOTI3NGE5NjAwMDEyYTNlYjEiLCJpZCI6ImVlNDFjMWI0MjlkODQ2MThiNWI4ZDViZDAyMTM2YTM3IiwiaCI6Im11cm11cjEyOCJ9")
   )
   time <- as.POSIXct("2024-4-4 20:00:00",
     tz = "Europe/Helsinki"
@@ -29,7 +29,7 @@ test_that("failure to find converter", {
   withr::local_options(list("keyring_backend" = "env"))
   # get public key here https://developer.dataplatform.knmi.nl/open-data-api#token
   withr::local_envvar(
-    list("getRad_nl_api_key" = "eyJvcmciOiI1ZTU1NGUxOTI3NGE5NjAwMDEyYTNlYjEiLCJpZCI6ImE1OGI5NGZmMDY5NDRhZDNhZjFkMDBmNDBmNTQyNjBkIiwiaCI6Im11cm11cjEyOCJ9")
+    list("getRad_nl_api_key" = "eyJvcmciOiI1ZTU1NGUxOTI3NGE5NjAwMDEyYTNlYjEiLCJpZCI6ImVlNDFjMWI0MjlkODQ2MThiNWI4ZDViZDAyMTM2YTM3IiwiaCI6Im11cm11cjEyOCJ9")
   )
   expect_error(
     get_pvol("nlhrw",

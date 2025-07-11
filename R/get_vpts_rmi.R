@@ -6,11 +6,7 @@
 #' @inheritParams get_vpts_aloft
 #' @return A tibble with VPTS data.
 #' @keywords internal
-#' @examplesIf interactive()
-#' get_vpts_rmi(
-#'   radar_odim_code = "bejab",
-#'   rounded_interval = lubridate::interval("20200119", "20200124")
-#' )
+
 get_vpts_rmi <- function(radar_odim_code,
                          rounded_interval) {
   # Check the coverage for data availability

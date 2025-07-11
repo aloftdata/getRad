@@ -30,6 +30,8 @@ Other contributors:
 \itemize{
   \item Cecilia Nilsson \email{cecilia.nilsson@biol.lu.se} (\href{https://orcid.org/0000-0001-8957-4411}{ORCID}) (Lund University) [contributor]
   \item Alexander Tedeschi \email{at744@cornell.edu} (\href{https://orcid.org/0000-0003-0772-6931}{ORCID}) (Cornell Lab of Ornithology) [contributor]
+  \item Hidde Leijnse (\href{https://orcid.org/0000-0001-7835-4480}{ORCID}) (Royal Netherlands Meteorological Institute) [contributor]
+  \item Bart Hoekstra (\href{https://orcid.org/0000-0002-7085-3805}{ORCID}) (University of Amsterdam) [contributor]
   \item University of Amsterdam (04dkp9463) [copyright holder]
   \item Biodiversa+ (https://hirad.science/) [funder]
 }

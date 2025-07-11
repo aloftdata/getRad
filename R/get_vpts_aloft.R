@@ -26,12 +26,6 @@
 #'   If not provided, it will be fetched from via the internet.
 #' @return A tibble with VPTS data.
 #' @keywords internal
-#' @examplesIf interactive()
-#' get_vpts_aloft(
-#'   radar_odim_code = "bejab",
-#'   rounded_interval = lubridate::interval("20240305", "20240307"),
-#'   source = "baltrad"
-#' )
 get_vpts_aloft <- function(radar_odim_code,
                            rounded_interval,
                            source = c("baltrad", "uva", "ecog-04003"),

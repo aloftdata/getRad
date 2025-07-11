@@ -375,7 +375,7 @@ references:
   title: rhdf5
   abstract: 'rhdf5: R Interface to HDF5'
   notes: Suggests
-  url: https://github.com/grimbough/rhdf5
+  url: https://github.com/Huber-group-EMBL/rhdf5
   repository: https://bioconductor.org/
   authors:
   - family-names: Fischer

@@ -14,7 +14,7 @@
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.4.2 (2024-10-31)",
+  "runtimePlatform": "R version 4.5.1 (2025-06-13)",
   "author": [
     {
       "@type": "Person",
@@ -52,6 +52,18 @@
       "familyName": "Tedeschi",
       "email": "at744@cornell.edu",
       "@id": "https://orcid.org/0000-0003-0772-6931"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Hidde",
+      "familyName": "Leijnse",
+      "@id": "https://orcid.org/0000-0001-7835-4480"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Bart",
+      "familyName": "Hoekstra",
+      "@id": "https://orcid.org/0000-0002-7085-3805"
     }
   ],
   "copyrightHolder": [
@@ -400,5 +412,5 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "4558.36KB"
+  "fileSize": "4558.665KB"
 }

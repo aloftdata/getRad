@@ -17,12 +17,4 @@ A tibble with VPTS data.
 \description{
 Get VPTS data from \href{https://opendata.meteo.be/geonetwork/srv/eng/catalog.search#/metadata/RMI_DATASET_CROW}{RMI_DATASET_CROW}.
 }
-\examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-get_vpts_rmi(
-  radar_odim_code = "bejab",
-  rounded_interval = lubridate::interval("20200119", "20200124")
-)
-\dontshow{\}) # examplesIf}
-}
 \keyword{internal}

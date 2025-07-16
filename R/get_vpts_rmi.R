@@ -6,11 +6,7 @@
 #' @inheritParams get_vpts_aloft
 #' @return A tibble with VPTS data.
 #' @keywords internal
-#' @examplesIf interactive()
-#' get_vpts_rmi(
-#'   radar_odim_code = "bejab",
-#'   rounded_interval = lubridate::interval("20200119", "20200124")
-#' )
+
 get_vpts_rmi <- function(radar_odim_code,
                          rounded_interval) {
   # Check the coverage for data availability
@@ -69,7 +65,7 @@ get_vpts_rmi <- function(radar_odim_code,
   # Enrich with metadata from `weather_radars()`, but only from the `main`
   # origin to avoid duplicating rows
   radar_metadata <-
-    get_weather_radars(return_type = "tibble", source="opera") |>
+    get_weather_radars(source = "opera") |>
     dplyr::filter(.data$origin == "main") |>
     dplyr::mutate(.data$odimcode,
       radar_latitude = .data$latitude,

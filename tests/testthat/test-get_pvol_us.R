@@ -7,8 +7,8 @@ test_that("NEXRAD polar volume can be downloaded", {
     expect_s3_class(
       getRad::get_pvol("KABR", time_utc),
       "pvol"
-  ))
-
+    )
+  )
 })
 
 test_that("NEXRAD polar volume correct time is downloaded", {
@@ -56,7 +56,9 @@ test_that("Caching of keys works", {
   t <- as.POSIXct("2025-2-3 5:00")
   r <- "KGGW"
   expect_gt(system.time(.most_representative_nexrad_key(t, r))["elapsed"], .15)
-  expect_true(all(c("list_nexrad_keys_kggw_2025-02-04_historic", "list_nexrad_keys_kggw_2025-02-03_historic",
-                    "list_nexrad_keys_kggw_2025-02-02_historic") %in% getOption("getRad.cache")$keys()))
+  expect_true(all(c(
+    "list_nexrad_keys_kggw_2025-02-04_historic", "list_nexrad_keys_kggw_2025-02-03_historic",
+    "list_nexrad_keys_kggw_2025-02-02_historic"
+  ) %in% getOption("getRad.cache")$keys()))
   expect_lt(system.time(.most_representative_nexrad_key(t, r))["elapsed"], .025)
 })

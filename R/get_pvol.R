@@ -28,8 +28,7 @@
 #' @return Either a polar volume or a list of polar volumes. See
 #'   [bioRad::summary.pvol()] for details.
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' # Get PVOL data for a single radar and datetime
 #' get_pvol("deess", as.POSIXct(Sys.Date()))
 #'
@@ -38,7 +37,6 @@
 #'   c("deess", "dehnr", "fianj", "czska", "KABR"),
 #'   as.POSIXct(Sys.Date())
 #' )
-#' }
 get_pvol <- function(radar = NULL, datetime = NULL, ...) {
   check_odim_nexrad(radar)
   if (anyDuplicated(radar)) {

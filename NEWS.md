@@ -1,5 +1,7 @@
 # getRad (development version)
 
+# getRad 0.2.0
+
 * New function `get_weather_radars()` retrieves metadata for OPERA weather radars (#15, #54).
 * New function `get_vpts()` downloads vertical profile time series from the [Aloft bucket](https://aloftdata.eu/browse/) and [RMI](https://opendata.meteo.be/geonetwork/srv/eng/catalog.search#/metadata/RMI_DATASET_CROW) (#10, #53).
 * New function `get_vpts_coverage()` fetches an overview table of the files available on the [Aloft bucket](https://aloftdata.eu/browse/) (#10) and RMI.

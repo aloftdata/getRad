@@ -11,7 +11,7 @@ detected based on the provided radar."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">getRad</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,7 +38,7 @@ detected based on the provided radar."></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Get polar volume (PVOL) data from supported sources</h1>
-      <small class="dont-index">Source: <a href="https://github.com/aloftdata/getRad/blob/main/R/get_pvol.R" class="external-link"><code>R/get_pvol.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/aloftdata/getRad/blob/v0.2.0/R/get_pvol.R" class="external-link"><code>R/get_pvol.R</code></a></small>
       <div class="d-none name"><code>get_pvol.Rd</code></div>
     </div>
 
@@ -94,7 +94,7 @@ be identified using the <code>stntype</code> column in <code>get_weather_radars(
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># interactive()</span></span></span>
 <span class="r-in"><span><span class="co"># Get PVOL data for a single radar and datetime</span></span></span>
 <span class="r-in"><span><span class="fu">get_pvol</span><span class="op">(</span><span class="st">"deess"</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -103,7 +103,7 @@ be identified using the <code>stntype</code> column in <code>get_weather_radars(
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"deess"</span>, <span class="st">"dehnr"</span>, <span class="st">"fianj"</span>, <span class="st">"czska"</span>, <span class="st">"KABR"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

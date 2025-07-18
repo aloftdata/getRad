@@ -23,7 +23,7 @@ require(leaflet)
 require(rnaturalearth)
 included_countries <- dplyr::tribble(
   ~code, ~description, ~time, ~supported, ~license, ~links,
-  "se", "Data is publicly available", "Data is only available for 24 hours","Readable","CC BY 4.0 SE<sup><a href='https://www.smhi.se/data/om-smhis-data/villkor-for-anvandning'>1</a></sup>",c("API documentation"="https://opendata.smhi.se/radar/api"),
+  "se", "Data is publicly available", "Data is only available for 24 hours","Readable","CC BY 4.0 SE<sup><a href='https://www.smhi.se/data/om-smhis-data/villkor-for-anvandning'>1</a></sup>",c("API documentation"="https://opendata.smhi.se/radar/api","Documentation of radar products"="https://www.smhi.se/data/sok-oppna-data-i-utforskaren/meteorologiska-observationer-radar-sverigekomposit-och-enskilda-volymer"),
   "us", "Data is available in an aws S3 bucket", NA, "Readable", "NOAA data disseminated through NODD are open to the public and can be used as desired<sup> <a href='https://registry.opendata.aws/noaa-nexrad/'>1</a>", c("Bucket" = "https://noaa-nexrad-level2.s3.amazonaws.com/index.html", "More info" = "https://www.ncei.noaa.gov/products/radar/next-generation-weather-radar"),
   "be", "Data is suggested to be opened into the future, it is however not yet accessible.", NA, "Information", NA, c("More info" = "https://opendata.meteo.be/geonetwork/srv/eng/catalog.search#/metadata/RMI_DATASET_JABBEKE_VOLUME"),
   "pl", "Volume data should be open according to a presentation by <a href='https://poster.easyabstract.it/ERAD2024/abstract/15550/161/884'>Groenemeijer et al</a> at erad2024. However no link is known by the authors of the package up to now.", NA, "Information", NA, list(),

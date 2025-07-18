@@ -59,38 +59,39 @@ get_pvol_de <- function(radar, time, ...,
       }
     )
   )
-
-  files_to_get$resp <- files_to_get$req |>
-    httr2::req_perform_parallel(
-      paths = replicate(
-        length(files_to_get$req),
-        tempfile(fileext = ".h5")
+  pvol <- withr::with_tempdir({
+    files_to_get$resp <- files_to_get$req |>
+      httr2::req_perform_parallel(
+        paths = replicate(
+          length(files_to_get$req),
+          tempfile(fileext = ".h5", tmpdir = getwd())
+        )
       )
+    files_to_get <- files_to_get |>
+      dplyr::mutate(
+        tempfile = purrr::map_chr(resp, ~ .x$body)
+      ) |>
+      dplyr::mutate(
+        scan = purrr::map(tempfile, ~ read_scan(.x)),
+        remove = purrr::map(tempfile, ~ file.remove(.x))
+      ) |>
+      tidyr::separate_wider_delim(sweep,
+        delim = "_", cols_remove = FALSE,
+        names = c("vol", "name", "param", "iter")
+      ) |>
+      dplyr::group_by(iter) |>
+      dplyr::summarize(
+        scan = list(scan),
+        param = list(param), radar = unique(radar)
+      ) |>
+      dplyr::mutate(
+        scan = purrr::map2(scan, param, ~ list_to_scan(.x, .y))
+      )
+    list_to_pvol(files_to_get$scan,
+      time = time, radar = radar,
+      source = glue::glue("NOD:{radar},CMT:constructed from opendata.dwd.de")
     )
-  files_to_get <- files_to_get |>
-    dplyr::mutate(
-      tempfile = purrr::map_chr(resp, ~ .x$body)
-    ) |>
-    dplyr::mutate(
-      scan = purrr::map(tempfile, ~ read_scan(.x)),
-      remove = purrr::map(tempfile, ~ file.remove(.x))
-    ) |>
-    tidyr::separate_wider_delim(sweep,
-      delim = "_", cols_remove = FALSE,
-      names = c("vol", "name", "param", "iter")
-    ) |>
-    dplyr::group_by(iter) |>
-    dplyr::summarize(
-      scan = list(scan),
-      param = list(param), radar = unique(radar)
-    ) |>
-    dplyr::mutate(
-      scan = purrr::map2(scan, param, ~ list_to_scan(.x, .y))
-    )
-  pvol <- list_to_pvol(files_to_get$scan,
-    time = time, radar = radar,
-    source = glue::glue("NOD:{radar},CMT:constructed from opendata.dwd.de")
-  )
+  })
   return(pvol)
 }
 

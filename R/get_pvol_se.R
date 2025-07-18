@@ -32,8 +32,10 @@ get_pvol_se <- function(radar, time, ..., call = rlang::caller_env()) {
   )
   req <- withCallingHandlers(
     httr2::request(
-      getOption("getRad.se_base_url",
-                "https://opendata-download-radar.smhi.se/api/version/latest")
+      getOption(
+        "getRad.se_base_url",
+        "https://opendata-download-radar.smhi.se/api/version/latest"
+      )
     ) |>
       req_user_agent_getrad() |>
       httr2::req_url_path_append(url) |>

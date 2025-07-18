@@ -1,8 +1,16 @@
 get_pvol_se_radar_mapping <- c(
-  "seang" = "angelholm", "seatv" = "atvidaberg", "sebaa" = "balsta",
-  "sehem" = "hemse", "sehuv" = "hudiksvall", "sekaa" = "karlskrona",
-  "sekrn" = "kiruna", "selek" = "leksand", "sella" = "lulea",
-  "seoer" = "ornskoldsvik", "seosd" = "ostersund", "sevax" = "vara"
+  "seang" = "angelholm",
+  "seatv" = "atvidaberg",
+  "sebaa" = "balsta",
+  "sehem" = "hemse",
+  "sehuv" = "hudiksvall",
+  "sekaa" = "karlskrona",
+  "sekrn" = "kiruna",
+  "selek" = "leksand",
+  "sella" = "lulea",
+  "seoer" = "ornskoldsvik",
+  "seosd" = "ostersund",
+  "sevax" = "vara"
 )
 
 get_pvol_se <- function(radar, time, ..., call = rlang::caller_env()) {

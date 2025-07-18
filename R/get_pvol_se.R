@@ -24,10 +24,16 @@ get_pvol_se <- function(radar, time, ..., call = rlang::caller_env()) {
     )
   }
   radar_name <- get_pvol_se_radar_mapping[radar]
-  url <- glue::glue('/area/{radar_name}/product/qcvol/{lubridate::year(time)}/{lubridate::month(time)}/{lubridate::day(time)}/radar_{radar_name}_qcvol_{strftime(time, "%Y%m%d%H%M", tz="UTC" )}.h5')
+  url <- glue::glue(
+    getOption(
+      "getRad.se_url_path_format",
+      '/area/{radar_name}/product/qcvol/{lubridate::year(time)}/{lubridate::month(time)}/{lubridate::day(time)}/radar_{radar_name}_qcvol_{strftime(time, "%Y%m%d%H%M", tz="UTC" )}.h5'
+    )
+  )
   req <- withCallingHandlers(
     httr2::request(
-      "https://opendata-download-radar.smhi.se/api/version/latest"
+      getOption("getRad.se_base_url",
+                "https://opendata-download-radar.smhi.se/api/version/latest")
     ) |>
       req_user_agent_getrad() |>
       httr2::req_url_path_append(url) |>
@@ -39,7 +45,7 @@ get_pvol_se <- function(radar, time, ..., call = rlang::caller_env()) {
           i = "Volume data in Sweden is only available for 24 hours",
           i = "If the requested time is within the last 24 hours the error might relate to a server outage or package problem"
         ),
-        parent = cnd, call = call, url=url, class = "getRad_error_get_pvol_se_data_not_found"
+        parent = cnd, call = call, url = url, class = "getRad_error_get_pvol_se_data_not_found"
       )
     }
   )

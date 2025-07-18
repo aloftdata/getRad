@@ -132,6 +132,7 @@ select_get_pvol_function <- function(radar, ..., call = rlang::caller_env()) {
     cntry_code == "de" ~ "get_pvol_de",
     cntry_code == "ee" ~ "get_pvol_ee",
     cntry_code == "cz" ~ "get_pvol_cz",
+    cntry_code == "se" ~ "get_pvol_se",
     .default = NA
   ))
   if (rlang::is_na(fun)) {

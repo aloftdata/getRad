@@ -22,9 +22,7 @@ get_pvol_se <- function(radar, time, ..., call = rlang::caller_env()) {
       "https://opendata-download-radar.smhi.se/api/version/latest"
     ) |>
       req_user_agent_getrad() |>
-      httr2::req_url_path_append(
-        glue::glue(url)
-      ) |>
+      httr2::req_url_path_append(url) |>
       httr2::req_perform(path = tempfile(fileext = ".h5"), error_call = call),
     httr2_http_404 = function(cnd) {
       cli::cli_abort(

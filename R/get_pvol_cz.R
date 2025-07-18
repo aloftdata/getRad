@@ -44,27 +44,28 @@ get_pvol_cz <- function(radar, time, ..., call = rlang::caller_env()) {
     })
   )
 
-
-  files_to_get$resp <- files_to_get$req |>
-    httr2::req_perform_parallel(
-      paths = replicate(
-        length(files_to_get$req),
-        tempfile(fileext = ".h5")
+  polar_volumes_tibble <- withr::with_tempdir({
+    files_to_get$resp <- files_to_get$req |>
+      httr2::req_perform_parallel(
+        paths = replicate(
+          length(files_to_get$req),
+          tempfile(fileext = ".h5", tmpdir = getwd())
+        )
       )
-    )
-  polar_volumes_tibble <- files_to_get |>
-    dplyr::mutate(
-      tempfile = purrr::map_chr(resp, purrr::chuck, "body"),
-      # add h5 how group as it seems to be missing
-      mut = purrr::map(tempfile, ~ {
-        hdf_connection <- rhdf5::H5Fopen(.x)
-        group <- rhdf5::H5Gcreate(hdf_connection, "how")
-        rhdf5::H5Fclose(hdf_connection)
-        rhdf5::H5Gclose(group)
-      }),
-      pvol = purrr::map(tempfile, ~ bioRad::read_pvolfile(.x)),
-      remove = purrr::map(tempfile, ~ file.remove(.x))
-    )
+    files_to_get |>
+      dplyr::mutate(
+        tempfile = purrr::map_chr(resp, purrr::chuck, "body"),
+        # add h5 how group as it seems to be missing
+        mut = purrr::map(tempfile, ~ {
+          hdf_connection <- rhdf5::H5Fopen(.x)
+          group <- rhdf5::H5Gcreate(hdf_connection, "how")
+          rhdf5::H5Fclose(hdf_connection)
+          rhdf5::H5Gclose(group)
+        }),
+        pvol = purrr::map(tempfile, ~ bioRad::read_pvolfile(.x)),
+        remove = purrr::map(tempfile, ~ file.remove(.x))
+      )
+  })
   # Check if all parameter have same attributes
   list_of_attribute_tables <- purrr::map(
     purrr::chuck(polar_volumes_tibble, "pvol"),

@@ -8,7 +8,8 @@ message: 'To cite package "getRad" in publications use:'
 type: software
 license: MIT
 title: 'getRad: Download Radar Data for Biological Research'
-version: 0.2.0
+version: 0.2.0.9000
+doi: 10.32614/CRAN.package.getRad
 abstract: Load polar volume and vertical profile data for aeroecological research
   directly into R. With 'getRad' you can access data from several sources in Europe
   and the US and standardize it to facilitate further exploration in tools such as
@@ -29,6 +30,7 @@ authors:
   email: peter.desmet@inbo.be
   orcid: https://orcid.org/0000-0002-8442-8025
   affiliation: Research Institute for Nature and Forest (INBO)
+repository: https://CRAN.R-project.org/package=getRad
 repository-code: https://github.com/aloftdata/getRad
 url: https://aloftdata.github.io/getRad/
 contact:
@@ -268,6 +270,31 @@ references:
   year: '2025'
   doi: 10.32614/CRAN.package.vroom
 - type: software
+  title: withr
+  abstract: 'withr: Run Code ''With'' Temporarily Modified Global State'
+  notes: Imports
+  url: https://withr.r-lib.org
+  repository: https://CRAN.R-project.org/package=withr
+  authors:
+  - family-names: Hester
+    given-names: Jim
+  - family-names: Henry
+    given-names: Lionel
+    email: lionel@posit.co
+  - family-names: Müller
+    given-names: Kirill
+    email: krlmlr+r@mailbox.org
+  - family-names: Ushey
+    given-names: Kevin
+    email: kevinushey@gmail.com
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+  - family-names: Chang
+    given-names: Winston
+  year: '2025'
+  doi: 10.32614/CRAN.package.withr
+- type: software
   title: xml2
   abstract: 'xml2: Parse XML'
   notes: Imports
@@ -483,29 +510,4 @@ references:
     orcid: https://orcid.org/0000-0001-6573-066X
   year: '2025'
   doi: 10.32614/CRAN.package.vol2birdR
-- type: software
-  title: withr
-  abstract: 'withr: Run Code ''With'' Temporarily Modified Global State'
-  notes: Suggests
-  url: https://withr.r-lib.org
-  repository: https://CRAN.R-project.org/package=withr
-  authors:
-  - family-names: Hester
-    given-names: Jim
-  - family-names: Henry
-    given-names: Lionel
-    email: lionel@posit.co
-  - family-names: Müller
-    given-names: Kirill
-    email: krlmlr+r@mailbox.org
-  - family-names: Ushey
-    given-names: Kevin
-    email: kevinushey@gmail.com
-  - family-names: Wickham
-    given-names: Hadley
-    email: hadley@posit.co
-  - family-names: Chang
-    given-names: Winston
-  year: '2025'
-  doi: 10.32614/CRAN.package.withr
 

@@ -1,5 +1,7 @@
 # getRad (development version)
 
+* Use `withr` to prevent files being left in temporary directories (#98)
+
 # getRad 0.2.0
 
 * New function `get_weather_radars()` retrieves metadata for OPERA weather radars (#15, #54).

@@ -26,14 +26,14 @@ get_pvol_se <- function(radar, time, ..., call = rlang::caller_env()) {
   radar_name <- get_pvol_se_radar_mapping[radar]
   url <- glue::glue(
     getOption(
-      "getRad.se_url_path_format",
+      "getRad.se_path_format",
       '/area/{radar_name}/product/qcvol/{lubridate::year(time)}/{lubridate::month(time)}/{lubridate::day(time)}/radar_{radar_name}_qcvol_{strftime(time, "%Y%m%d%H%M", tz="UTC" )}.h5'
     )
   )
   req <- withCallingHandlers(
     httr2::request(
       getOption(
-        "getRad.se_base_url",
+        "getRad.se_url",
         "https://opendata-download-radar.smhi.se/api/version/latest"
       )
     ) |>

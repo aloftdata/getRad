@@ -135,6 +135,7 @@ test_that("Mixed radar vector (single timestamp)", {
 
 test_that("Mixed radar vector + 9 minute interval", {
   skip_if_offline()
+  time_utc <- lubridate::floor_date(Sys.time() - lubridate::hours(12), "5 mins")
   dt_int <- lubridate::interval(time_utc, time_utc + lubridate::minutes(9))
   suppressMessages(pvols <- getRad::get_pvol(c("KABR", "czska"), dt_int))
   expect_true(is.list(pvols))

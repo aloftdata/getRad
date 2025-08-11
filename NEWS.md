@@ -1,6 +1,6 @@
 # getRad (development version)
 
-* Support downloading Swedish data (#96)
+* Support downloading Swedish data (#96).
 
 # getRad 0.2.0
 

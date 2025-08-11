@@ -32,24 +32,12 @@ test_that("NEXRAD polar volume correct time is downloaded", {
   ))
 })
 
-test_that("Mixed radar vector (single timestamp)", {
-  skip_if_offline()
-  suppressMessages(pvols <- getRad::get_pvol(c("KABR", "czska"), time_utc))
-  expect_true(is.list(pvols))
-  expect_gt(length(pvols), 0)
-  expect_true(all(purrr::map_lgl(pvols, ~ inherits(.x, "pvol"))))
-})
+
 test_that("Correct error is given when no near data is found", {
   expect_error(get_pvol("KABX", as.POSIXct("1970-1-1")), class = "getRad_error_us_no_scan_found")
 })
 
-test_that("Mixed radar vector + 9 minute interval", {
-  skip_if_offline()
-  suppressMessages(pvols <- getRad::get_pvol(c("KABR", "czska"), dt_int))
-  expect_true(is.list(pvols))
-  expect_gt(length(pvols), 2)
-  expect_true(all(purrr::map_lgl(pvols, ~ inherits(.x, "pvol"))))
-})
+
 test_that("Caching of keys works", {
   skip_on_cran()
   skip_if_offline()

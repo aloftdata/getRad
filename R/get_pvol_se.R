@@ -30,7 +30,7 @@ get_pvol_se <- function(radar, time, ..., call = rlang::caller_env()) {
       '/area/{radar_name}/product/qcvol/{lubridate::year(time)}/{lubridate::month(time)}/{lubridate::day(time)}/radar_{radar_name}_qcvol_{strftime(time, "%Y%m%d%H%M", tz="UTC" )}.h5'
     )
   )
-  withr::with_tempfile("file", {
+  pvol<-withr::with_tempfile("file", {
     req <- withCallingHandlers(
       httr2::request(
         getOption(
@@ -51,7 +51,6 @@ get_pvol_se <- function(radar, time, ..., call = rlang::caller_env()) {
             {
               return(FALSE)
             }
-            if(resp)
             r <- inherits(try(
               {
                 f <- rhdf5::H5Fopen(resp$body)
@@ -74,8 +73,7 @@ get_pvol_se <- function(radar, time, ..., call = rlang::caller_env()) {
         )
       }
     )
-    pvol <- bioRad::read_pvolfile(req$body, ...)
-    file.remove(req$body)
+    bioRad::read_pvolfile(req$body, ...)
   })
   pvol
 }

@@ -301,7 +301,7 @@ test_that("get_vpts() can fetch vpts data for a date range", {
   )
 
   # Check that all days of the interval are included
-  expect_contains(
+  expect_setequal(
     as.Date(radar_interval_long$datetime),
     seq(from = as.Date("2023-01-01"), to = as.Date("2023-01-05"), by = "day")
   )

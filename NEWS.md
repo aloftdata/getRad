@@ -1,6 +1,7 @@
 # getRad (development version)
 
 * A bug (#101) in `get_vpts()` was fixed that caused the function to only return the first day of an interval, regardless of the length of the interval. (#105)
+* Support downloading Swedish data (#96).
 * How attribute is now present in Czech data (#102).
 
 # getRad 0.2.0

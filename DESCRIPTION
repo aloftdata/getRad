@@ -45,6 +45,7 @@ Imports:
     tools,
     utils,
     vroom,
+    withr,
     xml2
 Suggests:
     askpass,
@@ -58,8 +59,7 @@ Suggests:
     sf,
     testthat (>= 3.0.0),
     tidyr,
-    vol2birdR,
-    withr
+    vol2birdR
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3

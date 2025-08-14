@@ -284,8 +284,8 @@ test_that("get_vpts() can fetch vpts data for a date range", {
   )
 
   # Check that the requested dates are present in the output
-  expect_in(
     unique(as.Date((radar_interval$datetime))),
+  expect_contains(
     c(as.Date("2023-01-01"), as.Date("2023-01-02"))
   )
 })

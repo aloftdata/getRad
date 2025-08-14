@@ -39,6 +39,19 @@ get_pvol_se <- function(radar, time, ..., call = rlang::caller_env()) {
     ) |>
       req_user_agent_getrad() |>
       httr2::req_url_path_append(url) |>
+      httr2::req_retry(
+        max_tries = 5,
+        # this should catch curl streaming errors
+        retry_on_failure = T,
+        # this should catch not downloading a valid h5 file
+        is_transient = function(resp) {
+          r <- inherits(try({
+            f <- rhdf5::H5Fopen(resp$body)
+            rhdf5::H5Fclose(f)
+          }, silent = T), "try-error")
+          r
+        }
+      ) |>
       httr2::req_perform(path = tempfile(fileext = ".h5"), error_call = call),
     httr2_http_404 = function(cnd) {
       cli::cli_abort(

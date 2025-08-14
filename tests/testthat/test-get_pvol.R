@@ -126,19 +126,25 @@ test_that("multiple timestamps and radars work", {
 
 test_that("Mixed radar vector (single timestamp)", {
   skip_if_offline()
-  time_utc <- lubridate::floor_date(Sys.time() - lubridate::hours(12), "5 mins")
-  suppressMessages(pvols <- getRad::get_pvol(c("KABR", "czska"), time_utc))
+  time_utc <- lubridate::as_datetime("2021-01-20 05:01:00")
+  suppressMessages(pvols <- getRad::get_pvol(c("KABR", "finur"), time_utc))
   expect_true(is.list(pvols))
-  expect_gt(length(pvols), 0)
+  expect_length(pvols, 2)
   expect_true(all(purrr::map_lgl(pvols, ~ inherits(.x, "pvol"))))
+  expect_equal(purrr::map_chr(pvols ,~.x$radar), c("KABR","finur"), ignore_attr=TRUE)
+  expect_identical(pvols[[1]]$datetime, lubridate::as_datetime("2021-01-20 04:57:36 UTC"))
+  expect_identical(pvols[[2]]$datetime, lubridate::floor_date(time_utc,"5 mins"))
+
 })
 
 test_that("Mixed radar vector + 9 minute interval", {
   skip_if_offline()
-  time_utc <- lubridate::floor_date(Sys.time() - lubridate::hours(12), "5 mins")
+  time_utc <- lubridate::as_datetime("2025-01-20 03:55:50")
   dt_int <- lubridate::interval(time_utc, time_utc + lubridate::minutes(9))
-  suppressMessages(pvols <- getRad::get_pvol(c("KABR", "czska"), dt_int))
+  suppressMessages(pvols <- getRad::get_pvol(c("KABR", "fikan"), dt_int))
   expect_type(pvols, "list")
-  expect_gt(length(pvols), 2)
-    purrr::walk(pvols, ~expect_s3_class(.x, "pvol"))
+  expect_length(pvols, 3)
+  purrr::walk(pvols, ~expect_s3_class(.x, "pvol"))
+  expect_equal(purrr::map_chr(pvols ,~.x$radar), c("KABR","KABR","fikan"), ignore_attr=T)
+  expect_true(all(purrr::map_vec(pvols, ~.x$datetime) %within% dt_int))
 })

@@ -177,7 +177,7 @@ get_vpts <- function(radar,
   ## Round the interval because the helpers always fetch data a day at a time ----
   date_interval_utc <- lubridate::as.interval(
     lubridate::with_tz(lubridate::int_start(date_interval), "UTC"),
-    lubridate::with_tz(lubridate::int_start(date_interval), "UTC")
+    lubridate::with_tz(lubridate::int_end(date_interval), "UTC")
   )
   rounded_interval <- round_interval(date_interval_utc, "day")
 

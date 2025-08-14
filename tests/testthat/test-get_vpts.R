@@ -135,7 +135,7 @@ test_that("get_vpts() can fetch vpts data for multiple radars", {
     "data.frame"
   )
 
-  expect_contains(
+  expect_setequal(
     multiple_radars$radar,
     c("bejab", "bewid")
   )
@@ -307,7 +307,7 @@ test_that("get_vpts() can fetch vpts data for a date range", {
   )
 
   # Check that all expected timesteps are present
-  expect_contains(
+  expect_setequal(
     radar_interval_long$datetime,
     seq(
       from = lubridate::ymd_hms("2023-01-01 00:00:00"),

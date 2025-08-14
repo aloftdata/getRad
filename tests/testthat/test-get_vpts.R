@@ -279,7 +279,7 @@ test_that("get_vpts() can fetch vpts data for a date range", {
     return_type = "tibble"
   )
 
-  # Specific interval that didn't work
+  # Longer interval from bugreport #101
   radar_interval_long <- get_vpts(
     radar = "bejab",
     datetime = lubridate::interval(
@@ -300,9 +300,20 @@ test_that("get_vpts() can fetch vpts data for a date range", {
     c(as.Date("2023-01-01"), as.Date("2023-01-02"))
   )
 
+  # Check that all days of the interval are included
   expect_contains(
     as.Date(radar_interval_long$datetime),
     seq(from = as.Date("2023-01-01"), to = as.Date("2023-01-05"), by = "day")
+  )
+
+  # Check that all expected timesteps are present
+  expect_contains(
+    radar_interval_long$datetime,
+    seq(
+      from = lubridate::ymd_hms("2023-01-01 00:00:00"),
+      to = lubridate::ymd_hms("2023-01-05 14:00:00"),
+      by = max(radar_interval_long$timesteps) # don't check for 0 timestep
+    )
   )
 
   # Check that the daterange was set correctly

@@ -269,7 +269,7 @@ test_that("get_vpts() can fetch data from a specific source only", {
 test_that("get_vpts() can fetch vpts data for a date range", {
   skip_if_offline()
 
-  radar_interval <- get_vpts(
+  radar_interval_short <- get_vpts(
     radar = "bejab",
     lubridate::interval(
       lubridate::ymd("2023-01-01"),
@@ -278,15 +278,31 @@ test_that("get_vpts() can fetch vpts data for a date range", {
     source = "baltrad",
     return_type = "tibble"
   )
+
+  # Specific interval that didn't work
+  radar_interval_long <- get_vpts(
+    radar = "bejab",
+    datetime = lubridate::interval(
+      lubridate::ymd_hms("2023-01-01 00:00:00"),
+      lubridate::ymd_hms("2023-01-05 14:00:00")
+    ),
+    source = "baltrad"
+  )
+
   expect_s3_class(
-    radar_interval,
+    radar_interval_short,
     "data.frame"
   )
 
   # Check that the requested dates are present in the output
-    unique(as.Date((radar_interval$datetime))),
   expect_contains(
+    unique(as.Date((radar_interval_short$datetime))),
     c(as.Date("2023-01-01"), as.Date("2023-01-02"))
+  )
+
+  expect_contains(
+    as.Date(radar_interval_long$datetime),
+    seq(from = as.Date("2023-01-01"),to = as.Date("2023-01-05"), by = "day")
   )
 })
 

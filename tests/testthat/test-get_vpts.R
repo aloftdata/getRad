@@ -302,7 +302,16 @@ test_that("get_vpts() can fetch vpts data for a date range", {
 
   expect_contains(
     as.Date(radar_interval_long$datetime),
-    seq(from = as.Date("2023-01-01"),to = as.Date("2023-01-05"), by = "day")
+    seq(from = as.Date("2023-01-01"), to = as.Date("2023-01-05"), by = "day")
+  )
+
+  # Check that the daterange was set correctly
+  expect_identical(
+    radar_interval_long$daterange,
+    c(
+      lubridate::ymd_hms("2023-01-01 00:00:00"),
+      lubridate::ymd_hms("2023-01-05 14:00:00")
+    )
   )
 })
 

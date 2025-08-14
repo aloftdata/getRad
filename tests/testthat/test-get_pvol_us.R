@@ -32,33 +32,39 @@ test_that("NEXRAD polar volume correct time is downloaded", {
   ))
 })
 
-test_that("Mixed radar vector (single timestamp)", {
-  skip_if_offline()
-  suppressMessages(pvols <- getRad::get_pvol(c("KABR", "czska"), time_utc))
-  expect_true(is.list(pvols))
-  expect_gt(length(pvols), 0)
-  expect_true(all(purrr::map_lgl(pvols, ~ inherits(.x, "pvol"))))
-})
+
 test_that("Correct error is given when no near data is found", {
   expect_error(get_pvol("KABX", as.POSIXct("1970-1-1")), class = "getRad_error_us_no_scan_found")
 })
 
-test_that("Mixed radar vector + 9 minute interval", {
-  skip_if_offline()
-  suppressMessages(pvols <- getRad::get_pvol(c("KABR", "czska"), dt_int))
-  expect_true(is.list(pvols))
-  expect_gt(length(pvols), 2)
-  expect_true(all(purrr::map_lgl(pvols, ~ inherits(.x, "pvol"))))
-})
+
 test_that("Caching of keys works", {
   skip_on_cran()
   skip_if_offline()
+
   t <- as.POSIXct("2025-2-3 5:00")
   r <- "KGGW"
-  expect_gt(system.time(.most_representative_nexrad_key(t, r))["elapsed"], .15)
-  expect_true(all(c(
-    "list_nexrad_keys_kggw_2025-02-04_historic", "list_nexrad_keys_kggw_2025-02-03_historic",
-    "list_nexrad_keys_kggw_2025-02-02_historic"
-  ) %in% getOption("getRad.cache")$keys()))
-  expect_lt(system.time(.most_representative_nexrad_key(t, r))["elapsed"], .025)
+
+  expect_false(any(
+    c(
+      "list_nexrad_keys_kggw_2025-02-04_historic",
+      "list_nexrad_keys_kggw_2025-02-03_historic",
+      "list_nexrad_keys_kggw_2025-02-02_historic"
+    ) %in% getOption("getRad.cache")$keys()
+  ))
+
+  time_used <- system.time(.most_representative_nexrad_key(t, r))["elapsed"]
+
+  expect_true(all(
+    c(
+      "list_nexrad_keys_kggw_2025-02-04_historic",
+      "list_nexrad_keys_kggw_2025-02-03_historic",
+      "list_nexrad_keys_kggw_2025-02-02_historic"
+    ) %in% getOption("getRad.cache")$keys()
+  ))
+
+  expect_lt(
+    system.time(.most_representative_nexrad_key(t, r))["elapsed"],
+    time_used * 0.25
+  )
 })

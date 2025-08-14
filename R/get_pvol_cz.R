@@ -36,56 +36,8 @@ get_pvol_cz <- function(radar, time, ..., call = rlang::caller_env()) {
         time + lubridate::minutes(5)
       )
     ))
-  files_to_get <- files_to_get |> dplyr::mutate(
-    req = purrr::pmap(list(x = base, y = file), function(x, y) {
-      httr2::request(x) |>
-        httr2::req_url_path_append(y) |>
-        req_user_agent_getrad()
-    })
-  )
 
-  polar_volumes_tibble <- withr::with_tempdir({
-    files_to_get$resp <- files_to_get$req |>
-      httr2::req_perform_parallel(
-        paths = replicate(
-          length(files_to_get$req),
-          tempfile(fileext = ".h5", tmpdir = getwd())
-        )
-      )
-    files_to_get |>
-      dplyr::mutate(
-        tempfile = purrr::map_chr(resp, purrr::chuck, "body"),
-        pvol = purrr::map(tempfile, ~ bioRad::read_pvolfile(.x)),
-        remove = purrr::map(tempfile, ~ file.remove(.x))
-      )
-  })
-  # Check if all parameter have same attributes
-  list_of_attribute_tables <- purrr::map(
-    purrr::chuck(polar_volumes_tibble, "pvol"),
-    bioRad::attribute_table
-  )
-  all_params_same_attributes <- all(unlist(lapply(
-    lapply(list_of_attribute_tables[-1], dplyr::select, -"param"), all.equal,
-    dplyr::select(list_of_attribute_tables[[1]], -"param")
-  )))
-  if (!all_params_same_attributes) {
-    cli::cli_abort("Not all polar volumes have the same attributes",
-      class = "getRad_error_differing_attributes_cz", call = call
-    )
-  }
-  pvol <- Reduce(
-    function(x, y) {
-      x$scans <- mapply(
-        function(i, j) {
-          i$params <- c(i$params, j$params)
-          i
-        },
-        x$scans, y$scans,
-        SIMPLIFY = FALSE
-      )
-      x
-    },
-    polar_volumes_tibble$pvol
-  )
+  pvol<-read_pvol_from_url_per_param(paste0(files_to_get$base, files_to_get$file))
+
   pvol
 }

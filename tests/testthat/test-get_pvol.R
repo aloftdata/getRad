@@ -123,3 +123,22 @@ test_that("multiple timestamps and radars work", {
     as.list(rep(multiple_radars, each = 3))
   )
 })
+
+test_that("Mixed radar vector (single timestamp)", {
+  skip_if_offline()
+  time_utc <- lubridate::floor_date(Sys.time() - lubridate::hours(12), "5 mins")
+  suppressMessages(pvols <- getRad::get_pvol(c("KABR", "czska"), time_utc))
+  expect_true(is.list(pvols))
+  expect_gt(length(pvols), 0)
+  expect_true(all(purrr::map_lgl(pvols, ~ inherits(.x, "pvol"))))
+})
+
+test_that("Mixed radar vector + 9 minute interval", {
+  skip_if_offline()
+  time_utc <- lubridate::floor_date(Sys.time() - lubridate::hours(12), "5 mins")
+  dt_int <- lubridate::interval(time_utc, time_utc + lubridate::minutes(9))
+  suppressMessages(pvols <- getRad::get_pvol(c("KABR", "czska"), dt_int))
+  expect_type(pvols, "list")
+  expect_gt(length(pvols), 2)
+    purrr::walk(pvols, ~expect_s3_class(.x, "pvol"))
+})

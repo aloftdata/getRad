@@ -9,21 +9,20 @@ get_pvol_us <- function(radar, datetime, ..., call = rlang::caller_env()) {
   for (key in keys) {
     url <- nexrad_key_to_url(key)
 
-    tmp <- file.path(tempdir(), basename(key))
-
-    tryCatch(
-      httr2::request(url) |>
-        req_user_agent_getrad() |>
-        httr2::req_perform(path = tmp, error_call = call),
-      httr2_http_404 = function(cnd) {
-        cli::cli_abort("NEXRAD file not found at {.url {url}}.",
-          call = call,
-          cnd = cnd, class = "getRad_error_us_file_not_found"
-        )
-      }
-    )
-    pvol[[key]] <- bioRad::read_pvolfile(tmp, ...)
-    unlink(tmp)
+    pvol[[key]] <- withr::with_tempfile("file", pattern = basename(url), {
+      tryCatch(
+        httr2::request(url) |>
+          req_user_agent_getrad() |>
+          httr2::req_perform(path = file, error_call = call),
+        httr2_http_404 = function(cnd) {
+          cli::cli_abort("NEXRAD file not found at {.url {url}}.",
+            call = call,
+            cnd = cnd, class = "getRad_error_us_file_not_found"
+          )
+        }
+      )
+      bioRad::read_pvolfile(file, ...)
+    })
   }
   if (!lubridate::is.interval(datetime)) {
     pvol <- pvol[[1]]

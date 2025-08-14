@@ -1,5 +1,6 @@
 # getRad (development version)
 
+* Support downloading Swedish data (#96).
 * How attribute is now present in Czech data (#102).
 
 # getRad 0.2.0

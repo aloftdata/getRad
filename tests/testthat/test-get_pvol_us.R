@@ -41,16 +41,30 @@ test_that("Correct error is given when no near data is found", {
 test_that("Caching of keys works", {
   skip_on_cran()
   skip_if_offline()
+
   t <- as.POSIXct("2025-2-3 5:00")
   r <- "KGGW"
-  expect_false(any(c(
-    "list_nexrad_keys_kggw_2025-02-04_historic", "list_nexrad_keys_kggw_2025-02-03_historic",
-    "list_nexrad_keys_kggw_2025-02-02_historic"
-  ) %in% getOption("getRad.cache")$keys()))
-  time_used<-system.time(.most_representative_nexrad_key(t, r))["elapsed"]
-  expect_true(all(c(
-    "list_nexrad_keys_kggw_2025-02-04_historic", "list_nexrad_keys_kggw_2025-02-03_historic",
-    "list_nexrad_keys_kggw_2025-02-02_historic"
-  ) %in% getOption("getRad.cache")$keys()))
-  expect_lt(system.time(.most_representative_nexrad_key(t, r))["elapsed"], time_used * 0.25)
+
+  expect_false(any(
+    c(
+      "list_nexrad_keys_kggw_2025-02-04_historic",
+      "list_nexrad_keys_kggw_2025-02-03_historic",
+      "list_nexrad_keys_kggw_2025-02-02_historic"
+    ) %in% getOption("getRad.cache")$keys()
+  ))
+
+  time_used <- system.time(.most_representative_nexrad_key(t, r))["elapsed"]
+
+  expect_true(all(
+    c(
+      "list_nexrad_keys_kggw_2025-02-04_historic",
+      "list_nexrad_keys_kggw_2025-02-03_historic",
+      "list_nexrad_keys_kggw_2025-02-02_historic"
+    ) %in% getOption("getRad.cache")$keys()
+  ))
+
+  expect_lt(
+    system.time(.most_representative_nexrad_key(t, r))["elapsed"],
+    time_used * 0.25
+  )
 })

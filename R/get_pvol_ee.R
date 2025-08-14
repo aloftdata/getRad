@@ -44,13 +44,14 @@ get_pvol_ee <- function(radar, time, ...,
       class = "getRad_error_get_pvol_ee_differing_n_files"
     )
   }
-  req <- httr2::request("https://avaandmed.keskkonnaportaal.ee/_vti_bin/RmApi.svc/active/items/") |>
-    req_user_agent_getrad() |>
-    httr2::req_url_path_append(files$documents[[1]]$id) |>
-    httr2::req_url_path_append("files/0") |>
-    req_retry_getrad() |>
-    httr2::req_perform(path = tempfile(fileext = ".h5"), error_call = call)
-  pvol <- bioRad::read_pvolfile(req$body, ...)
-  file.remove(req$body)
+  pvol <- withr::with_tempfile("file", fileext = ".h5", {
+    req <- httr2::request("https://avaandmed.keskkonnaportaal.ee/_vti_bin/RmApi.svc/active/items/") |>
+      req_user_agent_getrad() |>
+      httr2::req_url_path_append(files$documents[[1]]$id) |>
+      httr2::req_url_path_append("files/0") |>
+      req_retry_getrad() |>
+      httr2::req_perform(path = file, error_call = call)
+    bioRad::read_pvolfile(req$body, ...)
+  })
   return(pvol)
 }

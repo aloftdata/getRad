@@ -150,15 +150,15 @@ select_get_pvol_function <- function(radar, ..., call = rlang::caller_env()) {
 
 #' Match radars to a specific arguments/name
 #'
-#' @param radar The radar to match
+#' @param radar The radar to match.
 #' @param ... A set of radar names with their corresponding mapping.
-#' @param call The caller environment for the error messages
+#' @param call The caller environment for the error messages.
 #'
-#' @returns The resulting radar mapping
+#' @returns (character) The resulting radar mapping.
 #' @noRd
 #'
 #' @examples
-#' radar_recode("nlhrw", 'nldhl'="Den Helder",'nlhrw'="Herwijnen")
+#' radar_recode("nlhrw", 'nldhl'="Den Helder", 'nlhrw'="Herwijnen")
 radar_recode <- function(radar, ..., call = rlang::caller_env()) {
   if (!(rlang::is_scalar_character(radar) && !is.na(radar))) {
     cli::cli_abort(

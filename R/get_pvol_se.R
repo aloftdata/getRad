@@ -17,7 +17,7 @@ get_pvol_se <- function(radar, time, ..., call = rlang::caller_env()) {
   url <- glue::glue(
     getOption(
       "getRad.se_path_format",
-      '/area/{radar_name}/product/qcvol/{lubridate::year(time)}/{lubridate::month(time)}/{lubridate::day(time)}/radar_{radar_name}_qcvol_{strftime(time, "%Y%m%d%H%M", tz="UTC" )}.h5'
+      default = '/area/{radar_name}/product/qcvol/{lubridate::year(time)}/{lubridate::month(time)}/{lubridate::day(time)}/radar_{radar_name}_qcvol_{strftime(time, "%Y%m%d%H%M", tz="UTC" )}.h5'
     )
   )
   pvol <- withr::with_tempfile("file", {
@@ -25,7 +25,7 @@ get_pvol_se <- function(radar, time, ..., call = rlang::caller_env()) {
       httr2::request(
         getOption(
           "getRad.se_url",
-          "https://opendata-download-radar.smhi.se/api/version/latest"
+          default = "https://opendata-download-radar.smhi.se/api/version/latest"
         )
       ) |>
         req_user_agent_getrad() |>

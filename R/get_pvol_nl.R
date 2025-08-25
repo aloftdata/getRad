@@ -1,16 +1,18 @@
 get_pvol_nl <- function(radar, time, ...,
                         call = rlang::caller_env()) {
-  # Convert radar names into urls.
-  url <-
+  #  Convert radar names into the dirname and version used by the KNMI data platform.
+  mapped_radar <-
     radar_recode(
       radar,
-      "nlhrw" = "https://api.dataplatform.knmi.nl/open-data/v1/datasets/radar_volume_full_herwijnen/versions/1.0/files",
-      "nldhl" = "https://api.dataplatform.knmi.nl/open-data/v1/datasets/radar_volume_denhelder/versions/2.0/files",
+      "nlhrw" = "radar_volume_full_herwijnen",
+      "nldhl" = "radar_volume_denhelder",
       call = call
     )
+  version_radar <- radar_recode(radar, "nlhrw" = "1.0", "nldhl" = "2.0", call = call)
   # This request generate the temporary download url where the polar volume file can be retrieved
   resp <- tryCatch(
-    httr2::request(url) |>
+    httr2::request("https://api.dataplatform.knmi.nl/open-data/v1/datasets/") |>
+      httr2::req_url_path_append(mapped_radar, "versions", version_radar, "files") |>
       req_user_agent_getrad() |>
       httr2::req_url_path_append(
         glue::glue(getOption(

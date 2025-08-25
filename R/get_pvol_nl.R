@@ -1,24 +1,23 @@
 get_pvol_nl <- function(radar, time, ...,
                         call = rlang::caller_env()) {
-  url <- dplyr::case_when(
-    radar == "nlhrw" ~ "https://api.dataplatform.knmi.nl/open-data/v1/datasets/radar_volume_full_herwijnen/versions/1.0/files",
-    radar == "nldhl" ~ "https://api.dataplatform.knmi.nl/open-data/v1/datasets/radar_volume_denhelder/versions/2.0/files",
-    .default = NA
-  )
-  if (is.na(url)) {
-    cli::cli_abort(
-      message = "No suitable url exist for the radar {radar}",
-      class = "getRad_error_netherlands_no_url_for_radar", call = call
+  #  Convert radar names into the dirname and version used by the KNMI data platform.
+  mapped_radar <-
+    radar_recode(
+      radar,
+      "nlhrw" = "radar_volume_full_herwijnen",
+      "nldhl" = "radar_volume_denhelder",
+      call = call
     )
-  }
+  version_radar <- radar_recode(radar, "nlhrw" = "1.0", "nldhl" = "2.0", call = call)
   # This request generate the temporary download url where the polar volume file can be retrieved
   resp <- tryCatch(
-    httr2::request(url) |>
+    httr2::request("https://api.dataplatform.knmi.nl/open-data/v1/datasets/") |>
+      httr2::req_url_path_append(mapped_radar, "versions", version_radar, "files") |>
       req_user_agent_getrad() |>
       httr2::req_url_path_append(
         glue::glue(getOption(
           "getRad.nl_file_format",
-          "RAD_{c('nlhrw'='NL62','nldhl'='NL61')[radar]}_VOL_NA_{strftime(time,'%Y%m%d%H%M', tz='UTC')}.h5"
+          "RAD_{radar_recode(radar, 'nlhrw'='NL62','nldhl'='NL61')}_VOL_NA_{strftime(time,'%Y%m%d%H%M', tz='UTC')}.h5"
         ))
       ) |>
       httr2::req_url_path_append("/url") |>

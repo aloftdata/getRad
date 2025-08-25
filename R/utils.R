@@ -1,3 +1,36 @@
+#' Match radars to a specific arguments/name
+#'
+#' @param radar The radar to match.
+#' @param ... A set of radar names with their corresponding mapping.
+#' @param call The caller environment for the error messages.
+#'
+#' @returns (character) The resulting radar mapping.
+#' @noRd
+#'
+#' @examples
+#' radar_recode("nlhrw", "nldhl" = "Den Helder", "nlhrw" = "Herwijnen")
+radar_recode <- function(radar, ..., call = rlang::caller_env()) {
+  if (!(rlang::is_scalar_character(radar) && !is.na(radar))) {
+    cli::cli_abort(
+      "The argument {.arg radar} should be scalar character of length 1 that is not NA.",
+      class = "getRad_error_recode_radar_radar_argument", call = call
+    )
+  }
+  res <- switch(radar,
+                ...,
+                cli::cli_abort(
+                  c(
+                    x = "No mapping exists for the {.val {radar}} radar.",
+                    i = " Either this radar is non-existant (possibly check with {.code get_weather_radars()}). Alternatively no mapping is (yet) implemented for this radar. In the later case consider creating a bug report."
+                  ),
+                  class = "getRad_error_radar_not_found", call = call
+                )
+  )
+  return(res)
+}
+
+
+
 #' Extracts a substring from a string based on a regex pattern
 #'
 #' This function uses regular expressions to extract a substring from a given
@@ -446,31 +479,3 @@ get_element_regex <- function(html, regex) {
     string_extract(regex) |>
     (\(vec) vec[!is.na(vec)])()
 }
-
-#' Create an .onload function to set package options during load
-#'
-#' - getRad.key_prefix is the default prefix used when setting or getting
-#' secrets using keyring.
-#' - getRad.user_agent is the string used as a user agent for the http calls
-#' generated in this package. It incorporates the package version using
-#' `getNamespaceVersion`.
-#' - getRad.max_cache_age_seconds is the default max cache age for the httr2
-#' cache in seconds.
-#' - getRad.max_cache_size_bytes is the default max cache size for the httr2
-#' cache in bytes.
-#' @noRd
-.onLoad <- function(libname, pkgname) { # nolint
-  op <- options()
-  op.getRad <- list(
-    getRad.key_prefix = "getRad_",
-    getRad.user_agent = paste("R package getRad", getNamespaceVersion("getRad")),
-    getRad.aloft_data_url = "https://aloftdata.s3-eu-west-1.amazonaws.com",
-    getRad.nexrad_data_url = "https://noaa-nexrad-level2.s3.amazonaws.com",
-    getRad.cache = cachem::cache_mem(max_size = 128 * 1024^2, max_age = 60^2 * 24)
-  )
-  toset <- !(names(op.getRad) %in% names(op))
-  if (any(toset)) options(op.getRad[toset])
-  rlang::run_on_load()
-  invisible()
-}
-rlang::on_load(rlang::local_use_cli(inline = TRUE))

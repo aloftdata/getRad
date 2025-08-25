@@ -46,7 +46,7 @@ test_that("The Netherlands non existing radar", {
       "nlaaa",
       time <- as.POSIXct("2024-4-4 20:00:00", tz = "Europe/Helsinki")
     ),
-    class = "getRad_error_netherlands_no_url_for_radar"
+    class = "getRad_error_radar_not_found"
   )
 })
 test_that("Pvol for the Netherlands authenication failure", {

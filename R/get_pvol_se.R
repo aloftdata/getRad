@@ -14,14 +14,18 @@ get_pvol_se <- function(radar, time, ..., call = rlang::caller_env()) {
     "seosd" = "ostersund",
     "sevax" = "vara"
   )
-  url <- glue::glue(
+  url_path <- glue::glue(
     getOption(
       "getRad.se_path_format",
-      default = '/area/{radar_name}/product/qcvol/{lubridate::year(time)}/{lubridate::month(time)}/{lubridate::day(time)}/radar_{radar_name}_qcvol_{strftime(time, "%Y%m%d%H%M", tz="UTC" )}.h5'
-    )
+      default = "/area/{radar_name}/product/qcvol/{year}/{month}/{day}/radar_{radar_name}_qcvol_{datetime}.h5"
+    ),
+    year = lubridate::year(time),
+    month = lubridate::month(time),
+    day = lubridate::day(time),
+    datetime = strftime(time, "%Y%m%d%H%M", tz = "UTC")
   )
 
-  pvol<-withr::with_tempfile("file", fileext = ".h5", {
+  pvol <- withr::with_tempfile("file", fileext = ".h5", {
     req <- withCallingHandlers(
       httr2::request(
         getOption(
@@ -30,7 +34,7 @@ get_pvol_se <- function(radar, time, ..., call = rlang::caller_env()) {
         )
       ) |>
         req_user_agent_getrad() |>
-        httr2::req_url_path_append(url) |>
+        httr2::req_url_path_append(url_path) |>
         httr2::req_retry(
           max_tries = 5,
           # this should catch curl streaming errors
@@ -41,14 +45,13 @@ get_pvol_se <- function(radar, time, ..., call = rlang::caller_env()) {
             if (httr2::resp_status(resp) == 404) {
               return(FALSE)
             }
-            r <- inherits(try(
+            inherits(try(
               {
-                f <- rhdf5::H5Fopen(resp$body)
-                rhdf5::H5Fclose(f)
+                file_handle <- rhdf5::H5Fopen(resp$body)
+                rhdf5::H5Fclose(file_handle)
               },
               silent = T
             ), "try-error")
-            r
           }
         ) |>
         httr2::req_perform(path = file, error_call = call),

@@ -14,11 +14,15 @@ get_pvol_se <- function(radar, time, ..., call = rlang::caller_env()) {
     "seosd" = "ostersund",
     "sevax" = "vara"
   )
-  url <- glue::glue(
+  url_path <- glue::glue(
     getOption(
       "getRad.se_path_format",
-      default = '/area/{radar_name}/product/qcvol/{lubridate::year(time)}/{lubridate::month(time)}/{lubridate::day(time)}/radar_{radar_name}_qcvol_{strftime(time, "%Y%m%d%H%M", tz="UTC" )}.h5'
-    )
+      default = '/area/{radar_name}/product/qcvol/{year}/{month}/{day}/radar_{radar_name}_qcvol_{datetime}.h5'
+    ),
+    year = lubridate::year(time),
+    month = lubridate::month(time),
+    day = lubridate::day(time),
+    datetime = strftime(time, "%Y%m%d%H%M", tz="UTC")
   )
   pvol <- withr::with_tempfile("file", {
     req <- withCallingHandlers(
@@ -29,7 +33,27 @@ get_pvol_se <- function(radar, time, ..., call = rlang::caller_env()) {
         )
       ) |>
         req_user_agent_getrad() |>
-        httr2::req_url_path_append(url) |>
+        (\(request){
+        if("getRad.se_path_format" %in% options()){
+          httr2::req_url_path_append(request, getOption("getRad.se_path_format"))
+        } else {
+          httr2::req_url_path_append(request,
+                                     "area",
+                                     radar_name,
+                                     "product",
+                                     "qcvol",
+                                     lubridate::year(time),
+                                     lubridate::month(time),
+                                     lubridate::day(time),
+                                     glue::glue(
+                                       "radar_{radar_name}_qcvol_{datetime}.h5",
+                                       datetime = strftime(time,
+                                                           "%Y%m%d%H%M",
+                                                           tz = "UTC"))
+          )
+          }
+          }
+        )() |>
         httr2::req_retry(
           max_tries = 5,
           # this should catch curl streaming errors

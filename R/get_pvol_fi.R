@@ -13,17 +13,17 @@ get_pvol_fi <- function(radar, time, ..., call = rlang::caller_env()) {
         "{strftime(time,'%Y', tz='UTC')}/{strftime(time,'%m', tz='UTC')}/{strftime(time,'%d', tz='UTC')}/{radar}/{strftime(time,'%Y%m%d%H%M', tz='UTC')}_{radar}_PVOL.h5"
       ))
     )
-
-  req <- req |>
-    httr2::req_perform(path = tempfile(fileext = ".h5"), error_call = call)
-  rlang::check_installed("rhdf5", "To adjust the polar volume files for Finish data.", call = call)
-  hdf_connection <- rhdf5::H5Fopen(req$body)
-  group <- rhdf5::H5Gopen(hdf_connection, "what")
-  rhdf5::h5writeAttribute("PVOL", group, "object")
-  rhdf5::H5Fclose(hdf_connection)
-  rhdf5::H5Gclose(group)
-  pvol <- bioRad::read_pvolfile(req$body, ...)
-  file.remove(req$body)
+  pvol <- withr::with_tempfile("file", fileext = ".h5", {
+    req <- req |>
+      httr2::req_perform(path = file, error_call = call)
+    rlang::check_installed("rhdf5", "To adjust the polar volume files for Finish data.", call = call)
+    hdf_connection <- rhdf5::H5Fopen(req$body)
+    group <- rhdf5::H5Gopen(hdf_connection, "what")
+    rhdf5::h5writeAttribute("PVOL", group, "object")
+    rhdf5::H5Fclose(hdf_connection)
+    rhdf5::H5Gclose(group)
+    bioRad::read_pvolfile(req$body, ...)
+  })
   return(pvol)
 }
 # https://en.ilmatieteenlaitos.fi/radar-data-on-aws-s3

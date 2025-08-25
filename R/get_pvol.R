@@ -147,6 +147,31 @@ select_get_pvol_function <- function(radar, ..., call = rlang::caller_env()) {
 }
 
 
+
+#' Match radars to a specific arguments/name
+#'
+#' @param radar The radar to match
+#' @param ... A set of radar names with their corresponding mapping.
+#' @param call The caller environment for the error messages
+#'
+#' @returns The resulting radar mapping
+#'
+#' @examples
+#' radar_recode("nlhrw", 'nldhl'="Den Helder",'nlhrw'="Herwijnen")
+radar_recode<-function(radar, ..., call=rlang::caller_env()){
+  if(!(rlang::is_scalar_character(radar) && !is.na(radar))){
+    cli::cli_abort(
+      "The argument {.arg radar} should be scalar character of length 1 that is not NA.",
+      class="getRad_error_recode_radar_radar_argument", call=call)
+  }
+  res<-switch(radar, ...,
+              cli::cli_abort(
+                c(    x="No mapping exists for the {.val {radar}} radar.",
+                      i=" Either this radar is non-existant (possibly check with {.code get_weather_radars()}). Alternatively no mapping is (yet) implemented for this radar. In the later case consider creating a bug report."),
+                class="getRad_error_radar_not_found", call=call))
+  return(res)
+}
+
 #' Read and merge pvol files
 #'
 #' Several countries have pvol files per parameter this helper function reads them.

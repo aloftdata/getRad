@@ -1,29 +1,19 @@
-get_pvol_se_radar_mapping <- c(
-  "seang" = "angelholm",
-  "seatv" = "atvidaberg",
-  "sebaa" = "balsta",
-  "sehem" = "hemse",
-  "sehuv" = "hudiksvall",
-  "sekaa" = "karlskrona",
-  "sekrn" = "kiruna",
-  "selek" = "leksand",
-  "sella" = "lulea",
-  "seoer" = "ornskoldsvik",
-  "seosd" = "ostersund",
-  "sevax" = "vara"
-)
 
 get_pvol_se <- function(radar, time, ..., call = rlang::caller_env()) {
-  if (!radar %in% names(get_pvol_se_radar_mapping)) {
-    cli::cli_abort(
-      c(
-        x = "The radar {.val {radar}} is not found in the mapping for Swedish radars",
-        i = "Most likely this means an invalid odim code has been provided"
-      ),
-      call = call, class = "getRad_error_get_pvol_se_radar_not_found"
-    )
-  }
-  radar_name <- get_pvol_se_radar_mapping[radar]
+  radar_name<-radar_recode(radar,call=call,
+    "seang" = "angelholm",
+    "seatv" = "atvidaberg",
+    "sebaa" = "balsta",
+    "sehem" = "hemse",
+    "sehuv" = "hudiksvall",
+    "sekaa" = "karlskrona",
+    "sekrn" = "kiruna",
+    "selek" = "leksand",
+    "sella" = "lulea",
+    "seoer" = "ornskoldsvik",
+    "seosd" = "ostersund",
+    "sevax" = "vara"
+  )
   url <- glue::glue(
     getOption(
       "getRad.se_path_format",

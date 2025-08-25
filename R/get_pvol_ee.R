@@ -25,10 +25,10 @@ get_pvol_ee <- function(radar, time, ...,
         ),
         list(isEqual = list(
           field = "Radar",
-          value = dplyr::case_match(
+          value = radar_recode(
             radar,
-            "eesur" ~ "S\u00FCrgavere radar (SUR)",
-            "eehar" ~ "Harku radar (HAR)"
+            "eesur" = "S\u00FCrgavere radar (SUR)",
+            "eehar" = "Harku radar (HAR)", call = call
           )
         ))
       ))))

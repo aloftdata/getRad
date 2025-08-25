@@ -200,14 +200,14 @@ read_pvol_from_url_per_param <- function(urls, ..., call = rlang::caller_env()) 
             httr2::req_options(ssl_verifypeer = 0) |> # SK seems to have verification error
             req_user_agent_getrad()
         }),
-        # use rlang::.data to prevent note about no visible binding for global variable
-        resp = httr2::req_perform_parallel(rlang::.data$req,
+        # use .data to prevent note about no visible binding for global variable
+        resp = httr2::req_perform_parallel(.data$req,
           paths = replicate(
-            length(rlang::.data$req),
+            length(.data$req),
             tempfile(fileext = ".h5", tmpdir = getwd())
           )
         ),
-        tempfile = purrr::map_chr(rlang::.data$resp, purrr::chuck, "body"),
+        tempfile = purrr::map_chr(.data$resp, purrr::chuck, "body"),
         pvol = purrr::map(tempfile, bioRad::read_pvolfile, ...),
         remove = purrr::map(tempfile, file.remove)
       )

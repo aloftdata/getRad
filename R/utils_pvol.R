@@ -28,7 +28,7 @@ read_pvol_from_url_per_param <- function(urls, ..., call = rlang::caller_env()) 
                                              tempfile(fileext = ".h5", tmpdir = getwd())
                                            )
         ),
-        tempfile = purrr::map_chr(.data$resp, purrr::chuck, "body"),
+        tempfile = purrr::map_chr(.data$resp, "body"),
         pvol = purrr::map(tempfile, bioRad::read_pvolfile, ...),
         remove = purrr::map(tempfile, file.remove)
       )

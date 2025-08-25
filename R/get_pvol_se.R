@@ -1,6 +1,6 @@
-
 get_pvol_se <- function(radar, time, ..., call = rlang::caller_env()) {
-  radar_name<-radar_recode(radar,call=call,
+  radar_name <- radar_recode(radar,
+    call = call,
     "seang" = "angelholm",
     "seatv" = "atvidaberg",
     "sebaa" = "balsta",
@@ -20,7 +20,7 @@ get_pvol_se <- function(radar, time, ..., call = rlang::caller_env()) {
       '/area/{radar_name}/product/qcvol/{lubridate::year(time)}/{lubridate::month(time)}/{lubridate::day(time)}/radar_{radar_name}_qcvol_{strftime(time, "%Y%m%d%H%M", tz="UTC" )}.h5'
     )
   )
-  pvol<-withr::with_tempfile("file", {
+  pvol <- withr::with_tempfile("file", {
     req <- withCallingHandlers(
       httr2::request(
         getOption(
@@ -37,8 +37,7 @@ get_pvol_se <- function(radar, time, ..., call = rlang::caller_env()) {
           # this should catch not downloading a valid h5 file
           is_transient = function(resp) {
             # for example when a file out of date range is requested
-            if(httr2::resp_status(resp)==404)
-            {
+            if (httr2::resp_status(resp) == 404) {
               return(FALSE)
             }
             r <- inherits(try(

@@ -155,7 +155,7 @@ get_weather_radars_nexrad <- function(use_cache = TRUE, ...,
   #  https://www.ncei.noaa.gov/access/homr/reports
   file_content <- httr2::request("https://www.ncei.noaa.gov/access/homr/file/nexrad-stations.txt") |>
     req_user_agent_getrad() |>
-    req_retry_getrad(transient_statuses = 503L)
+    req_retry_getrad(transient_statuses = 503L) |>
     req_cache_getrad(use_cache = TRUE) |>
     httr2::req_perform(error_call = call) |>
     httr2::resp_body_string()

@@ -1,9 +1,10 @@
 # getRad (development version)
 
-* A bug (#101) in `get_vpts()` was fixed that caused the function to only return the first day of an interval, regardless of the length of the interval. (#105)
-* Support downloading Swedish data (#96).
+* A bug (#101) in `get_vpts()` was fixed that caused the function to only return the first day of an interval, regardless of the length of the interval (#105).
+* Support downloading Swedish polar volume data (#96).
+* Support downloading Romanian polar volume data (#104).
 * How attribute is now present in Czech data (#102).
-* Use `withr` to prevent files being left in temporary directories (#98)
+* Use `withr` to prevent files being left in temporary directories (#98).
 
 # getRad 0.2.0
 

@@ -158,7 +158,7 @@ select_get_pvol_function <- function(radar, ..., call = rlang::caller_env()) {
 #' @noRd
 #'
 #' @examples
-#' radar_recode("nlhrw", 'nldhl'="Den Helder", 'nlhrw'="Herwijnen")
+#' radar_recode("nlhrw", "nldhl" = "Den Helder", "nlhrw" = "Herwijnen")
 radar_recode <- function(radar, ..., call = rlang::caller_env()) {
   if (!(rlang::is_scalar_character(radar) && !is.na(radar))) {
     cli::cli_abort(
@@ -200,13 +200,14 @@ read_pvol_from_url_per_param <- function(urls, ..., call = rlang::caller_env()) 
             httr2::req_options(ssl_verifypeer = 0) |> # SK seems to have verification error
             req_user_agent_getrad()
         }),
-        resp = httr2::req_perform_parallel(req,
-                                           paths = replicate(
-                                             length(req),
-                                             tempfile(fileext = ".h5", tmpdir = getwd())
-                                           )
+        # use rlang::.data to prevent note about no visible binding for global variable
+        resp = httr2::req_perform_parallel(rlang::.data$req,
+          paths = replicate(
+            length(rlang::.data$req),
+            tempfile(fileext = ".h5", tmpdir = getwd())
+          )
         ),
-        tempfile = purrr::map_chr(resp, purrr::chuck, "body"),
+        tempfile = purrr::map_chr(rlang::.data$resp, purrr::chuck, "body"),
         pvol = purrr::map(tempfile, bioRad::read_pvolfile, ...),
         remove = purrr::map(tempfile, file.remove)
       )
@@ -222,7 +223,7 @@ read_pvol_from_url_per_param <- function(urls, ..., call = rlang::caller_env()) 
   )))
   if (!all_params_same_attributes) {
     cli::cli_abort("Not all polar volumes have the same attributes",
-                   class = "getRad_error_differing_attributes", call = call
+      class = "getRad_error_differing_attributes", call = call
     )
   }
   pvol <- Reduce(
@@ -241,5 +242,3 @@ read_pvol_from_url_per_param <- function(urls, ..., call = rlang::caller_env()) 
   )
   pvol
 }
-
-

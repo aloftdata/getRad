@@ -36,8 +36,6 @@ get_pvol_cz <- function(radar, time, ..., call = rlang::caller_env()) {
         time + lubridate::minutes(5)
       )
     ))
-
   pvol<-read_pvol_from_url_per_param(paste0(files_to_get$base, files_to_get$file))
-
   pvol
 }

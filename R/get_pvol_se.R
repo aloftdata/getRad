@@ -20,7 +20,8 @@ get_pvol_se <- function(radar, time, ..., call = rlang::caller_env()) {
       default = '/area/{radar_name}/product/qcvol/{lubridate::year(time)}/{lubridate::month(time)}/{lubridate::day(time)}/radar_{radar_name}_qcvol_{strftime(time, "%Y%m%d%H%M", tz="UTC" )}.h5'
     )
   )
-  pvol <- withr::with_tempfile("file", {
+
+  pvol<-withr::with_tempfile("file", fileext = ".h5", {
     req <- withCallingHandlers(
       httr2::request(
         getOption(

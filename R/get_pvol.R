@@ -155,6 +155,7 @@ select_get_pvol_function <- function(radar, ..., call = rlang::caller_env()) {
 #' @param call The caller environment for the error messages
 #'
 #' @returns The resulting radar mapping
+#' @noRd
 #'
 #' @examples
 #' radar_recode("nlhrw", 'nldhl'="Den Helder",'nlhrw'="Herwijnen")

@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   supported_sources: supported_sources.html
   articles/vpts_coverage: vpts_coverage.html
-last_built: 2025-08-25T18:12Z
+last_built: 2025-08-28T21:51Z
 urls:
   reference: https://aloftdata.github.io/getRad/reference
   article: https://aloftdata.github.io/getRad/articles

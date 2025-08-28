@@ -1,5 +1,7 @@
 # getRad (development version)
 
+* Update of NEXRAD url (#118).
+
 # getRad 0.2.1
 
 * A bug (#101) in `get_vpts()` was fixed that caused the function to only return the first day of an interval, regardless of the length of the interval (#105).

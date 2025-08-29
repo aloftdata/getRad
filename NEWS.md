@@ -1,6 +1,7 @@
 # getRad (development version)
 
 * Update of NEXRAD url (#118).
+* Fix CRAN warning where cache was not cleaned after tests (#122).
 
 # getRad 0.2.1
 

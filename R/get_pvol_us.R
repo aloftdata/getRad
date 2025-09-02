@@ -53,7 +53,7 @@ get_pvol_us <- function(radar, datetime, ..., call = rlang::caller_env()) {
     lubridate::month(d), lubridate::day(d), toupper(radar)
   )
   ns <- c(s3 = "http://s3.amazonaws.com/doc/2006-03-01/")
-  host <- getOption("getRad.nexrad_data_url", default = "https://noaa-nexrad-level2.s3.amazonaws.com")
+  host <- getOption("getRad.nexrad_data_url", default = "https://unidata-nexrad-level2.s3.amazonaws.com")
   keys <- character()
   token <- NULL
   cache <- getOption("getRad.cache")
@@ -126,5 +126,5 @@ get_pvol_us <- function(radar, datetime, ..., call = rlang::caller_env()) {
 }
 
 nexrad_key_to_url <- function(key) {
-  paste0(getOption("getRad.nexrad_data_url", default = "https://noaa-nexrad-level2.s3.amazonaws.com"), "/", key)
+   paste0(getOption("getRad.nexrad_data_url", default = "https://unidata-nexrad-level2.s3.amazonaws.com"), "/", key)
 }

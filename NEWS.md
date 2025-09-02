@@ -1,6 +1,7 @@
 # getRad (development version)
 
 * Add retry attempts to `get_weather_radars` for NEXRAD to prevent failure(#116).
+* Update of NEXRAD url (#118).
 
 # getRad 0.2.1
 

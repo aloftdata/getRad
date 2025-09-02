@@ -1,5 +1,6 @@
 # getRad (development version)
 
+* Support downloading Slovakian polar volume data (#124).
 * Update of NEXRAD url (#118).
 
 # getRad 0.2.1

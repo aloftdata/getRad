@@ -1,4 +1,5 @@
 test_that("Pvol for Danish can be downloaded", {
+  withr::local_options(list("keyring_backend" = "env"))
   skip_if(
     inherits(try(get_secret("dk_api_key"), silent = TRUE), "try-error"),
     message = "Because no key for Denmark is available in the testing environment"

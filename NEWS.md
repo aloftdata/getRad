@@ -2,6 +2,7 @@
 
 * Update of NEXRAD url (#118).
 * Fix CRAN warning where cache was not cleaned after tests (#122).
+* Resolve `withr` error for Danish radars.
 
 # getRad 0.2.1
 

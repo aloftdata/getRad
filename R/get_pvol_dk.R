@@ -1,5 +1,5 @@
 get_pvol_dk <- function(radar, time, ..., call = rlang::caller_env()) {
-  pvol <- withr::with_file("file", fileext = ".h5", {
+ withr::with_file("file.h5", {
     req <- httr2::request(
       getOption(
         "getRad.dk_url",
@@ -14,8 +14,8 @@ get_pvol_dk <- function(radar, time, ..., call = rlang::caller_env()) {
         ))
       ) |>
       httr2::req_url_query(`api-key` = get_secret("dk_api_key")) |>
-      httr2::req_perform(path = file, error_call = call)
-    bioRad::read_pvolfile(req$body, ...)
+      httr2::req_perform(path = "file.h5", error_call = call)
+    pvol<-bioRad::read_pvolfile(req$body, ...)
   })
   return(pvol)
 }

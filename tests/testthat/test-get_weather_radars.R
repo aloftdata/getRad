@@ -248,19 +248,11 @@ test_that("get_weather_radars nexrad downloads", {
   expect_gt(nrow(get_weather_radars("nexrad", return_type = "tibble")), 170)
 })
 
-test_that("get_weather_radars nexrad downloads", {
-  skip_if_offline(host = "ncei.noaa.gov")
-  skip_if_offline(host = "eumetnet.eu")
-
-  expect_identical(get_weather_radars(c("opera", "nexrad")), get_weather_radars("all"))
-})
-
 
 
 test_that("get_weather_radars is the same for both return types (besides geometry)", {
   skip_if_offline(host = "ncei.noaa.gov")
   skip_if_offline(host = "eumetnet.eu")
-
   expect_identical(
     get_weather_radars(c("opera", "nexrad")),
     get_weather_radars("all")

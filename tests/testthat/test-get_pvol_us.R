@@ -34,7 +34,9 @@ test_that("NEXRAD polar volume correct time is downloaded", {
 
 
 test_that("Correct error is given when no near data is found", {
-  expect_error(get_pvol("KABX", as.POSIXct("1970-1-1")), class = "getRad_error_us_no_scan_found")
+  skip_if_offline(host = "unidata-nexrad-level2.s3.amazonaws.com")
+    expect_error(get_pvol("KABX", as.POSIXct("1970-1-1")),
+               class = "getRad_error_us_no_scan_found")
 })
 
 

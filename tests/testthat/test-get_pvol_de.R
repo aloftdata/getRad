@@ -5,3 +5,8 @@ test_that("Pvol for German can be downloaded", {
   expect_true(bioRad::is.pvol(pvol))
   expect_identical(lubridate::floor_date(pvol$datetime, "5 mins"), lubridate::with_tz(time, "UTC"))
 })
+test_that("Correct error for old German data",
+ {
+            skip_if_offline()
+            expect_error(get_pvol("deess",Sys.time()-lubridate::days(4)), class="getRad_error_germany_unexpected_number_of_files")
+})

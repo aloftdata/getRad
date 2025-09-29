@@ -22,7 +22,8 @@
 set_secret <- function(name, secret = NULL) {
   rlang::check_installed("keyring", "to manage secrets in getRad")
   if (!rlang::is_scalar_character(name)) {
-    cli::cli_abort("{.arg name} should be a scalar character",
+    cli::cli_abort(
+      "{.arg name} should be a scalar character",
       class = "getRad_error_set_secret_no_scalar_character"
     )
   }
@@ -34,11 +35,14 @@ set_secret <- function(name, secret = NULL) {
     )
   }
   sname <- paste0(
-    getOption("getRad.key_prefix",
-      default = cli::cli_abort("The option `getRad.key_prefix` is not found",
+    getOption(
+      "getRad.key_prefix",
+      default = cli::cli_abort(
+        "The option `getRad.key_prefix` is not found",
         class = "getRad_error_key_prefix_not_found_setting"
       )
-    ), name
+    ),
+    name
   )
   keyring::key_set_with_value(service = sname, password = secret)
   invisible(TRUE)
@@ -60,16 +64,20 @@ list_secrets <- list(
 get_secret <- function(name) {
   rlang::check_installed("keyring", "to manage secrets in getRad")
   if (!rlang::is_scalar_character(name)) {
-    cli::cli_abort("{.arg name} should be a scalar character",
+    cli::cli_abort(
+      "{.arg name} should be a scalar character",
       class = "getRad_error_get_secret_no_scalar_character"
     )
   }
   sname <- paste0(
-    getOption("getRad.key_prefix",
-      default = cli::cli_abort("The option `getRad.key_prefix` is not found",
+    getOption(
+      "getRad.key_prefix",
+      default = cli::cli_abort(
+        "The option `getRad.key_prefix` is not found",
         class = "getRad_error_key_prefix_not_found_getting"
       )
-    ), name
+    ),
+    name
   )
   if (!(sname %in% keyring::key_list(sname)$service)) {
     cli::cli_abort(

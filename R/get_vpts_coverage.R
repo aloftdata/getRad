@@ -12,8 +12,10 @@
 #' @export
 #' @examplesIf interactive()
 #' get_vpts_coverage()
-get_vpts_coverage <- function(source = c("baltrad", "uva", "ecog-04003", "rmi"),
-                              ...) {
+get_vpts_coverage <- function(
+  source = c("baltrad", "uva", "ecog-04003", "rmi"),
+  ...
+) {
   # argument all returns all possible sources
   if (rlang::is_scalar_character(source) && source == "all") {
     source <- rlang::eval_bare(formals(rlang::caller_fn(0))[["source"]])
@@ -27,7 +29,8 @@ get_vpts_coverage <- function(source = c("baltrad", "uva", "ecog-04003", "rmi"),
   }
 
   if (length(source) == 0) {
-    cli::cli_abort("Source should atleast have one value.",
+    cli::cli_abort(
+      "Source should atleast have one value.",
       class = "getRad_error_length_zero"
     )
   }

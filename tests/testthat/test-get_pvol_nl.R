@@ -1,21 +1,19 @@
 test_that("Pvol for the Netherlands can be downloaded", {
   skip_if_offline()
-  skip_if(Sys.which("KNMI_vol_h5_to_ODIM_h5") == "",
+  skip_if(
+    Sys.which("KNMI_vol_h5_to_ODIM_h5") == "",
     message = "Skip trying to read Dutch pvol data as no converter is present"
   )
   # make sure local env is used by keyring so that api key can be set
   withr::local_options(list("keyring_backend" = "env"))
   # get public key here https://developer.dataplatform.knmi.nl/open-data-api#token
   withr::local_envvar(
-    list("getRad_nl_api_key" = "eyJvcmciOiI1ZTU1NGUxOTI3NGE5NjAwMDEyYTNlYjEiLCJpZCI6ImVlNDFjMWI0MjlkODQ2MThiNWI4ZDViZDAyMTM2YTM3IiwiaCI6Im11cm11cjEyOCJ9")
+    list(
+      "getRad_nl_api_key" = "eyJvcmciOiI1ZTU1NGUxOTI3NGE5NjAwMDEyYTNlYjEiLCJpZCI6ImVlNDFjMWI0MjlkODQ2MThiNWI4ZDViZDAyMTM2YTM3IiwiaCI6Im11cm11cjEyOCJ9"
+    )
   )
-  time <- as.POSIXct("2024-4-4 20:00:00",
-    tz = "Europe/Helsinki"
-  )
-  pvol <- expect_s3_class(get_pvol("nlhrw",
-    time,
-    param = "all"
-  ), "pvol")
+  time <- as.POSIXct("2024-4-4 20:00:00", tz = "Europe/Helsinki")
+  pvol <- expect_s3_class(get_pvol("nlhrw", time, param = "all"), "pvol")
   expect_true(bioRad::is.pvol(pvol))
   expect_identical(
     lubridate::floor_date(pvol$datetime, "1 mins"),
@@ -32,10 +30,13 @@ test_that("failure to find converter", {
     withr::local_options(list("keyring_backend" = "env"))
     # get public key here https://developer.dataplatform.knmi.nl/open-data-api#token
     withr::local_envvar(
-      list("getRad_nl_api_key" = "eyJvcmciOiI1ZTU1NGUxOTI3NGE5NjAwMDEyYTNlYjEiLCJpZCI6ImVlNDFjMWI0MjlkODQ2MThiNWI4ZDViZDAyMTM2YTM3IiwiaCI6Im11cm11cjEyOCJ9")
+      list(
+        "getRad_nl_api_key" = "eyJvcmciOiI1ZTU1NGUxOTI3NGE5NjAwMDEyYTNlYjEiLCJpZCI6ImVlNDFjMWI0MjlkODQ2MThiNWI4ZDViZDAyMTM2YTM3IiwiaCI6Im11cm11cjEyOCJ9"
+      )
     )
     expect_error(
-      get_pvol("nlhrw",
+      get_pvol(
+        "nlhrw",
         time <- as.POSIXct("2024-4-4 20:00:00", tz = "Europe/Helsinki"),
         param = "all"
       ),
@@ -60,7 +61,8 @@ test_that("Pvol for the Netherlands authenication failure", {
   # get public key here https://developer.dataplatform.knmi.nl/open-data-api#token
   withr::local_envvar(list("getRad_nl_api_key" = "wrongkey"))
   expect_error(
-    pvol <- get_pvol("nlhrw",
+    pvol <- get_pvol(
+      "nlhrw",
       time <- as.POSIXct("2024-4-4 20:00:00", tz = "Europe/Helsinki"),
       param = "all"
     ),

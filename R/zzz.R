@@ -1,4 +1,3 @@
-
 #' Create an .onload function to set package options during load
 #'
 #' - getRad.key_prefix is the default prefix used when setting or getting
@@ -11,17 +10,26 @@
 #' - getRad.max_cache_size_bytes is the default max cache size for the httr2
 #' cache in bytes.
 #' @noRd
-.onLoad <- function(libname, pkgname) { # nolint
+.onLoad <- function(libname, pkgname) {
+  # nolint
   op <- options()
   op.getRad <- list(
     getRad.key_prefix = "getRad_",
-    getRad.user_agent = paste("R package getRad", getNamespaceVersion("getRad")),
+    getRad.user_agent = paste(
+      "R package getRad",
+      getNamespaceVersion("getRad")
+    ),
     getRad.aloft_data_url = "https://aloftdata.s3-eu-west-1.amazonaws.com",
     getRad.nexrad_data_url = "https://unidata-nexrad-level2.s3.amazonaws.com",
-    getRad.cache = cachem::cache_mem(max_size = 128 * 1024^2, max_age = 60^2 * 24)
+    getRad.cache = cachem::cache_mem(
+      max_size = 128 * 1024^2,
+      max_age = 60^2 * 24
+    )
   )
   toset <- !(names(op.getRad) %in% names(op))
-  if (any(toset)) options(op.getRad[toset])
+  if (any(toset)) {
+    options(op.getRad[toset])
+  }
   rlang::run_on_load()
   invisible()
 }

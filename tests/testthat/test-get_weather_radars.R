@@ -1,11 +1,14 @@
 test_that("get_weather_radars source `argument`", {
-  expect_error(get_weather_radars(1),
+  expect_error(
+    get_weather_radars(1),
     class = "getRad_error_weather_radar_source_not_character"
   )
-  expect_error(get_weather_radars(character()),
+  expect_error(
+    get_weather_radars(character()),
     class = "getRad_error_weather_radar_source_not_character"
   )
-  expect_error(get_weather_radars(c("asdf", NA)),
+  expect_error(
+    get_weather_radars(c("asdf", NA)),
     class = "getRad_error_weather_radar_source_not_character"
   )
   expect_error(
@@ -221,7 +224,6 @@ test_that("get_weather_radars() doesn't return empty strings, but NA instead", {
     ) |>
     purrr::walk(expect_false)
 
-
   ### All columns
   expect_false(
     any(
@@ -240,14 +242,27 @@ test_that("get_weather_radars nexrad downloads", {
       "nexrad"
     ),
     c(
-      "radar", "ncdcid", "icao", "wban", "name", "country", "st",
-      "county", "elev", "utc", "stntype", "latitude", "longitude",
-      "location", "heightantenna", "source", "geometry"
+      "radar",
+      "ncdcid",
+      "icao",
+      "wban",
+      "name",
+      "country",
+      "st",
+      "county",
+      "elev",
+      "utc",
+      "stntype",
+      "latitude",
+      "longitude",
+      "location",
+      "heightantenna",
+      "source",
+      "geometry"
     )
   )
   expect_gt(nrow(get_weather_radars("nexrad", return_type = "tibble")), 170)
 })
-
 
 
 test_that("get_weather_radars is the same for both return types (besides geometry)", {

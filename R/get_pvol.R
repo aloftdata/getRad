@@ -47,24 +47,26 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
   }
   if (inherits(datetime, "POSIXct") && length(datetime) == 2) {
     if (any(duplicated(datetime))) {
-      cli::cli_abort("When providing two {.cls POSIXct} as a {.arg datetime}
+      cli::cli_abort(
+        "When providing two {.cls POSIXct} as a {.arg datetime}
                      they should differ to represent an inverval.",
         class = "getRad_error_duplicated_timestamps"
       )
     }
     datetime <- lubridate::interval(min(datetime), max(datetime))
   }
-  if (is.null(datetime) ||
-    !inherits(datetime, c("POSIXct", "Interval")) ||
-    !rlang::is_scalar_vector(datetime)
+  if (
+    is.null(datetime) ||
+      !inherits(datetime, c("POSIXct", "Interval")) ||
+      !rlang::is_scalar_vector(datetime)
   ) {
-    cli::cli_abort("The argument {.arg datetime} to the {.fn get_pvol} function
+    cli::cli_abort(
+      "The argument {.arg datetime} to the {.fn get_pvol} function
                    should be a single {.cls POSIXct} or a {.cls interval}.
                    The later can also be specified by two {.cls POSIXct}.",
       class = "getRad_error_time_not_correct"
     )
   }
-
 
   safe_get_pvol <- purrr::possibly(get_pvol, otherwise = NULL, quiet = TRUE)
 
@@ -81,12 +83,12 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
     return(pvols)
   }
 
-
   fn <- select_get_pvol_function(radar)
 
   if (lubridate::is.interval(datetime)) {
     if (lubridate::as.duration(datetime) > lubridate::hours(1)) {
-      cli::cli_warn("The interval specified for {.arg datetime} ({.val {lubridate::int_start(datetime)}}-{.val {lubridate::int_end(datetime)}}) likely results
+      cli::cli_warn(
+        "The interval specified for {.arg datetime} ({.val {lubridate::int_start(datetime)}}-{.val {lubridate::int_end(datetime)}}) likely results
                     in many polar volumes, when loading that may polar
                     volumes at the same time computational issues frequently
                     occur.",
@@ -99,7 +101,8 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
     if (lubridate::is.interval(datetime)) {
       timerange <-
         lubridate::floor_date(
-          seq(lubridate::int_start(datetime),
+          seq(
+            lubridate::int_start(datetime),
             lubridate::int_end(datetime) + lubridate::minutes(5),
             by = "5 mins"
           ),
@@ -109,7 +112,12 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
       polar_volumes <- purrr::map(datetime, safe_get_pvol, radar = radar, ...)
       return(polar_volumes)
     } else {
-      rlang::exec(fn, radar = radar, lubridate::floor_date(datetime, "5 mins"), ...)
+      rlang::exec(
+        fn,
+        radar = radar,
+        lubridate::floor_date(datetime, "5 mins"),
+        ...
+      )
     }
   } else {
     # For now then US data is request the interval if forwarded
@@ -147,5 +155,3 @@ select_get_pvol_function <- function(radar, ..., call = rlang::caller_env()) {
   }
   return(fun)
 }
-
-

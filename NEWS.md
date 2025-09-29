@@ -1,7 +1,9 @@
 # getRad (development version)
 
+# getRad 0.2.2
+
 * Support downloading Slovakian polar volume data (#124).
-* Add retry attempts to `get_weather_radars` for NEXRAD to prevent failure(#116).
+* Add retry attempts to `get_weather_radars` for NEXRAD to prevent failure (#116).
 * Update of NEXRAD url (#118).
 * Fix CRAN warning where cache was not cleaned after tests (#122).
 * Resolve `withr` error for Danish radars.

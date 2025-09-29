@@ -1,6 +1,6 @@
 Package: getRad
 Title: Download Radar Data for Biological Research
-Version: 0.2.1.9000
+Version: 0.2.2.9000
 Authors@R: c(
     person("Bart", "Kranstauber", , "b.kranstauber@uva.nl", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-8303-780X", affiliation = "University of Amsterdam")),

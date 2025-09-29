@@ -5,7 +5,9 @@ get_pvol_cz <- function(radar, time, ..., call = rlang::caller_env()) {
   # All parameters are retrieved from separate files
   # Here all urls are generated
   params <- c("z", "u", "v", "w", "zdr", "rhohv", "phidp")
-  urls <- glue::glue("http://opendata.chmi.cz/meteorology/weather/radar/sites/{substr(radar,3,5)}/vol_{params}/hdf5/")
+  urls <- glue::glue(
+    "http://opendata.chmi.cz/meteorology/weather/radar/sites/{substr(radar,3,5)}/vol_{params}/hdf5/"
+  )
   rlang::check_installed(
     c("lubridate", "tidyr", "xml2", "rhdf5"),
     "to read Czech radar data",
@@ -36,6 +38,9 @@ get_pvol_cz <- function(radar, time, ..., call = rlang::caller_env()) {
         time + lubridate::minutes(5)
       )
     ))
-  pvol<-read_pvol_from_url_per_param(paste0(files_to_get$base, files_to_get$file))
+  pvol <- read_pvol_from_url_per_param(paste0(
+    files_to_get$base,
+    files_to_get$file
+  ))
   pvol
 }

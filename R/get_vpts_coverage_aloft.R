@@ -12,8 +12,11 @@
 #' @noRd
 #' @examplesIf interactive()
 #' get_vpts_coverage_aloft()
-get_vpts_coverage_aloft <- function(use_cache = TRUE, ...,
-                                    call = rlang::caller_env()) {
+get_vpts_coverage_aloft <- function(
+  use_cache = TRUE,
+  ...,
+  call = rlang::caller_env()
+) {
   # Discover what data is available for the requested radar and time interval
   aloft_data_url <- getOption("getRad.aloft_data_url")
   coverage_raw <-

@@ -1,5 +1,6 @@
 get_pvol_se <- function(radar, time, ..., call = rlang::caller_env()) {
-  radar_name <- radar_recode(radar,
+  radar_name <- radar_recode(
+    radar,
     call = call,
     "seang" = "angelholm",
     "seatv" = "atvidaberg",
@@ -45,13 +46,16 @@ get_pvol_se <- function(radar, time, ..., call = rlang::caller_env()) {
             if (httr2::resp_status(resp) == 404) {
               return(FALSE)
             }
-            inherits(try(
-              {
-                file_handle <- rhdf5::H5Fopen(resp$body)
-                rhdf5::H5Fclose(file_handle)
-              },
-              silent = T
-            ), "try-error")
+            inherits(
+              try(
+                {
+                  file_handle <- rhdf5::H5Fopen(resp$body)
+                  rhdf5::H5Fclose(file_handle)
+                },
+                silent = T
+              ),
+              "try-error"
+            )
           }
         ) |>
         httr2::req_perform(path = file, error_call = call),
@@ -62,7 +66,10 @@ get_pvol_se <- function(radar, time, ..., call = rlang::caller_env()) {
             i = "Volume data in Sweden is only available for 24 hours",
             i = "If the requested time is within the last 24 hours the error might relate to a server outage or package problem"
           ),
-          parent = cnd, call = call, url = url, class = "getRad_error_get_pvol_se_data_not_found"
+          parent = cnd,
+          call = call,
+          url = url,
+          class = "getRad_error_get_pvol_se_data_not_found"
         )
       }
     )

@@ -1,7 +1,13 @@
 test_that("Source argument as expected", {
-  expect_error(get_vpts_coverage(source = NULL), "must be a character vector, not `NULL`.")
+  expect_error(
+    get_vpts_coverage(source = NULL),
+    "must be a character vector, not `NULL`."
+  )
   expect_error(get_vpts_coverage(source = "asdf"), ' not "asdf"')
-  expect_error(get_vpts_coverage(source = character()), class = "getRad_error_length_zero")
+  expect_error(
+    get_vpts_coverage(source = character()),
+    class = "getRad_error_length_zero"
+  )
 })
 
 test_that("format as expect for aloft", {
@@ -46,7 +52,9 @@ test_that("The argument source='all' returns all data", {
     get_vpts_coverage(source = "all") |>
       dplyr::pull(source) |>
       table(),
-    get_vpts_coverage(source = eval(rlang::fn_fmls(get_vpts_coverage)$source)) |>
+    get_vpts_coverage(
+      source = eval(rlang::fn_fmls(get_vpts_coverage)$source)
+    ) |>
       dplyr::pull(source) |>
       table()
   )

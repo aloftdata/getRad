@@ -1,5 +1,3 @@
-
-
 #' Read and merge pvol files
 #'
 #' Several countries have pvol files per parameter this helper function reads them.
@@ -12,7 +10,11 @@
 #' @returns a pvol
 #' @noRd
 #'
-read_pvol_from_url_per_param <- function(urls, ..., call = rlang::caller_env()) {
+read_pvol_from_url_per_param <- function(
+  urls,
+  ...,
+  call = rlang::caller_env()
+) {
   withr::with_tempdir({
     polar_volumes_tibble <- data.frame(url = urls) |>
       dplyr::mutate(
@@ -22,11 +24,12 @@ read_pvol_from_url_per_param <- function(urls, ..., call = rlang::caller_env()) 
             req_user_agent_getrad()
         }),
         # use .data to prevent note about no visible binding for global variable
-        resp = httr2::req_perform_parallel(.data$req,
-                                           paths = replicate(
-                                             length(.data$req),
-                                             tempfile(fileext = ".h5", tmpdir = getwd())
-                                           )
+        resp = httr2::req_perform_parallel(
+          .data$req,
+          paths = replicate(
+            length(.data$req),
+            tempfile(fileext = ".h5", tmpdir = getwd())
+          )
         ),
         tempfile = purrr::map_chr(.data$resp, "body"),
         pvol = purrr::map(tempfile, bioRad::read_pvolfile, ...),
@@ -39,12 +42,15 @@ read_pvol_from_url_per_param <- function(urls, ..., call = rlang::caller_env()) 
     bioRad::attribute_table
   )
   all_params_same_attributes <- all(unlist(lapply(
-    lapply(list_of_attribute_tables[-1], dplyr::select, -"param"), all.equal,
+    lapply(list_of_attribute_tables[-1], dplyr::select, -"param"),
+    all.equal,
     dplyr::select(list_of_attribute_tables[[1]], -"param")
   )))
   if (!all_params_same_attributes) {
-    cli::cli_abort("Not all polar volumes have the same attributes",
-                   class = "getRad_error_differing_attributes", call = call
+    cli::cli_abort(
+      "Not all polar volumes have the same attributes",
+      class = "getRad_error_differing_attributes",
+      call = call
     )
   }
   pvol <- Reduce(
@@ -54,7 +60,8 @@ read_pvol_from_url_per_param <- function(urls, ..., call = rlang::caller_env()) 
           i$params <- c(i$params, j$params)
           i
         },
-        x$scans, y$scans,
+        x$scans,
+        y$scans,
         SIMPLIFY = FALSE
       )
       x

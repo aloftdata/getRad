@@ -1,5 +1,7 @@
 # getRad (development version)
 
+* Start using the air formatter (#128).
+
 # getRad 0.2.2
 
 * Support downloading Slovakian polar volume data (#124).

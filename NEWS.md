@@ -1,5 +1,7 @@
 # getRad (development version)
 
+* Improve error for requesting German data out of temporal restrictions (#131).
+
 # getRad 0.2.2
 
 * Support downloading Slovakian polar volume data (#124).

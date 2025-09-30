@@ -22,6 +22,7 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/aloftdata/getRad/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/aloftdata/getRad/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/aloftdata/getRad/branch/main/graph/badge.svg)](https://app.codecov.io/gh/aloftdata/getRad/)
 [![repo status](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![regular-checks](https://github.com/aloftdata/getRad/actions/workflows/regular-checks.yaml/badge.svg)](https://github.com/aloftdata/getRad/actions/workflows/regular-checks.yaml)
 <!-- badges: end -->
 
 getRad is an R package that provides a unified interface to download radar data for biological and aeroecological research. It gives access to both polar volume radar data and [vertical profile data](https://aloftdata.eu/vpts-csv/) from [different sources](https://aloftdata.github.io/getRad/articles/supported_sources.html) and loads it directly into R. getRad also facilitates further exploration of the data by other tools such as [bioRad](https://adriaandokter.com/bioRad/) by standardizing the data.

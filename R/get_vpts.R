@@ -59,10 +59,12 @@
 #'   source = "baltrad",
 #'   return_type = "tibble"
 #' )
-get_vpts <- function(radar,
-                     datetime,
-                     source = c("baltrad", "uva", "ecog-04003", "rmi"),
-                     return_type = c("vpts", "tibble")) {
+get_vpts <- function(
+  radar,
+  datetime,
+  source = c("baltrad", "uva", "ecog-04003", "rmi"),
+  return_type = c("vpts", "tibble")
+) {
   # Input checks ----
   # Check source argument
   ## If no source is provided, set "baltrad" as default
@@ -75,7 +77,8 @@ get_vpts <- function(radar,
       glue::glue(
         "Please provide a value for the source argument:
         possible values are {possible_sources}.",
-        possible_sources = glue::glue_collapse(glue::backtick(eval(rlang::fn_fmls()$source)),
+        possible_sources = glue::glue_collapse(
+          glue::backtick(eval(rlang::fn_fmls()$source)),
           sep = ", ",
           last = " or "
         )
@@ -123,9 +126,11 @@ get_vpts <- function(radar,
   }
 
   # Check that the provided date argument is parsable as a date or interval
-  if (!is.character(datetime) &&
-    !lubridate::is.timepoint(datetime) &&
-    !lubridate::is.interval(datetime)) {
+  if (
+    !is.character(datetime) &&
+      !lubridate::is.timepoint(datetime) &&
+      !lubridate::is.interval(datetime)
+  ) {
     cli::cli_abort(
       "{.arg datetime} argument must be a {.cls character}, {.cls POSIXct}, {.cls Date}, or {.cls Interval} object.",
       class = "getRad_error_date_parsable"
@@ -136,8 +141,13 @@ get_vpts <- function(radar,
   if (!inherits(datetime, "Interval")) {
     datetime_converted <- lubridate::as_datetime(datetime)
     ### If time information is provided
-    if (any(datetime_converted != lubridate::as_datetime(lubridate::as_date(datetime_converted))) ||
-      inherits(datetime, "POSIXct")) {
+    if (
+      any(
+        datetime_converted !=
+          lubridate::as_datetime(lubridate::as_date(datetime_converted))
+      ) ||
+        inherits(datetime, "POSIXct")
+    ) {
       # timestamp like `datetime`
       if (length(datetime) == 1) {
         # if only one timestamps is provided generate the 5 minute floored interval
@@ -185,27 +195,34 @@ get_vpts <- function(radar,
   # Directing to the correct get_vpts_* helper based on source.
   cl <- rlang::caller_env(0)
   fetched_vpts <-
-    switch(dplyr::case_when(
-      source == "rmi" ~ "rmi",
-      source %in% eval(formals("get_vpts_aloft")$source) ~ "aloft"
-    ),
-    rmi = purrr::map(radar, ~ get_vpts_rmi(.x, rounded_interval), .purrr_error_call = cl),
-    aloft = purrr::map(radar, ~ get_vpts_aloft(
-      .x,
-      rounded_interval = rounded_interval,
-      source = source
-    ), .purrr_error_call = cl)
-    ) |> radar_to_name()
-
+    switch(
+      dplyr::case_when(
+        source == "rmi" ~ "rmi",
+        source %in% eval(formals("get_vpts_aloft")$source) ~ "aloft"
+      ),
+      rmi = purrr::map(
+        radar,
+        ~ get_vpts_rmi(.x, rounded_interval),
+        .purrr_error_call = cl
+      ),
+      aloft = purrr::map(
+        radar,
+        ~ get_vpts_aloft(
+          .x,
+          rounded_interval = rounded_interval,
+          source = source
+        ),
+        .purrr_error_call = cl
+      )
+    ) |>
+    radar_to_name()
 
   # Drop any results outside the requested interval ----
   filtered_vpts <-
     fetched_vpts |>
     purrr::map(
       \(df) {
-        dplyr::mutate(df,
-          datetime = lubridate::as_datetime(.data$datetime)
-        )
+        dplyr::mutate(df, datetime = lubridate::as_datetime(.data$datetime))
       },
       .purrr_error_call = cl
     ) |>
@@ -225,11 +242,16 @@ get_vpts <- function(radar,
   ## Depending on the value of the `return_type` argument, do some final
   ## formatting or conversion
   return_object <-
-    switch(return_type,
+    switch(
+      return_type,
       tibble = purrr::list_rbind(filtered_vpts),
       vpts = (\(filtered_vpts) {
         filtered_vpts_no_source <-
-          purrr::map(filtered_vpts, \(df) dplyr::select(df, -source), .purrr_error_call = cl)
+          purrr::map(
+            filtered_vpts,
+            \(df) dplyr::select(df, -source),
+            .purrr_error_call = cl
+          )
         vpts_list <- purrr::map(filtered_vpts_no_source, bioRad::as.vpts)
         # If we are only returning a single radar, don't return a list
         if (length(vpts_list) == 1) {

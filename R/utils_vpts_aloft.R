@@ -30,11 +30,11 @@ read_vpts_from_url <- function(urls, use_cache = TRUE) {
   ## criteria
 
   fetch_from_url_raw(urls, use_cache = use_cache) |>
-    purrr::map(~ vroom::vroom(
-      delim = ",",
-      I(.x),
-      col_types =
-        list(
+    purrr::map(
+      ~ vroom::vroom(
+        delim = ",",
+        I(.x),
+        col_types = list(
           radar = vroom::col_factor(),
           datetime = vroom::col_datetime(),
           height = vroom::col_integer(),
@@ -62,7 +62,8 @@ read_vpts_from_url <- function(urls, use_cache = TRUE) {
           radar_wavelength = vroom::col_double(),
           source_file = vroom::col_character()
         ),
-      show_col_types = NULL,
-      progress = FALSE
-    ))
+        show_col_types = NULL,
+        progress = FALSE
+      )
+    )
 }

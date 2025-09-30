@@ -26,7 +26,8 @@ test_that("get_pvol radar argument", {
 })
 
 test_that("get_pvol time argument", {
-  expect_error(get_pvol("nlhrw", datetime = "asdf"),
+  expect_error(
+    get_pvol("nlhrw", datetime = "asdf"),
     class = "getRad_error_time_not_correct"
   )
   expect_error(
@@ -116,7 +117,10 @@ test_that("multiple timestamps and radars work", {
   expect_true(all(unlist(lapply(pvl, bioRad::is.pvol))))
   expect_identical(
     lapply(pvl, \(x) x$datetime),
-    as.list(rep(seq(min(multiple_timestamps), max(multiple_timestamps), "5 mins"), 2))
+    as.list(rep(
+      seq(min(multiple_timestamps), max(multiple_timestamps), "5 mins"),
+      2
+    ))
   )
   expect_identical(
     lapply(pvl, \(x) x$radar),
@@ -131,10 +135,19 @@ test_that("Mixed radar vector (single timestamp)", {
   expect_true(is.list(pvols))
   expect_length(pvols, 2)
   expect_true(all(purrr::map_lgl(pvols, ~ inherits(.x, "pvol"))))
-  expect_equal(purrr::map_chr(pvols ,~.x$radar), c("KABR","finur"), ignore_attr=TRUE)
-  expect_identical(pvols[[1]]$datetime, lubridate::as_datetime("2021-01-20 04:57:36 UTC"))
-  expect_identical(pvols[[2]]$datetime, lubridate::floor_date(time_utc,"5 mins"))
-
+  expect_equal(
+    purrr::map_chr(pvols, ~ .x$radar),
+    c("KABR", "finur"),
+    ignore_attr = TRUE
+  )
+  expect_identical(
+    pvols[[1]]$datetime,
+    lubridate::as_datetime("2021-01-20 04:57:36 UTC")
+  )
+  expect_identical(
+    pvols[[2]]$datetime,
+    lubridate::floor_date(time_utc, "5 mins")
+  )
 })
 
 test_that("Mixed radar vector + 9 minute interval", {
@@ -144,7 +157,11 @@ test_that("Mixed radar vector + 9 minute interval", {
   suppressMessages(pvols <- getRad::get_pvol(c("KABR", "fikan"), dt_int))
   expect_type(pvols, "list")
   expect_length(pvols, 3)
-  purrr::walk(pvols, ~expect_s3_class(.x, "pvol"))
-  expect_equal(purrr::map_chr(pvols ,~.x$radar), c("KABR","KABR","fikan"), ignore_attr=T)
-  expect_true(all(purrr::map_vec(pvols, ~.x$datetime) %within% dt_int))
+  purrr::walk(pvols, ~ expect_s3_class(.x, "pvol"))
+  expect_equal(
+    purrr::map_chr(pvols, ~ .x$radar),
+    c("KABR", "KABR", "fikan"),
+    ignore_attr = T
+  )
+  expect_true(all(purrr::map_vec(pvols, ~ .x$datetime) %within% dt_int))
 })

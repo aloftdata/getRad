@@ -1,5 +1,4 @@
-get_pvol_de <- function(radar, time, ...,
-                        call = rlang::caller_env()) {
+get_pvol_de <- function(radar, time, ..., call = rlang::caller_env()) {
   time_pos <- base <- iter <- param <- resp <- time_chr <- NULL
   # https://opendata.dwd.de/weather/radar/sites
   # https://opendata.dwd.de/weather/radar/sites/sweep_vol_z/hnr/hdf5/filter_simple/ras07-stqual-vol5minng01_sweeph5onem_dbzh_00-2024061011155700-hnr-10339-hd5
@@ -11,8 +10,12 @@ get_pvol_de <- function(radar, time, ...,
     call = call
   )
   urls <- c(
-    glue::glue("https://opendata.dwd.de/weather/radar/sites/sweep_vol_{c('z','v')}/{substr(radar,3,5)}/hdf5/filter_simple/"),
-    glue::glue("https://opendata.dwd.de/weather/radar/sites/sweep_vol_{c('rhohv','phidp','zdr')}/{substr(radar,3,5)}/unfiltered/")
+    glue::glue(
+      "https://opendata.dwd.de/weather/radar/sites/sweep_vol_{c('z','v')}/{substr(radar,3,5)}/hdf5/filter_simple/"
+    ),
+    glue::glue(
+      "https://opendata.dwd.de/weather/radar/sites/sweep_vol_{c('rhohv','phidp','zdr')}/{substr(radar,3,5)}/unfiltered/"
+    )
   )
 
   res <- lapply(urls, function(x) {
@@ -28,8 +31,10 @@ get_pvol_de <- function(radar, time, ...,
     tidyr::unnest(file) |>
     dplyr::filter(file != "../") |>
     dplyr::mutate(filestd = sub("stqual-", "", file)) |>
-    tidyr::separate_wider_delim("filestd",
-      delim = "-", cols_remove = FALSE,
+    tidyr::separate_wider_delim(
+      "filestd",
+      delim = "-",
+      cols_remove = FALSE,
       names = c("ras", "sweep", "time_chr", "radar", "odim", "h5")
     ) |>
     dplyr::mutate(
@@ -43,22 +48,24 @@ get_pvol_de <- function(radar, time, ...,
       )
     ))
   if (nrow(files_to_get) != 50) {
-    cli::cli_abort("The server returned an unexpected number of files",
+    cli::cli_abort(
+      "The server returned an unexpected number of files",
       class = "getRad_error_germany_unexpected_number_of_files",
       call = call
     )
   }
 
-  files_to_get <- files_to_get |> dplyr::mutate(
-    req = purrr::pmap(
-      list(x = base, y = file),
-      function(x, y) {
-        httr2::request(x) |>
-          httr2::req_url_path_append(y) |>
-          req_user_agent_getrad()
-      }
+  files_to_get <- files_to_get |>
+    dplyr::mutate(
+      req = purrr::pmap(
+        list(x = base, y = file),
+        function(x, y) {
+          httr2::request(x) |>
+            httr2::req_url_path_append(y) |>
+            req_user_agent_getrad()
+        }
+      )
     )
-  )
   pvol <- withr::with_tempdir({
     files_to_get$resp <- files_to_get$req |>
       httr2::req_perform_parallel(
@@ -75,28 +82,37 @@ get_pvol_de <- function(radar, time, ...,
         scan = purrr::map(tempfile, ~ read_scan(.x)),
         remove = purrr::map(tempfile, ~ file.remove(.x))
       ) |>
-      tidyr::separate_wider_delim(sweep,
-        delim = "_", cols_remove = FALSE,
+      tidyr::separate_wider_delim(
+        sweep,
+        delim = "_",
+        cols_remove = FALSE,
         names = c("vol", "name", "param", "iter")
       ) |>
       dplyr::group_by(iter) |>
       dplyr::summarize(
         scan = list(scan),
-        param = list(param), radar = unique(radar)
+        param = list(param),
+        radar = unique(radar)
       ) |>
       dplyr::mutate(
         scan = purrr::map2(scan, param, ~ list_to_scan(.x, .y))
       )
-    list_to_pvol(files_to_get$scan,
-      time = time, radar = radar,
+    list_to_pvol(
+      files_to_get$scan,
+      time = time,
+      radar = radar,
       source = glue::glue("NOD:{radar},CMT:constructed from opendata.dwd.de")
     )
   })
   return(pvol)
 }
 
-list_to_pvol <- function(x, time, radar,
-                         source = "CMT:constructed from opendata.dwd.de") {
+list_to_pvol <- function(
+  x,
+  time,
+  radar,
+  source = "CMT:constructed from opendata.dwd.de"
+) {
   stopifnot(length(time) == 1)
   stopifnot(length(radar) == 1)
   stopifnot(is.list(x))
@@ -106,9 +122,20 @@ list_to_pvol <- function(x, time, radar,
   output$scans <- x
 
   output$attributes <- purrr::chuck(x, 1, "attributes")
-  output$attributes$what[c("starttime", "startdate", "endtime", "enddate")] <- NULL
-  output$attributes$what$date <- min(purrr::map_chr(x, ~ purrr::chuck(.x, "attributes", "what", "startdate")))
-  output$attributes$what$time <- min(purrr::map_chr(x, ~ purrr::chuck(.x, "attributes", "what", "starttime")))
+  output$attributes$what[c(
+    "starttime",
+    "startdate",
+    "endtime",
+    "enddate"
+  )] <- NULL
+  output$attributes$what$date <- min(purrr::map_chr(
+    x,
+    ~ purrr::chuck(.x, "attributes", "what", "startdate")
+  ))
+  output$attributes$what$time <- min(purrr::map_chr(
+    x,
+    ~ purrr::chuck(.x, "attributes", "what", "starttime")
+  ))
   output$attributes$what$object <- "PVOL"
   output$attributes$what$source <- source
   output$geo <- attr(purrr::chuck(x, 1, "params", 1), "geo")
@@ -125,17 +152,24 @@ list_to_scan <- function(x, param) {
   xx
 }
 
-read_scan <- function(file, scan = "dataset1",
-                      param = "all", radar = "",
-                      datetime = "", geo = list(), attributes = "", ..., call = rlang::caller_env()) {
+read_scan <- function(
+  file,
+  scan = "dataset1",
+  param = "all",
+  radar = "",
+  datetime = "",
+  geo = list(),
+  attributes = "",
+  ...,
+  call = rlang::caller_env()
+) {
   rlang::check_installed("rhdf5", call = call)
   h5struct <- rhdf5::h5ls(file, all = TRUE)
   groups <- h5struct[h5struct$group == paste("/", scan, sep = ""), ]$name
   groups <- groups[grep("data", groups)]
-  dtypes <- h5struct[startsWith(h5struct$group, paste("/",
-    scan, "/data",
-    sep = ""
-  )), ]
+  dtypes <- h5struct[
+    startsWith(h5struct$group, paste("/", scan, "/data", sep = "")),
+  ]
   dtypes <- dtypes[dtypes$name == "data", ]$dtype
 
   h5struct <- h5struct[h5struct$group == paste("/", scan, sep = ""), ]$name
@@ -146,9 +180,10 @@ read_scan <- function(file, scan = "dataset1",
   }
   if (!allParam) {
     quantityNames <- purrr::map_chr(groups, function(x) {
-      rhdf5::h5readAttributes(file, paste(scan, "/", x, "/what",
-        sep = ""
-      ))$quantity
+      rhdf5::h5readAttributes(
+        file,
+        paste(scan, "/", x, "/what", sep = "")
+      )$quantity
     })
     groups <- groups[quantityNames %in% param]
     dtypes <- dtypes[quantityNames %in% param]
@@ -158,19 +193,19 @@ read_scan <- function(file, scan = "dataset1",
   }
   attribs.how <- attribs.what <- attribs.where <- NULL
   if ("how" %in% h5struct) {
-    attribs.how <- rhdf5::h5readAttributes(file, paste(scan, "/how",
-      sep = ""
-    ))
+    attribs.how <- rhdf5::h5readAttributes(file, paste(scan, "/how", sep = ""))
   }
   if ("what" %in% h5struct) {
-    attribs.what <- rhdf5::h5readAttributes(file, paste(scan, "/what",
-      sep = ""
-    ))
+    attribs.what <- rhdf5::h5readAttributes(
+      file,
+      paste(scan, "/what", sep = "")
+    )
   }
   if ("where" %in% h5struct) {
-    attribs.where <- rhdf5::h5readAttributes(file, paste(scan, "/where",
-      sep = ""
-    ))
+    attribs.where <- rhdf5::h5readAttributes(
+      file,
+      paste(scan, "/where", sep = "")
+    )
   }
   geo <- rhdf5::h5readAttributes(file, "where")
   geo$elangle <- c(attribs.where$elangle)
@@ -178,29 +213,54 @@ read_scan <- function(file, scan = "dataset1",
   geo$ascale <- c(360 / attribs.where$nrays)
   geo$astart <- attribs.how$astart
   geo$rstart <- attribs.where$rstart * 1000
-  quantities <- mapply(function(x, y) {
-    rr(
-      file, paste(scan, "/", x, sep = ""),
-      radar, datetime, geo, y
-    )
-  }, x = groups, y = dtypes, SIMPLIFY = FALSE)
-  quantityNames <- purrr::map_chr(quantities, ~ purrr::chuck(.x, "quantityName"))
+  quantities <- mapply(
+    function(x, y) {
+      rr(
+        file,
+        paste(scan, "/", x, sep = ""),
+        radar,
+        datetime,
+        geo,
+        y
+      )
+    },
+    x = groups,
+    y = dtypes,
+    SIMPLIFY = FALSE
+  )
+  quantityNames <- purrr::map_chr(
+    quantities,
+    ~ purrr::chuck(.x, "quantityName")
+  )
   quantities <- lapply(quantities, "[[", "quantity")
   names(quantities) <- quantityNames
   if (is.null(attribs.how$wavelength)) {
     attribs.how$wavelength <- attributes$how$wavelength
   }
   output <- list(
-    radar = radar, datetime = datetime, params = quantities,
+    radar = radar,
+    datetime = datetime,
+    params = quantities,
     attributes = list(
-      how = attribs.how, what = attribs.what,
+      how = attribs.how,
+      what = attribs.what,
       where = attribs.where
-    ), geo = geo
+    ),
+    geo = geo
   )
   class(output) <- "scan"
   output
 }
-rr <- function(file, quantity = "/", radar, datetime, geo, dtype, ..., call = rlang::caller_env()) {
+rr <- function(
+  file,
+  quantity = "/",
+  radar,
+  datetime,
+  geo,
+  dtype,
+  ...,
+  call = rlang::caller_env()
+) {
   rlang::check_installed("rhdf5", call = call)
   data <- rhdf5::h5read(file, quantity)$data
 
@@ -208,13 +268,16 @@ rr <- function(file, quantity = "/", radar, datetime, geo, dtype, ..., call = rl
   attr <- rhdf5::h5readAttributes(file, paste(quantity, "/what", sep = ""))
   data <- replace(data, data == as.numeric(attr$nodata), NA)
   data <- replace(
-    data, data == as.numeric(attr$undetect),
+    data,
+    data == as.numeric(attr$undetect),
     NaN
   )
   data <- as.numeric(attr$offset) + as.numeric(attr$gain) * data
   conversion <- list(
-    gain = as.numeric(attr$gain), offset = as.numeric(attr$offset),
-    nodata = as.numeric(attr$nodata), undetect = as.numeric(attr$undetect),
+    gain = as.numeric(attr$gain),
+    offset = as.numeric(attr$offset),
+    nodata = as.numeric(attr$nodata),
+    undetect = as.numeric(attr$undetect),
     dtype = dtype
   )
   class(data) <- c("param", class(data))
@@ -226,7 +289,8 @@ rr <- function(file, quantity = "/", radar, datetime, geo, dtype, ..., call = rl
   list(
     quantityName = paste0(
       strsplit(file, "_")[[1]][6],
-      "_", basename(dirname(file))
+      "_",
+      basename(dirname(file))
     ),
     quantity = data
   )

@@ -12,5 +12,8 @@ test_that("odim test", {
   expect_false(is_odim_scalar(c("nlhrw", "nldhl")))
 
   expect_identical(is_odim(c("nlhrw", "nldhl2")), c(TRUE, FALSE))
-  expect_error(check_odim(c("nlhrw", "nldhlu")), class = "getRad_error_radar_not_odim_string")
+  expect_error(
+    check_odim(c("nlhrw", "nldhlu")),
+    class = "getRad_error_radar_not_odim_string"
+  )
 })

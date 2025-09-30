@@ -643,7 +643,10 @@ test_that("`get_vpts` is tz insensitive", {
   tUtc <- lubridate::with_tz(t, "UTC")
   expect_identical(
     get_vpts("nlhrw", lubridate::as.interval(t, t + lubridate::minutes(30))),
-    get_vpts("nlhrw", lubridate::as.interval(tUtc, tUtc + lubridate::minutes(30)))
+    get_vpts(
+      "nlhrw",
+      lubridate::as.interval(tUtc, tUtc + lubridate::minutes(30))
+    )
   )
 })
 

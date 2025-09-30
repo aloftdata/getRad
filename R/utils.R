@@ -13,22 +13,24 @@ radar_recode <- function(radar, ..., call = rlang::caller_env()) {
   if (!(rlang::is_scalar_character(radar) && !is.na(radar))) {
     cli::cli_abort(
       "The argument {.arg radar} should be scalar character of length 1 that is not NA.",
-      class = "getRad_error_recode_radar_radar_argument", call = call
+      class = "getRad_error_recode_radar_radar_argument",
+      call = call
     )
   }
-  res <- switch(radar,
-                ...,
-                cli::cli_abort(
-                  c(
-                    x = "No mapping exists for the {.val {radar}} radar.",
-                    i = " Either this radar is non-existant (possibly check with {.code get_weather_radars()}). Alternatively no mapping is (yet) implemented for this radar. In the later case consider creating a bug report."
-                  ),
-                  class = "getRad_error_radar_not_found", call = call
-                )
+  res <- switch(
+    radar,
+    ...,
+    cli::cli_abort(
+      c(
+        x = "No mapping exists for the {.val {radar}} radar.",
+        i = " Either this radar is non-existant (possibly check with {.code get_weather_radars()}). Alternatively no mapping is (yet) implemented for this radar. In the later case consider creating a bug report."
+      ),
+      class = "getRad_error_radar_not_found",
+      call = call
+    )
   )
   return(res)
 }
-
 
 
 #' Extracts a substring from a string based on a regex pattern
@@ -254,10 +256,12 @@ req_user_agent_getrad <- function(req) {
 #' @param max_tries The maximum number of times to retry the request.
 #' @returns A `httr2` request.
 #' @noRd
-req_retry_getrad <- function(req,
-                             transient_statuses = c(429),
-                             max_tries = 15,
-                             retry_on_failure = TRUE) {
+req_retry_getrad <- function(
+  req,
+  transient_statuses = c(429),
+  max_tries = 15,
+  retry_on_failure = TRUE
+) {
   httr2::req_retry(
     req,
     max_tries = max_tries,
@@ -276,18 +280,17 @@ req_retry_getrad <- function(req,
 #'    This can also be useful if you want to force a refresh of the cache.
 #' @param ... Additional arguments passed to `httr2::req_cache()`.
 #' @keywords internal
-req_cache_getrad <- function(req,
-                             use_cache = TRUE,
-                             max_age = getOption("getRad.max_cache_age_seconds",
-                               default = 6 * 60 * 60
-                             ),
-                             max_n = getOption("getRad.max_cache_n",
-                               default = Inf
-                             ),
-                             max_size = getOption("getRad.max_cache_size_bytes",
-                               default = 1024 * 1024 * 1024
-                             ),
-                             ...) {
+req_cache_getrad <- function(
+  req,
+  use_cache = TRUE,
+  max_age = getOption("getRad.max_cache_age_seconds", default = 6 * 60 * 60),
+  max_n = getOption("getRad.max_cache_n", default = Inf),
+  max_size = getOption(
+    "getRad.max_cache_size_bytes",
+    default = 1024 * 1024 * 1024
+  ),
+  ...
+) {
   # If caching is disabled, return early.
   if (!use_cache) {
     return(req)
@@ -295,11 +298,10 @@ req_cache_getrad <- function(req,
 
   httr2::req_cache(
     req,
-    path =
-      file.path(
-        tools::R_user_dir("getRad", "cache"),
-        "httr2"
-      ),
+    path = file.path(
+      tools::R_user_dir("getRad", "cache"),
+      "httr2"
+    ),
     max_age = max_age,
     max_n = max_n,
     max_size = max_size,
@@ -334,18 +336,27 @@ is_odim_scalar <- function(x) {
 is_odim_nexrad_scalar <- function(x) {
   rlang::is_scalar_character(x) && is_odim_nexrad(x)
 }
-check_odim <- function(x, ..., arg = rlang::caller_arg(x),
-                       call = rlang::caller_env()) {
+check_odim <- function(
+  x,
+  ...,
+  arg = rlang::caller_arg(x),
+  call = rlang::caller_env()
+) {
   if (!all(is_odim(x))) {
     cli::cli_abort(
       "Please provide one or more radars as a character vector.
       Consisting of 5 characters each to match an odim code.",
-      class = "getRad_error_radar_not_odim_string", call = call
+      class = "getRad_error_radar_not_odim_string",
+      call = call
     )
   }
 }
-check_odim_nexrad <- function(x, ..., arg = rlang::caller_arg(x),
-                              call = rlang::caller_env()) {
+check_odim_nexrad <- function(
+  x,
+  ...,
+  arg = rlang::caller_arg(x),
+  call = rlang::caller_env()
+) {
   if (!all(is_odim_nexrad(x))) {
     cli::cli_abort(
       "Each element of {.arg {arg}} must be either a 5-letter ODIM code
@@ -356,8 +367,12 @@ check_odim_nexrad <- function(x, ..., arg = rlang::caller_arg(x),
   }
   invisible(TRUE)
 }
-check_odim_scalar <- function(x, ..., arg = rlang::caller_arg(x),
-                              call = rlang::caller_env()) {
+check_odim_scalar <- function(
+  x,
+  ...,
+  arg = rlang::caller_arg(x),
+  call = rlang::caller_env()
+) {
   if (!is_odim_scalar(x)) {
     cli::cli_abort(
       "Please provide {.arg {arg}} as a character vector of length 1.
@@ -368,12 +383,17 @@ check_odim_scalar <- function(x, ..., arg = rlang::caller_arg(x),
   }
 }
 
-check_odim_nexrad_scalar <- function(x, ..., arg = rlang::caller_arg(x),
-                                     call = rlang::caller_env()) {
+check_odim_nexrad_scalar <- function(
+  x,
+  ...,
+  arg = rlang::caller_arg(x),
+  call = rlang::caller_env()
+) {
   if (!is_odim_nexrad_scalar(x)) {
     cli::cli_abort(
       "Radar must be exactly one 5-letter ODIM code or one 4-letter NEXRAD code.",
-      class = "getRad_error_radar_not_single_odim_nexrad", call = call
+      class = "getRad_error_radar_not_single_odim_nexrad",
+      call = call
     )
   }
   invisible(TRUE)
@@ -405,10 +425,7 @@ fetch_from_url_raw <- function(urls, use_cache = TRUE, parallel = TRUE) {
     purrr::map(req_retry_getrad) |>
     # Set throttling so we don't overwhelm data sources
     purrr::map(\(req) {
-      httr2::req_throttle(req,
-        capacity = 30,
-        fill_time_s = 40
-      )
+      httr2::req_throttle(req, capacity = 30, fill_time_s = 40)
     }) |>
     # Optionally cache the responses
     purrr::map(req_cache_getrad)
@@ -445,9 +462,7 @@ fetch_from_url_raw <- function(urls, use_cache = TRUE, parallel = TRUE) {
 read_lines_from_url <- function(urls, use_cache = TRUE, parallel = TRUE) {
   fetch_from_url_raw(urls, use_cache = use_cache, parallel) |>
     I() |>
-    purrr::map(~ vroom::vroom_lines(.x,
-      progress = FALSE
-    ))
+    purrr::map(~ vroom::vroom_lines(.x, progress = FALSE))
 }
 
 #' Get HTML from a URL

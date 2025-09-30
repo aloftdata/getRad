@@ -15,4 +15,5 @@ test_that("Correct error for old German data",
  {
             skip_if_offline()
             expect_error(get_pvol("deess",Sys.time()-lubridate::days(4)), class="getRad_error_germany_unexpected_number_of_files")
+
 })

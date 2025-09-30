@@ -1,5 +1,6 @@
 # getRad (development version)
 
+* Improve error for requesting German data out of temporal restrictions (#131).
 * Start using the air formatter (#128).
 
 # getRad 0.2.2

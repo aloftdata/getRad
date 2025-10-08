@@ -17,3 +17,18 @@ test_that("odim test", {
     class = "getRad_error_radar_not_odim_string"
   )
 })
+test_that("fetch_from_url_raw warns on failing url", {
+  expect_warning(
+    res <- fetch_from_url_raw(
+      c(
+        "https://aloftdata.s3-eu-west-1.amazonaws.com/baltrad/daily/bejab/2024/bejab_vpts_20240307.csv",
+        "https://aloftdata.s3-eu-west-1.amazonaws.com/baltrad/daily/bejab/2024/bejab_vpts_20240347.csv"
+      )
+    ),
+    class = "getRad_warning_404_on_csv_download"
+  )
+  expect_identical(
+    res[2],
+    list(raw())
+  )
+})

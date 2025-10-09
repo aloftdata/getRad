@@ -143,8 +143,26 @@ list_to_pvol <- function(
   ))
   output$attributes$what$object <- "PVOL"
   output$attributes$what$source <- source
-  output$geo <- attr(purrr::chuck(x, 1, "params", 1), "geo")
-
+  # Remove scan specific how attributes (there might be more)
+  output$attributes$how[c(
+    "NI",
+    "highprf",
+    "lowprf",
+    "scan_index",
+    "startazA",
+    "startazT",
+    "startelA",
+    "stopazA",
+    "stopazT",
+    "stopelA",
+    "task"
+  )] <- NULL
+  output$geo <- attr(purrr::chuck(x, 1, "params", 1), "geo")[c(
+    "lat",
+    "lon",
+    "height"
+  )]
+  output$attributes$where <- output$geo
   class(output) <- "pvol"
   output
 }

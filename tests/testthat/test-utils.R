@@ -26,6 +26,7 @@ test_that("fetch_from_url_raw warns on failing url", {
     ),
     class = "getRad_warning_404_on_csv_download"
   )
+  # we replace 404 with empty raw vectors to have the same class but not data returned
   expect_identical(
     res,
     list(raw())
@@ -40,6 +41,7 @@ test_that("fetch_from_url_raw warns on failing url", {
     ),
     class = "getRad_warning_404_on_csv_download"
   )
+  # For failed urls we return an empty data. so later functions can just work with it but have no data
   expect_identical(
     res[2],
     list(data.frame())
@@ -48,6 +50,7 @@ test_that("fetch_from_url_raw warns on failing url", {
     res[[1]],
     "data.frame"
   )
+  # use 200 as it just indicated that there is data in the first dataframe (it is probably much longer 20 height bins for a day)
   expect_gt(
     nrow(res[[1]]),
     200

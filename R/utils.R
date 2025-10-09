@@ -433,11 +433,32 @@ fetch_from_url_raw <- function(urls, use_cache = TRUE, parallel = TRUE) {
   if (parallel) {
     data_response <-
       data_request |>
-      httr2::req_perform_parallel(progress = interactive())
+      httr2::req_perform_parallel(
+        progress = interactive(),
+        on_error = "continue"
+      )
   } else {
     data_response <-
       data_request |>
-      httr2::req_perform_sequential()
+      httr2::req_perform_sequential(on_error = "continue")
+  }
+  # Make warning for missing csv
+  if (any(ss <- unlist(lapply(data_response, inherits, "httr2_http_404")))) {
+    cli::cli_warn(
+      class = "getRad_warning_404_on_csv_download",
+      c(
+        "!" = "The following: {urls[ss]} url{?s} could not be downloaded (HTTP 404 Not Found).",
+        i = "Given an attempt was made data was present in the coverage data. Therefore this likely relates to an error in the data repository. For now the data has been omitted from the returned result however for a final resolution the issue should be resolved in the repository (e.g. {.url https://github.com/aloftdata/data-repository})."
+      )
+    )
+    for (i in seq_along(data_response)) {
+      if (ss[i]) {
+        data_response[[i]] <- raw()
+      } else {
+        data_response[[i]] <- httr2::resp_body_raw(data_response[[i]])
+      }
+    }
+    return(data_response)
   }
   # Fetch the response bodies
   purrr::map(data_response, httr2::resp_body_raw)

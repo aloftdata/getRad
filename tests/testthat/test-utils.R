@@ -18,12 +18,12 @@ test_that("odim test", {
   )
 })
 test_that("fetch_from_url_raw warns on failing url", {
-  skip_if_offline("httpbin.org")
+  skip_if_offline("httpbingo.org")
   skip_if_offline("aloftdata.s3-eu-west-1.amazonaws.com")
   expect_warning(
     res <- fetch_from_url_raw(
       c(
-        "https://httpbin.org/status/404"
+        "https://httpbingo.org/status/404"
       )
     ),
     class = "getRad_warning_404_on_csv_download"
@@ -38,7 +38,7 @@ test_that("fetch_from_url_raw warns on failing url", {
     res <- read_vpts_from_url(
       c(
         "https://aloftdata.s3-eu-west-1.amazonaws.com/baltrad/daily/bejab/2024/bejab_vpts_20240307.csv",
-        "https://httpbin.org/status/404"
+        "https://httpbingo.org/status/404"
       )
     ),
     class = "getRad_warning_404_on_csv_download"

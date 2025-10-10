@@ -10,6 +10,8 @@ test_that("Pvol for German can be downloaded", {
     lubridate::floor_date(pvol$datetime, "5 mins"),
     lubridate::with_tz(time, "UTC")
   )
+  expect_named(pvol$geo, c("lat", "lon", "height"))
+  expect_named(pvol$attributes$where, c("lat", "lon", "height"))
 })
 test_that("Correct error for old German data", {
   skip_if_offline(host = "opendata.dwd.de")

@@ -3,6 +3,7 @@
 * Improve error for requesting German data out of temporal restrictions (#131).
 * Start using the air formatter (#128).
 * Do not fail but rather warn when csv is missing from repository (#136).
+* In `get_pvol` correct where attributes for German data causing incorrect `vp` heights (#139). 
 
 # getRad 0.2.2
 

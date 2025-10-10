@@ -23,7 +23,7 @@ test_that("fetch_from_url_raw warns on failing url", {
   expect_warning(
     res <- fetch_from_url_raw(
       c(
-        "https://httpbin.org/status/404"
+        "https://httpbingo.org/status/404"
       )
     ),
     class = "getRad_warning_404_on_csv_download"

@@ -48,6 +48,10 @@ test_that("failure to find converter", {
 })
 
 test_that("The Netherlands non existing radar", {
+  withr::local_options(list(
+    # use random binary so checking for converter step is passed
+    "getRad.nl_converter" = "ls"
+  ))
   expect_error(
     pvol <- get_pvol(
       "nlaaa",

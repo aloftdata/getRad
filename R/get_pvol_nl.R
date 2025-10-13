@@ -1,4 +1,23 @@
 get_pvol_nl <- function(radar, time, ..., call = rlang::caller_env()) {
+  # Dutch files need to be converted to the odim format therefore we check early for the availability of the converter
+  converter <- getOption("getRad.nl_converter", "KNMI_vol_h5_to_ODIM_h5")
+  if (!file.exists(converter)) {
+    converter <- Sys.which(converter)
+  }
+  if (converter == "") {
+    cli::cli_abort(
+      c(
+        x = "The program to convert KNMI data to ODIM format is not found.",
+        i = "The source code for this binary can be obtained from this location {.file {system.file('extra/KNMI_vol_h5_to_ODIM_h5.c', package='getRad')}}",
+        i = "Please compile the binary and include it in the search path as a program named {.arg KNMI_vol_h5_to_ODIM_h5}",
+        i = "On linux systems this can be done with the following command {.code h5cc KNMI_vol_h5_to_ODIM_h5.c -o KNMI_vol_h5_to_ODIM_h5}.",
+        i = "If another name is used or the program is not in the search path use options to locate the program ({.run options(getRad.nl_converter='')})."
+      ),
+      class = "getRad_error_no_nl_converter_found",
+      call = call
+    )
+  }
+
   #  Convert radar names into the dirname and version used by the KNMI data platform.
   mapped_radar <-
     radar_recode(
@@ -51,24 +70,6 @@ get_pvol_nl <- function(radar, time, ..., call = rlang::caller_env()) {
       httr2::req_url(req = resp$request) |>
       httr2::req_headers(Authorization = NULL) |>
       httr2::req_perform(path = file, error_call = call)
-    # Dutch files need to be converted to the odim format
-    converter <- getOption("getRad.nl_converter", "KNMI_vol_h5_to_ODIM_h5")
-    if (!file.exists(converter)) {
-      converter <- Sys.which(converter)
-    }
-    if (converter == "") {
-      cli::cli_abort(
-        c(
-          x = "The program to convert KNMI data to ODIM format is not found.",
-          i = "The source code for this binary can be obtained from this location {.file {system.file('extra/KNMI_vol_h5_to_ODIM_h5.c', package='getRad')}}",
-          i = "Please compile the binary and include it in the search path as a program named {.arg KNMI_vol_h5_to_ODIM_h5}",
-          i = "On linux systems this can be done with the following command {.code h5cc KNMI_vol_h5_to_ODIM_h5.c -o KNMI_vol_h5_to_ODIM_h5}.",
-          i = "If another name is used or the program is not in the search path use options to locate the program ({.run options(getRad.nl_converter='')})."
-        ),
-        class = "getRad_error_no_nl_converter_found",
-        call = call
-      )
-    }
     pvol_path <- paste0(req$body, ".odim.h5")
     system(paste(converter, pvol_path, req$body))
     bioRad::read_pvolfile(pvol_path, ...)

@@ -1,5 +1,6 @@
 check_attributes <- function(x, wr_df) {
   expect_s3_class(x, "pvol")
+  expect_true(bioRad::is.pvol(x))
   expect_true(x$radar %in% wr_df$radar)
   radar_df <- wr_df[
     x$radar == wr_df$radar &

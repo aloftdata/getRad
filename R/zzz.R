@@ -34,3 +34,13 @@
   invisible()
 }
 rlang::on_load(rlang::local_use_cli(inline = TRUE))
+
+
+# see ?usethis::use_release_issue() #nolint
+release_bullets <- function() {
+  c(
+    "Update codemeta.json with: `codemetar::write_codemeta()`",
+    "update CITATION.cff with `cffr::cff_write(dependencies = FALSE)`
+    (after incrementing version)"
+  )
+}

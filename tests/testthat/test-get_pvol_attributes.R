@@ -18,7 +18,8 @@ check_attributes <- function(x, wr_df) {
   expect_equal(x$geo$lon, radar_df$longitude, tolerance = .001)
   expect_equal(x$attributes$where$lon, radar_df$longitude, tolerance = .001)
   expect_equal(
-    x$attributes$how$wavelength,
+    # For the Netherlands wavelength get a dim 1, using c() drops it
+    c(x$attributes$how$wavelength),
     299792458 / (radar_df$frequency * 10^9) * 100,
     tolerance = .005
   )

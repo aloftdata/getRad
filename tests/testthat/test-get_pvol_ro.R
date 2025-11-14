@@ -9,8 +9,9 @@ test_that("Check if the available attributes changed", {
       tail(-1) |>
       gsub(pattern = ".*0200", replacement = "") |>
       unique() |>
-      gsub(pattern = ".hdf", replacement = ""),
-    c("KDP", "RhoHV", "V", "ZDR", "dBR", "dBZ", "Height")
+      gsub(pattern = ".hdf", replacement = "") |>
+      sort(),
+    c("KDP", "RhoHV", "V", "ZDR", "dBR", "dBZ", "Height") |> sort()
   )
 })
 test_that("Pvol for Romania can be downloaded", {

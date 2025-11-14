@@ -41,15 +41,15 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
   check_odim_nexrad(radar)
   if (anyDuplicated(radar)) {
     cli::cli_abort(
-      "The argument {.arg radar} contains duplications these should be removed.",
+      "{.arg radar} contains duplications these must be removed.",
       class = "getRad_error_radar_duplicated"
     )
   }
   if (inherits(datetime, "POSIXct") && length(datetime) == 2) {
     if (any(duplicated(datetime))) {
       cli::cli_abort(
-        "When providing two {.cls POSIXct} as a {.arg datetime}
-                     they should differ to represent an inverval.",
+        "When providing two {.cls POSIXct} as a {.arg datetime} they must differ
+         to represent an inverval.",
         class = "getRad_error_duplicated_timestamps"
       )
     }
@@ -61,9 +61,8 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
       !rlang::is_scalar_vector(datetime)
   ) {
     cli::cli_abort(
-      "The argument {.arg datetime} to the {.fn get_pvol} function
-                   should be a single {.cls POSIXct} or a {.cls interval}.
-                   The latter can also be specified by two {.cls POSIXct}.",
+      "{.arg datetime} should be a single {.cls POSIXct} or a {.cls interval}.
+       The latter can also be specified by two {.cls POSIXct}.",
       class = "getRad_error_time_not_correct"
     )
   }
@@ -88,10 +87,10 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
   if (lubridate::is.interval(datetime)) {
     if (lubridate::as.duration(datetime) > lubridate::hours(1)) {
       cli::cli_warn(
-        "The interval specified for {.arg datetime} ({.val {lubridate::int_start(datetime)}}-{.val {lubridate::int_end(datetime)}}) likely results
-                    in many polar volumes, when loading that may polar
-                    volumes at the same time computational issues frequently
-                    occur.",
+        "The interval specified for {.arg datetime} ({.val
+        {lubridate::int_start(datetime)}}-{.val {lubridate::int_end(datetime)}})
+        likely results in many polar volumes. Computational issues can occur
+        when loading that many polar volumes at the same time.",
         class = "getRad_warn_many_pvols_requested"
       )
     }
@@ -148,7 +147,7 @@ select_get_pvol_function <- function(radar, ..., call = rlang::caller_env()) {
   ))
   if (rlang::is_na(fun)) {
     cli::cli_abort(
-      "No suitable function exist downloading from the radar {.val {radar}}",
+      "No suitable function exist to download data for radar {.val {radar}}.",
       class = "getRad_error_no_function_for_radar_with_country_code",
       call = call
     )

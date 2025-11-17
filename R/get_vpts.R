@@ -71,12 +71,15 @@ get_vpts <- function(
   if (missing(source)) {
     source <- "baltrad"
   }
+  supported_sources <- eval(rlang::fn_fmls()$source)
+
   if (is.null(source)) {
     # providing NULL isn't allowed either
-    supported_sources <- eval(rlang::fn_fmls()$source)
     cli::cli_abort(
-      "{.arg source} must be provided.",
-      "i" = "Supported sources: {supported_sources}",
+      c(
+        "{.arg source} must be provided.",
+        "i" = "Supported sources: {.val {supported_sources}}."
+      ),
       class = "getRad_error_source_missing"
     )
   }
@@ -95,11 +98,12 @@ get_vpts <- function(
 
   # Get the default value of the source arg, even if the user provided
   # a different value.
-  supported_sources <- eval(formals()$source)
   if (!source %in% supported_sources) {
     cli::cli_abort(
-      "{.arg source} {.val {source}} is invalid.",
-      "i" = "Supported sources: {supported_sources}",
+      c(
+        "{.arg source} {.val {source}} is invalid.",
+        "i" = "Supported sources: {.val {supported_sources}}."
+      ),
       class = "getRad_error_source_invalid"
     )
   }

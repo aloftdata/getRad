@@ -82,7 +82,7 @@ get_secret <- function(name) {
   if (!(sname %in% keyring::key_list(sname)$service)) {
     cli::cli_abort(
       c(
-        "x" = "Can't find secret {.arg {sname}} in the keyring.",
+        "Can't find secret {.arg {sname}} in the keyring.",
         "i" = "Please use {.code set_secret(\"{name}\")} to store the secret. Note that the prefix is automatically added in {.fun set_secret}."
       ),
       class = "getRad_error_secret_not_found"

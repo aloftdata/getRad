@@ -50,7 +50,7 @@ get_pvol_de <- function(radar, time, ..., call = rlang::caller_env()) {
   if (nrow(files_to_get) != 50) {
     cli::cli_abort(
       c(
-        "x" = "The server returned an unexpected number of files.",
+        "The server returned an unexpected number of files.",
         "i" = "In many cases this because no data are available for the time
                requested. For Germany only the last three days are available.
                The error can also be caused by an unstable connection or

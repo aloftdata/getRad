@@ -449,17 +449,16 @@ fetch_from_url_raw <- function(urls, use_cache = TRUE, parallel = TRUE) {
   # Make warning for missing csv
   if (any(ss <- unlist(lapply(data_response, inherits, "httr2_http_404")))) {
     cli::cli_warn(
-      class = "getRad_warning_404_on_csv_download",
       c(
-        "!" = "The following: {urls[ss]} url{?s} could not be downloaded (HTTP
-               404 Not Found).",
-        "i" = "Given an attempt was made data was present in the coverage data.
-               Therefore this likely relates to an error in the data repository.
-               For now the data has been omitted from the returned result,
-               however for a final resolution the issue should be resolved in
-               the repository (e.g. {.url
-               https://github.com/aloftdata/data-repository})."
-      )
+        "Not all files listed in the coverage file (see {.fun
+         get_vpts_coverage}) could be downloaded (404 Not Found).",
+        "i" = "This may indicate an error in the repository, please report an
+               issue at {.url
+               https://github.com/aloftdata/data-repository/issues/}.",
+        "i" = "The following file{?s} could not be downloaded: {.url
+               {urls[[ss]]}}."
+      ),
+      class = "getRad_warning_404_on_csv_download"
     )
     for (i in seq_along(data_response)) {
       if (ss[i]) {

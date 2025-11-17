@@ -456,7 +456,7 @@ fetch_from_url_raw <- function(urls, use_cache = TRUE, parallel = TRUE) {
                issue at {.url
                https://github.com/aloftdata/data-repository/issues/}.",
         "i" = "The following file{?s} could not be downloaded: {.url
-               {urls[[ss]]}}."
+               {urls[ss]}}."
       ),
       class = "getRad_warning_404_on_csv_download"
     )

@@ -7,7 +7,7 @@ test_that("Check if the available attributes changed", {
       xml2::xml_find_all("//a/@href") |>
       xml2::xml_text() |>
       tail(-1) |>
-      gsub(pattern = ".*0200", replacement = "") |>
+      gsub(pattern = "MED_[0-9]*00", replacement = "") |>
       unique() |>
       gsub(pattern = ".hdf", replacement = "") |>
       sort(),

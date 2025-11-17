@@ -62,9 +62,10 @@ get_pvol_se <- function(radar, time, ..., call = rlang::caller_env()) {
       httr2_http_404 = function(cnd) {
         cli::cli_abort(
           c(
-            x = "No polar volume data could be found for {.val {radar}} at time {.val {time}}",
-            i = "Volume data in Sweden is only available for 24 hours",
-            i = "If the requested time is within the last 24 hours the error might relate to a server outage or package problem"
+            "Can't find polar volume data for {.val {radar}} at {.val {time}}.",
+            "i" = "Polar volume data in Sweden is only available for 24 hours.
+                   If the requested time is within the last 24 hours the error
+                   might relate to a server outage or package problem."
           ),
           parent = cnd,
           call = call,

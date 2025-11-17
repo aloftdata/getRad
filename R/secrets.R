@@ -23,7 +23,7 @@ set_secret <- function(name, secret = NULL) {
   rlang::check_installed("keyring", "to manage secrets in getRad")
   if (!rlang::is_scalar_character(name)) {
     cli::cli_abort(
-      "{.arg name} must be a scalar character.",
+      "{.arg name} must be a single character value.",
       class = "getRad_error_set_secret_no_scalar_character"
     )
   }
@@ -65,7 +65,7 @@ get_secret <- function(name) {
   rlang::check_installed("keyring", "to manage secrets in getRad")
   if (!rlang::is_scalar_character(name)) {
     cli::cli_abort(
-      "{.arg name} must be a scalar character.",
+      "{.arg name} must be a single character value.",
       class = "getRad_error_get_secret_no_scalar_character"
     )
   }

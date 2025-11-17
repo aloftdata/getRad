@@ -22,7 +22,7 @@ radar_recode <- function(radar, ..., call = rlang::caller_env()) {
     ...,
     cli::cli_abort(
       c(
-        "x" = "Can't find radar {.val {radar}}.",
+        "Can't find radar {.val {radar}}.",
         "i" = "Either this radar is non-existant (possibly check with {.fun
                get_weather_radars}). Alternatively no mapping is (yet)
                implemented for this radar. In the latter case consider creating

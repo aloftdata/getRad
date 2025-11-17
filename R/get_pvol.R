@@ -41,15 +41,15 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
   check_odim_nexrad(radar)
   if (anyDuplicated(radar)) {
     cli::cli_abort(
-      "{.arg radar} contains duplications these must be removed.",
+      "{.arg radar} contains duplications that must be removed.",
       class = "getRad_error_radar_duplicated"
     )
   }
   if (inherits(datetime, "POSIXct") && length(datetime) == 2) {
     if (any(duplicated(datetime))) {
       cli::cli_abort(
-        "When providing two {.cls POSIXct} as a {.arg datetime} they must differ
-         to represent an inverval.",
+        "{.arg datetime} contains duplicate {.cls POSIXct}. Values must differ
+         to represent an interval.",
         class = "getRad_error_duplicated_timestamps"
       )
     }
@@ -87,10 +87,10 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
   if (lubridate::is.interval(datetime)) {
     if (lubridate::as.duration(datetime) > lubridate::hours(1)) {
       cli::cli_warn(
-        "The interval specified for {.arg datetime} ({.val
-        {lubridate::int_start(datetime)}}-{.val {lubridate::int_end(datetime)}})
-        likely results in many polar volumes. Computational issues can occur
-        when loading that many polar volumes at the same time.",
+        "{.arg datetime} represent an interval ({.val
+         {lubridate::int_start(datetime)}}-{.val {lubridate::int_end(datetime)}})
+         that likely covers many polar volumes. Computational issues can occur
+         when loading that many polar volumes at the same time.",
         class = "getRad_warn_many_pvols_requested"
       )
     }

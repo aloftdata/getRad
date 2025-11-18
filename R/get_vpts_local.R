@@ -1,7 +1,9 @@
 get_vpts_local <- function(
   radar,
   rounded_interval,
-  directory
+  directory,
+  ...,
+  call = rlang::caller_env()
 ) {
   dates <- as.Date(seq(
     lubridate::int_start(rounded_interval),
@@ -31,7 +33,8 @@ get_vpts_local <- function(
         x = "None of the expected files are in the source directory ({.file {directory}}).",
         i = "The following files were expected: {.file {unlist(full_paths)}}."
       ),
-      class = "getRad_error_files_not_in_source_dir"
+      class = "getRad_error_files_not_in_source_dir",
+      call = call
     )
   }
   if (any(!unlist(s))) {
@@ -43,7 +46,8 @@ get_vpts_local <- function(
         i = "These files are considered missing data and therefore omitted from the results."
       ),
       missing_files = missing_files,
-      class = "getRad_warning_some_files_not_in_source_dir"
+      class = "getRad_warning_some_files_not_in_source_dir",
+      call = call
     )
   }
   any_file <- purrr::map_lgl(s, any)

@@ -6,8 +6,7 @@ test_that("get_vpts_aloft() returns error on invalid odim code", {
     get_vpts_aloft(
       radar = "beja",
       rounded_interval = lubridate::interval("2023-01-01", "2023-01-02"),
-      source = "uva",
-      coverage
+      source = "uva"
     ),
     class = "getRad_error_radar_not_single_odim_string"
   )
@@ -16,8 +15,7 @@ test_that("get_vpts_aloft() returns error on invalid odim code", {
     get_vpts_aloft(
       radar = 12345,
       rounded_interval = lubridate::interval("2023-01-01", "2023-01-02"),
-      source = "uva",
-      coverage
+      source = "uva"
     ),
     class = "getRad_error_radar_not_single_odim_string"
   )
@@ -28,8 +26,7 @@ test_that("get_vpts_aloft() returns error when multiple radars are queried", {
     get_vpts_aloft(
       radar = c("bejab", "depro"),
       rounded_interval = lubridate::interval("2023-01-01", "2023-01-02"),
-      source = "uva",
-      coverage
+      source = "uva"
     ),
     class = "getRad_error_radar_not_single_odim_string"
   )
@@ -40,8 +37,7 @@ test_that("get_vpts_aloft() returns error when radar is not found in coverage", 
     get_vpts_aloft(
       radar = "aaazz",
       rounded_interval = lubridate::interval("2023-01-01", "2023-01-02"),
-      source = "baltrad",
-      coverage
+      source = "baltrad"
     ),
     class = "getRad_error_aloft_radar_not_found"
   )
@@ -49,8 +45,7 @@ test_that("get_vpts_aloft() returns error when radar is not found in coverage", 
     rlang::catch_cnd(get_vpts_aloft(
       radar = c("nlaaa"),
       rounded_interval = lubridate::interval("2023-01-01", "2023-01-02"),
-      source = "baltrad",
-      coverage
+      source = "baltrad"
     ))$missing_radar,
     c("nlaaa")
   )
@@ -61,8 +56,7 @@ test_that("get_vpts_aloft() returns error when date is requested not in coverage
     get_vpts_aloft(
       radar = "bejab",
       rounded_interval = lubridate::interval("2018-05-01", "2018-05-02"),
-      source = "baltrad",
-      coverage
+      source = "baltrad"
     ),
     class = "getRad_error_date_not_found"
   )

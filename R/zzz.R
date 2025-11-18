@@ -41,6 +41,7 @@ release_bullets <- function() {
   c(
     "Update codemeta.json with: `codemetar::write_codemeta()`",
     "update CITATION.cff with `cffr::cff_write(dependencies = FALSE)`
-    (after incrementing version)"
+    (after incrementing version)",
+    "Run local tests to ensure attributes and radars with api keys work"
   )
 }

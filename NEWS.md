@@ -1,5 +1,7 @@
 # getRad (development version)
 
+* Implement reading vpts data from a local directory (#135).
+
 # getRad 0.2.3
 
 * Improve error for requesting German data out of temporal restrictions (#131).

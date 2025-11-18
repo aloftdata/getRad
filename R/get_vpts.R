@@ -19,7 +19,11 @@
 #'   - A [lubridate::interval()], between which all data files are downloaded.
 #' @param source Source of the data. One of `"baltrad"`, `"uva"`, `"ecog-04003"`
 #'   or `"rmi"`. Only one source can be queried at a time. If not provided,
-#'   `"baltrad"` is used.
+#'   `"baltrad"` is used. Alternatively a local directory can be specified.
+#'   In that case data is read from the directory, file in the directory
+#'   should be structures like they are in the monthly folders of the aloft
+#'   repository. To specify an alternative structure the
+#'   `"getRad.vpts_local_path_format"` option can be used.
 #' @param return_type Type of object that should be returned. Either:
 #'   - `"vpts"`: vpts object(s) (default).
 #'   - `"tibble"`: a [dplyr::tibble()].
@@ -102,11 +106,11 @@ get_vpts <- function(
   # Get the default value of the source arg, even if the user provided
   # a different value.
   supported_sources <- eval(formals()$source)
-  if (!source %in% supported_sources) {
+  if (!(source %in% supported_sources | dir.exists(source))) {
     cli::cli_abort(
       glue::glue(
         "Invalid source {glue::backtick(source)} provided. Possible values are:
-        {possible_sources}.",
+        {possible_sources} or a local directory.",
         possible_sources = glue::glue_collapse(
           glue::backtick(supported_sources),
           sep = ", ",
@@ -198,7 +202,9 @@ get_vpts <- function(
     switch(
       dplyr::case_when(
         source == "rmi" ~ "rmi",
-        source %in% eval(formals("get_vpts_aloft")$source) ~ "aloft"
+        source %in% eval(formals("get_vpts_aloft")$source) ~ "aloft",
+        # this is the last option to avoid using a local source if an online exists
+        dir.exists(source) ~ "local"
       ),
       rmi = purrr::map(
         radar,
@@ -213,7 +219,8 @@ get_vpts <- function(
           source = source
         ),
         .purrr_error_call = cl
-      )
+      ),
+      local = get_vpts_local(radar, rounded_interval, directory = source)
     ) |>
     radar_to_name()
 

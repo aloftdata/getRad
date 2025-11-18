@@ -28,7 +28,11 @@ downloaded.
 
 \item{source}{Source of the data. One of \code{"baltrad"}, \code{"uva"}, \code{"ecog-04003"}
 or \code{"rmi"}. Only one source can be queried at a time. If not provided,
-\code{"baltrad"} is used.}
+\code{"baltrad"} is used. Alternatively a local directory can be specified.
+In that case data is read from the directory, file in the directory
+should be structures like they are in the monthly folders of the aloft
+repository. To specify an alternative structure the
+\code{"getRad.vpts_local_path_format"} option can be used.}
 
 \item{return_type}{Type of object that should be returned. Either:
 \itemize{

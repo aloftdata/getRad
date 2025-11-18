@@ -44,6 +44,7 @@ get_vpts_aloft <- function(
     cli::cli_abort(
       "Can't find radar {.val {missing_radar}} in the coverage file (see
        {.fun get_vpts_coverage}).",
+      missing_radar = missing_radar,
       class = "getRad_error_aloft_radar_not_found"
     )
   }

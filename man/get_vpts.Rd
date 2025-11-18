@@ -28,11 +28,8 @@ downloaded.
 
 \item{source}{Source of the data. One of \code{"baltrad"}, \code{"uva"}, \code{"ecog-04003"}
 or \code{"rmi"}. Only one source can be queried at a time. If not provided,
-\code{"baltrad"} is used. Alternatively a local directory can be specified.
-In that case data is read from the directory, file in the directory
-should be structures like they are in the monthly folders of the aloft
-repository. To specify an alternative structure the
-\code{"getRad.vpts_local_path_format"} option can be used.}
+\code{"baltrad"} is used. Alternatively a local directory can be specified,
+see details for an explanation of the file format.}
 
 \item{return_type}{Type of object that should be returned. Either:
 \itemize{
@@ -51,6 +48,24 @@ as a (list of) of \link[bioRad:summary.vpts]{vpts objects} or a
 }
 \details{
 For more details on supported sources, see \code{vignette("supported_sources")}.
+
+In that case data is read from the directory, file in the directory
+should be structures like they are in the monthly folders of the aloft
+repository. To specify an alternative structure the
+\code{"getRad.vpts_local_path_format"} option can be used. This can, for
+example, be used to read daily data. Some example options for the glue
+formatters are:
+\itemize{
+\item \code{"{radar}/{year}/{radar}_vpts_{year}{month}.csv.gz"}: The default format,
+the same structure as the monthly directories in the aloft repository. Or as
+contained in the \code{tgz} files in the aloft zenodo repository.
+\item \code{"{substr(radar, 1,2)}/{radar}/{year}/{radar}_vpts_{year}{month}.csv.gz"}:
+The format as in the files in the zenodo aloft repository
+\item \code{"{radar}/{year}/{radar}_vpts_{year}{month}{day}.csv"}: The format as daily
+data is stored in aloft data
+}
+
+Besides the examples above there is a \code{date} object available for formatting.
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

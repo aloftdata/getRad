@@ -13,13 +13,13 @@ get_vpts_local <- function(
       ~ unique(glue::glue(
         getOption(
           "getRad.vpts_local_path_format",
-          default = "{radar}/{year}/{radar}_vpts_{year}{sprintf('%02i',month)}.csv.gz"
+          default = "{radar}/{year}/{radar}_vpts_{year}{month}.csv.gz"
         ),
         radar = .x,
         year = lubridate::year(dates),
-        month = lubridate::month(dates),
-        day = lubridate::day(dates),
-        datetime = strftime(dates, "%Y%m%d%H%M", tz = "UTC")
+        month = sprintf("%02i", lubridate::month(dates)),
+        day = sprintf("%02i", lubridate::day(dates)),
+        date = dates
       ))
     ) |>
     purrr::set_names(radar)

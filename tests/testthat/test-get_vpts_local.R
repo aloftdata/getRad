@@ -19,7 +19,7 @@ for (i in files) {
 test_that("can read data", {
   withr::with_options(
     c(
-      "getRad.vpts_local_path_format" = "{radar}/{year}/{radar}_vpts_{year}{sprintf('%02i',month)}{sprintf('%02i',day)}.csv"
+      "getRad.vpts_local_path_format" = "{radar}/{year}/{radar}_vpts_{year}{month}{day}.csv"
     ),
     {
       expect_s3_class(
@@ -45,7 +45,7 @@ test_that("can read data", {
 test_that("errors outside of range or directory with corect format", {
   withr::with_options(
     c(
-      "getRad.vpts_local_path_format" = "{radar}/{year}/{radar}_vpts_{year}{sprintf('%02i',month)}{sprintf('%02i',day)}.csv"
+      "getRad.vpts_local_path_format" = "{radar}/{year}/{radar}_vpts_{year}{month}{day}.csv"
     ),
     {
       expect_error(

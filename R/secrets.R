@@ -49,10 +49,6 @@ set_secret <- function(name, secret = NULL) {
 }
 
 list_secrets <- list(
-  "dk_api_key" = c(
-    i = "To obtain an api key for danish radar data please visit {.url https://dmiapi.govcloud.dk/#!/}, here a user account can be created  ({.href [documentation](https://opendatadocs.dmi.govcloud.dk/en/Authentication)}) and a api key (called {.arg radardataAPI}) can be obtained.",
-    i = "Also confirm you adhere to the terms of use {.url https://opendatadocs.dmi.govcloud.dk/Terms_of_Use})."
-  ),
   "nl_api_key" = c(
     i = "To obtain an api key for the Netherlands visit {.url https://developer.dataplatform.knmi.nl/open-data-api#token}.",
     i = "On the refered page also an public token is available for exploratory use this could be a easy option."

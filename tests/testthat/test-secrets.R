@@ -28,19 +28,19 @@ test_that("set_secret fails correctly", {
 test_that("Fails correctly when getRad.key_prefix is not set", {
   withr::with_options(list("getRad.key_prefix" = NULL), {
     expect_error(
-      set_secret("dk_api_key", secret = "empty"),
+      set_secret("nl_api_key", secret = "empty"),
       class = "getRad_error_key_prefix_not_found_setting"
     )
     expect_error(
-      get_secret("dk_api_key"),
+      get_secret("nl_api_key"),
       class = "getRad_error_key_prefix_not_found_getting"
     )
   })
 })
 test_that("set_secret informs where to get secret", {
   withr::with_options(list(keyring_backend = "env"), {
-    expect_silent(set_secret("dk_api_key", "asdf"))
-    expect_silent(keyring::key_delete("getRad_dk_api_key"))
+    expect_silent(set_secret("nl_api_key", "asdf"))
+    expect_silent(keyring::key_delete("getRad_nl_api_key"))
   })
 })
 

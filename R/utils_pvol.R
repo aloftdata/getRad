@@ -48,7 +48,7 @@ read_pvol_from_url_per_param <- function(
   )))
   if (!all_params_same_attributes) {
     cli::cli_abort(
-      "Not all polar volumes have the same attributes",
+      "Not all polar volumes have the same attributes.",
       class = "getRad_error_differing_attributes",
       call = call
     )

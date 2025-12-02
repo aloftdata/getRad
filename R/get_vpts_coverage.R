@@ -30,7 +30,7 @@ get_vpts_coverage <- function(
 
   if (length(source) == 0) {
     cli::cli_abort(
-      "Source should atleast have one value.",
+      "{.arg source} must have at least one value.",
       class = "getRad_error_length_zero"
     )
   }

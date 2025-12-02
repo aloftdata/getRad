@@ -89,17 +89,14 @@ get_vpts <- function(
   if (missing(source)) {
     source <- "baltrad"
   }
+  supported_sources <- eval(rlang::fn_fmls()$source)
+
   if (is.null(source)) {
     # providing NULL isn't allowed either
     cli::cli_abort(
-      glue::glue(
-        "Please provide a value for the source argument:
-        possible values are {possible_sources}.",
-        possible_sources = glue::glue_collapse(
-          glue::backtick(eval(rlang::fn_fmls()$source)),
-          sep = ", ",
-          last = " or "
-        )
+      c(
+        "{.arg source} must be provided.",
+        "i" = "Supported sources: {.val {supported_sources}}."
       ),
       class = "getRad_error_source_missing"
     )
@@ -110,7 +107,7 @@ get_vpts <- function(
   ## the enumeration in the function definition.
   if (length(source) > 1) {
     cli::cli_abort(
-      "Only one source can be queried at a time.",
+      "{.arg source} must be a single character value.",
       class = "getRad_error_multiple_sources"
     )
   }
@@ -122,14 +119,9 @@ get_vpts <- function(
   supported_sources <- eval(formals()$source)
   if (!(source %in% supported_sources | dir.exists(source))) {
     cli::cli_abort(
-      glue::glue(
-        "Invalid source {glue::backtick(source)} provided. Possible values are:
-        {possible_sources} or a local directory.",
-        possible_sources = glue::glue_collapse(
-          glue::backtick(supported_sources),
-          sep = ", ",
-          last = " or "
-        )
+      c(
+        "{.arg source} {.val {source}} is invalid.",
+        "i" = "Supported sources: {.val {supported_sources}} or a local directory."
       ),
       class = "getRad_error_source_invalid"
     )
@@ -138,7 +130,7 @@ get_vpts <- function(
   # Check that the provided radar argument is a character vector
   if (!is.character(radar)) {
     cli::cli_abort(
-      "Radar argument must be a character vector.",
+      "{.arg radar} must be a character vector.",
       class = "getRad_error_radar_not_character"
     )
   }
@@ -150,7 +142,8 @@ get_vpts <- function(
       !lubridate::is.interval(datetime)
   ) {
     cli::cli_abort(
-      "{.arg datetime} argument must be a {.cls character}, {.cls POSIXct}, {.cls Date}, or {.cls Interval} object.",
+      "{.arg datetime} must be a {.cls character}, {.cls POSIXct}, {.cls Date},
+       or {.cls Interval} object.",
       class = "getRad_error_date_parsable"
     )
   }

@@ -12,7 +12,7 @@
 radar_recode <- function(radar, ..., call = rlang::caller_env()) {
   if (!(rlang::is_scalar_character(radar) && !is.na(radar))) {
     cli::cli_abort(
-      "The argument {.arg radar} should be scalar character of length 1 that is not NA.",
+      "{.arg radar} must be a single radar code.",
       class = "getRad_error_recode_radar_radar_argument",
       call = call
     )
@@ -22,8 +22,11 @@ radar_recode <- function(radar, ..., call = rlang::caller_env()) {
     ...,
     cli::cli_abort(
       c(
-        x = "No mapping exists for the {.val {radar}} radar.",
-        i = " Either this radar is non-existant (possibly check with {.code get_weather_radars()}). Alternatively no mapping is (yet) implemented for this radar. In the later case consider creating a bug report."
+        "Can't find radar {.val {radar}}.",
+        "i" = "Either this radar is non-existant (possibly check with {.fun
+               get_weather_radars}). Alternatively no mapping is (yet)
+               implemented for this radar. In the latter case consider creating
+               a bug report."
       ),
       class = "getRad_error_radar_not_found",
       call = call
@@ -186,7 +189,7 @@ radar_to_name <- function(vpts_df_list) {
 #' as_integer_shh(c("1", "2", "3"))
 as_integer_shh <- function(x) {
   if (!is.character(x)) {
-    cli::cli_abort("x must be a character vector")
+    cli::cli_abort("{.arg x} must be a character (vector).")
   }
   suppressWarnings(as.integer(x))
 }
@@ -203,7 +206,7 @@ as_integer_shh <- function(x) {
 yes_no_as_logical <- function(x) {
   # x needs to be a character vector
   if (!is.character(x)) {
-    cli::cli_abort("x must be a character vector")
+    cli::cli_abort("{.arg x} must be a character (vector).")
   }
 
   # Convert `Y` to TRUE, `N` to FALSE and `NA` to NA
@@ -230,7 +233,7 @@ yes_no_as_logical <- function(x) {
 #' as_double_shh(c("1.1", "2.2", "3.3"))
 as_numeric_shh <- function(x) {
   if (!is.character(x)) {
-    cli::cli_abort("x must be a character vector")
+    cli::cli_abort("{.arg x} must be a character (vector).")
   }
   suppressWarnings(as.numeric(x))
 }
@@ -344,8 +347,8 @@ check_odim <- function(
 ) {
   if (!all(is_odim(x))) {
     cli::cli_abort(
-      "Please provide one or more radars as a character vector.
-      Consisting of 5 characters each to match an odim code.",
+      "{.arg arg} must be a (vector of) radar code(s). Each code must be a
+       5-letter ODIM code (e.g. {.val nldhl}).",
       class = "getRad_error_radar_not_odim_string",
       call = call
     )
@@ -359,8 +362,8 @@ check_odim_nexrad <- function(
 ) {
   if (!all(is_odim_nexrad(x))) {
     cli::cli_abort(
-      "Each element of {.arg {arg}} must be either a 5-letter ODIM code
-      or a 4-letter NEXRAD ICAO code.",
+      "{.arg arg} must be a (vector of) radar code(s). Each code must be a
+       5-letter ODIM code or a 4-letter NEXRAD code.",
       class = "getRad_error_radar_not_odim_nexrad",
       call = call
     )
@@ -375,8 +378,8 @@ check_odim_scalar <- function(
 ) {
   if (!is_odim_scalar(x)) {
     cli::cli_abort(
-      "Please provide {.arg {arg}} as a character vector of length 1.
-    Consisting of 5 characters to match an odim code.",
+      "{.arg arg} must be a single radar code. The code must be a 5-letter ODIM
+       code (e.g. {.val nldhl}).",
       class = "getRad_error_radar_not_single_odim_string",
       call = call
     )
@@ -391,7 +394,8 @@ check_odim_nexrad_scalar <- function(
 ) {
   if (!is_odim_nexrad_scalar(x)) {
     cli::cli_abort(
-      "Radar must be exactly one 5-letter ODIM code or one 4-letter NEXRAD code.",
+      "{.arg arg} must be a single radar code. The code must be a 5-letter ODIM
+       code or a 4-letter NEXRAD code.",
       class = "getRad_error_radar_not_single_odim_nexrad",
       call = call
     )
@@ -445,11 +449,16 @@ fetch_from_url_raw <- function(urls, use_cache = TRUE, parallel = TRUE) {
   # Make warning for missing csv
   if (any(ss <- unlist(lapply(data_response, inherits, "httr2_http_404")))) {
     cli::cli_warn(
-      class = "getRad_warning_404_on_csv_download",
       c(
-        "!" = "The following: {urls[ss]} url{?s} could not be downloaded (HTTP 404 Not Found).",
-        i = "Given an attempt was made data was present in the coverage data. Therefore this likely relates to an error in the data repository. For now the data has been omitted from the returned result however for a final resolution the issue should be resolved in the repository (e.g. {.url https://github.com/aloftdata/data-repository})."
-      )
+        "Not all files listed in the coverage file (see {.fun
+         get_vpts_coverage}) could be downloaded (404 Not Found).",
+        "i" = "This may indicate an error in the repository, please report an
+               issue at {.url
+               https://github.com/aloftdata/data-repository/issues/}.",
+        "i" = "The following file{?s} could not be downloaded: {.url
+               {urls[ss]}}."
+      ),
+      class = "getRad_warning_404_on_csv_download"
     )
     for (i in seq_along(data_response)) {
       if (ss[i]) {

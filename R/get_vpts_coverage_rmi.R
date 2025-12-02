@@ -47,8 +47,8 @@ get_vpts_coverage_rmi <- function(
 
   if (any(!radar %in% found_radars)) {
     cli::cli_abort(
-      "Requested radar {radar[!radar %in% found_radars]} not
-                   present in RMI coverage",
+      "Can't find radar {.val {radar[!radar %in% found_radars]}} in the coverage
+       file (see {.fun get_vpts_coverage}.",
       call = call
     )
   }
@@ -69,8 +69,8 @@ get_vpts_coverage_rmi <- function(
 
   if (!all(year %in% years_covered_by_rmi) && use_year_filter) {
     cli::cli_abort(
-      "Requested year {year[!year %in% years_covered_by_rmi]}
-     not present in RMI coverage",
+      "Can't find year {.val {year[!year %in% years_covered_by_rmi]}} in the
+       coverage file (see {.fun get_vpts_coverage}).",
       class = "getRad_error_date_not_found",
       call = call
     )

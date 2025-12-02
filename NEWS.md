@@ -1,5 +1,8 @@
 # getRad (development version)
 
+* Make error messages more consistent (#146).
+* Restore access to Estonian data.
+
 # getRad 0.2.3
 
 * Improve error for requesting German data out of temporal restrictions (#131).

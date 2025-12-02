@@ -18,7 +18,7 @@ get_pvol_us <- function(radar, datetime, ..., call = rlang::caller_env()) {
           httr2::req_perform(path = file, error_call = call),
         httr2_http_404 = function(cnd) {
           cli::cli_abort(
-            "NEXRAD file not found at {.url {url}}.",
+            "Can't find NEXRAD file at {.url {url}}.",
             call = call,
             cnd = cnd,
             class = "getRad_error_us_file_not_found"
@@ -48,8 +48,7 @@ get_pvol_us <- function(radar, datetime, ..., call = rlang::caller_env()) {
   d <- as.Date(date, tz = "UTC")
   if (!rlang::is_scalar_character(radar)) {
     cli::cli_abort(
-      "Radar should be a character of length one as otherwise not all
-                   key date combinations might be tried",
+      "{.arg radar} must be single radar code.",
       class = "getRad_error_pvol_us_radar_not_scalar",
       call = call
     )
@@ -145,7 +144,8 @@ get_pvol_us <- function(radar, datetime, ..., call = rlang::caller_env()) {
   )
   if (!length(ts)) {
     cli::cli_abort(
-      "No scans found for {.val {radar}} near {.val {format(datetime, '%F %T %Z')}}",
+      "Can't find scans for radar {.val {radar}} near {.val {format(datetime,
+       \"%F %T %Z\")}}.",
       class = "getRad_error_us_no_scan_found",
       call = call
     )

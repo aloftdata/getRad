@@ -5,6 +5,8 @@
 - Make error messages more consistent
   ([\#146](https://github.com/aloftdata/getRad/issues/146)).
 - Restore access to Estonian data.
+- Prevent leaving temporary files for downloading Dutch polar volume
+  data ([\#148](https://github.com/aloftdata/getRad/issues/148)).
 
 ## getRad 0.2.3
 

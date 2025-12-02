@@ -1,5 +1,6 @@
 # getRad (development version)
 
+* Implement reading `vpts` data from a local directory (#135).
 * Make error messages more consistent (#146).
 * Restore access to Estonian data.
 

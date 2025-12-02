@@ -7,6 +7,23 @@
 #' @details
 #' For more details on supported sources, see `vignette("supported_sources")`.
 #'
+#'   In that case data is read from the directory, file in the directory
+#'   should be structures like they are in the monthly folders of the aloft
+#'   repository. To specify an alternative structure the
+#'   `"getRad.vpts_local_path_format"` option can be used. This can, for
+#'   example, be used to read daily data. Some example options for the glue
+#'   formatters are:
+#'
+#'  * `"{radar}/{year}/{radar}_vpts_{year}{month}.csv.gz"`: The default format,
+#'  the same structure as the monthly directories in the aloft repository. Or as
+#'  contained in the `tgz` files in the aloft zenodo repository.
+#'  *  `"{substr(radar, 1,2)}/{radar}/{year}/{radar}_vpts_{year}{month}.csv.gz"`:
+#'  The format as in the files in the zenodo aloft repository
+#'  * `"{radar}/{year}/{radar}_vpts_{year}{month}{day}.csv"`: The format as daily
+#'  data is stored in aloft data
+#'
+#'  Besides the examples above there is a `date` object available for formatting.
+#'
 #' @inheritParams get_pvol
 #' @inherit get_vpts_aloft details
 #' @param datetime Either:
@@ -19,7 +36,8 @@
 #'   - A [lubridate::interval()], between which all data files are downloaded.
 #' @param source Source of the data. One of `"baltrad"`, `"uva"`, `"ecog-04003"`
 #'   or `"rmi"`. Only one source can be queried at a time. If not provided,
-#'   `"baltrad"` is used.
+#'   `"baltrad"` is used. Alternatively a local directory can be specified,
+#'   see details for an explanation of the file format.
 #' @param return_type Type of object that should be returned. Either:
 #'   - `"vpts"`: vpts object(s) (default).
 #'   - `"tibble"`: a [dplyr::tibble()].
@@ -98,11 +116,13 @@ get_vpts <- function(
 
   # Get the default value of the source arg, even if the user provided
   # a different value.
-  if (!source %in% supported_sources) {
+
+  supported_sources <- eval(formals()$source)
+  if (!(source %in% supported_sources | dir.exists(source))) {
     cli::cli_abort(
       c(
         "{.arg source} {.val {source}} is invalid.",
-        "i" = "Supported sources: {.val {supported_sources}}."
+        "i" = "Supported sources: {.val {supported_sources}}. Alternatively a local directory can be specified."
       ),
       class = "getRad_error_source_invalid"
     )
@@ -190,7 +210,9 @@ get_vpts <- function(
     switch(
       dplyr::case_when(
         source == "rmi" ~ "rmi",
-        source %in% eval(formals("get_vpts_aloft")$source) ~ "aloft"
+        source %in% eval(formals("get_vpts_aloft")$source) ~ "aloft",
+        # this is the last option to avoid using a local source if an online exists
+        dir.exists(source) ~ "local"
       ),
       rmi = purrr::map(
         radar,
@@ -205,7 +227,8 @@ get_vpts <- function(
           source = source
         ),
         .purrr_error_call = cl
-      )
+      ),
+      local = get_vpts_local(radar, rounded_interval, directory = source)
     ) |>
     radar_to_name()
 

@@ -1,5 +1,11 @@
 # getRad (development version)
 
+* Make error messages more consistent (#146).
+* Restore access to Estonian data.
+* Prevent leaving temporary files for downloading Dutch polar volume data (#148).
+
+# getRad 0.2.3
+
 * Improve error for requesting German data out of temporal restrictions (#131).
 * Start using the air formatter (#128).
 * Do not fail but rather warn when csv is missing from repository (#136).

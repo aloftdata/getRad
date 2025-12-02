@@ -39,8 +39,7 @@ get_weather_radars <- function(
     !rlang::is_character(source) || any(is.na(source)) || length(source) == 0
   ) {
     cli::cli_abort(
-      "{.arg source} is not valid, it should be an {.cls character}
-                   vector with a length of atleast one not contain NA values.",
+      "{.arg source} must be a character (vector).",
       class = "getRad_error_weather_radar_source_not_character"
     )
   }

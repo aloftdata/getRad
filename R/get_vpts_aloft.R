@@ -42,8 +42,8 @@ get_vpts_aloft <- function(
   if (!all(radar_odim_code %in% coverage$radar)) {
     missing_radar <- radar_odim_code[!radar_odim_code %in% coverage$radar]
     cli::cli_abort(
-      "Radar not found in ALOFT coverage:
-      {missing_radar}.",
+      "Can't find radar {.val {missing_radar}} in the coverage file (see
+       {.fun get_vpts_coverage}).",
       missing_radar = missing_radar,
       class = "getRad_error_aloft_radar_not_found"
     )
@@ -60,7 +60,7 @@ get_vpts_aloft <- function(
 
   if (!at_least_one_radar_date_combination_exists) {
     cli::cli_abort(
-      "No data found for the requested radar(s) and date(s).",
+      "Can't find any data for the requested radar(s) and date(s).",
       class = "getRad_error_date_not_found"
     )
   }
@@ -77,9 +77,8 @@ get_vpts_aloft <- function(
 
   if (!all(radar_odim_code %in% coverage$radar)) {
     cli::cli_abort(
-      "{length(missing_radars)} Radar{?s} not found in {source} coverage:
-      {glue::backtick(missing_radars)}",
-      missing_radars = missing_radars,
+      "Can't find radar{?s} {.val {missing_radars}} in the coverage file (see
+       {.fun get_vpts_coverage}).",
       class = "getRad_error_radar_not_found"
     )
   }

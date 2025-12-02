@@ -7,8 +7,7 @@
 #' @return A tibble with VPTS data.
 #' @keywords internal
 
-get_vpts_rmi <- function(radar_odim_code,
-                         rounded_interval) {
+get_vpts_rmi <- function(radar_odim_code, rounded_interval) {
   # Check the coverage for data availability
   coverage <- get_vpts_coverage_rmi(
     radar = radar_odim_code,
@@ -49,17 +48,21 @@ get_vpts_rmi <- function(radar_odim_code,
     purrr::map(rmi_files, \(lines) utils::tail(lines, -4)) |>
     purrr::map(parse_rmi) |>
     # Add the source_file column
-    purrr::map2(rmi_files, ~ dplyr::mutate(.x,
-      source_file =
-        basename(get_rmi_sourcefile(.y))
-    )) |>
+    purrr::map2(
+      rmi_files,
+      ~ dplyr::mutate(.x, source_file = basename(get_rmi_sourcefile(.y)))
+    ) |>
     # Add the radar column from the file path
-    purrr::map2(rmi_urls, ~ dplyr::mutate(.x,
-      radar = string_extract(
-        .y,
-        "(?<=vbird\\/)[a-z]+"
+    purrr::map2(
+      rmi_urls,
+      ~ dplyr::mutate(
+        .x,
+        radar = string_extract(
+          .y,
+          "(?<=vbird\\/)[a-z]+"
+        )
       )
-    )) |>
+    ) |>
     purrr::list_rbind()
 
   # Enrich with metadata from `weather_radars()`, but only from the `main`
@@ -67,7 +70,8 @@ get_vpts_rmi <- function(radar_odim_code,
   radar_metadata <-
     get_weather_radars(source = "opera") |>
     dplyr::filter(.data$origin == "main") |>
-    dplyr::mutate(.data$odimcode,
+    dplyr::mutate(
+      .data$odimcode,
       radar_latitude = .data$latitude,
       radar_longitude = .data$longitude,
       radar_height = .data$heightofstation,
@@ -79,7 +83,8 @@ get_vpts_rmi <- function(radar_odim_code,
     )
 
   enriched_vpts <-
-    dplyr::left_join(combined_vpts,
+    dplyr::left_join(
+      combined_vpts,
       radar_metadata,
       by = dplyr::join_by("radar" == "odimcode")
     )

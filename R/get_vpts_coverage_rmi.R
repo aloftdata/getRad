@@ -15,8 +15,12 @@
 #'
 #' # For several radars for a single year
 #' get_vpts_coverage_rmi(radar = c("frave", "bezav", "nlhrw"), year = 2024)
-get_vpts_coverage_rmi <- function(radar = NULL, year = NULL, ...,
-                                  call = rlang::caller_env()) {
+get_vpts_coverage_rmi <- function(
+  radar = NULL,
+  year = NULL,
+  ...,
+  call = rlang::caller_env()
+) {
   rlang::check_installed(
     c("tidyr"),
     "to read coverage date from RMI",
@@ -26,7 +30,10 @@ get_vpts_coverage_rmi <- function(radar = NULL, year = NULL, ...,
   base_url <-
     "https://opendata.meteo.be/ftp/observations/radar/vbird"
 
-  found_radars <- get_element_regex(get_html(base_url, call = call), "[a-z]{5}(?=\\/)")
+  found_radars <- get_element_regex(
+    get_html(base_url, call = call),
+    "[a-z]{5}(?=\\/)"
+  )
 
   if (missing(radar)) {
     radar <- found_radars
@@ -39,26 +46,33 @@ get_vpts_coverage_rmi <- function(radar = NULL, year = NULL, ...,
   }
 
   if (any(!radar %in% found_radars)) {
-    cli::cli_abort("Requested radar {radar[!radar %in% found_radars]} not
-                   present in RMI coverage", call = call)
+    cli::cli_abort(
+      "Can't find radar {.val {radar[!radar %in% found_radars]}} in the coverage
+       file (see {.fun get_vpts_coverage}.",
+      call = call
+    )
   }
 
   radar_year_combos <-
     purrr::map(
       found_radars,
-      \(radar) get_element_regex(
-        get_html(file.path(base_url, radar), call = call),
-        "[0-9]{4}"
-      )
+      \(radar) {
+        get_element_regex(
+          get_html(file.path(base_url, radar), call = call),
+          "[0-9]{4}"
+        )
+      }
     ) |>
     purrr::set_names(found_radars)
 
   years_covered_by_rmi <- as.integer(unique(unlist(radar_year_combos)))
 
   if (!all(year %in% years_covered_by_rmi) && use_year_filter) {
-    cli::cli_abort("Requested year {year[!year %in% years_covered_by_rmi]}
-     not present in RMI coverage",
-      class = "getRad_error_date_not_found", call = call
+    cli::cli_abort(
+      "Can't find year {.val {year[!year %in% years_covered_by_rmi]}} in the
+       coverage file (see {.fun get_vpts_coverage}).",
+      class = "getRad_error_date_not_found",
+      call = call
     )
   }
 
@@ -76,7 +90,7 @@ get_vpts_coverage_rmi <- function(radar = NULL, year = NULL, ...,
         years_per_radar
       }
     })() |>
-    (\(years_per_radar)    {
+    (\(years_per_radar) {
       purrr::map2(
         years_per_radar,
         names(years_per_radar),
@@ -84,10 +98,13 @@ get_vpts_coverage_rmi <- function(radar = NULL, year = NULL, ...,
       )
     })() |>
     purrr::map(\(year_url) {
-      purrr::map(year_url, ~ get_element_regex(
-        get_html(.x, call = call),
-        "[a-z]{5}_vpts_.+"
-      )) |>
+      purrr::map(
+        year_url,
+        ~ get_element_regex(
+          get_html(.x, call = call),
+          "[a-z]{5}_vpts_.+"
+        )
+      ) |>
         purrr::set_names(basename(year_url))
     }) |>
     tibble::enframe(name = "radar", value = "years") |>

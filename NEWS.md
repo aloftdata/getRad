@@ -1,7 +1,31 @@
 # getRad (development version)
 
-* Support downloading Swedish data (#96).
+* Make error messages more consistent (#146).
+* Restore access to Estonian data.
+* Prevent leaving temporary files for downloading Dutch polar volume data (#148).
+
+# getRad 0.2.3
+
+* Improve error for requesting German data out of temporal restrictions (#131).
+* Start using the air formatter (#128).
+* Do not fail but rather warn when csv is missing from repository (#136).
+* In `get_pvol` correct where attributes for German data causing incorrect `vp` heights (#139). 
+
+# getRad 0.2.2
+
+* Support downloading Slovakian polar volume data (#124).
+* Add retry attempts to `get_weather_radars` for NEXRAD to prevent failure (#116).
+* Update of NEXRAD url (#118).
+* Fix CRAN warning where cache was not cleaned after tests (#122).
+* Resolve `withr` error for Danish radars.
+
+# getRad 0.2.1
+
+* A bug (#101) in `get_vpts()` was fixed that caused the function to only return the first day of an interval, regardless of the length of the interval (#105).
+* Support downloading Swedish polar volume data (#96).
+* Support downloading Romanian polar volume data (#104).
 * How attribute is now present in Czech data (#102).
+* Use `withr` to prevent files being left in temporary directories (#98).
 
 # getRad 0.2.0
 

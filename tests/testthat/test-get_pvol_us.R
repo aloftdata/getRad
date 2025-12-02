@@ -2,7 +2,7 @@ time_utc <- lubridate::floor_date(Sys.time() - lubridate::hours(12), "5 mins")
 dt_int <- lubridate::interval(time_utc, time_utc + lubridate::minutes(9))
 
 test_that("NEXRAD polar volume can be downloaded", {
-  skip_if_offline(host = "noaa-nexrad-level2.s3.amazonaws.com")
+  skip_if_offline(host = "unidata-nexrad-level2.s3.amazonaws.com")
   suppressMessages(
     expect_s3_class(
       getRad::get_pvol("KABR", time_utc),
@@ -12,7 +12,7 @@ test_that("NEXRAD polar volume can be downloaded", {
 })
 
 test_that("NEXRAD polar volume correct time is downloaded", {
-  skip_if_offline(host = "noaa-nexrad-level2.s3.amazonaws.com")
+  skip_if_offline(host = "unidata-nexrad-level2.s3.amazonaws.com")
   t <- as.POSIXct("2025-1-10 18:00:00", tz = "UTC")
   suppressMessages(expect_identical(
     getRad::get_pvol("KABX", t)$datetime,
@@ -34,7 +34,11 @@ test_that("NEXRAD polar volume correct time is downloaded", {
 
 
 test_that("Correct error is given when no near data is found", {
-  expect_error(get_pvol("KABX", as.POSIXct("1970-1-1")), class = "getRad_error_us_no_scan_found")
+  skip_if_offline(host = "unidata-nexrad-level2.s3.amazonaws.com")
+  expect_error(
+    get_pvol("KABX", as.POSIXct("1970-1-1")),
+    class = "getRad_error_us_no_scan_found"
+  )
 })
 
 
@@ -50,7 +54,8 @@ test_that("Caching of keys works", {
       "list_nexrad_keys_kggw_2025-02-04_historic",
       "list_nexrad_keys_kggw_2025-02-03_historic",
       "list_nexrad_keys_kggw_2025-02-02_historic"
-    ) %in% getOption("getRad.cache")$keys()
+    ) %in%
+      getOption("getRad.cache")$keys()
   ))
 
   time_used <- system.time(.most_representative_nexrad_key(t, r))["elapsed"]
@@ -60,7 +65,8 @@ test_that("Caching of keys works", {
       "list_nexrad_keys_kggw_2025-02-04_historic",
       "list_nexrad_keys_kggw_2025-02-03_historic",
       "list_nexrad_keys_kggw_2025-02-02_historic"
-    ) %in% getOption("getRad.cache")$keys()
+    ) %in%
+      getOption("getRad.cache")$keys()
   ))
 
   expect_lt(

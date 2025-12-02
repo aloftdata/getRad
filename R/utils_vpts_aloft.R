@@ -30,39 +30,44 @@ read_vpts_from_url <- function(urls, use_cache = TRUE) {
   ## criteria
 
   fetch_from_url_raw(urls, use_cache = use_cache) |>
-    purrr::map(~ vroom::vroom(
-      delim = ",",
-      I(.x),
-      col_types =
-        list(
-          radar = vroom::col_factor(),
-          datetime = vroom::col_datetime(),
-          height = vroom::col_integer(),
-          u = vroom::col_double(),
-          v = vroom::col_double(),
-          w = vroom::col_double(),
-          ff = vroom::col_double(),
-          dd = vroom::col_double(),
-          sd_vvp = vroom::col_double(),
-          gap = vroom::col_logical(),
-          eta = vroom::col_double(),
-          dens = vroom::col_double(),
-          dbz = vroom::col_double(),
-          dbz_all = vroom::col_double(),
-          n = vroom::col_integer(),
-          n_dbz = vroom::col_integer(),
-          n_all = vroom::col_integer(),
-          n_dbz_all = vroom::col_integer(),
-          rcs = vroom::col_double(),
-          sd_vvp_threshold = vroom::col_double(),
-          vcp = vroom::col_integer(),
-          radar_longitude = vroom::col_double(),
-          radar_latitude = vroom::col_double(),
-          radar_height = vroom::col_integer(),
-          radar_wavelength = vroom::col_double(),
-          source_file = vroom::col_character()
-        ),
-      show_col_types = NULL,
-      progress = FALSE
-    ))
+    purrr::map(
+      ~ if (length(.x)) {
+        vroom::vroom(
+          delim = ",",
+          I(.x),
+          col_types = list(
+            radar = vroom::col_factor(),
+            datetime = vroom::col_datetime(),
+            height = vroom::col_integer(),
+            u = vroom::col_double(),
+            v = vroom::col_double(),
+            w = vroom::col_double(),
+            ff = vroom::col_double(),
+            dd = vroom::col_double(),
+            sd_vvp = vroom::col_double(),
+            gap = vroom::col_logical(),
+            eta = vroom::col_double(),
+            dens = vroom::col_double(),
+            dbz = vroom::col_double(),
+            dbz_all = vroom::col_double(),
+            n = vroom::col_integer(),
+            n_dbz = vroom::col_integer(),
+            n_all = vroom::col_integer(),
+            n_dbz_all = vroom::col_integer(),
+            rcs = vroom::col_double(),
+            sd_vvp_threshold = vroom::col_double(),
+            vcp = vroom::col_integer(),
+            radar_longitude = vroom::col_double(),
+            radar_latitude = vroom::col_double(),
+            radar_height = vroom::col_integer(),
+            radar_wavelength = vroom::col_double(),
+            source_file = vroom::col_character()
+          ),
+          show_col_types = NULL,
+          progress = FALSE
+        )
+      } else {
+        (data.frame())
+      }
+    )
 }

@@ -135,7 +135,7 @@ test_that("get_vpts() can fetch vpts data for multiple radars", {
     "data.frame"
   )
 
-  expect_contains(
+  expect_setequal(
     multiple_radars$radar,
     c("bejab", "bewid")
   )
@@ -269,7 +269,7 @@ test_that("get_vpts() can fetch data from a specific source only", {
 test_that("get_vpts() can fetch vpts data for a date range", {
   skip_if_offline()
 
-  radar_interval <- get_vpts(
+  radar_interval_short <- get_vpts(
     radar = "bejab",
     lubridate::interval(
       lubridate::ymd("2023-01-01"),
@@ -278,15 +278,51 @@ test_that("get_vpts() can fetch vpts data for a date range", {
     source = "baltrad",
     return_type = "tibble"
   )
+
+  # Longer interval from bugreport #101
+  radar_interval_long <- get_vpts(
+    radar = "bejab",
+    datetime = lubridate::interval(
+      lubridate::ymd_hms("2023-01-01 00:00:00"),
+      lubridate::ymd_hms("2023-01-05 14:00:00")
+    ),
+    source = "baltrad"
+  )
+
   expect_s3_class(
-    radar_interval,
+    radar_interval_short,
     "data.frame"
   )
 
   # Check that the requested dates are present in the output
-  expect_in(
-    unique(as.Date((radar_interval$datetime))),
+  expect_setequal(
+    unique(as.Date((radar_interval_short$datetime))),
     c(as.Date("2023-01-01"), as.Date("2023-01-02"))
+  )
+
+  # Check that all days of the interval are included
+  expect_setequal(
+    as.Date(radar_interval_long$datetime),
+    seq(from = as.Date("2023-01-01"), to = as.Date("2023-01-05"), by = "day")
+  )
+
+  # Check that all expected timesteps are present
+  expect_setequal(
+    radar_interval_long$datetime,
+    seq(
+      from = lubridate::ymd_hms("2023-01-01 00:00:00"),
+      to = lubridate::ymd_hms("2023-01-05 14:00:00"),
+      by = max(radar_interval_long$timesteps) # don't check for 0 timestep
+    )
+  )
+
+  # Check that the daterange was set correctly
+  expect_identical(
+    radar_interval_long$daterange,
+    c(
+      lubridate::ymd_hms("2023-01-01 00:00:00"),
+      lubridate::ymd_hms("2023-01-05 14:00:00")
+    )
   )
 })
 
@@ -607,7 +643,10 @@ test_that("`get_vpts` is tz insensitive", {
   tUtc <- lubridate::with_tz(t, "UTC")
   expect_identical(
     get_vpts("nlhrw", lubridate::as.interval(t, t + lubridate::minutes(30))),
-    get_vpts("nlhrw", lubridate::as.interval(tUtc, tUtc + lubridate::minutes(30)))
+    get_vpts(
+      "nlhrw",
+      lubridate::as.interval(tUtc, tUtc + lubridate::minutes(30))
+    )
   )
 })
 

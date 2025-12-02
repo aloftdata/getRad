@@ -30,11 +30,16 @@
 #'
 #' # Get radar metadata from NEXRAD
 #' get_weather_radars(source = "nexrad")
-get_weather_radars <- function(source = c("opera", "nexrad"),
-                               use_cache = TRUE, ...) {
-  if (!rlang::is_character(source) || any(is.na(source)) || length(source) == 0) {
-    cli::cli_abort("{.arg source} is not valid, it should be an {.cls character}
-                   vector with a length of atleast one not contain NA values.",
+get_weather_radars <- function(
+  source = c("opera", "nexrad"),
+  use_cache = TRUE,
+  ...
+) {
+  if (
+    !rlang::is_character(source) || any(is.na(source)) || length(source) == 0
+  ) {
+    cli::cli_abort(
+      "{.arg source} must be a character (vector).",
       class = "getRad_error_weather_radar_source_not_character"
     )
   }
@@ -51,23 +56,41 @@ get_weather_radars <- function(source = c("opera", "nexrad"),
   }
 
   if (!rlang::is_scalar_character(source)) {
-    t <- purrr::map(source, ~ get_weather_radars(
-      source = .x,
-      return_type = return_type,
-      use_cache = use_cache, ...
-    )) |>
+    t <- purrr::map(
+      source,
+      ~ get_weather_radars(
+        source = .x,
+        return_type = return_type,
+        use_cache = use_cache,
+        ...
+      )
+    ) |>
       dplyr::bind_rows()
     return(t)
   }
-  res <- switch(source,
+  res <- switch(
+    source,
     "opera" = get_weather_radars_opera(use_cache = use_cache, ...),
     "nexrad" = get_weather_radars_nexrad(use_cache = use_cache, ...)
-  ) |> dplyr::mutate(source = source)
-  rlang::check_installed("sf", 'For `get_weather_radars()` to return and `sf` the package `sf` is required. Alternatively use `return_type="tibble"`.')
-  sf::st_as_sf(res, coords = c("longitude", "latitude"), crs = 4326, na.fail = FALSE, remove = FALSE)
+  ) |>
+    dplyr::mutate(source = source)
+  rlang::check_installed(
+    "sf",
+    'For `get_weather_radars()` to return and `sf` the package `sf` is required. Alternatively use `return_type="tibble"`.'
+  )
+  sf::st_as_sf(
+    res,
+    coords = c("longitude", "latitude"),
+    crs = 4326,
+    na.fail = FALSE,
+    remove = FALSE
+  )
 }
-get_weather_radars_opera <- function(use_cache = TRUE, ...,
-                                     call = rlang::caller_env()) {
+get_weather_radars_opera <- function(
+  use_cache = TRUE,
+  ...,
+  call = rlang::caller_env()
+) {
   # Build the url where the JSON files are hosted on eumetnet
 
   # Read source JSON files from OPERA
@@ -114,10 +137,7 @@ get_weather_radars_opera <- function(use_cache = TRUE, ...,
     dplyr::mutate(
       dplyr::across(
         dplyr::where(is.character),
-        \(string) dplyr::if_else(string == "",
-          NA_character_,
-          string
-        )
+        \(string) dplyr::if_else(string == "", NA_character_, string)
       )
     ) |>
     # Move source column to end
@@ -133,7 +153,8 @@ get_weather_radars_opera <- function(use_cache = TRUE, ...,
       heightofstation = as_integer_shh(.data$heightofstation),
       doppler = yes_no_as_logical(.data$doppler),
       maxrange = as_integer_shh(.data$maxrange),
-      startyear = as_integer_shh(.data$startyear), ,
+      startyear = as_integer_shh(.data$startyear),
+      ,
       heightantenna = as_numeric_shh(.data$heightantenna),
       diameterantenna = as_numeric_shh(.data$diameterantenna),
       beam = as_numeric_shh(.data$beam),
@@ -150,11 +171,17 @@ get_weather_radars_opera <- function(use_cache = TRUE, ...,
     dplyr::arrange(.data$country, .data$number, .data$startyear)
 }
 
-get_weather_radars_nexrad <- function(use_cache = TRUE, ...,
-                                      call = rlang::caller_env()) {
+get_weather_radars_nexrad <- function(
+  use_cache = TRUE,
+  ...,
+  call = rlang::caller_env()
+) {
   #  https://www.ncei.noaa.gov/access/homr/reports
-  file_content <- httr2::request("https://www.ncei.noaa.gov/access/homr/file/nexrad-stations.txt") |>
+  file_content <- httr2::request(
+    "https://www.ncei.noaa.gov/access/homr/file/nexrad-stations.txt"
+  ) |>
     req_user_agent_getrad() |>
+    req_retry_getrad(transient_statuses = 503L) |>
     req_cache_getrad(use_cache = TRUE) |>
     httr2::req_perform(error_call = call) |>
     httr2::resp_body_string()
@@ -163,16 +190,30 @@ get_weather_radars_nexrad <- function(use_cache = TRUE, ...,
     I() |>
     vroom::vroom_fwf(show_col_types = F, n_max = 2)
 
-  widths <- vroom::fwf_widths(nchar(unlist(tmp[2, ])) + 1, tolower(unlist(tmp[1, ])))
+  widths <- vroom::fwf_widths(
+    nchar(unlist(tmp[2, ])) + 1,
+    tolower(unlist(tmp[1, ]))
+  )
   # for type specification see: https://www.ncei.noaa.gov/access/homr/file/NexRad_Table.txt
   file_content |>
     I() |>
     vroom::vroom_fwf(
-      show_col_types = F, col_positions = widths, skip = 2,
+      show_col_types = F,
+      col_positions = widths,
+      skip = 2,
       col_types = vroom::cols(
-        ncdcid = "i", icao = "c", wban = "c", name = "c",
-        country = "c", st = "c", county = "c", lat = "d",
-        lon = "d", elev = "i", utc = "i", stntype = "c"
+        ncdcid = "i",
+        icao = "c",
+        wban = "c",
+        name = "c",
+        country = "c",
+        st = "c",
+        county = "c",
+        lat = "d",
+        lon = "d",
+        elev = "i",
+        utc = "i",
+        stntype = "c"
       )
     ) |>
     dplyr::mutate(
@@ -181,11 +222,14 @@ get_weather_radars_nexrad <- function(use_cache = TRUE, ...,
       longitude = .data$lon,
       country = capwords(tolower(.data$country)),
       location = capwords(sub(
-        " wfo", " WFO",
+        " wfo",
+        " WFO",
         sub(
-          " ab", " AB",
+          " ab",
+          " AB",
           sub(
-            " faa", " FAA",
+            " faa",
+            " FAA",
             sub(" jfk", " JFK", sub(" afb", " AFB", tolower(.data$name)))
           )
         )
@@ -199,7 +243,8 @@ get_weather_radars_nexrad <- function(use_cache = TRUE, ...,
 # from base::chartr examples
 capwords <- function(s, strict = FALSE) {
   cap <- function(s) {
-    paste(toupper(substring(s, 1, 1)),
+    paste(
+      toupper(substring(s, 1, 1)),
       {
         s <- substring(s, 2)
         if (strict) tolower(s) else s

@@ -1,6 +1,6 @@
 Package: getRad
 Title: Download Radar Data for Biological Research
-Version: 0.2.0.9000
+Version: 0.2.3.9000
 Authors@R: c(
     person("Bart", "Kranstauber", , "b.kranstauber@uva.nl", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-8303-780X", affiliation = "University of Amsterdam")),
@@ -15,7 +15,7 @@ Authors@R: c(
     person("Hidde", "Leijnse", role = "ctb",
            comment = c(ORCID = "0000-0001-7835-4480", affiliation = "Royal Netherlands Meteorological Institute")),
     person("Bart", "Hoekstra", role = "ctb",
-           comment = c(ORCID = " 0000-0002-7085-3805", affiliation = "University of Amsterdam")),
+           comment = c(ORCID = "0000-0002-7085-3805", affiliation = "University of Amsterdam")),
     person("University of Amsterdam", role = "cph",
            comment = c(ROR = "04dkp9463")),
     person("Biodiversa+", role = "fnd",
@@ -45,6 +45,7 @@ Imports:
     tools,
     utils,
     vroom,
+    withr,
     xml2
 Suggests:
     askpass,
@@ -58,8 +59,7 @@ Suggests:
     sf,
     testthat (>= 3.0.0),
     tidyr,
-    vol2birdR,
-    withr
+    vol2birdR
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3

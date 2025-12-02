@@ -26,10 +26,12 @@
 #'   If not provided, it will be fetched from via the internet.
 #' @return A tibble with VPTS data.
 #' @keywords internal
-get_vpts_aloft <- function(radar_odim_code,
-                           rounded_interval,
-                           source = c("baltrad", "uva", "ecog-04003"),
-                           coverage = get_vpts_coverage_aloft()) {
+get_vpts_aloft <- function(
+  radar_odim_code,
+  rounded_interval,
+  source = c("baltrad", "uva", "ecog-04003"),
+  coverage = get_vpts_coverage_aloft()
+) {
   # rename source argument for readability
   selected_source <- source
 
@@ -40,8 +42,8 @@ get_vpts_aloft <- function(radar_odim_code,
   if (!all(radar_odim_code %in% coverage$radar)) {
     missing_radar <- radar_odim_code[!radar_odim_code %in% coverage$radar]
     cli::cli_abort(
-      "Radar not found in ALOFT coverage:
-      {missing_radar}.",
+      "Can't find radar {.val {missing_radar}} in the coverage file (see
+       {.fun get_vpts_coverage}).",
       missing_radar = missing_radar,
       class = "getRad_error_aloft_radar_not_found"
     )
@@ -58,7 +60,7 @@ get_vpts_aloft <- function(radar_odim_code,
 
   if (!at_least_one_radar_date_combination_exists) {
     cli::cli_abort(
-      "No data found for the requested radar(s) and date(s).",
+      "Can't find any data for the requested radar(s) and date(s).",
       class = "getRad_error_date_not_found"
     )
   }
@@ -75,9 +77,8 @@ get_vpts_aloft <- function(radar_odim_code,
 
   if (!all(radar_odim_code %in% coverage$radar)) {
     cli::cli_abort(
-      "{length(missing_radars)} Radar{?s} not found in {source} coverage:
-      {glue::backtick(missing_radars)}",
-      missing_radars = missing_radars,
+      "Can't find radar{?s} {.val {missing_radars}} in the coverage file (see
+       {.fun get_vpts_coverage}).",
       class = "getRad_error_radar_not_found"
     )
   }
@@ -110,16 +111,21 @@ get_vpts_aloft <- function(radar_odim_code,
     # Add a column with the radar source to not lose this information
     purrr::map2(
       s3_paths,
-      ~ dplyr::mutate(.x,
+      ~ dplyr::mutate(
+        .x,
         source = string_extract(
           .y,
           ".+(?=\\/daily)"
         )
       )
     ) |>
+    purrr::keep(.p = ~ as.logical(nrow(.x))) |>
     purrr::list_rbind() |>
     # Move the source column to the front, where it makes sense
-    dplyr::relocate(dplyr::all_of("source"), .before = dplyr::all_of("radar")) |>
+    dplyr::relocate(
+      dplyr::all_of("source"),
+      .before = dplyr::all_of("radar")
+    ) |>
     # Overwrite the radar column with the radar_odim_date, all other values are
     # considered invalid for aloft
     dplyr::mutate(radar = radar_odim_code)

@@ -1,3 +1,41 @@
+#' Match radars to a specific arguments/name
+#'
+#' @param radar The radar to match.
+#' @param ... A set of radar names with their corresponding mapping.
+#' @param call The caller environment for the error messages.
+#'
+#' @returns (character) The resulting radar mapping.
+#' @noRd
+#'
+#' @examples
+#' radar_recode("nlhrw", "nldhl" = "Den Helder", "nlhrw" = "Herwijnen")
+radar_recode <- function(radar, ..., call = rlang::caller_env()) {
+  if (!(rlang::is_scalar_character(radar) && !is.na(radar))) {
+    cli::cli_abort(
+      "{.arg radar} must be a single radar code.",
+      class = "getRad_error_recode_radar_radar_argument",
+      call = call
+    )
+  }
+  res <- switch(
+    radar,
+    ...,
+    cli::cli_abort(
+      c(
+        "Can't find radar {.val {radar}}.",
+        "i" = "Either this radar is non-existant (possibly check with {.fun
+               get_weather_radars}). Alternatively no mapping is (yet)
+               implemented for this radar. In the latter case consider creating
+               a bug report."
+      ),
+      class = "getRad_error_radar_not_found",
+      call = call
+    )
+  )
+  return(res)
+}
+
+
 #' Extracts a substring from a string based on a regex pattern
 #'
 #' This function uses regular expressions to extract a substring from a given
@@ -151,7 +189,7 @@ radar_to_name <- function(vpts_df_list) {
 #' as_integer_shh(c("1", "2", "3"))
 as_integer_shh <- function(x) {
   if (!is.character(x)) {
-    cli::cli_abort("x must be a character vector")
+    cli::cli_abort("{.arg x} must be a character (vector).")
   }
   suppressWarnings(as.integer(x))
 }
@@ -168,7 +206,7 @@ as_integer_shh <- function(x) {
 yes_no_as_logical <- function(x) {
   # x needs to be a character vector
   if (!is.character(x)) {
-    cli::cli_abort("x must be a character vector")
+    cli::cli_abort("{.arg x} must be a character (vector).")
   }
 
   # Convert `Y` to TRUE, `N` to FALSE and `NA` to NA
@@ -195,7 +233,7 @@ yes_no_as_logical <- function(x) {
 #' as_double_shh(c("1.1", "2.2", "3.3"))
 as_numeric_shh <- function(x) {
   if (!is.character(x)) {
-    cli::cli_abort("x must be a character vector")
+    cli::cli_abort("{.arg x} must be a character (vector).")
   }
   suppressWarnings(as.numeric(x))
 }
@@ -221,10 +259,12 @@ req_user_agent_getrad <- function(req) {
 #' @param max_tries The maximum number of times to retry the request.
 #' @returns A `httr2` request.
 #' @noRd
-req_retry_getrad <- function(req,
-                             transient_statuses = c(429),
-                             max_tries = 15,
-                             retry_on_failure = TRUE) {
+req_retry_getrad <- function(
+  req,
+  transient_statuses = c(429),
+  max_tries = 15,
+  retry_on_failure = TRUE
+) {
   httr2::req_retry(
     req,
     max_tries = max_tries,
@@ -243,18 +283,17 @@ req_retry_getrad <- function(req,
 #'    This can also be useful if you want to force a refresh of the cache.
 #' @param ... Additional arguments passed to `httr2::req_cache()`.
 #' @keywords internal
-req_cache_getrad <- function(req,
-                             use_cache = TRUE,
-                             max_age = getOption("getRad.max_cache_age_seconds",
-                               default = 6 * 60 * 60
-                             ),
-                             max_n = getOption("getRad.max_cache_n",
-                               default = Inf
-                             ),
-                             max_size = getOption("getRad.max_cache_size_bytes",
-                               default = 1024 * 1024 * 1024
-                             ),
-                             ...) {
+req_cache_getrad <- function(
+  req,
+  use_cache = TRUE,
+  max_age = getOption("getRad.max_cache_age_seconds", default = 6 * 60 * 60),
+  max_n = getOption("getRad.max_cache_n", default = Inf),
+  max_size = getOption(
+    "getRad.max_cache_size_bytes",
+    default = 1024 * 1024 * 1024
+  ),
+  ...
+) {
   # If caching is disabled, return early.
   if (!use_cache) {
     return(req)
@@ -262,11 +301,10 @@ req_cache_getrad <- function(req,
 
   httr2::req_cache(
     req,
-    path =
-      file.path(
-        tools::R_user_dir("getRad", "cache"),
-        "httr2"
-      ),
+    path = file.path(
+      tools::R_user_dir("getRad", "cache"),
+      "httr2"
+    ),
     max_age = max_age,
     max_n = max_n,
     max_size = max_size,
@@ -301,46 +339,65 @@ is_odim_scalar <- function(x) {
 is_odim_nexrad_scalar <- function(x) {
   rlang::is_scalar_character(x) && is_odim_nexrad(x)
 }
-check_odim <- function(x, ..., arg = rlang::caller_arg(x),
-                       call = rlang::caller_env()) {
+check_odim <- function(
+  x,
+  ...,
+  arg = rlang::caller_arg(x),
+  call = rlang::caller_env()
+) {
   if (!all(is_odim(x))) {
     cli::cli_abort(
-      "Please provide one or more radars as a character vector.
-      Consisting of 5 characters each to match an odim code.",
-      class = "getRad_error_radar_not_odim_string", call = call
+      "{.arg arg} must be a (vector of) radar code(s). Each code must be a
+       5-letter ODIM code (e.g. {.val nldhl}).",
+      class = "getRad_error_radar_not_odim_string",
+      call = call
     )
   }
 }
-check_odim_nexrad <- function(x, ..., arg = rlang::caller_arg(x),
-                              call = rlang::caller_env()) {
+check_odim_nexrad <- function(
+  x,
+  ...,
+  arg = rlang::caller_arg(x),
+  call = rlang::caller_env()
+) {
   if (!all(is_odim_nexrad(x))) {
     cli::cli_abort(
-      "Each element of {.arg {arg}} must be either a 5-letter ODIM code
-      or a 4-letter NEXRAD ICAO code.",
+      "{.arg arg} must be a (vector of) radar code(s). Each code must be a
+       5-letter ODIM code or a 4-letter NEXRAD code.",
       class = "getRad_error_radar_not_odim_nexrad",
       call = call
     )
   }
   invisible(TRUE)
 }
-check_odim_scalar <- function(x, ..., arg = rlang::caller_arg(x),
-                              call = rlang::caller_env()) {
+check_odim_scalar <- function(
+  x,
+  ...,
+  arg = rlang::caller_arg(x),
+  call = rlang::caller_env()
+) {
   if (!is_odim_scalar(x)) {
     cli::cli_abort(
-      "Please provide {.arg {arg}} as a character vector of length 1.
-    Consisting of 5 characters to match an odim code.",
+      "{.arg arg} must be a single radar code. The code must be a 5-letter ODIM
+       code (e.g. {.val nldhl}).",
       class = "getRad_error_radar_not_single_odim_string",
       call = call
     )
   }
 }
 
-check_odim_nexrad_scalar <- function(x, ..., arg = rlang::caller_arg(x),
-                                     call = rlang::caller_env()) {
+check_odim_nexrad_scalar <- function(
+  x,
+  ...,
+  arg = rlang::caller_arg(x),
+  call = rlang::caller_env()
+) {
   if (!is_odim_nexrad_scalar(x)) {
     cli::cli_abort(
-      "Radar must be exactly one 5-letter ODIM code or one 4-letter NEXRAD code.",
-      class = "getRad_error_radar_not_single_odim_nexrad", call = call
+      "{.arg arg} must be a single radar code. The code must be a 5-letter ODIM
+       code or a 4-letter NEXRAD code.",
+      class = "getRad_error_radar_not_single_odim_nexrad",
+      call = call
     )
   }
   invisible(TRUE)
@@ -372,10 +429,7 @@ fetch_from_url_raw <- function(urls, use_cache = TRUE, parallel = TRUE) {
     purrr::map(req_retry_getrad) |>
     # Set throttling so we don't overwhelm data sources
     purrr::map(\(req) {
-      httr2::req_throttle(req,
-        capacity = 30,
-        fill_time_s = 40
-      )
+      httr2::req_throttle(req, capacity = 30, fill_time_s = 40)
     }) |>
     # Optionally cache the responses
     purrr::map(req_cache_getrad)
@@ -383,11 +437,37 @@ fetch_from_url_raw <- function(urls, use_cache = TRUE, parallel = TRUE) {
   if (parallel) {
     data_response <-
       data_request |>
-      httr2::req_perform_parallel(progress = interactive())
+      httr2::req_perform_parallel(
+        progress = interactive(),
+        on_error = "continue"
+      )
   } else {
     data_response <-
       data_request |>
-      httr2::req_perform_sequential()
+      httr2::req_perform_sequential(on_error = "continue")
+  }
+  # Make warning for missing csv
+  if (any(ss <- unlist(lapply(data_response, inherits, "httr2_http_404")))) {
+    cli::cli_warn(
+      c(
+        "Not all files listed in the coverage file (see {.fun
+         get_vpts_coverage}) could be downloaded (404 Not Found).",
+        "i" = "This may indicate an error in the repository, please report an
+               issue at {.url
+               https://github.com/aloftdata/data-repository/issues/}.",
+        "i" = "The following file{?s} could not be downloaded: {.url
+               {urls[ss]}}."
+      ),
+      class = "getRad_warning_404_on_csv_download"
+    )
+    for (i in seq_along(data_response)) {
+      if (ss[i]) {
+        data_response[[i]] <- raw()
+      } else {
+        data_response[[i]] <- httr2::resp_body_raw(data_response[[i]])
+      }
+    }
+    return(data_response)
   }
   # Fetch the response bodies
   purrr::map(data_response, httr2::resp_body_raw)
@@ -412,9 +492,7 @@ fetch_from_url_raw <- function(urls, use_cache = TRUE, parallel = TRUE) {
 read_lines_from_url <- function(urls, use_cache = TRUE, parallel = TRUE) {
   fetch_from_url_raw(urls, use_cache = use_cache, parallel) |>
     I() |>
-    purrr::map(~ vroom::vroom_lines(.x,
-      progress = FALSE
-    ))
+    purrr::map(~ vroom::vroom_lines(.x, progress = FALSE))
 }
 
 #' Get HTML from a URL
@@ -446,31 +524,3 @@ get_element_regex <- function(html, regex) {
     string_extract(regex) |>
     (\(vec) vec[!is.na(vec)])()
 }
-
-#' Create an .onload function to set package options during load
-#'
-#' - getRad.key_prefix is the default prefix used when setting or getting
-#' secrets using keyring.
-#' - getRad.user_agent is the string used as a user agent for the http calls
-#' generated in this package. It incorporates the package version using
-#' `getNamespaceVersion`.
-#' - getRad.max_cache_age_seconds is the default max cache age for the httr2
-#' cache in seconds.
-#' - getRad.max_cache_size_bytes is the default max cache size for the httr2
-#' cache in bytes.
-#' @noRd
-.onLoad <- function(libname, pkgname) { # nolint
-  op <- options()
-  op.getRad <- list(
-    getRad.key_prefix = "getRad_",
-    getRad.user_agent = paste("R package getRad", getNamespaceVersion("getRad")),
-    getRad.aloft_data_url = "https://aloftdata.s3-eu-west-1.amazonaws.com",
-    getRad.nexrad_data_url = "https://noaa-nexrad-level2.s3.amazonaws.com",
-    getRad.cache = cachem::cache_mem(max_size = 128 * 1024^2, max_age = 60^2 * 24)
-  )
-  toset <- !(names(op.getRad) %in% names(op))
-  if (any(toset)) options(op.getRad[toset])
-  rlang::run_on_load()
-  invisible()
-}
-rlang::on_load(rlang::local_use_cli(inline = TRUE))

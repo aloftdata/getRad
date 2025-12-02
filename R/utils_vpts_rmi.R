@@ -98,7 +98,8 @@ parse_rmi <- function(lines) {
   with(
     # With this list of helper functions:
     purrr::map(
-      specs, \(spec){
+      specs,
+      \(spec) {
         do.call(create_rmi_helper, spec)
       }
     ),

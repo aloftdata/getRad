@@ -41,30 +41,31 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
   check_odim_nexrad(radar)
   if (anyDuplicated(radar)) {
     cli::cli_abort(
-      "The argument {.arg radar} contains duplications these should be removed.",
+      "{.arg radar} contains duplications that must be removed.",
       class = "getRad_error_radar_duplicated"
     )
   }
   if (inherits(datetime, "POSIXct") && length(datetime) == 2) {
     if (any(duplicated(datetime))) {
-      cli::cli_abort("When providing two {.cls POSIXct} as a {.arg datetime}
-                     they should differ to represent an inverval.",
+      cli::cli_abort(
+        "{.arg datetime} contains duplicate {.cls POSIXct}. Values must differ
+         to represent an interval.",
         class = "getRad_error_duplicated_timestamps"
       )
     }
     datetime <- lubridate::interval(min(datetime), max(datetime))
   }
-  if (is.null(datetime) ||
-    !inherits(datetime, c("POSIXct", "Interval")) ||
-    !rlang::is_scalar_vector(datetime)
+  if (
+    is.null(datetime) ||
+      !inherits(datetime, c("POSIXct", "Interval")) ||
+      !rlang::is_scalar_vector(datetime)
   ) {
-    cli::cli_abort("The argument {.arg datetime} to the {.fn get_pvol} function
-                   should be a single {.cls POSIXct} or a {.cls interval}.
-                   The later can also be specified by two {.cls POSIXct}.",
+    cli::cli_abort(
+      "{.arg datetime} should be a single {.cls POSIXct} or a {.cls interval}.
+       The latter can also be specified by two {.cls POSIXct}.",
       class = "getRad_error_time_not_correct"
     )
   }
-
 
   safe_get_pvol <- purrr::possibly(get_pvol, otherwise = NULL, quiet = TRUE)
 
@@ -81,15 +82,15 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
     return(pvols)
   }
 
-
   fn <- select_get_pvol_function(radar)
 
   if (lubridate::is.interval(datetime)) {
     if (lubridate::as.duration(datetime) > lubridate::hours(1)) {
-      cli::cli_warn("The interval specified for {.arg datetime} ({.val {lubridate::int_start(datetime)}}-{.val {lubridate::int_end(datetime)}}) likely results
-                    in many polar volumes, when loading that may polar
-                    volumes at the same time computational issues frequently
-                    occur.",
+      cli::cli_warn(
+        "{.arg datetime} represent an interval ({.val
+         {lubridate::int_start(datetime)}}-{.val {lubridate::int_end(datetime)}})
+         that likely covers many polar volumes. Computational issues can occur
+         when loading that many polar volumes at the same time.",
         class = "getRad_warn_many_pvols_requested"
       )
     }
@@ -99,7 +100,8 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
     if (lubridate::is.interval(datetime)) {
       timerange <-
         lubridate::floor_date(
-          seq(lubridate::int_start(datetime),
+          seq(
+            lubridate::int_start(datetime),
             lubridate::int_end(datetime) + lubridate::minutes(5),
             by = "5 mins"
           ),
@@ -109,7 +111,12 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
       polar_volumes <- purrr::map(datetime, safe_get_pvol, radar = radar, ...)
       return(polar_volumes)
     } else {
-      rlang::exec(fn, radar = radar, lubridate::floor_date(datetime, "5 mins"), ...)
+      rlang::exec(
+        fn,
+        radar = radar,
+        lubridate::floor_date(datetime, "5 mins"),
+        ...
+      )
     }
   } else {
     # For now then US data is request the interval if forwarded
@@ -120,6 +127,7 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
 
 
 # Helper function to find the function for a specific radar
+# This function is only helpful in get_pvol and therefor not in a utils file
 select_get_pvol_function <- function(radar, ..., call = rlang::caller_env()) {
   if (is_nexrad(radar)) {
     return("get_pvol_us")
@@ -133,11 +141,13 @@ select_get_pvol_function <- function(radar, ..., call = rlang::caller_env()) {
     cntry_code == "ee" ~ "get_pvol_ee",
     cntry_code == "cz" ~ "get_pvol_cz",
     cntry_code == "se" ~ "get_pvol_se",
+    cntry_code == "ro" ~ "get_pvol_ro",
+    cntry_code == "sk" ~ "get_pvol_sk",
     .default = NA
   ))
   if (rlang::is_na(fun)) {
     cli::cli_abort(
-      "No suitable function exist downloading from the radar {.val {radar}}",
+      "No suitable function exist to download data for radar {.val {radar}}.",
       class = "getRad_error_no_function_for_radar_with_country_code",
       call = call
     )

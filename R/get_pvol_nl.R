@@ -5,23 +5,23 @@ get_pvol_nl <- function(radar, time, ..., call = rlang::caller_env()) {
     converter <- Sys.which(converter)
   }
   if (converter == "") {
-      cli::cli_abort(
-        c(
-          "The program to convert KNMI data to the ODIM format can't be found.",
-          "i" = "The source code for this binary can be obtained from {.file
+    cli::cli_abort(
+      c(
+        "The program to convert KNMI data to the ODIM format can't be found.",
+        "i" = "The source code for this binary can be obtained from {.file
                  {system.file(\"extra/KNMI_vol_h5_to_ODIM_h5.c\",
                  package=\"getRad\")}}.",
-          "i" = "Please compile the binary and include it in the search path as
+        "i" = "Please compile the binary and include it in the search path as
                  a program named {.val KNMI_vol_h5_to_ODIM_h5}. On linux systems
                  this can be done with the command {.code h5cc
                  KNMI_vol_h5_to_ODIM_h5.c -o KNMI_vol_h5_to_ODIM_h5}. If another
                  name is used or the program is not in the search path, use
                  options to locate the program ({.code
                  options(getRad.nl_converter=\"\")})."
-        ),
-        class = "getRad_error_no_nl_converter_found",
-        call = call
-      )
+      ),
+      class = "getRad_error_no_nl_converter_found",
+      call = call
+    )
   }
 
   #  Convert radar names into the dirname and version used by the KNMI data platform.
@@ -90,14 +90,15 @@ get_pvol_nl <- function(radar, time, ..., call = rlang::caller_env()) {
         c(
           x = "The converter for the Netherland has not generated the expected 
 output file.",
-          i = "Using {.file {converter}} an attempt was made to convert 
+            i = "Using {.file {converter}} an attempt was made to convert 
 {.file {req$body}} to the odim format. Most likely the 
 converter is incorrect."
-        ),
-        class = "getRad_error_dutch_converter_failed"
-      )
-    }
+          ),
+          class = "getRad_error_dutch_converter_failed"
+        )
+      }
       bioRad::read_pvolfile(pvol_path, ...)
-  })})
+    })
+  })
   return(pvol)
 }

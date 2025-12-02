@@ -77,6 +77,7 @@ get_pvol_nl <- function(radar, time, ..., call = rlang::caller_env()) {
         call = call
       )
     }
+    pvol_path <- NULL # to prevent no visible global variable warnings
     withr::with_tempfile("pvol_path", fileext = ".odim.h5", {
       system(paste(converter, pvol_path, req$body))
       bioRad::read_pvolfile(pvol_path, ...)

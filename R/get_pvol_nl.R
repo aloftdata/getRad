@@ -7,11 +7,17 @@ get_pvol_nl <- function(radar, time, ..., call = rlang::caller_env()) {
   if (converter == "") {
     cli::cli_abort(
       c(
-        x = "The program to convert KNMI data to ODIM format is not found.",
-        i = "The source code for this binary can be obtained from this location {.file {system.file('extra/KNMI_vol_h5_to_ODIM_h5.c', package='getRad')}}",
-        i = "Please compile the binary and include it in the search path as a program named {.arg KNMI_vol_h5_to_ODIM_h5}",
-        i = "On linux systems this can be done with the following command {.code h5cc KNMI_vol_h5_to_ODIM_h5.c -o KNMI_vol_h5_to_ODIM_h5}.",
-        i = "If another name is used or the program is not in the search path use options to locate the program ({.run options(getRad.nl_converter='')})."
+        "The program to convert KNMI data to the ODIM format can't be found.",
+        "i" = "The source code for this binary can be obtained from {.file
+                 {system.file(\"extra/KNMI_vol_h5_to_ODIM_h5.c\",
+                 package=\"getRad\")}}.",
+        "i" = "Please compile the binary and include it in the search path as
+                 a program named {.val KNMI_vol_h5_to_ODIM_h5}. On linux systems
+                 this can be done with the command {.code h5cc
+                 KNMI_vol_h5_to_ODIM_h5.c -o KNMI_vol_h5_to_ODIM_h5}. If another
+                 name is used or the program is not in the search path, use
+                 options to locate the program ({.code
+                 options(getRad.nl_converter=\"\")})."
       ),
       class = "getRad_error_no_nl_converter_found",
       call = call
@@ -55,8 +61,10 @@ get_pvol_nl <- function(radar, time, ..., call = rlang::caller_env()) {
     httr2_http_403 = function(cnd) {
       cli::cli_abort(
         c(
-          "There was an authorization error, possibly this relates to using an invalid API key",
-          i = "Please check if you set the correct `nl_api_key` with {.code get_secret('nl_api_key')}"
+          "There was an authorization error. You may have used an invalid API
+           key.",
+          "i" = "Please check if you set the correct {.val nl_api_key} with
+                 {.code get_secret(\"nl_api_key\")}."
         ),
         cnd = cnd,
         class = "getRad_error_get_pvol_nl_authorization_failure",
@@ -70,7 +78,8 @@ get_pvol_nl <- function(radar, time, ..., call = rlang::caller_env()) {
       httr2::req_url(req = resp$request) |>
       httr2::req_headers(Authorization = NULL) |>
       httr2::req_perform(path = file, error_call = call)
-    pvol_path <- paste0(req$body, ".odim.h5")
+  
+  withr::with_tempfile("pvol_path", fileext = ".odim.h5", {
     system(
       paste(converter, pvol_path, req$body),
       ignore.stdout = TRUE,
@@ -79,13 +88,17 @@ get_pvol_nl <- function(radar, time, ..., call = rlang::caller_env()) {
     if (!file.exists(pvol_path)) {
       cli::cli_abort(
         c(
-          x = "The converter for the Netherland has not generated the output file.",
-          i = "Using {.file {converter}} an attempt was made to convert {.file {req$body}} to the odim format. Most likely the converter is incorrect."
-        ),
-        class = "getRad_error_dutch_converter_failed"
-      )
-    }
-    bioRad::read_pvolfile(pvol_path, ...)
+          x = "The converter for the Netherland has not generated the expected 
+output file.",
+            i = "Using {.file {converter}} an attempt was made to convert 
+{.file {req$body}} to the odim format. Most likely the 
+converter is incorrect."
+          ),
+          class = "getRad_error_dutch_converter_failed"
+        )
+      }
+      bioRad::read_pvolfile(pvol_path, ...)
+    })
   })
   return(pvol)
 }

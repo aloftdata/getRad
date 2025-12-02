@@ -31,13 +31,13 @@ get_pvol_ee <- function(radar, time, ..., call = rlang::caller_env()) {
                         list(
                           greaterThanOrEqual = list(
                             field = "Timestamp",
-                            value = strftime(time, "%Y-%m-%dT%H:%M:%OS6%z")
+                            value = strftime(time, "%FT%TZ", tz = 'UTC')
                           )
                         ),
                         list(
                           lessThanOrEqual = list(
                             field = "Timestamp",
-                            value = strftime(time, "%Y-%m-%dT%H:%M:%OS6%z")
+                            value = strftime(time, "%FT%TZ", tz = "UTC")
                           )
                         )
                       )
@@ -62,7 +62,7 @@ get_pvol_ee <- function(radar, time, ..., call = rlang::caller_env()) {
       )
     )
   files <- httr2::request(
-    "https://avaandmed.keskkonnaportaal.ee/_vti_bin/RmApi.svc/active/items/query"
+    "https://avaandmed.keskkonnaportaal.ee/api/lists/active/items/query"
   ) |>
     req_user_agent_getrad() |>
     httr2::req_body_json(json_list) |>
@@ -71,7 +71,7 @@ get_pvol_ee <- function(radar, time, ..., call = rlang::caller_env()) {
     httr2::resp_body_json()
   if (files$numFound == 0 || length(files$documents) != 1) {
     cli::cli_abort(
-      "The expected number of files is not found",
+      "The expected number of files is not found.",
       class = "getRad_error_get_pvol_ee_differing_n_files"
     )
   }

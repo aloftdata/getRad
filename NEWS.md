@@ -2,6 +2,7 @@
 
 * Make error messages more consistent (#146).
 * Restore access to Estonian data.
+* Implement reading `vpts` data from a local directory (#135).
 * Prevent leaving temporary files for downloading Dutch polar volume data (#148).
 
 # getRad 0.2.3

@@ -98,6 +98,6 @@ converter is incorrect."
       )
     }
       bioRad::read_pvolfile(pvol_path, ...)
-  })
+  })})
   return(pvol)
 }

@@ -78,21 +78,21 @@ get_pvol_nl <- function(radar, time, ..., call = rlang::caller_env()) {
       httr2::req_url(req = resp$request) |>
       httr2::req_headers(Authorization = NULL) |>
       httr2::req_perform(path = file, error_call = call)
-  
-  withr::with_tempfile("pvol_path", fileext = ".odim.h5", {
-    system(
-      paste(converter, pvol_path, req$body),
-      ignore.stdout = TRUE,
-      ignore.stderr = TRUE
-    )
-    if (!file.exists(pvol_path)) {
-      cli::cli_abort(
-        c(
-          x = "The converter for the Netherland has not generated the expected 
-output file.",
-            i = "Using {.file {converter}} an attempt was made to convert 
-{.file {req$body}} to the odim format. Most likely the 
-converter is incorrect."
+
+    withr::with_tempfile("pvol_path", fileext = ".odim.h5", {
+      system(
+        paste(converter, pvol_path, req$body),
+        ignore.stdout = TRUE,
+        ignore.stderr = TRUE
+      )
+      if (!file.exists(pvol_path)) {
+        cli::cli_abort(
+          c(
+            x = "The converter for the Netherland has not generated the
+              expected output file.",
+            i = "Using {.file {converter}} an attempt was made to convert
+              {.file {req$body}} to the odim format. Most likely the
+              converter is incorrect."
           ),
           class = "getRad_error_dutch_converter_failed"
         )

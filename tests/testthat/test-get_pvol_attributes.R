@@ -90,10 +90,6 @@ test_that("Check Netherland", {
 test_that("Check Denmark", {
   skip_on_cran()
   skip_on_ci()
-  skip_if(
-    inherits(try(get_secret("dk_api_key"), silent = TRUE), "try-error"),
-    message = "Because no key for Denmark is available in the testing environment"
-  )
   pv <- get_pvol("dkbor", t)
   check_attributes(pv, wr_df)
 })

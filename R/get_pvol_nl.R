@@ -78,7 +78,7 @@ get_pvol_nl <- function(radar, time, ..., call = rlang::caller_env()) {
       httr2::req_url(req = resp$request) |>
       httr2::req_headers(Authorization = NULL) |>
       httr2::req_perform(path = file, error_call = call)
-
+    pvol_path <- NULL # to prevent no visible global variable warnings
     withr::with_tempfile("pvol_path", fileext = ".odim.h5", {
       system(
         paste(converter, pvol_path, req$body),

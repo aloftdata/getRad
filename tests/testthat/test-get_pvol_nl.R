@@ -1,11 +1,11 @@
 test_that("Pvol for the Netherlands can be downloaded", {
-  skip_if_offline()
-  skip_if(
-    Sys.which("KNMI_vol_h5_to_ODIM_h5") == "",
-    message = "Skip trying to read Dutch pvol data as no converter is present"
-  )
+  skip_if(Sys.which("KNMI_vol_h5_to_ODIM_h5") == "")
+  skip_if_offline(host = "api.dataplatform.knmi.nl")
+
   # make sure local env is used by keyring so that api key can be set
-  withr::local_options(list("keyring_backend" = "env"))
+  withr::local_options(list(
+    "keyring_backend" = "env"
+  ))
   # get public key here https://developer.dataplatform.knmi.nl/open-data-api#token
   withr::local_envvar(
     list(
@@ -13,6 +13,10 @@ test_that("Pvol for the Netherlands can be downloaded", {
     )
   )
   time <- as.POSIXct("2024-4-4 20:00:00", tz = "Europe/Helsinki")
+  expect_s3_class(
+    get_pvol("nlhrw", time, param = "all"),
+    "pvol"
+  )
   pvol <- expect_s3_class(get_pvol("nlhrw", time, param = "all"), "pvol")
   expect_true(bioRad::is.pvol(pvol))
   expect_identical(
@@ -21,13 +25,34 @@ test_that("Pvol for the Netherlands can be downloaded", {
   )
 })
 
-test_that("failure to find converter", {
-  skip_if_offline()
-  withr::with_envvar(c("PATH" = ""), {
-    skip_if_not(Sys.which("KNMI_vol_h5_to_ODIM_h5") == "")
 
+test_that("Pvol for the Netherlands can be downloaded. Incorrect converter results in failure.", {
+  skip_if_offline(host = "api.dataplatform.knmi.nl")
+
+  # make sure local env is used by keyring so that api key can be set
+  withr::local_options(list(
+    "keyring_backend" = "env",
+    "getRad.nl_converter" = "ls"
+  ))
+  # get public key here https://developer.dataplatform.knmi.nl/open-data-api#token
+  withr::local_envvar(
+    list(
+      "getRad_nl_api_key" = "eyJvcmciOiI1ZTU1NGUxOTI3NGE5NjAwMDEyYTNlYjEiLCJpZCI6ImVlNDFjMWI0MjlkODQ2MThiNWI4ZDViZDAyMTM2YTM3IiwiaCI6Im11cm11cjEyOCJ9"
+    )
+  )
+  time <- as.POSIXct("2024-4-4 20:00:00", tz = "Europe/Helsinki")
+  expect_error(
+    get_pvol("nlhrw", time, param = "all"),
+    class = "getRad_error_dutch_converter_failed"
+  )
+})
+
+test_that("failure to find converter", {
+  withr::with_envvar(c("PATH" = ""), {
     # make sure local env is used by keyring so that api key can be set
-    withr::local_options(list("keyring_backend" = "env"))
+    withr::local_options(list(
+      "keyring_backend" = "env"
+    ))
     # get public key here https://developer.dataplatform.knmi.nl/open-data-api#token
     withr::local_envvar(
       list(
@@ -46,6 +71,10 @@ test_that("failure to find converter", {
 })
 
 test_that("The Netherlands non existing radar", {
+  withr::local_options(list(
+    # use random binary so checking for converter step is passed
+    "getRad.nl_converter" = "ls"
+  ))
   expect_error(
     pvol <- get_pvol(
       "nlaaa",
@@ -55,9 +84,13 @@ test_that("The Netherlands non existing radar", {
   )
 })
 test_that("Pvol for the Netherlands authenication failure", {
-  skip_if_offline()
+  skip_if_offline(host = "api.dataplatform.knmi.nl")
   # make sure local env is used by keyring so that api key can be set
-  withr::local_options(list("keyring_backend" = "env"))
+  withr::local_options(list(
+    "keyring_backend" = "env",
+    # use random binary so checking for converter step is passed
+    "getRad.nl_converter" = "ls"
+  ))
   # get public key here https://developer.dataplatform.knmi.nl/open-data-api#token
   withr::local_envvar(list("getRad_nl_api_key" = "wrongkey"))
   expect_error(

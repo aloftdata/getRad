@@ -7,6 +7,8 @@
 - Restore access to Estonian data.
 - Prevent leaving temporary files for downloading Dutch polar volume
   data ([\#148](https://github.com/aloftdata/getRad/issues/148)).
+- Denmark does not require authentication anymore, removed from the
+  package ([\#154](https://github.com/aloftdata/getRad/issues/154)).
 
 ## getRad 0.2.3
 

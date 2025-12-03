@@ -11,6 +11,7 @@ status](https://www.r-pkg.org/badges/version/getRad)](https://CRAN.R-project.org
 [![codecov](https://codecov.io/gh/aloftdata/getRad/branch/main/graph/badge.svg)](https://app.codecov.io/gh/aloftdata/getRad/)
 [![repo
 status](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![regular-checks](https://github.com/aloftdata/getRad/actions/workflows/regular-checks.yaml/badge.svg)](https://github.com/aloftdata/getRad/actions/workflows/regular-checks.yaml)
 <!-- badges: end -->
 
 getRad is an R package that provides a unified interface to download

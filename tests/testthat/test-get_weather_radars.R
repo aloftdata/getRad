@@ -140,7 +140,7 @@ test_that("get_weather_radars() should return a table with records from main and
   n_records_main <-
     paste(
       sep = "/",
-      "http://eumetnet.eu/wp-content/themes/aeron-child",
+      "www.http://eumetnet.eu/wp-content/themes/aeron-child",
       "observations-programme/current-activities/opera/database",
       "OPERA_Database/OPERA_RADARS_DB.json"
     ) |>
@@ -155,7 +155,7 @@ test_that("get_weather_radars() should return a table with records from main and
   n_records_archive <-
     paste(
       sep = "/",
-      "http://eumetnet.eu/wp-content/themes/aeron-child",
+      "www.http://eumetnet.eu/wp-content/themes/aeron-child",
       "observations-programme/current-activities/opera/database",
       "OPERA_Database/OPERA_RADARS_ARH_DB.json"
     ) |>

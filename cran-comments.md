@@ -1,6 +1,5 @@
-
 Dear CRAN maintainers,
 
-This release fixes a bug that was present in the previous release causing incorrect results.
+This release accommodate several changes in API's used.
 
 As far as I can see there are no notes or issues

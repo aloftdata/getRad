@@ -1,4 +1,4 @@
-# getRad (development version)
+# getRad 0.2.4
 
 * Make error messages more consistent (#146).
 * Restore access to Estonian data.

@@ -38,16 +38,16 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/aloftdata/getRad/blob/v0.2.4/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/aloftdata/getRad/blob/main/DESCRIPTION)
 
 Kranstauber B, Huybrechts P, Desmet P (2025). *getRad: Download Radar
-Data for Biological Research*. R package version 0.2.4,
+Data for Biological Research*. R package version 0.2.4.9000,
 <https://github.com/aloftdata/getRad>.
 
     @Manual{,
       title = {getRad: Download Radar Data for Biological Research},
       author = {Bart Kranstauber and Pieter Huybrechts and Peter Desmet},
       year = {2025},
-      note = {R package version 0.2.4},
+      note = {R package version 0.2.4.9000},
       url = {https://github.com/aloftdata/getRad},
     }

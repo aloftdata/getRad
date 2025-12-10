@@ -9,6 +9,8 @@
   data ([\#148](https://github.com/aloftdata/getRad/issues/148)).
 - Denmark does not require authentication anymore, removed from the
   package ([\#154](https://github.com/aloftdata/getRad/issues/154)).
+- Account for url change of opera database
+  ([\#160](https://github.com/aloftdata/getRad/issues/160)).
 
 ## getRad 0.2.3
 

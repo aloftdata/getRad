@@ -43,9 +43,9 @@ and
 The source files for this function are:
 
 - For `opera`:
-  [OPERA_RADARS_DB.json](http://eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_DB.json)
+  [OPERA_RADARS_DB.json](http://www.eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_DB.json)
   (main/current) and
-  [OPERA_RADARS_ARH_DB.json](http://eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_ARH_DB.json)
+  [OPERA_RADARS_ARH_DB.json](http://www.eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_ARH_DB.json)
   (archive). A column `origin` is added to indicate which file the
   metadata were derived from.
 

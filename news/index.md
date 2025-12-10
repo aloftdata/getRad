@@ -1,6 +1,6 @@
 # Changelog
 
-## getRad (development version)
+## getRad 0.2.4
 
 - Make error messages more consistent
   ([\#146](https://github.com/aloftdata/getRad/issues/146)).

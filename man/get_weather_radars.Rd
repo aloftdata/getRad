@@ -29,8 +29,8 @@ and/or \href{https://www.ncei.noaa.gov/products/radar/next-generation-weather-ra
 \details{
 The source files for this function are:
 \itemize{
-\item For \code{opera}: \href{http://eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_DB.json}{OPERA_RADARS_DB.json} (main/current)
-and \href{http://eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_ARH_DB.json}{OPERA_RADARS_ARH_DB.json} (archive).
+\item For \code{opera}: \href{http://www.eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_DB.json}{OPERA_RADARS_DB.json} (main/current)
+and \href{http://www.eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/OPERA_RADARS_ARH_DB.json}{OPERA_RADARS_ARH_DB.json} (archive).
 A column \code{origin} is added to indicate which file the metadata were derived
 from.
 \item For \code{nexrad}: \href{https://www.ncei.noaa.gov/access/homr/file/nexrad-stations.txt}{nexrad-stations.txt}.

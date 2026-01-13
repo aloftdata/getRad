@@ -13,10 +13,6 @@ test_that("Pvol for the Netherlands can be downloaded", {
     )
   )
   time <- as.POSIXct("2024-4-4 20:00:00", tz = "Europe/Helsinki")
-  expect_s3_class(
-    get_pvol("nlhrw", time, param = "all"),
-    "pvol"
-  )
   pvol <- expect_s3_class(get_pvol("nlhrw", time, param = "all"), "pvol")
   expect_true(bioRad::is.pvol(pvol))
   expect_identical(

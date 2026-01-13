@@ -70,6 +70,19 @@ get_pvol_nl <- function(radar, time, ..., call = rlang::caller_env()) {
         class = "getRad_error_get_pvol_nl_authorization_failure",
         call = call
       )
+    },
+    httr2_http_429 = function(cnd) {
+      cli::cli_abort(
+        c(
+          "There was a rate limitation error (HTTP 429) while getting data from the Netherlands.",
+          "i" = "This frequently occurs when using the anonymous key, if it occurs repeatedly consider requesting a registered key ({.url https://developer.dataplatform.knmi.nl/open-data-api#token}). ",
+          "i" = "You can check the current value of {.val nl_api_key} with
+                 {.code get_secret(\"nl_api_key\")}."
+        ),
+        cnd = cnd,
+        class = "getRad_error_get_pvol_nl_429_failure",
+        call = call
+      )
     }
   )
   # This request retrieves the file

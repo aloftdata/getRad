@@ -30,12 +30,6 @@ test_that("Pvol for the Netherlands can be downloaded. Incorrect converter resul
     "keyring_backend" = "env",
     "getRad.nl_converter" = "ls"
   ))
-  # get public key here https://developer.dataplatform.knmi.nl/open-data-api#token
-  withr::local_envvar(
-    list(
-      "getRad_nl_api_key" = "eyJvcmciOiI1ZTU1NGUxOTI3NGE5NjAwMDEyYTNlYjEiLCJpZCI6ImVlNDFjMWI0MjlkODQ2MThiNWI4ZDViZDAyMTM2YTM3IiwiaCI6Im11cm11cjEyOCJ9"
-    )
-  )
   time <- as.POSIXct("2024-4-4 20:00:00", tz = "Europe/Helsinki")
   expect_error(
     get_pvol("nlhrw", time, param = "all"),

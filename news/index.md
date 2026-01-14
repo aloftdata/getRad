@@ -4,6 +4,8 @@
 
 ## getRad 0.2.4
 
+CRAN release: 2025-12-10
+
 - Make error messages more consistent
   ([\#146](https://github.com/aloftdata/getRad/issues/146)).
 - Restore access to Estonian data.

@@ -1,10 +1,13 @@
 # getRad (development version)
 
+# getRad 0.2.4
+
 * Make error messages more consistent (#146).
 * Restore access to Estonian data.
 * Implement reading `vpts` data from a local directory (#135).
 * Prevent leaving temporary files for downloading Dutch polar volume data (#148).
 * Denmark does not require authentication anymore, removed from the package (#154).
+* Account for url change of opera database (#160).
 
 # getRad 0.2.3
 

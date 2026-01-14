@@ -41,7 +41,7 @@ test_that("get_vpts_coverage_rmi() returns known radars and years", {
 
   expect_in(
     lubridate::year(cov$date),
-    seq(2019, 2025)
+    seq(2019, lubridate::year(Sys.Date()))
   )
 })
 

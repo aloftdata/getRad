@@ -4,17 +4,23 @@
   "identifier": "getRad",
   "description": "Load polar volume and vertical profile data for aeroecological research directly into R. With 'getRad' you can access data from several sources in Europe and the US and standardize it to facilitate further exploration in tools such as 'bioRad'.",
   "name": "getRad: Download Radar Data for Biological Research",
-  "relatedLink": "https://aloftdata.github.io/getRad/",
+  "relatedLink": ["https://aloftdata.github.io/getRad/", "https://CRAN.R-project.org/package=getRad"],
   "codeRepository": "https://github.com/aloftdata/getRad",
   "issueTracker": "https://github.com/aloftdata/getRad/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.2.0",
+  "version": "0.2.4",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
   "runtimePlatform": "R version 4.5.1 (2025-06-13)",
+  "provider": {
+    "@id": "https://cran.r-project.org",
+    "@type": "Organization",
+    "name": "Comprehensive R Archive Network (CRAN)",
+    "url": "https://cran.r-project.org"
+  },
   "author": [
     {
       "@type": "Person",
@@ -232,18 +238,6 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=vol2birdR"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "withr",
-      "name": "withr",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=withr"
     }
   ],
   "softwareRequirements": {
@@ -400,6 +394,18 @@
     },
     "15": {
       "@type": "SoftwareApplication",
+      "identifier": "withr",
+      "name": "withr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=withr"
+    },
+    "16": {
+      "@type": "SoftwareApplication",
       "identifier": "xml2",
       "name": "xml2",
       "provider": {
@@ -412,5 +418,10 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "4558.06KB"
+  "fileSize": "3693.219KB",
+  "releaseNotes": "https://github.com/aloftdata/getRad/blob/main/NEWS.md",
+  "readme": "https://github.com/aloftdata/getRad/blob/main/README.md",
+  "contIntegration": ["https://github.com/aloftdata/getRad/actions/workflows/R-CMD-check.yaml", "https://app.codecov.io/gh/aloftdata/getRad/", "https://github.com/aloftdata/getRad/actions/workflows/regular-checks.yaml"],
+  "developmentStatus": "https://www.repostatus.org/#active",
+  "keywords": ["oscibio", "r", "r-package", "radar", "rstats"]
 }

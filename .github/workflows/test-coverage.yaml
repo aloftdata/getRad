@@ -13,6 +13,7 @@ jobs:
   test-coverage:
     runs-on: ubuntu-latest
     env:
+      getRad_nl_api_key: ${{ secrets.GETRAD_NL_API_KEY }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:

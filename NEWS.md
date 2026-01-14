@@ -1,5 +1,7 @@
 # getRad (development version)
 
+* Clarify HTTP 429 error for the Netherlands (#165).
+
 # getRad 0.2.4
 
 * Make error messages more consistent (#146).

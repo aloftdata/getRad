@@ -1,6 +1,7 @@
 # getRad (development version)
 
 * Implement reading `vpts` data from a local directory (#135).
+* Clarify HTTP 429 error for the Netherlands (#165).
 
 # getRad 0.2.4
 

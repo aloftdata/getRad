@@ -2,6 +2,9 @@
 
 ## getRad (development version)
 
+- Clarify HTTP 429 error for the Netherlands
+  ([\#165](https://github.com/aloftdata/getRad/issues/165)).
+
 ## getRad 0.2.4
 
 CRAN release: 2025-12-10

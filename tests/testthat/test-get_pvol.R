@@ -50,7 +50,7 @@ test_that("get_pvol time argument", {
 
 test_that("multiple radars work", {
   skip_if_offline()
-  multiple_radars <- c("fianj", "dehnr")
+  multiple_radars <- c("dkbor", "dehnr")
   expect_type(
     pvl <- get_pvol(
       radar = multiple_radars,
@@ -81,7 +81,7 @@ test_that("multiple timestamps work", {
     )
   expect_type(
     pvl <- get_pvol(
-      c("fianj"),
+      c("dkbor"),
       datetime = multiple_timestamps
     ),
     "list"
@@ -95,7 +95,7 @@ test_that("multiple timestamps work", {
 
 test_that("multiple timestamps and radars work", {
   skip_if_offline()
-  multiple_radars <- c("fivim", "deess")
+  multiple_radars <- c("dkbor", "deess")
   multiple_timestamps <-
     lubridate::ymd_hms(
       paste(

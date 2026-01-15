@@ -11,7 +11,8 @@ test_that("Check if the available attributes changed", {
       unique() |>
       gsub(pattern = ".hdf", replacement = "") |>
       sort(),
-    c("KDP", "RhoHV", "V", "ZDR", "dBZ") |> sort()
+    c("Height", "KDP", "RhoHV", "V", "ZDR", "dBR", "dBZ") |> sort()
+    # Height and dBR are none polar files
   )
 })
 test_that("Pvol for Romania can be downloaded", {

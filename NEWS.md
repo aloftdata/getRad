@@ -1,9 +1,14 @@
 # getRad (development version)
 
+* Clarify HTTP 429 error for the Netherlands (#165).
+
+# getRad 0.2.4
+
 * Make error messages more consistent (#146).
 * Restore access to Estonian data.
 * Prevent leaving temporary files for downloading Dutch polar volume data (#148).
 * Denmark does not require authentication anymore, removed from the package (#154).
+* Account for url change of opera database (#160).
 
 # getRad 0.2.3
 

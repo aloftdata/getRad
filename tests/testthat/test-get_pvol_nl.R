@@ -2,21 +2,22 @@ test_that("Pvol for the Netherlands can be downloaded", {
   skip_if(Sys.which("KNMI_vol_h5_to_ODIM_h5") == "")
   skip_if_offline(host = "api.dataplatform.knmi.nl")
 
-  # make sure local env is used by keyring so that api key can be set
-  withr::local_options(list(
-    "keyring_backend" = "env"
-  ))
-  # get public key here https://developer.dataplatform.knmi.nl/open-data-api#token
-  withr::local_envvar(
-    list(
-      "getRad_nl_api_key" = "eyJvcmciOiI1ZTU1NGUxOTI3NGE5NjAwMDEyYTNlYjEiLCJpZCI6ImVlNDFjMWI0MjlkODQ2MThiNWI4ZDViZDAyMTM2YTM3IiwiaCI6Im11cm11cjEyOCJ9"
+  # First see if a key can be retrieved if not make sure env is used as a keyring backend
+  if (rlang::is_error(rlang::catch_cnd(getRad::get_secret("nl_api_key")))) {
+    withr::local_options(list(
+      "keyring_backend" = "env"
+    ))
+  }
+  # If no key can be retrieved from the current backend set the key to the anonymous key of KNMI
+  if (rlang::is_error(rlang::catch_cnd(getRad::get_secret("nl_api_key")))) {
+    # get public key here https://developer.dataplatform.knmi.nl/open-data-api#token
+    withr::local_envvar(
+      list(
+        "getRad_nl_api_key" = "eyJvcmciOiI1ZTU1NGUxOTI3NGE5NjAwMDEyYTNlYjEiLCJpZCI6ImVlNDFjMWI0MjlkODQ2MThiNWI4ZDViZDAyMTM2YTM3IiwiaCI6Im11cm11cjEyOCJ9"
+      )
     )
-  )
+  }
   time <- as.POSIXct("2024-4-4 20:00:00", tz = "Europe/Helsinki")
-  expect_s3_class(
-    get_pvol("nlhrw", time, param = "all"),
-    "pvol"
-  )
   pvol <- expect_s3_class(get_pvol("nlhrw", time, param = "all"), "pvol")
   expect_true(bioRad::is.pvol(pvol))
   expect_identical(
@@ -31,15 +32,24 @@ test_that("Pvol for the Netherlands can be downloaded. Incorrect converter resul
 
   # make sure local env is used by keyring so that api key can be set
   withr::local_options(list(
-    "keyring_backend" = "env",
     "getRad.nl_converter" = "ls"
   ))
-  # get public key here https://developer.dataplatform.knmi.nl/open-data-api#token
-  withr::local_envvar(
-    list(
-      "getRad_nl_api_key" = "eyJvcmciOiI1ZTU1NGUxOTI3NGE5NjAwMDEyYTNlYjEiLCJpZCI6ImVlNDFjMWI0MjlkODQ2MThiNWI4ZDViZDAyMTM2YTM3IiwiaCI6Im11cm11cjEyOCJ9"
+
+  # First see if a key can be retrieved if not make sure env is used as a keyring backend
+  if (rlang::is_error(rlang::catch_cnd(getRad::get_secret("nl_api_key")))) {
+    withr::local_options(list(
+      "keyring_backend" = "env"
+    ))
+  }
+  # If no key can be retrieved from the current backend set the key to the anonymous key of KNMI
+  if (rlang::is_error(rlang::catch_cnd(getRad::get_secret("nl_api_key")))) {
+    # get public key here https://developer.dataplatform.knmi.nl/open-data-api#token
+    withr::local_envvar(
+      list(
+        "getRad_nl_api_key" = "eyJvcmciOiI1ZTU1NGUxOTI3NGE5NjAwMDEyYTNlYjEiLCJpZCI6ImVlNDFjMWI0MjlkODQ2MThiNWI4ZDViZDAyMTM2YTM3IiwiaCI6Im11cm11cjEyOCJ9"
+      )
     )
-  )
+  }
   time <- as.POSIXct("2024-4-4 20:00:00", tz = "Europe/Helsinki")
   expect_error(
     get_pvol("nlhrw", time, param = "all"),

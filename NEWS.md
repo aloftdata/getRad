@@ -1,6 +1,7 @@
 # getRad (development version)
 
 * Clarify HTTP 429 error for the Netherlands (#165).
+* For Romania match deviating file format (thanks to Sorin Burcea, #167).
 
 # getRad 0.2.4
 

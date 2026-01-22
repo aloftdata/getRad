@@ -24,6 +24,34 @@
     getRad.cache = cachem::cache_mem(
       max_size = 128 * 1024^2,
       max_age = 60^2 * 24
+    ),
+    getRad.vpts_col_types = list(
+      radar = vroom::col_factor(),
+      datetime = vroom::col_datetime(),
+      height = vroom::col_integer(),
+      u = vroom::col_double(),
+      v = vroom::col_double(),
+      w = vroom::col_double(),
+      ff = vroom::col_double(),
+      dd = vroom::col_double(),
+      sd_vvp = vroom::col_double(),
+      gap = vroom::col_logical(),
+      eta = vroom::col_double(),
+      dens = vroom::col_double(),
+      dbz = vroom::col_double(),
+      dbz_all = vroom::col_double(),
+      n = vroom::col_integer(),
+      n_dbz = vroom::col_integer(),
+      n_all = vroom::col_integer(),
+      n_dbz_all = vroom::col_integer(),
+      rcs = vroom::col_double(),
+      sd_vvp_threshold = vroom::col_double(),
+      vcp = vroom::col_integer(),
+      radar_longitude = vroom::col_double(),
+      radar_latitude = vroom::col_double(),
+      radar_height = vroom::col_integer(),
+      radar_wavelength = vroom::col_double(),
+      source_file = vroom::col_character()
     )
   )
   toset <- !(names(op.getRad) %in% names(op))

@@ -2,6 +2,8 @@
 
 ## getRad (development version)
 
+- Implement reading `vpts` data from a local directory
+  ([\#135](https://github.com/aloftdata/getRad/issues/135)).
 - Clarify HTTP 429 error for the Netherlands
   ([\#165](https://github.com/aloftdata/getRad/issues/165)).
 

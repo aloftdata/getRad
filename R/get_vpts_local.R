@@ -10,7 +10,7 @@ get_vpts_local <- function(
     lubridate::int_end(rounded_interval),
     "day"
   ))
-  file_paths <- radar |>
+  file_paths_list <- radar |>
     purrr::map(
       ~ unique(glue::glue(
         getOption(
@@ -25,9 +25,10 @@ get_vpts_local <- function(
       ))
     ) |>
     purrr::set_names(radar)
-  full_paths <- purrr::map(file_paths, ~ file.path(directory, .x))
-  s <- purrr::map(full_paths, file.exists)
-  if (all(!unlist(s))) {
+  # `full_paths_list` is a list of file paths per radar, so that one vpts per radar is calculated
+  full_paths_list <- purrr::map(file_paths_list, ~ file.path(directory, .x))
+  full_paths_exist_list <- purrr::map(full_paths_list, file.exists)
+  if (all(!unlist(full_paths_exist_list))) {
     cli::cli_abort(
       c(
         x = "None of the expected files are in the source directory ({.file {directory}}).",
@@ -37,8 +38,12 @@ get_vpts_local <- function(
       call = call
     )
   }
-  if (any(!unlist(s))) {
-    missing_files <- unlist(purrr::map2(full_paths, s, ~ .x[!.y]))
+  if (any(!unlist(full_paths_exist_list))) {
+    missing_files <- unlist(purrr::map2(
+      full_paths_list,
+      full_paths_exist_list,
+      ~ .x[!.y]
+    ))
     cli::cli_warn(
       c(
         x = "Some of the expected files are in the source directory ({.file {directory}}).",
@@ -50,10 +55,10 @@ get_vpts_local <- function(
       call = call
     )
   }
-  any_file <- purrr::map_lgl(s, any)
+  any_file <- purrr::map_lgl(full_paths_exist_list, any)
   purrr::map2(
-    full_paths[any_file],
-    s[any_file],
+    full_paths_list[any_file],
+    full_paths_exist_list[any_file],
     ~ vroom::vroom(
       .x[.y],
       col_types = getOption(

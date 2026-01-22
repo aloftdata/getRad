@@ -32,7 +32,7 @@ get_vpts_local <- function(
     cli::cli_abort(
       c(
         x = "None of the expected files are in the source directory ({.file {directory}}).",
-        i = "The following files were expected: {.file {unlist(full_paths)}}."
+        i = "The following files were expected: {.file {unlist(full_paths_list)}}."
       ),
       class = "getRad_error_files_not_in_source_dir",
       call = call

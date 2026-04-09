@@ -82,7 +82,7 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
   # ensure early failure and not first do a lot of download before failing on
   # the last radar
   if (length(radar) != 1) {
-    purrr::map(radar, select_get_pvol_function) # quick check if all radars exist
+    purrr::map(radar, select_get_pvol_function, ...) # quick check if all radars exist
     pvols <- purrr::map(radar, safe_get_pvol, datetime = datetime, ...)
     if (lubridate::is.interval(datetime)) {
       pvols <- unlist(pvols, recursive = F)
@@ -90,7 +90,7 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
     return(pvols)
   }
 
-  fn <- select_get_pvol_function(radar)
+  fn <- select_get_pvol_function(radar, ...)
 
   if (lubridate::is.interval(datetime)) {
     if (lubridate::as.duration(datetime) > lubridate::hours(1)) {
@@ -136,16 +136,23 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
 
 # Helper function to find the function for a specific radar
 # This function is only helpful in get_pvol and therefor not in a utils file
-select_get_pvol_function <- function(radar, ..., call = rlang::caller_env()) {
+select_get_pvol_function <- function(
+  radar,
+  opera_ord = FALSE,
+  ...,
+  call = rlang::caller_env()
+) {
   if (radar == "hochficht") {
     return("get_pvol_hochficht")
   }
+
   if (is_nexrad(radar)) {
     return("get_pvol_us")
   }
 
   cntry_code <- substr(radar, 1, 2) # nolint
   fun <- (dplyr::case_when(
+    opera_ord ~ "get_pvol_ord",
     cntry_code == "nl" ~ "get_pvol_nl",
     cntry_code == "fi" ~ "get_pvol_fi",
     cntry_code == "dk" ~ "get_pvol_dk",
@@ -155,7 +162,7 @@ select_get_pvol_function <- function(radar, ..., call = rlang::caller_env()) {
     cntry_code == "se" ~ "get_pvol_se",
     cntry_code == "ro" ~ "get_pvol_ro",
     cntry_code == "sk" ~ "get_pvol_sk",
-    .default = NA
+    .default = "get_pvol_ord"
   ))
   if (rlang::is_na(fun)) {
     cli::cli_abort(

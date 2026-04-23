@@ -71,8 +71,9 @@ get_pvol_ee <- function(radar, time, ..., call = rlang::caller_env()) {
     httr2::resp_body_json()
   if (files$numFound == 0 || length(files$documents) != 1) {
     cli::cli_abort(
-      "The expected number of files is not found.",
-      class = "getRad_error_get_pvol_ee_differing_n_files"
+      "The expected number of files is not found for this Estonian Radar. This can occur when no data is available.",
+      class = "getRad_error_get_pvol_ee_differing_n_files",
+      call = call
     )
   }
   pvol <- withr::with_tempfile("file", fileext = ".h5", {

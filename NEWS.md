@@ -2,6 +2,7 @@
 
 * Implement reading `vpts` data from a local directory (#135).
 * Clarify HTTP 429 error for the Netherlands (#165).
+* Clarify error for Estonia and propagate call (#173).
 * For Romania match deviating file format (thanks to Sorin Burcea, #167).
 
 # getRad 0.2.4

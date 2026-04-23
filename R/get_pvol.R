@@ -37,7 +37,11 @@
 #'   c("deess", "dehnr", "fianj", "czska", "KABR"),
 #'   as.POSIXct(Sys.Date())
 #' )
-get_pvol <- function(radar = NULL, datetime = NULL, ...) {
+get_pvol <- function(
+  radar = NULL,
+  datetime = NULL,
+  ...
+) {
   if (!identical(radar, "hochficht")) {
     check_odim_nexrad(setdiff(radar, 'hochficht'))
   }
@@ -138,8 +142,8 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
 # This function is only helpful in get_pvol and therefor not in a utils file
 select_get_pvol_function <- function(
   radar,
-  opera_ord = FALSE,
   ...,
+  use_opera_ord = FALSE,
   call = rlang::caller_env()
 ) {
   if (radar == "hochficht") {
@@ -152,7 +156,7 @@ select_get_pvol_function <- function(
 
   cntry_code <- substr(radar, 1, 2) # nolint
   fun <- (dplyr::case_when(
-    opera_ord ~ "get_pvol_ord",
+    use_opera_ord ~ "get_pvol_ord",
     cntry_code == "nl" ~ "get_pvol_nl",
     cntry_code == "fi" ~ "get_pvol_fi",
     cntry_code == "dk" ~ "get_pvol_dk",
@@ -162,7 +166,30 @@ select_get_pvol_function <- function(
     cntry_code == "se" ~ "get_pvol_se",
     cntry_code == "ro" ~ "get_pvol_ro",
     cntry_code == "sk" ~ "get_pvol_sk",
-    .default = "get_pvol_ord"
+    cntry_code %in%
+      c(
+        "be",
+        "ch",
+        "cz",
+        "de",
+        "dk",
+        "ee",
+        "fi",
+        "fr",
+        "hr",
+        "ie",
+        "is",
+        "lt",
+        "mt",
+        "nl",
+        "no",
+        "pl",
+        "ro",
+        "se",
+        "si"
+      ) ~
+      "get_pvol_ord", # Some countries here can't be reached as a custom function exists
+    .default = NA
   ))
   if (rlang::is_na(fun)) {
     cli::cli_abort(

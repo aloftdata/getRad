@@ -21,6 +21,7 @@
     ),
     getRad.aloft_data_url = "https://aloftdata.s3-eu-west-1.amazonaws.com",
     getRad.nexrad_data_url = "https://unidata-nexrad-level2.s3.amazonaws.com",
+    getRad.nexrad_vpts_data_url = "https://birdcastdata.s3.amazonaws.com",
     getRad.cache = cachem::cache_mem(
       max_size = 128 * 1024^2,
       max_age = 60^2 * 24

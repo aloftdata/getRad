@@ -7,7 +7,7 @@
 get_vpts(
   radar,
   datetime,
-  source = c("baltrad", "uva", "ecog-04003", "rmi"),
+  source = c("baltrad", "uva", "ecog-04003", "rmi", "nexrad"),
   return_type = c("vpts", "tibble")
 )
 }
@@ -26,8 +26,8 @@ downloaded.
 \item A \code{\link[lubridate:interval]{lubridate::interval()}}, between which all data files are downloaded.
 }}
 
-\item{source}{Source of the data. One of \code{"baltrad"}, \code{"uva"}, \code{"ecog-04003"}
-or \code{"rmi"}. Only one source can be queried at a time. If not provided,
+\item{source}{Source of the data. One of \code{"baltrad"}, \code{"uva"}, \code{"ecog-04003"},
+\code{"rmi"}, or \code{"nexrad"}. Only one source can be queried at a time. If not provided,
 \code{"baltrad"} is used. Alternatively a local directory can be specified,
 see details for an explanation of the file format.}
 
@@ -101,5 +101,7 @@ get_vpts(
   source = "baltrad",
   return_type = "tibble"
 )
+#' Get VPTS data from the public BirdCast NEXRAD archive
+get_vpts(radar = "KABR", datetime = "2023-01-01", source = "nexrad")
 \dontshow{\}) # examplesIf}
 }

@@ -10,7 +10,7 @@ test_that("Source argument as expected", {
   )
 })
 
-test_that("format as expect for aloft", {
+test_that("format as expected for aloft", {
   skip_if_offline()
 
   data <- get_vpts_coverage("uva")
@@ -19,13 +19,23 @@ test_that("format as expect for aloft", {
   expect_true(all(is_odim(data$radar)))
 })
 
-test_that("format as expect for rmi", {
+test_that("format as expected for rmi", {
   skip_if_offline("opendata.meteo.be")
 
   data <- get_vpts_coverage("rmi")
   expect_true(all(c("source", "radar", "date") %in% names(data)))
   expect_s3_class(data$date, "Date")
   expect_true(all(is_odim(data$radar)))
+})
+
+test_that("format as expected for nexrad", {
+  skip_if_offline()
+
+  data <- get_vpts_coverage("nexrad")
+  expect_true(all(c("source", "radar", "date") %in% names(data)))
+  expect_s3_class(data$date, "Date")
+  expect_true(all(grepl("^[A-Z0-9]{4}$", data$radar)))
+  expect_true(all(data$source == "nexrad"))
 })
 
 

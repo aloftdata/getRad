@@ -34,8 +34,8 @@
 #'   - A vector of datetimes or dates, between which all data files are
 #'   downloaded.
 #'   - A [lubridate::interval()], between which all data files are downloaded.
-#' @param source Source of the data. One of `"baltrad"`, `"uva"`, `"ecog-04003"`
-#'   or `"rmi"`. Only one source can be queried at a time. If not provided,
+#' @param source Source of the data. One of `"baltrad"`, `"uva"`, `"ecog-04003"`,
+#'   `"rmi"`, or `"nexrad"`. Only one source can be queried at a time. If not provided,
 #'   `"baltrad"` is used. Alternatively a local directory can be specified,
 #'   see details for an explanation of the file format.
 #' @param return_type Type of object that should be returned. Either:
@@ -77,10 +77,12 @@
 #'   source = "baltrad",
 #'   return_type = "tibble"
 #' )
+#' #' Get VPTS data from the public BirdCast NEXRAD archive
+#' get_vpts(radar = "KABR", datetime = "2023-01-01", source = "nexrad")
 get_vpts <- function(
   radar,
   datetime,
-  source = c("baltrad", "uva", "ecog-04003", "rmi"),
+  source = c("baltrad", "uva", "ecog-04003", "rmi", "nexrad"),
   return_type = c("vpts", "tibble")
 ) {
   # Input checks ----
@@ -205,14 +207,19 @@ get_vpts <- function(
   # Query the selected radars ----
   # Directing to the correct get_vpts_* helper based on source.
   cl <- rlang::caller_env(0)
+
+  aloft_sources <- eval(formals("get_vpts_aloft")$source)
+
+  source_type <- dplyr::case_when(
+    source == "rmi" ~ "rmi",
+    source == "nexrad" ~ "nexrad",
+    source %in% aloft_sources ~ "aloft",
+    dir.exists(source) ~ "local"
+  )
+
   fetched_vpts <-
     switch(
-      dplyr::case_when(
-        source == "rmi" ~ "rmi",
-        source %in% eval(formals("get_vpts_aloft")$source) ~ "aloft",
-        # this is the last option to avoid using a local source if an online exists
-        dir.exists(source) ~ "local"
-      ),
+      source_type,
       rmi = purrr::map(
         radar,
         ~ get_vpts_rmi(.x, rounded_interval),
@@ -224,6 +231,14 @@ get_vpts <- function(
           .x,
           rounded_interval = rounded_interval,
           source = source
+        ),
+        .purrr_error_call = cl
+      ),
+      nexrad = purrr::map(
+        radar,
+        ~ get_vpts_nexrad(
+          .x,
+          rounded_interval = rounded_interval
         ),
         .purrr_error_call = cl
       ),

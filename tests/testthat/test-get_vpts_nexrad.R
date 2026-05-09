@@ -4,7 +4,7 @@ test_that("get_vpts_nexrad() returns error on invalid radar code", {
       radar = "KAB",
       rounded_interval = lubridate::interval("2013-09-01", "2013-09-02")
     ),
-    class = "getRad_error_radar_not_single_odim_string"
+    class = "getRad_error_radar_not_single_odim_nexrad"
   )
 
   expect_error(
@@ -12,7 +12,7 @@ test_that("get_vpts_nexrad() returns error on invalid radar code", {
       radar = 12345,
       rounded_interval = lubridate::interval("2013-09-01", "2013-09-02")
     ),
-    class = "getRad_error_radar_not_single_odim_string"
+    class = "getRad_error_radar_not_single_odim_nexrad"
   )
 })
 
@@ -22,14 +22,14 @@ test_that("get_vpts_nexrad() returns error when multiple radars are queried", {
       radar = c("KABR", "KABX"),
       rounded_interval = lubridate::interval("2013-09-01", "2013-09-02")
     ),
-    class = "getRad_error_radar_not_single_odim_string"
+    class = "getRad_error_radar_not_single_odim_nexrad"
   )
 })
 
 test_that("get_vpts_nexrad() returns error when radar is not found in coverage", {
   expect_error(
     getRad:::get_vpts_nexrad(
-      radar = "ZZZZZ",
+      radar = "ZZZZ",
       rounded_interval = lubridate::interval("2013-09-01", "2013-09-02")
     ),
     class = "getRad_error_nexrad_radar_not_found"
@@ -38,12 +38,12 @@ test_that("get_vpts_nexrad() returns error when radar is not found in coverage",
   expect_identical(
     rlang::catch_cnd(
       getRad:::get_vpts_nexrad(
-        radar = "ZZZZZ",
+        radar = "ZZZZ",
         rounded_interval = lubridate::interval("2013-09-01", "2013-09-02")
       ),
       classes = "getRad_error_nexrad_radar_not_found"
     )$missing_radar,
-    "ZZZZZ"
+    "ZZZZ"
   )
 })
 
@@ -65,15 +65,8 @@ test_that("get_vpts_nexrad() can fetch daily VPTS data from BirdCast archive", {
     rounded_interval = lubridate::interval("2013-09-01", "2013-09-02")
   )
 
-  expect_type(
-    nexrad_vpts_tbl,
-    "list"
-  )
-
-  expect_s3_class(
-    nexrad_vpts_tbl,
-    "tbl_df"
-  )
+  expect_type(nexrad_vpts_tbl, "list")
+  expect_s3_class(nexrad_vpts_tbl, "tbl_df")
 
   expect_named(
     nexrad_vpts_tbl,

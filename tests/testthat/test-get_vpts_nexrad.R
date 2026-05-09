@@ -1,9 +1,73 @@
+test_that("get_vpts_nexrad() returns error on invalid radar code", {
+  expect_error(
+    getRad:::get_vpts_nexrad(
+      radar = "KAB",
+      rounded_interval = lubridate::interval("2013-09-01", "2013-09-02")
+    ),
+    class = "getRad_error_radar_not_single_odim_string"
+  )
+
+  expect_error(
+    getRad:::get_vpts_nexrad(
+      radar = 12345,
+      rounded_interval = lubridate::interval("2013-09-01", "2013-09-02")
+    ),
+    class = "getRad_error_radar_not_single_odim_string"
+  )
+})
+
+test_that("get_vpts_nexrad() returns error when multiple radars are queried", {
+  expect_error(
+    getRad:::get_vpts_nexrad(
+      radar = c("KABR", "KABX"),
+      rounded_interval = lubridate::interval("2013-09-01", "2013-09-02")
+    ),
+    class = "getRad_error_radar_not_single_odim_string"
+  )
+})
+
+test_that("get_vpts_nexrad() returns error when radar is not found in coverage", {
+  expect_error(
+    getRad:::get_vpts_nexrad(
+      radar = "ZZZZZ",
+      rounded_interval = lubridate::interval("2013-09-01", "2013-09-02")
+    ),
+    class = "getRad_error_nexrad_radar_not_found"
+  )
+
+  expect_identical(
+    rlang::catch_cnd(
+      getRad:::get_vpts_nexrad(
+        radar = "ZZZZZ",
+        rounded_interval = lubridate::interval("2013-09-01", "2013-09-02")
+      ),
+      classes = "getRad_error_nexrad_radar_not_found"
+    )$missing_radar,
+    "ZZZZZ"
+  )
+})
+
+test_that("get_vpts_nexrad() returns error when date is requested not in coverage", {
+  expect_error(
+    getRad:::get_vpts_nexrad(
+      radar = "KABR",
+      rounded_interval = lubridate::interval("1900-01-01", "1900-01-02")
+    ),
+    class = "getRad_error_date_not_found"
+  )
+})
+
 test_that("get_vpts_nexrad() can fetch daily VPTS data from BirdCast archive", {
   skip_if_offline()
 
   nexrad_vpts_tbl <- getRad:::get_vpts_nexrad(
     radar = "KABR",
     rounded_interval = lubridate::interval("2013-09-01", "2013-09-02")
+  )
+
+  expect_type(
+    nexrad_vpts_tbl,
+    "list"
   )
 
   expect_s3_class(

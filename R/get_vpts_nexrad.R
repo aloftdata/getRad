@@ -32,7 +32,7 @@ get_vpts_nexrad <- function(
   radar <- toupper(radar)
 
   # Check that only one radar is provided.
-  check_odim_scalar(radar)
+  check_odim_nexrad_scalar(radar)
 
   # Check if the requested radar is present in the coverage.
   if (!all(radar %in% coverage$radar)) {

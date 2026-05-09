@@ -81,7 +81,7 @@ get_vpts_nexrad <- function(
     purrr::keep(.p = ~ as.logical(nrow(.x))) |>
     purrr::list_rbind() |>
     dplyr::mutate(
-      radar = tolower(.data$radar),
+      radar = tolower(radar),
       source = "nexrad"
     )
 }

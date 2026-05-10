@@ -12,9 +12,10 @@
 #' @examplesIf interactive()
 #' get_vpts_coverage_nexrad()
 get_vpts_coverage_nexrad <- function(
-    use_cache = TRUE,
-    ...,
-    call = rlang::caller_env()) {
+  use_cache = TRUE,
+  ...,
+  call = rlang::caller_env()
+) {
   nexrad_vpts_data_url <- getOption("getRad.nexrad_vpts_data_url")
 
   coverage_raw <-

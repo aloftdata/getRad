@@ -4,12 +4,15 @@
 \alias{get_vpts_nexrad}
 \title{Get VPTS data from the public BirdCast NEXRAD archive}
 \usage{
-get_vpts_nexrad(radar, rounded_interval)
+get_vpts_nexrad(radar, rounded_interval, coverage = get_vpts_coverage_nexrad())
 }
 \arguments{
 \item{radar}{NEXRAD radar code.}
 
 \item{rounded_interval}{Interval to fetch data for, rounded to nearest day.}
+
+\item{coverage}{A data frame containing the coverage of the BirdCast NEXRAD
+archive. If not provided, it will be fetched via the internet.}
 }
 \value{
 A tibble with VPTS data.
@@ -19,18 +22,17 @@ Gets VPTS data from the public BirdCast NEXRAD archive.
 }
 \details{
 By default, data are retrieved from the public BirdCast S3 archive at
-\verb{https://birdcastdata.s3.amazonaws.com/nexrad}.
+\verb{https://birdcastdata.s3.amazonaws.com/nexrad/daily}.
 
-The default path format is monthly:
-\code{"{radar}/{year}/{radar}_vpts_{year}{month}.csv.gz"}.
-
-To read daily files, set:
-\code{options(getRad.vpts_nexrad_path_format = "{radar}/{year}/{radar}_vpts_{year}{month}{day}.csv")}.
+The expected path format is:
+\code{"{radar}/{year}/{radar}_vpts_{year}{month}{day}.csv"}.
 }
 \section{Inner working}{
 
 \itemize{
-\item Constructs the S3 paths for the VPTS files based on the input.
+\item Checks that the requested radar is present in the NEXRAD coverage file.
+\item Checks that data exist for the requested radar/date combination.
+\item Constructs the S3 paths for the daily VPTS files from the coverage file.
 \item Performs parallel HTTP requests to fetch the VPTS CSV data.
 \item Parses the response bodies with the shared VPTS column classes.
 \item Uses uppercase NEXRAD radar codes for archive paths.

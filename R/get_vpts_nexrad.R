@@ -25,9 +25,10 @@
 #' @return A tibble with VPTS data.
 #' @keywords internal
 get_vpts_nexrad <- function(
-    radar,
-    rounded_interval,
-    coverage = get_vpts_coverage_nexrad()) {
+  radar,
+  rounded_interval,
+  coverage = get_vpts_coverage_nexrad()
+) {
   radar <- toupper(radar)
 
   # Check that only one radar is provided.

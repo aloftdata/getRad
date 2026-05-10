@@ -13,9 +13,8 @@
 #' @examplesIf interactive()
 #' get_vpts_coverage()
 get_vpts_coverage <- function(
-  source = c("baltrad", "uva", "ecog-04003", "rmi", "nexrad"),
-  ...
-) {
+    source = c("baltrad", "uva", "ecog-04003", "rmi", "nexrad"),
+    ...) {
   # argument all returns all possible sources
   if (rlang::is_scalar_character(source) && source == "all") {
     source <- rlang::eval_bare(formals(rlang::caller_fn(0))[["source"]])

@@ -77,12 +77,13 @@ get_vpts_nexrad <- function(
   nexrad_data_url <- "https://birdcastdata.s3.amazonaws.com/nexrad/daily"
   radar_out <- tolower(radar)
 
-  paste(nexrad_data_url, s3_paths, sep = "/") |>
+  out <- paste(nexrad_data_url, s3_paths, sep = "/") |>
     read_vpts_from_url() |>
     purrr::keep(.p = ~ as.logical(nrow(.x))) |>
-    purrr::list_rbind() |>
-    dplyr::mutate(
-      radar = .env$radar_out,
-      source = "nexrad"
-    )
+    purrr::list_rbind()
+
+  out$radar <- radar_out
+  out$source <- "nexrad"
+
+  out
 }

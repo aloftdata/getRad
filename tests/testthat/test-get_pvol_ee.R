@@ -7,17 +7,16 @@ test_that("Pvol for estonia can be downloaded", {
   # The API frequently sends 429/500 responses, therefore this test is allowed
   # to skip when the download is unsuccessful.
   pvol <- tryCatch(
-    get_pvol(
-      "eesur",
-      time,
-      param = "all"
-    ),
+    get_pvol("eesur", time, param = "all"),
     error = function(e) NULL
   )
 
   skip_if_not(
     inherits(pvol, "pvol"),
-    message = "PVOL download for Estonia was unsuccessful; success is variable in testing environments"
+    message = paste(
+      "PVOL download for Estonia was unsuccessful;",
+      "success is variable in testing environments"
+    )
   )
 
   expect_s3_class(pvol, "pvol")

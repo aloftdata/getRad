@@ -14,6 +14,7 @@ exploration of the data by other tools such as
 Install the latest released version from CRAN:
 
 ``` r
+
 install.packages("getRad")
 ```
 
@@ -21,6 +22,7 @@ Or the development version from
 [GitHub](https://github.com/aloftdata/getRad):
 
 ``` r
+
 # install.packages("devtools")
 devtools::install_github("aloftdata/getRad")
 ```
@@ -30,6 +32,7 @@ devtools::install_github("aloftdata/getRad")
 Download a polar volume, and then plot it using `bioRad`:
 
 ``` r
+
 library(getRad)
 library(bioRad)
 # Plot daytime insect movements in Finland (Mäkinen et al. 2022)
@@ -40,12 +43,14 @@ plot(project_as_ppi(get_scan(pvol, 0), range_max = 75000))
 ![](reference/figures/README-example-1.png)
 
 ``` r
+
 plot(calculate_vp(pvol, h_layer = 50, n_layer = 40, warning = FALSE))
 ```
 
 ![](reference/figures/README-example-2.png)
 
 ``` r
+
 
 # Plot nocturnal migration in Finland
 pvol <- get_pvol("fianj", as.POSIXct("2012-05-11 23:00", tz = "UTC"))
@@ -55,6 +60,7 @@ plot(project_as_ppi(get_scan(pvol, 0), range_max = 75000))
 ![](reference/figures/README-example-3.png)
 
 ``` r
+
 plot(calculate_vp(pvol, h_layer = 50, n_layer = 40, warning = FALSE))
 ```
 
@@ -64,6 +70,7 @@ Download a vertical profile time series from the [Aloft
 bucket](https://aloftdata.eu/browse/):
 
 ``` r
+
 # Plot VPTS data for two radars
 vpts_list <- get_vpts(
   radar = c("bejab", "deess"),

@@ -6,6 +6,8 @@
   ([\#135](https://github.com/aloftdata/getRad/issues/135)).
 - Clarify HTTP 429 error for the Netherlands
   ([\#165](https://github.com/aloftdata/getRad/issues/165)).
+- Clarify error for Estonia and propagate call
+  ([\#173](https://github.com/aloftdata/getRad/issues/173)).
 - For Romania match deviating file format (thanks to Sorin Burcea,
   [\#167](https://github.com/aloftdata/getRad/issues/167)).
 

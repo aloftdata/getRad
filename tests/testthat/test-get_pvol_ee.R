@@ -18,3 +18,13 @@ test_that("Pvol for estonia can be downloaded", {
   expect_true(bioRad::is.pvol(pvol))
   expect_identical(pvol$datetime, lubridate::with_tz(time, "UTC"))
 })
+
+test_that("Pvol for estonia fails on missing data", {
+  expect_error(
+    get_pvol(
+      radar = "eesur",
+      structure(1776221700, class = c("POSIXct", "POSIXt"))
+    ),
+    class = "getRad_error_get_pvol_ee_differing_n_files"
+  )
+})

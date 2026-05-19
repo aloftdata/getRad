@@ -68,7 +68,7 @@ data is stored in aloft data
 Besides the examples above there is a \code{date} object available for formatting.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Get VPTS data for a single radar and date
 get_vpts(radar = "bejab", datetime = "2023-01-01", source = "baltrad")
 get_vpts(radar = "bejab", datetime = "2020-01-19", source = "rmi")

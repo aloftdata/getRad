@@ -8,7 +8,9 @@ get_vpts_aloft(
   radar_odim_code,
   rounded_interval,
   source = c("baltrad", "uva", "ecog-04003"),
-  coverage = get_vpts_coverage_aloft()
+  coverage = get_vpts_coverage_aloft(),
+  ...,
+  call = rlang::caller_env()
 )
 }
 \arguments{

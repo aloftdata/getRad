@@ -4,7 +4,13 @@
 \alias{get_vpts_nexrad}
 \title{Get VPTS data from the public BirdCast NEXRAD archive}
 \usage{
-get_vpts_nexrad(radar, rounded_interval, coverage = get_vpts_coverage_nexrad())
+get_vpts_nexrad(
+  radar,
+  rounded_interval,
+  coverage = get_vpts_coverage_nexrad(),
+  ...,
+  call = rlang::caller_env()
+)
 }
 \arguments{
 \item{radar}{NEXRAD radar code.}

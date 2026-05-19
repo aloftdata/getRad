@@ -42,7 +42,7 @@ with the Terminal Doppler Weather Radar (TDWR) program can not be read. These ca
 be identified using the \code{stntype} column in \code{get_weather_radars("nexrad")}.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Get PVOL data for a single radar and datetime
 get_pvol("deess", as.POSIXct(Sys.Date()))
 

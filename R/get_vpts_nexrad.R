@@ -27,7 +27,9 @@
 get_vpts_nexrad <- function(
   radar,
   rounded_interval,
-  coverage = get_vpts_coverage_nexrad()
+  coverage = get_vpts_coverage_nexrad(),
+  ...,
+  call = rlang::caller_env()
 ) {
   radar <- toupper(radar)
 
@@ -42,7 +44,8 @@ get_vpts_nexrad <- function(
       "Can't find radar {.val {missing_radar}} in the NEXRAD coverage file
        (see {.fun get_vpts_coverage}).",
       missing_radar = missing_radar,
-      class = "getRad_error_nexrad_radar_not_found"
+      class = "getRad_error_nexrad_radar_not_found",
+      call = call
     )
   }
 
@@ -56,7 +59,8 @@ get_vpts_nexrad <- function(
   if (nrow(filtered_coverage) == 0) {
     cli::cli_abort(
       "Can't find any data for the requested radar(s) and date(s).",
-      class = "getRad_error_date_not_found"
+      class = "getRad_error_date_not_found",
+      call = call
     )
   }
 

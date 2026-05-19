@@ -34,8 +34,8 @@ test_that("Pvol for Sweden can be downloaded", {
 
 test_that("Pvol for Sweden fails out of time range", {
   skip_if_offline("opendata-download-radar.smhi.se")
+  skip_if_se_not_updated("hudiksvall", Sys.time() - lubridate::hours(4))
   time <- Sys.time() - lubridate::hours(40)
-  skip_if_se_not_updated("hudiksvall", time)
 
   expect_error(
     get_pvol("sehuv", time),

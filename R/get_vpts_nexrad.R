@@ -78,10 +78,10 @@ get_vpts_nexrad <- function(
     dplyr::pull(.data$path)
 
   # Read the VPTS CSV files.
-  nexrad_data_url <- "https://birdcastdata.s3.amazonaws.com/nexrad/daily"
+  nexrad_data_url <- getOption("getRad.nexrad_vpts_data_url")
   radar_out <- tolower(radar)
 
-  out <- paste(nexrad_data_url, s3_paths, sep = "/") |>
+  out <- paste(nexrad_data_url, "nexrad", "daily", s3_paths, sep = "/") |>
     read_vpts_from_url() |>
     purrr::keep(.p = ~ as.logical(nrow(.x))) |>
     purrr::list_rbind()

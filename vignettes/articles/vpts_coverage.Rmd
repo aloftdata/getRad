@@ -23,11 +23,90 @@ library(htmltools)
 ```
 
 ```{r data}
-cvr <- get_vpts_coverage(c("baltrad", "uva", "ecog-04003", "rmi"))
-wr <- get_weather_radars("opera") |>
+cvr <- get_vpts_coverage("all")
+wr <- get_weather_radars("all") |>
   group_by(radar) |>
   arrange(status) |>
   slice_tail(n = 1)
+```
+```{r}
+# there is a with issue in the svg, here is a temporary solution: https://github.com/r-spatial/leafpop/issues/25
+assignInNamespace("popupSVGraph",function(graphs, #dsn = tempdir(),
+                        width = 300, height = 300, ...) {
+  lapply(1:length(graphs), function(i) {
+    #nm = paste0("tmp_", i, ".svg")
+    #fls = file.path(dsn, nm)
+
+    inch_wdth = width / 96
+    inch_hght = height  / 96
+
+    #svg(filename = fls, width = inch_wdth, height = inch_hght, ...)
+    #print(graphs[[i]])
+    #dev.off()
+    lns <- svglite::svgstring(
+      width = inch_wdth,
+      height = inch_hght,
+      standalone = FALSE
+    )
+    print(graphs[[i]])
+    dev.off()
+
+    svg_str <- lns()
+
+    # this is a temporary solution to work around svglite
+    #   non-specific CSS styles
+    #   perhaps we should separate out into its own function/utility
+    #   also adds uuid dependency
+    svg_id <- paste0("x",uuid::UUIDgenerate())
+    svg_str <- gsub(
+      x = svg_str,
+      pattern = "<svg ",
+      replacement = sprintf("<svg id='%s'", svg_id)
+    )
+    # this style gets appended as defaults in all svglite
+    #    but might change if svglite changes
+    svg_css_rule <- sprintf(
+      "#%1$s line, #%1$s polyline, #%1$s polygon, #%1$s path, #%1$s rect, #%1$s circle {",
+      svg_id
+    )
+    svg_str <- gsub(
+      x = svg_str,
+      pattern = "line, polyline, polygon, path, rect, circle \\{",
+      replacement = svg_css_rule
+    )
+
+    #lns = paste(readLines(fls), collapse = "")
+    # file.remove(fls)
+    #     return(
+    # sprintf(
+    # "
+    # <div style='width: %dpx; height: %dpx;'>
+    # %s
+    # </div>
+    # " ,
+    #   width,
+    #   height,
+    #   svg_str
+    # )
+    # )
+    pop = sprintf(
+      "<div style='width: %dpx; height: %dpx;'>%s</div>",
+      width,
+      height,
+      svg_str
+    )
+
+    popTemplate = system.file("templates/popup-graph.brew", package = "leafpop")
+    myCon = textConnection("outputObj", open = "w")
+    brew::brew(popTemplate, output = myCon)
+    outputObj = outputObj
+    close(myCon)
+
+    return(paste(outputObj, collapse = ' '))
+
+  })
+}
+,"leafpop")
 ```
 
 
@@ -48,20 +127,21 @@ for (i in unique(cvr$source)) {
   years <- seq(min(cvrsub$year), max(cvrsub$year), 1)
   cvrsub |>
     group_by(radar) |>
-    summarize(grph = list(ggplot(data = pick(everything())) +
-      geom_tile(aes(x = month, y = year, fill = (n / n_max) * 100)) +
-      scale_fill_viridis_c("Coverage", limits = c(0, 100), breaks = (0:5) * 20, labels = paste0((0:5) * 20, " [%]"), direction = -1) +
+    summarize(grph = list(ggplot(data = bind_rows(expand.grid(year=years, month=month.name, n=NA, n_max=NA), pick(everything())))+
+      scale_x_discrete("Month", breaks = month.name, labels = month.name, limits = month.name) +
+      geom_raster(aes(x = month, y = year, fill = (n / n_max) * 100)) +
+      scale_fill_viridis_c("Coverage", limits = c(0, 100), breaks = (0:5) * 20, labels = paste0((0:5) * 20, " [%]"), direction = -1, na.value = "#FFF0") +
       theme_minimal() +
-      scale_y_continuous("Year", breaks = years, limits = range(years) + c(-.51, .51)) +
+      scale_y_continuous("Year", breaks=if(length(years)<6){ years}else{pretty(years)} , limits = range(years) + c(-.51, .51)) +
       theme(
         axis.text.x = element_text(angle = -90, vjust = 0.5, hjust = 0),
         plot.title = element_text(hjust = 0.5),
-        panel.grid = element_blank()
+        panel.grid = element_blank(), 
+        legend.ticks = element_blank()
       ) +
-      ggtitle(radar) +
-      scale_x_discrete("Month", breaks = month.name, labels = month.name, limits = month.name))) -> res
-  res$grph[[1]]
-  suppressWarnings(res |> left_join(wr, by = join_by(radar))) -> res
+      ggtitle(radar) )) -> res
+#  res$grph[[1]]
+  suppressWarnings(res |> left_join(wr |> select(radar, longitude, latitude), by = join_by(radar))) -> res
   ll <- NULL
   if (any(is.na(res$longitude))) {
     ll <- p(glue::glue("The following radars were omitted from the map because they lack location information in OPERA: {glue::glue_collapse(res$radar[is.na(res$longitude)], ', ', last = ' and ' )}."))
@@ -74,7 +154,7 @@ for (i in unique(cvr$source)) {
       lat = res$latitude,
       label = res$radar,
       clusterOptions = markerClusterOptions(maxClusterRadius = 30),
-      popup = popupGraph(res$grph)
+      popup = popupGraph(res$grph, type = "svg")
     )
   html <- c(html, list(h3(i), lft, ll))
 }

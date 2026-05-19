@@ -49,7 +49,7 @@ get_vpts_nexrad <- function(
   # Check if the requested radar/date combination is present in the coverage.
   filtered_coverage <- dplyr::filter(
     coverage,
-    .data$radar %in% radar,
+    .data$radar %in% .env$radar,
     .data$date %within% rounded_interval
   )
 

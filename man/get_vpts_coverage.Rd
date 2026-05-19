@@ -25,7 +25,7 @@ A \code{data.frame} or \code{tibble} with at least three columns, \code{source},
 Gets the VPTS file coverage from supported sources per radar and date.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 get_vpts_coverage()
 \dontshow{\}) # examplesIf}
 }

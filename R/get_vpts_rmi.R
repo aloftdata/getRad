@@ -5,7 +5,7 @@
 #'
 #' @inheritParams get_vpts_aloft
 #' @return A tibble with VPTS data.
-#' @keywords internal
+#' @noRd
 
 get_vpts_rmi <- function(radar_odim_code, rounded_interval) {
   # Check the coverage for data availability

@@ -23,7 +23,7 @@
 #' @param coverage A data frame containing the coverage of the BirdCast NEXRAD
 #'   archive. If not provided, it will be fetched via the internet.
 #' @return A tibble with VPTS data.
-#' @keywords internal
+#' @noRd
 get_vpts_nexrad <- function(
   radar,
   rounded_interval,

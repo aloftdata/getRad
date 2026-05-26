@@ -5,7 +5,7 @@
 #'
 #' @param urls A character vector with urls to h5 files to read
 #' @param ... arguments to bioRad::read_pvolfile
-#' @param call
+#' @inheritParams radar_recode call
 #'
 #' @returns a pvol
 #' @noRd

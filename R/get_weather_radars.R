@@ -15,9 +15,11 @@
 #' from.
 #' - For `nexrad`: [nexrad-stations.txt](https://www.ncei.noaa.gov/access/homr/file/nexrad-stations.txt).
 #'
-#' @inheritParams req_cache_getrad
 #' @param source Source of the metadata. `"opera"`, `"nexrad"` or `"all"`.
 #'   If not provided, `"opera"` is used.
+#' @param use_cache Logical indicating whether to use the cache. Default is
+#'   `TRUE`. If `FALSE` the cache is ignored and the file is fetched anew.
+#'    This can also be useful if you want to force a refresh of the cache.
 #' @param ... Additional arguments passed on to reading functions per source,
 #'   currently not used.
 #' @return A sf or tibble with weather radar metadata. In all cases the column `source` is

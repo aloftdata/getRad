@@ -25,7 +25,7 @@
 #' @param coverage A data frame containing the coverage of the Aloft bucket.
 #'   If not provided, it will be fetched from via the internet.
 #' @return A tibble with VPTS data.
-#' @keywords internal
+#' @noRd
 get_vpts_aloft <- function(
   radar_odim_code,
   rounded_interval,

@@ -18,21 +18,22 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Bart Kranstauber \email{b.kranstauber@uva.nl} (\href{https://orcid.org/0000-0001-8303-780X}{ORCID}) (University of Amsterdam)
+\strong{Maintainer}: Bart Kranstauber \email{b.kranstauber@uva.nl} (\href{https://orcid.org/0000-0001-8303-780X}{ORCID}) (affiliation: University of Amsterdam)
 
 Authors:
 \itemize{
-  \item Pieter Huybrechts \email{pieter.huybrechts@inbo.be} (\href{https://orcid.org/0000-0002-6658-6062}{ORCID}) (Research Institute for Nature and Forest (INBO))
-  \item Peter Desmet \email{peter.desmet@inbo.be} (\href{https://orcid.org/0000-0002-8442-8025}{ORCID}) (Research Institute for Nature and Forest (INBO))
+  \item Bart Kranstauber \email{b.kranstauber@uva.nl} (\href{https://orcid.org/0000-0001-8303-780X}{ORCID}) (affiliation: University of Amsterdam)
+  \item Pieter Huybrechts \email{pieter.huybrechts@inbo.be} (\href{https://orcid.org/0000-0002-6658-6062}{ORCID}) (affiliation: Research Institute for Nature and Forest (INBO))
+  \item Peter Desmet \email{peter.desmet@inbo.be} (\href{https://orcid.org/0000-0002-8442-8025}{ORCID}) (affiliation: Research Institute for Nature and Forest (INBO))
 }
 
 Other contributors:
 \itemize{
-  \item Cecilia Nilsson \email{cecilia.nilsson@biol.lu.se} (\href{https://orcid.org/0000-0001-8957-4411}{ORCID}) (Lund University) [contributor]
-  \item Alexander Tedeschi \email{at744@cornell.edu} (\href{https://orcid.org/0000-0003-0772-6931}{ORCID}) (Cornell Lab of Ornithology) [contributor]
-  \item Hidde Leijnse (\href{https://orcid.org/0000-0001-7835-4480}{ORCID}) (Royal Netherlands Meteorological Institute) [contributor]
-  \item Bart Hoekstra (\href{https://orcid.org/0000-0002-7085-3805}{ORCID}) (University of Amsterdam) [contributor]
-  \item University of Amsterdam (04dkp9463) [copyright holder]
+  \item Cecilia Nilsson \email{cecilia.nilsson@biol.lu.se} (\href{https://orcid.org/0000-0001-8957-4411}{ORCID}) (affiliation: Lund University) [contributor]
+  \item Alexander Tedeschi \email{at744@cornell.edu} (\href{https://orcid.org/0000-0003-0772-6931}{ORCID}) (affiliation: Cornell Lab of Ornithology) [contributor]
+  \item Hidde Leijnse (\href{https://orcid.org/0000-0001-7835-4480}{ORCID}) (affiliation: Royal Netherlands Meteorological Institute) [contributor]
+  \item Bart Hoekstra (\href{https://orcid.org/0000-0002-7085-3805}{ORCID}) (affiliation: University of Amsterdam) [contributor]
+  \item University of Amsterdam (\href{https://ror.org/04dkp9463}{ROR}) [copyright holder]
   \item Biodiversa+ (https://hirad.science/) [funder]
 }
 

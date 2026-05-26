@@ -34,7 +34,7 @@ see details for an explanation of the file format.}
 \item{return_type}{Type of object that should be returned. Either:
 \itemize{
 \item \code{"vpts"}: vpts object(s) (default).
-\item \code{"tibble"}: a \code{\link[dplyr:reexports]{dplyr::tibble()}}.
+\item \code{"tibble"}: a \code{\link[dplyr:tibble]{dplyr::tibble()}}.
 }}
 }
 \value{
@@ -44,7 +44,7 @@ Either a vpts object, a list of vpts objects or a tibble. See
 \description{
 Gets vertical profile time series data from supported sources and returns it
 as a (list of) of \link[bioRad:summary.vpts]{vpts objects} or a
-\code{\link[dplyr:reexports]{dplyr::tibble()}}.
+\code{\link[dplyr:tibble]{dplyr::tibble()}}.
 }
 \details{
 For more details on supported sources, see \code{vignette("supported_sources")}.
@@ -68,7 +68,7 @@ data is stored in aloft data
 Besides the examples above there is a \code{date} object available for formatting.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Get VPTS data for a single radar and date
 get_vpts(radar = "bejab", datetime = "2023-01-01", source = "baltrad")
 get_vpts(radar = "bejab", datetime = "2020-01-19", source = "rmi")

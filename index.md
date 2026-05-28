@@ -11,20 +11,20 @@ exploration of the data by other tools such as
 
 ## Installation
 
-Install the latest released version from CRAN:
+Install the released version of getRad from CRAN:
 
 ``` r
 
 install.packages("getRad")
 ```
 
-Or the development version from
-[GitHub](https://github.com/aloftdata/getRad):
+Or install the development version from [GitHub](https://github.com/)
+with:
 
 ``` r
 
-# install.packages("devtools")
-devtools::install_github("aloftdata/getRad")
+# install.packages("pak")
+pak::pak("aloftdata/getRad")
 ```
 
 ## Usage
@@ -35,6 +35,7 @@ Download a polar volume, and then plot it using `bioRad`:
 
 library(getRad)
 library(bioRad)
+
 # Plot daytime insect movements in Finland (Mäkinen et al. 2022)
 pvol <- get_pvol("fianj", as.POSIXct("2012-05-17 14:00", tz = "UTC"))
 plot(project_as_ppi(get_scan(pvol, 0), range_max = 75000))

@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Download Radar Data for Biological Research • getRad</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Download Radar Data for Biological Research">
 <meta name="description" content="Load polar volume and vertical profile data for aeroecological research directly into R. With getRad you can access data from several sources in Europe and the US and standardize it to facilitate further exploration in tools such as bioRad.">
@@ -62,13 +62,13 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>Install the latest released version from CRAN:</p>
+<p>Install the released version of getRad from CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"getRad"</span><span class="op">)</span></span></code></pre></div>
-<p>Or the development version from <a href="https://github.com/aloftdata/getRad" class="external-link">GitHub</a>:</p>
+<p>Or install the development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"aloftdata/getRad"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("pak")</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"aloftdata/getRad"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
@@ -77,22 +77,23 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/aloftdata/getRad" class="external-link">getRad</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/adokter/bioRad/" class="external-link">bioRad</a></span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># Plot daytime insect movements in Finland (Mäkinen et al. 2022)</span></span>
 <span><span class="va">pvol</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_pvol.html">get_pvol</a></span><span class="op">(</span><span class="st">"fianj"</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="st">"2012-05-17 14:00"</span>, tz <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="http://adriaandokter.com/bioRad/reference/project_as_ppi.html" class="external-link">project_as_ppi</a></span><span class="op">(</span><span class="fu"><a href="http://adriaandokter.com/bioRad/reference/get_scan.html" class="external-link">get_scan</a></span><span class="op">(</span><span class="va">pvol</span>, <span class="fl">0</span><span class="op">)</span>, range_max <span class="op">=</span> <span class="fl">75000</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-example-1.png" width="100%"></p>
+<p><img src="reference/figures/README-example-1.png" alt="" width="100%"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="http://adriaandokter.com/bioRad/reference/calculate_vp.html" class="external-link">calculate_vp</a></span><span class="op">(</span><span class="va">pvol</span>, h_layer <span class="op">=</span> <span class="fl">50</span>, n_layer <span class="op">=</span> <span class="fl">40</span>, warning <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-example-2.png" width="100%"></p>
+<p><img src="reference/figures/README-example-2.png" alt="" width="100%"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Plot nocturnal migration in Finland</span></span>
 <span><span class="va">pvol</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_pvol.html">get_pvol</a></span><span class="op">(</span><span class="st">"fianj"</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="st">"2012-05-11 23:00"</span>, tz <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="http://adriaandokter.com/bioRad/reference/project_as_ppi.html" class="external-link">project_as_ppi</a></span><span class="op">(</span><span class="fu"><a href="http://adriaandokter.com/bioRad/reference/get_scan.html" class="external-link">get_scan</a></span><span class="op">(</span><span class="va">pvol</span>, <span class="fl">0</span><span class="op">)</span>, range_max <span class="op">=</span> <span class="fl">75000</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-example-3.png" width="100%"></p>
+<p><img src="reference/figures/README-example-3.png" alt="" width="100%"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="http://adriaandokter.com/bioRad/reference/calculate_vp.html" class="external-link">calculate_vp</a></span><span class="op">(</span><span class="va">pvol</span>, h_layer <span class="op">=</span> <span class="fl">50</span>, n_layer <span class="op">=</span> <span class="fl">40</span>, warning <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-example-4.png" width="100%"></p>
+<p><img src="reference/figures/README-example-4.png" alt="" width="100%"></p>
 <p>Download a vertical profile time series from the <a href="https://aloftdata.eu/browse/" class="external-link">Aloft bucket</a>:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot VPTS data for two radars</span></span>
@@ -108,7 +109,7 @@
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">vpts_list</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="http://adriaandokter.com/bioRad/reference/regularize_vpts.html" class="external-link">regularize_vpts</a></span><span class="op">(</span><span class="va">vpts_list</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, main <span class="op">=</span> <span class="va">i</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p><img src="reference/figures/README-vpts-1.png" width="100%"></p>
+<p><img src="reference/figures/README-vpts-1.png" alt="" width="100%"></p>
 </div>
 <div class="section level2">
 <h2 id="meta">Meta<a class="anchor" aria-label="anchor" href="#meta"></a>

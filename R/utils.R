@@ -183,7 +183,6 @@ radar_to_name <- function(vpts_df_list) {
 #'
 #' @param x Character vector.
 #' @return An integer vector.
-#' @seealso [as_numeric_shh()] [as_logical_shh()]
 #' @noRd
 #' @examples
 #' as_integer_shh(c("1", "2", "3"))
@@ -278,11 +277,9 @@ req_retry_getrad <- function(
 #'
 #' @inheritParams httr2::req_cache
 #' @param req `httr2` request.
-#' @param use_cache Logical indicating whether to use the cache. Default is
-#'   `TRUE`. If `FALSE` the cache is ignored and the file is fetched anew.
-#'    This can also be useful if you want to force a refresh of the cache.
+#' @inheritParams get_weather_radars use_cache
 #' @param ... Additional arguments passed to `httr2::req_cache()`.
-#' @keywords internal
+#' @noRd
 req_cache_getrad <- function(
   req,
   use_cache = TRUE,

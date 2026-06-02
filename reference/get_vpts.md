@@ -3,7 +3,7 @@
 Gets vertical profile time series data from supported sources and
 returns it as a (list of) of [vpts
 objects](http://adriaandokter.com/bioRad/reference/summary.vpts.md) or a
-[`dplyr::tibble()`](https://dplyr.tidyverse.org/reference/reexports.html).
+[`dplyr::tibble()`](https://tibble.tidyverse.org/reference/tibble.html).
 
 ## Usage
 
@@ -55,7 +55,7 @@ get_vpts(
   - `"vpts"`: vpts object(s) (default).
 
   - `"tibble"`: a
-    [`dplyr::tibble()`](https://dplyr.tidyverse.org/reference/reexports.html).
+    [`dplyr::tibble()`](https://tibble.tidyverse.org/reference/tibble.html).
 
 ## Value
 

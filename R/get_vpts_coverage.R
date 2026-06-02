@@ -3,7 +3,7 @@
 #' Gets the VPTS file coverage from supported sources per radar and date.
 #'
 #' @param source Source of the data. One or more of `"baltrad"`, `"uva"`,
-#'   `"ecog-04003"` or `"rmi"` or `"nexrad"`. If not provided, `"baltrad"` is used.
+#'   `"ecog-04003"` or `"rmi"` or `"birdcast"`. If not provided, `"baltrad"` is used.
 #'   Alternatively `"all"` can be used if data from all sources should be
 #'   returned.
 #' @param ... Arguments passed on to internal functions.
@@ -13,7 +13,7 @@
 #' @examplesIf interactive()
 #' get_vpts_coverage()
 get_vpts_coverage <- function(
-  source = c("baltrad", "uva", "ecog-04003", "rmi", "nexrad"),
+  source = c("baltrad", "uva", "ecog-04003", "rmi", "birdcast"),
   ...
 ) {
   # argument all returns all possible sources
@@ -41,7 +41,7 @@ get_vpts_coverage <- function(
     baltrad = get_vpts_coverage_aloft,
     uva = get_vpts_coverage_aloft,
     "ecog-04003" = get_vpts_coverage_aloft,
-    nexrad = get_vpts_coverage_nexrad
+    birdcast = get_vpts_coverage_birdcast
   )
   cl <- rlang::caller_env(0)
   # Run the helpers, but every helper only once.

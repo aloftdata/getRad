@@ -7,7 +7,7 @@
 get_vpts(
   radar,
   datetime,
-  source = c("baltrad", "uva", "ecog-04003", "rmi", "nexrad"),
+  source = c("baltrad", "uva", "ecog-04003", "rmi", "birdcast"),
   return_type = c("vpts", "tibble")
 )
 }
@@ -27,14 +27,14 @@ downloaded.
 }}
 
 \item{source}{Source of the data. One of \code{"baltrad"}, \code{"uva"}, \code{"ecog-04003"},
-\code{"rmi"}, or \code{"nexrad"}. Only one source can be queried at a time. If not provided,
+\code{"rmi"}, or \code{"birdcast"}. Only one source can be queried at a time. If not provided,
 \code{"baltrad"} is used. Alternatively a local directory can be specified,
 see details for an explanation of the file format.}
 
 \item{return_type}{Type of object that should be returned. Either:
 \itemize{
 \item \code{"vpts"}: vpts object(s) (default).
-\item \code{"tibble"}: a \code{\link[dplyr:reexports]{dplyr::tibble()}}.
+\item \code{"tibble"}: a \code{\link[dplyr:tibble]{dplyr::tibble()}}.
 }}
 }
 \value{
@@ -44,7 +44,7 @@ Either a vpts object, a list of vpts objects or a tibble. See
 \description{
 Gets vertical profile time series data from supported sources and returns it
 as a (list of) of \link[bioRad:summary.vpts]{vpts objects} or a
-\code{\link[dplyr:reexports]{dplyr::tibble()}}.
+\code{\link[dplyr:tibble]{dplyr::tibble()}}.
 }
 \details{
 For more details on supported sources, see \code{vignette("supported_sources")}.
@@ -102,6 +102,6 @@ get_vpts(
   return_type = "tibble"
 )
 #' Get VPTS data from the public BirdCast NEXRAD archive
-get_vpts(radar = "KABR", datetime = "2023-01-01", source = "nexrad")
+get_vpts(radar = "KABR", datetime = "2023-01-01", source = "birdcast")
 \dontshow{\}) # examplesIf}
 }

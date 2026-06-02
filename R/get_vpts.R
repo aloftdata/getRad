@@ -35,7 +35,7 @@
 #'   downloaded.
 #'   - A [lubridate::interval()], between which all data files are downloaded.
 #' @param source Source of the data. One of `"baltrad"`, `"uva"`, `"ecog-04003"`,
-#'   `"rmi"`, or `"nexrad"`. Only one source can be queried at a time. If not provided,
+#'   `"rmi"`, or `"birdcast"`. Only one source can be queried at a time. If not provided,
 #'   `"baltrad"` is used. Alternatively a local directory can be specified,
 #'   see details for an explanation of the file format.
 #' @param return_type Type of object that should be returned. Either:
@@ -78,11 +78,11 @@
 #'   return_type = "tibble"
 #' )
 #' #' Get VPTS data from the public BirdCast NEXRAD archive
-#' get_vpts(radar = "KABR", datetime = "2023-01-01", source = "nexrad")
+#' get_vpts(radar = "KABR", datetime = "2023-01-01", source = "birdcast")
 get_vpts <- function(
   radar,
   datetime,
-  source = c("baltrad", "uva", "ecog-04003", "rmi", "nexrad"),
+  source = c("baltrad", "uva", "ecog-04003", "rmi", "birdcast"),
   return_type = c("vpts", "tibble")
 ) {
   # Input checks ----
@@ -212,7 +212,7 @@ get_vpts <- function(
 
   source_type <- dplyr::case_when(
     source == "rmi" ~ "rmi",
-    source == "nexrad" ~ "nexrad",
+    source == "birdcast" ~ "birdcast",
     source %in% aloft_sources ~ "aloft",
     dir.exists(source) ~ "local"
   )
@@ -234,9 +234,9 @@ get_vpts <- function(
         ),
         .purrr_error_call = cl
       ),
-      nexrad = purrr::map(
+      birdcast = purrr::map(
         radar,
-        ~ get_vpts_nexrad(
+        ~ get_vpts_birdcast(
           .x,
           rounded_interval = rounded_interval
         ),

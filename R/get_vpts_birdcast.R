@@ -24,10 +24,10 @@
 #'   archive. If not provided, it will be fetched via the internet.
 #' @return A tibble with VPTS data.
 #' @noRd
-get_vpts_nexrad <- function(
+get_vpts_birdcast <- function(
   radar,
   rounded_interval,
-  coverage = get_vpts_coverage_nexrad(),
+  coverage = get_vpts_coverage_birdcast(),
   ...,
   call = rlang::caller_env()
 ) {
@@ -41,10 +41,10 @@ get_vpts_nexrad <- function(
     missing_radar <- radar[!radar %in% coverage$radar]
 
     cli::cli_abort(
-      "Can't find radar {.val {missing_radar}} in the NEXRAD coverage file
+      "Can't find radar {.val {missing_radar}} in the birdcast coverage file
        (see {.fun get_vpts_coverage}).",
       missing_radar = missing_radar,
-      class = "getRad_error_nexrad_radar_not_found",
+      class = "getRad_error_birdcast_radar_not_found",
       call = call
     )
   }
@@ -78,16 +78,16 @@ get_vpts_nexrad <- function(
     dplyr::pull(.data$path)
 
   # Read the VPTS CSV files.
-  nexrad_data_url <- getOption("getRad.nexrad_vpts_data_url")
+  birdcast_data_url <- getOption("getRad.birdcast_vpts_data_url")
   radar_out <- tolower(radar)
 
-  out <- paste(nexrad_data_url, "nexrad", "daily", s3_paths, sep = "/") |>
+  out <- paste(birdcast_data_url, "nexrad", "daily", s3_paths, sep = "/") |>
     read_vpts_from_url() |>
     purrr::keep(.p = ~ as.logical(nrow(.x))) |>
     purrr::list_rbind()
 
   out$radar <- radar_out
-  out$source <- "nexrad"
+  out$source <- "birdcast"
 
   out
 }

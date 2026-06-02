@@ -1,25 +1,25 @@
-test_that("get_vpts_coverage_nexrad() returns a tibble", {
+test_that("get_vpts_coverage_birdcast() returns a tibble", {
   skip_if_offline()
 
   expect_s3_class(
-    get_vpts_coverage_nexrad(),
+    get_vpts_coverage_birdcast(),
     "tbl_df"
   )
 })
 
-test_that("get_vpts_coverage_nexrad() returns the expected columns", {
+test_that("get_vpts_coverage_birdcast() returns the expected columns", {
   skip_if_offline()
 
   expect_named(
-    get_vpts_coverage_nexrad(),
+    get_vpts_coverage_birdcast(),
     c("directory", "file_count", "source", "radar", "date")
   )
 })
 
-test_that("get_vpts_coverage_nexrad() returns expected NEXRAD values", {
+test_that("get_vpts_coverage_birdcast() returns expected NEXRAD values", {
   skip_if_offline()
 
-  coverage <- get_vpts_coverage_nexrad()
+  coverage <- get_vpts_coverage_birdcast()
 
   expect_true(all(coverage$source == "nexrad"))
   expect_s3_class(coverage$date, "Date")

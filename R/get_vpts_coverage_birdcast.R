@@ -24,7 +24,6 @@ get_vpts_coverage_birdcast <- function(
     req_user_agent_getrad() |>
     req_retry_getrad() |>
     req_cache_getrad(use_cache = use_cache) |>
-    httr2::req_progress(type = "down") |>
     httr2::req_perform(error_call = call) |>
     httr2::resp_body_raw()
 

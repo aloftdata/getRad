@@ -21,7 +21,7 @@ test_that("get_vpts_coverage_birdcast() returns expected NEXRAD values", {
 
   coverage <- get_vpts_coverage_birdcast()
 
-  expect_true(all(coverage$source == "nexrad"))
+  expect_all_true(coverage$source == "birdcast")
   expect_s3_class(coverage$date, "Date")
   expect_true(all(grepl("^[A-Z0-9]{4}$", coverage$radar)))
   expect_true(all(grepl(

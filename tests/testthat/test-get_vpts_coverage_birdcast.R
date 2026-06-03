@@ -1,6 +1,5 @@
 test_that("get_vpts_coverage_birdcast() returns a tibble", {
   skip_if_offline()
-
   expect_s3_class(
     get_vpts_coverage_birdcast(),
     "tbl_df"

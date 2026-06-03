@@ -37,10 +37,41 @@ get_pvol_cz <- function(radar, time, ..., call = rlang::caller_env()) {
         time,
         time + lubridate::minutes(5)
       )
-    ))
-  pvol <- read_pvol_from_url_per_param(paste0(
-    files_to_get$base,
-    files_to_get$file
+    )) |>
+    dplyr::mutate(url = paste0(base, file))
+  # There are sometimes multiple pvols, generally one with 12 scans
+  # additionally there are (sometimes) scans in separate files for
+  # the 0.3 and 1.5 elevation angle. These are not always both present.
+  # It all seems a bit irregular
+  pvols <- lapply(
+    split(files_to_get$url, files_to_get$time_chr),
+    read_pvol_from_url_per_param
+  )
+  if (length(pvols) == 1) {
+    return(pvols[[1]])
+  }
+
+  pvol <- purrr::pluck(pvols, 1)
+  pvol$scans <- unlist(recursive = F, lapply(pvols, purrr::pluck, 'scans'))
+  pvol$attributes$how$scan_count <- length(pvol$scans)
+  pvol$datetime <- max(do.call(c, lapply(pvols, purrr::pluck, "datetime")))
+  pvol$attributes$what$time <- max(unlist(
+    (lapply(pvols, \(x) x$attributes$what$time))
   ))
-  pvol
+  pvol$attributes$what$date <- max(unlist(
+    (lapply(pvols, \(x) x$attributes$what$date))
+  ))
+  if (anyDuplicated(bioRad::get_elevation_angles(pvol))) {
+    # Note that if scanning pattern changes this might flag false positive, but
+    # currently the check is there to prevent falsely merging scans from two iterations
+    # of the scanning pattern
+    cli::cli_abort(
+      c(
+        "There are duplicated elevation angles, likely as a result of merging the wrong scans."
+      ),
+      class = "getRad_error_czechia_duplicated_elevation_angles",
+      call = call
+    )
+  }
+  return(pvol)
 }

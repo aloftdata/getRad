@@ -1,5 +1,5 @@
 test_that("Check if the available attributes changed", {
-  skip_if_offline()
+  skip_if_offline("opendata.chmi.cz")
   expect_identical(
     httr2::request(
       "http://opendata.chmi.cz/meteorology/weather/radar/sites/ska"
@@ -21,7 +21,7 @@ test_that("Check if the available attributes changed", {
   )
 })
 test_that("Pvol for Czechia can be downloaded", {
-  skip_if_offline()
+  skip_if_offline("opendata.chmi.cz")
   time <- lubridate::floor_date(
     as.POSIXct(Sys.time(), tz = "Europe/Helsinki") - lubridate::hours(10),
     "5 mins"

@@ -6,10 +6,13 @@ test_that("Pvol for estonia can be downloaded", {
 
   # The API frequently sends 429/500 responses, therefore this test is allowed
   # to skip when the download is unsuccessful.
-  pvol <- tryCatch(
-    get_pvol("eesur", time, param = "all"),
-    error = function(e) NULL
-  )
+  show_failure(expect_no_error(
+    pvol <- get_pvol(
+      "eesur",
+      time,
+      param = "all"
+    )
+  ))
 
   skip_if_not(
     inherits(pvol, "pvol"),

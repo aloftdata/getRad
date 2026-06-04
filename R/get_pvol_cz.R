@@ -61,7 +61,7 @@ get_pvol_cz <- function(radar, time, ..., call = rlang::caller_env()) {
   pvol$attributes$what$date <- max(unlist(
     (lapply(pvols, \(x) x$attributes$what$date))
   ))
-  if (anyDuplicated(bioRad::get_elevation_angles(pvol))) {
+  if (anyDuplicated(get_elevation_angles(pvol))) {
     # Note that if scanning pattern changes this might flag false positive, but
     # currently the check is there to prevent falsely merging scans from two iterations
     # of the scanning pattern

@@ -38,7 +38,9 @@
 #'   as.POSIXct(Sys.Date())
 #' )
 get_pvol <- function(radar = NULL, datetime = NULL, ...) {
-  check_odim_nexrad(radar)
+  if (!identical(radar, "hochficht")) {
+    check_odim_nexrad(setdiff(radar, 'hochficht'))
+  }
   if (anyDuplicated(radar)) {
     cli::cli_abort(
       "{.arg radar} contains duplications that must be removed.",
@@ -129,9 +131,13 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
 # Helper function to find the function for a specific radar
 # This function is only helpful in get_pvol and therefor not in a utils file
 select_get_pvol_function <- function(radar, ..., call = rlang::caller_env()) {
+  if (radar == "hochficht") {
+    return("get_pvol_hochficht")
+  }
   if (is_nexrad(radar)) {
     return("get_pvol_us")
   }
+
   cntry_code <- substr(radar, 1, 2) # nolint
   fun <- (dplyr::case_when(
     cntry_code == "nl" ~ "get_pvol_nl",

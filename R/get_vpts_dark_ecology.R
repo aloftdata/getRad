@@ -62,21 +62,6 @@ read_vpts_dark_ecology2 <- function(
   radar,
   dateinterval
 ) {
-  years <-
-    seq(
-      lubridate::year(lubridate::int_start(dateinterval)),
-      lubridate::year(lubridate::int_end(dateinterval))
-    )
-
-  months <-
-    seq(
-      lubridate::int_start(dateinterval),
-      lubridate::int_end(dateinterval),
-      by = "month"
-    ) |>
-    lubridate::month() |>
-    unique()
-
   days <-
     seq(
       lubridate::int_start(dateinterval),

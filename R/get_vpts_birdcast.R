@@ -22,6 +22,8 @@
 #' @param rounded_interval Interval to fetch data for, rounded to nearest day.
 #' @param coverage A data frame containing the coverage of the BirdCast NEXRAD
 #'   archive. If not provided, it will be fetched via the internet.
+#' @param ... Used to prevent accidentally using the `call` argument
+#' @param call A call used for error messaging.
 #' @return A tibble with VPTS data.
 #' @noRd
 get_vpts_birdcast <- function(

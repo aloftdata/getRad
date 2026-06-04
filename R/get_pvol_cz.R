@@ -50,7 +50,19 @@ get_pvol_cz <- function(radar, time, ..., call = rlang::caller_env()) {
   if (length(pvols) == 1) {
     return(pvols[[1]])
   }
-
+  attr <- purrr::map(pvols, purrr::pluck, "attributes") |>
+    purrr::map(purrr::assign_in, where = c("what", "time"), purrr::zap()) |>
+    purrr::map(purrr::assign_in, where = c("what", "date"), purrr::zap()) |>
+    purrr::map(purrr::assign_in, where = c("how", "scan_count"), purrr::zap())
+  if (!all(unlist(lapply(attr[-1], identical, attr[[1]])))) {
+    cli::cli_abort(
+      c(
+        "The attributes of the polar volumes about to be merged differ"
+      ),
+      class = "getRad_error_czechia_attributes_differ",
+      call = call
+    )
+  }
   pvol <- purrr::pluck(pvols, 1)
   pvol$scans <- unlist(recursive = F, lapply(pvols, purrr::pluck, 'scans'))
   pvol$attributes$how$scan_count <- length(pvol$scans)

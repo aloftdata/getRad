@@ -1,7 +1,7 @@
 # http://opendata.chmi.cz/meteorology/weather/radar/sites/ska/vol_z/hdf5/
 
 get_pvol_cz <- function(radar, time, ..., call = rlang::caller_env()) {
-  time_chr <- time_pos <- base <- resp <- NULL
+  time_chr <- time_pos <- base <- NULL
   # All parameters are retrieved from separate files
   # Here all urls are generated
   params <- c("z", "u", "v", "w", "zdr", "rhohv", "phidp")

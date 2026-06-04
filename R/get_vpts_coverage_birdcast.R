@@ -5,6 +5,7 @@
 #' <`r file.path(getOption("getRad.birdcast_vpts_data_url"), "coverage.csv")`>. By
 #' default this file is cached for 6 hours.
 #'
+#' @param ... Used to prevent accidentally using the `call` argument
 #' @param call A call used for error messaging.
 #' @inheritParams req_cache_getrad
 #' @return A data frame of the coverage file in the birdcast VPTS archive.

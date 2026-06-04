@@ -5,7 +5,10 @@ Gets the VPTS file coverage from supported sources per radar and date.
 ## Usage
 
 ``` r
-get_vpts_coverage(source = c("baltrad", "uva", "ecog-04003", "rmi"), ...)
+get_vpts_coverage(
+  source = c("baltrad", "uva", "ecog-04003", "rmi", "birdcast"),
+  ...
+)
 ```
 
 ## Arguments
@@ -13,9 +16,9 @@ get_vpts_coverage(source = c("baltrad", "uva", "ecog-04003", "rmi"), ...)
 - source:
 
   Source of the data. One or more of `"baltrad"`, `"uva"`,
-  `"ecog-04003"` or `"rmi"`. If not provided, `"baltrad"` is used.
-  Alternatively `"all"` can be used if data from all sources should be
-  returned.
+  `"ecog-04003"` or `"rmi"` or `"birdcast"`. If not provided,
+  `"baltrad"` is used. Alternatively `"all"` can be used if data from
+  all sources should be returned.
 
 - ...:
 

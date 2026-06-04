@@ -23,3 +23,5 @@ location information in OPERA: bgvar, ctcdv, ctpda and ptliz.
 ### uva
 
 ### rmi
+
+### birdcast

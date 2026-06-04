@@ -11,7 +11,7 @@ objects](http://adriaandokter.com/bioRad/reference/summary.vpts.md) or a
 get_vpts(
   radar,
   datetime,
-  source = c("baltrad", "uva", "ecog-04003", "rmi"),
+  source = c("baltrad", "uva", "ecog-04003", "rmi", "birdcast"),
   return_type = c("vpts", "tibble")
 )
 ```
@@ -43,10 +43,10 @@ get_vpts(
 
 - source:
 
-  Source of the data. One of `"baltrad"`, `"uva"`, `"ecog-04003"` or
-  `"rmi"`. Only one source can be queried at a time. If not provided,
-  `"baltrad"` is used. Alternatively a local directory can be specified,
-  see details for an explanation of the file format.
+  Source of the data. One of `"baltrad"`, `"uva"`, `"ecog-04003"`,
+  `"rmi"`, or `"birdcast"`. Only one source can be queried at a time. If
+  not provided, `"baltrad"` is used. Alternatively a local directory can
+  be specified, see details for an explanation of the file format.
 
 - return_type:
 
@@ -125,5 +125,7 @@ get_vpts(
   source = "baltrad",
   return_type = "tibble"
 )
+#' Get VPTS data from the public BirdCast NEXRAD archive
+get_vpts(radar = "KABR", datetime = "2023-01-01", source = "birdcast")
 }
 ```

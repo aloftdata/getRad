@@ -53,7 +53,7 @@ as a (list of) of <a href="http://adriaandokter.com/bioRad/reference/summary.vpt
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_vpts</span><span class="op">(</span></span>
 <span>  <span class="va">radar</span>,</span>
 <span>  <span class="va">datetime</span>,</span>
-<span>  source <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"baltrad"</span>, <span class="st">"uva"</span>, <span class="st">"ecog-04003"</span>, <span class="st">"rmi"</span><span class="op">)</span>,</span>
+<span>  source <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"baltrad"</span>, <span class="st">"uva"</span>, <span class="st">"ecog-04003"</span>, <span class="st">"rmi"</span>, <span class="st">"birdcast"</span><span class="op">)</span>,</span>
 <span>  return_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"vpts"</span>, <span class="st">"tibble"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -79,8 +79,8 @@ downloaded.</p></li>
 
 
 <dt id="arg-source">source<a class="anchor" aria-label="anchor" href="#arg-source"></a></dt>
-<dd><p>Source of the data. One of <code>"baltrad"</code>, <code>"uva"</code>, <code>"ecog-04003"</code>
-or <code>"rmi"</code>. Only one source can be queried at a time. If not provided,
+<dd><p>Source of the data. One of <code>"baltrad"</code>, <code>"uva"</code>, <code>"ecog-04003"</code>,
+<code>"rmi"</code>, or <code>"birdcast"</code>. Only one source can be queried at a time. If not provided,
 <code>"baltrad"</code> is used. Alternatively a local directory can be specified,
 see details for an explanation of the file format.</p></dd>
 
@@ -149,6 +149,8 @@ data is stored in aloft data</p></li>
 <span class="r-in"><span>  source <span class="op">=</span> <span class="st">"baltrad"</span>,</span></span>
 <span class="r-in"><span>  return_type <span class="op">=</span> <span class="st">"tibble"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">#' Get VPTS data from the public BirdCast NEXRAD archive</span></span></span>
+<span class="r-in"><span><span class="fu">get_vpts</span><span class="op">(</span>radar <span class="op">=</span> <span class="st">"KABR"</span>, datetime <span class="op">=</span> <span class="st">"2023-01-01"</span>, source <span class="op">=</span> <span class="st">"birdcast"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>

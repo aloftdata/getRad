@@ -8,6 +8,8 @@
   ([\#165](https://github.com/aloftdata/getRad/issues/165)).
 - Clarify error for Estonia and propagate call
   ([\#173](https://github.com/aloftdata/getRad/issues/173)).
+- Include the hochficht radar in Austria
+  ([\#169](https://github.com/aloftdata/getRad/issues/169)).
 - For Romania match deviating file format (thanks to Sorin Burcea,
   [\#167](https://github.com/aloftdata/getRad/issues/167)).
 - Fix download for Czechia as multiple scans were found

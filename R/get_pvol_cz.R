@@ -67,12 +67,10 @@ get_pvol_cz <- function(radar, time, ..., call = rlang::caller_env()) {
   pvol$scans <- purrr::list_flatten(purrr::map(pvols, "scans"))
   pvol$attributes$how$scan_count <- length(pvol$scans)
   pvol$datetime <- max(purrr::map_vec(pvols, "datetime"))
-  pvol$attributes$what$time <- max(unlist(
   pvol$attributes$what$time <- max(purrr::map_vec(
     pvols,
     c("attributes", "what", "time")
   ))
-  pvol$attributes$what$date <- max(unlist(
   pvol$attributes$what$date <- max(purrr::map_vec(
     pvols,
     c("attributes", "what", "date")

@@ -64,14 +64,18 @@ get_pvol_cz <- function(radar, time, ..., call = rlang::caller_env()) {
     )
   }
   pvol <- purrr::pluck(pvols, 1)
-  pvol$scans <- unlist(recursive = F, lapply(pvols, purrr::pluck, 'scans'))
+  pvol$scans <- purrr::list_flatten(purrr::map(pvols, "scans"))
   pvol$attributes$how$scan_count <- length(pvol$scans)
-  pvol$datetime <- max(do.call(c, lapply(pvols, purrr::pluck, "datetime")))
+  pvol$datetime <- max(purrr::map_vec(pvols, "datetime"))
   pvol$attributes$what$time <- max(unlist(
-    (lapply(pvols, \(x) x$attributes$what$time))
+  pvol$attributes$what$time <- max(purrr::map_vec(
+    pvols,
+    c("attributes", "what", "time")
   ))
   pvol$attributes$what$date <- max(unlist(
-    (lapply(pvols, \(x) x$attributes$what$date))
+  pvol$attributes$what$date <- max(purrr::map_vec(
+    pvols,
+    c("attributes", "what", "date")
   ))
   if (anyDuplicated(get_elevation_angles(pvol))) {
     # Note that if scanning pattern changes this might flag false positive, but

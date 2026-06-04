@@ -12,10 +12,11 @@
 #'   dateinterval = lubridate::interval(start = "20150101", end = "20150201")
 #' )
 
-read_vpts_dark_ecology <- function(path = "/media/pieter_huybrechts/data/profiles_lite/",
-                         radar,
-                         dateinterval) {
-
+read_vpts_dark_ecology <- function(
+  path = "/media/pieter_huybrechts/data/profiles_lite/",
+  radar,
+  dateinterval
+) {
   part <- arrow::DirectoryPartitioning$create(
     arrow::schema(
       year = arrow::int32(),
@@ -26,18 +27,21 @@ read_vpts_dark_ecology <- function(path = "/media/pieter_huybrechts/data/profile
   )
 
   profiles <- arrow::open_csv_dataset(path, partitioning = part) |>
-    dplyr::mutate(filename = arrow::add_filename(),
-                  date = lubridate::ymd(paste(year, month, day))) |>
+    dplyr::mutate(
+      filename = arrow::add_filename(),
+      date = lubridate::ymd(paste(year, month, day))
+    ) |>
     # required to create the filenames
     dplyr::collect() |>
-    dplyr::mutate(datetime = lubridate::ymd_hms(paste(
-      date, stringr::str_extract(filename, "[0-9]+(?=\\.)")
-    ))) |>
-    dplyr::filter(.data$station == radar,
-                  .data$datetime %within% dateinterval)
+    dplyr::mutate(
+      datetime = lubridate::ymd_hms(paste(
+        date,
+        stringr::str_extract(filename, "[0-9]+(?=\\.)")
+      ))
+    ) |>
+    dplyr::filter(.data$station == radar, .data$datetime %within% dateinterval)
 
   profiles
-
 }
 
 #' Read dark ecology vpts profiles from disk via vroom and guessing paths
@@ -65,7 +69,8 @@ read_vpts_dark_ecology2 <- function(
     )
 
   months <-
-    seq(lubridate::int_start(dateinterval),
+    seq(
+      lubridate::int_start(dateinterval),
       lubridate::int_end(dateinterval),
       by = "month"
     ) |>
@@ -73,7 +78,8 @@ read_vpts_dark_ecology2 <- function(
     unique()
 
   days <-
-    seq(lubridate::int_start(dateinterval),
+    seq(
+      lubridate::int_start(dateinterval),
       lubridate::int_end(dateinterval),
       by = "day"
     )
@@ -82,8 +88,18 @@ read_vpts_dark_ecology2 <- function(
     file.path(
       path,
       lubridate::year(days),
-      stringr::str_pad(lubridate::month(days), width = 2, pad = "0", side = "left"),
-      stringr::str_pad(lubridate::day(days), width = 2, pad = "0", side = "left"),
+      stringr::str_pad(
+        lubridate::month(days),
+        width = 2,
+        pad = "0",
+        side = "left"
+      ),
+      stringr::str_pad(
+        lubridate::day(days),
+        width = 2,
+        pad = "0",
+        side = "left"
+      ),
       radar
     )
 

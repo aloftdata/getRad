@@ -1,5 +1,5 @@
 test_that("Check if the available attributes changed", {
-  skip_if_offline()
+  skip_if_offline("opendata.chmi.cz")
   expect_identical(
     httr2::request(
       "http://opendata.chmi.cz/meteorology/weather/radar/sites/ska"
@@ -21,7 +21,7 @@ test_that("Check if the available attributes changed", {
   )
 })
 test_that("Pvol for Czechia can be downloaded", {
-  skip_if_offline()
+  skip_if_offline("opendata.chmi.cz")
   time <- lubridate::floor_date(
     as.POSIXct(Sys.time(), tz = "Europe/Helsinki") - lubridate::hours(10),
     "5 mins"
@@ -31,5 +31,22 @@ test_that("Pvol for Czechia can be downloaded", {
   expect_identical(
     lubridate::floor_date(pvol$datetime, "5 mins"),
     lubridate::with_tz(time, "UTC")
+  )
+})
+
+test_that("get_pvol_cz() returns error on duplicate elevation angles", {
+  skip_if_offline("opendata.chmi.cz")
+  time <- lubridate::floor_date(
+    as.POSIXct(Sys.time(), tz = "Europe/Helsinki") - lubridate::hours(10),
+    "5 mins"
+  )
+  with_mocked_bindings(
+    code = {
+      expect_error(
+        get_pvol("czska", time, param = "all"),
+        class = "getRad_error_czechia_duplicated_elevation_angles"
+      )
+    },
+    get_elevation_angles = function(...) c("dup_angle", "dup_angle")
   )
 })

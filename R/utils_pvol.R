@@ -42,9 +42,12 @@ read_pvol_from_url_per_param <- function(
     bioRad::attribute_table
   )
   all_params_same_attributes <- all(unlist(lapply(
-    lapply(list_of_attribute_tables[-1], dplyr::select, -"param"),
-    all.equal,
-    dplyr::select(list_of_attribute_tables[[1]], -"param")
+    lapply(
+      lapply(list_of_attribute_tables[-1], dplyr::select, -"param"),
+      all.equal,
+      dplyr::select(list_of_attribute_tables[[1]], -"param")
+    ),
+    isTRUE
   )))
   if (!all_params_same_attributes) {
     cli::cli_abort(

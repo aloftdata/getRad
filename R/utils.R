@@ -521,3 +521,11 @@ get_element_regex <- function(html, regex) {
     string_extract(regex) |>
     (\(vec) vec[!is.na(vec)])()
 }
+
+#' Wrapper of bioRad::get_elevation_angles
+#' This function is wrapped so it can be mocked in
+#' `testhat::with_mocked_bindings()` and thus allows for testing an error
+#' in`get_pvol_cz()`.
+#'
+#' @noRd
+get_elevation_angles <- bioRad::get_elevation_angles

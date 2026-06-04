@@ -21,12 +21,13 @@ test_that("Pvol for hochficht in austria can be downloaded", {
   )
 })
 test_that("hochficht can be combined with other radars", {
-  expect_type(
+  suppressMessages(expect_type(
     pvol_lst <- get_pvol(
       c("depro", "hochficht", "KABX"),
       as.POSIXct(Sys.Date())
     ),
     "list"
-  )
+  ))
   expect_all_true(purrr::map_lgl(pvol_lst, inherits, "pvol"))
+  expect_length(pvol_lst, 3L)
 })

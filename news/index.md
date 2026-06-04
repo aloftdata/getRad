@@ -10,6 +10,8 @@
   ([\#173](https://github.com/aloftdata/getRad/issues/173)).
 - For Romania match deviating file format (thanks to Sorin Burcea,
   [\#167](https://github.com/aloftdata/getRad/issues/167)).
+- Fix download for Czechia as multiple scans were found
+  ([\#183](https://github.com/aloftdata/getRad/issues/183)).
 
 ## getRad 0.2.4
 

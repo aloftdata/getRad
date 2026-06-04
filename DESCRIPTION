@@ -32,6 +32,7 @@ BugReports: https://github.com/aloftdata/getRad/issues
 Depends: 
     R (>= 4.1.0)
 Imports: 
+    arrow,
     bioRad,
     cachem,
     cli,

@@ -33,3 +33,20 @@ test_that("Pvol for Czechia can be downloaded", {
     lubridate::with_tz(time, "UTC")
   )
 })
+
+test_that("get_pvol_cz() returns error on duplicate elevation angles", {
+  skip_if_offline("opendata.chmi.cz")
+  time <- lubridate::floor_date(
+    as.POSIXct(Sys.time(), tz = "Europe/Helsinki") - lubridate::hours(10),
+    "5 mins"
+  )
+  with_mocked_bindings(
+    code = {
+      expect_error(
+        get_pvol("czska", time, param = "all"),
+        class = "getRad_error_czechia_duplicated_elevation_angles"
+      )
+    },
+    get_elevation_angles = function(...) c("dup_angle", "dup_angle")
+  )
+})

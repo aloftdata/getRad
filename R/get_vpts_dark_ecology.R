@@ -49,6 +49,7 @@ read_vpts_dark_ecology <- function(
 #' @param path
 #' @param radar
 #' @param dateinterval
+#' @param ... additional arguments passed to `bioRad::read_cajun()`
 #'
 #' @returns
 #'
@@ -60,7 +61,8 @@ read_vpts_dark_ecology <- function(
 read_vpts_dark_ecology2 <- function(
   path = "/media/pieter_huybrechts/data/profiles_lite/",
   radar,
-  dateinterval
+  dateinterval,
+  ...
 ) {
   days <-
     seq(
@@ -97,8 +99,5 @@ read_vpts_dark_ecology2 <- function(
       )
     }) |>
     unlist() |>
-    vroom::vroom(
-      show_col_types = FALSE,
-      progress = FALSE
-    )
+    purrr::map(bioRad::read_cajun, ...)
 }

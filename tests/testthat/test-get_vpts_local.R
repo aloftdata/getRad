@@ -7,6 +7,7 @@ withr::with_tempdir({
   files <- c(
     "bewid/2016/bewid_vpts_20160201.csv",
     "bewid/2016/bewid_vpts_20160202.csv",
+    "bewid/2016/bewid_vpts_20160203.csv",
     "bejab/2016/bejab_vpts_20160201.csv",
     "bejab/2016/bejab_vpts_20160202.csv"
   )
@@ -142,6 +143,37 @@ withr::with_tempdir({
     expect_error(
       get_vpts("bewid", as.Date("2016-2-10"), path = local_dir),
       "local_tests/bewid/2016/bewid_vpts_201602.csv.gz"
+    )
+  })
+  test_that("datetime_intervalworksas expected", {
+    withr::with_options(
+      c(
+        "getRad.vpts_local_path_format" = "{radar}/{year}/{radar}_vpts_{year}{month}{day}.csv"
+      ),
+      {
+        int_one <- lubridate::as.interval(
+          as.POSIXct("2016-2-1 10:46"),
+          as.POSIXct("2016-2-1 18:46")
+        )
+        int_two <- lubridate::as.interval(
+          as.POSIXct("2016-2-1 10:46"),
+          as.POSIXct("2016-2-2 18:46")
+        )
+
+        expect_s3_class(
+          vpts_one <- get_vpts("bewid", int_one, path = local_dir),
+          "vpts"
+        )
+        expect_s3_class(
+          vpts_two <- get_vpts("bewid", int_two, path = local_dir),
+          "vpts"
+        )
+        expect_all_true(vpts_one$datetime %within% int_one)
+        expect_all_true(vpts_two$datetime %within% int_two)
+        expect_all_true(vpts_one$datetime %in% vpts_two$datetime)
+        expect_length(vpts_one$datetime, 88)
+        expect_length(vpts_two$datetime, 352)
+      }
     )
   })
 })

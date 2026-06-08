@@ -17,8 +17,27 @@ get_vpts_dark_ecology <- function(
   directory,
   radar,
   rounded_interval,
-  ...
+  ...,
+  call = rlang::caller_env()
 ) {
+  # Allow only one directory to be provided
+  if (length(directory) > 1) {
+    cli::cli_abort(
+      "Only one directory can be provided, but {length(directory)} were given.",
+      class = "dark_ecology_multiple_directories",
+      call = call
+    )
+  }
+
+  # Check that the provided directory exists
+  if (!is_readable(directory)) {
+    cli::cli_abort(
+      "The provided directory does not exist or is not readable: {directory}",
+      class = "dark_ecology_directory_not_found",
+      call = call
+    )
+  }
+
   days <-
     seq(
       lubridate::int_start(rounded_interval),

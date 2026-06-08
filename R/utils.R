@@ -522,6 +522,21 @@ get_element_regex <- function(html, regex) {
     (\(vec) vec[!is.na(vec)])()
 }
 
+#' Check that a path is readable
+#'
+#' Heavily inspired by assertthat::is.readable
+#'
+#' @param path A character vector of file paths to check for readability.
+#'
+#' @returns A named logical vector indicating whether the path is readable.
+#'
+#' @noRd
+is_readable <- function(path) {
+  file.access(path, mode = 4) ==
+    0 |>
+      purrr::set_names(path)
+}
+
 #' Wrapper of bioRad::get_elevation_angles
 #' This function is wrapped so it can be mocked in
 #' `testhat::with_mocked_bindings()` and thus allows for testing an error

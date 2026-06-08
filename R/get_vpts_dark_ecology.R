@@ -1,6 +1,6 @@
 #' Read dark ecology vpts profiles from disk
 #'
-#' @param path
+#' @param directory
 #' @param radar
 #' @param rounded_interval
 #' @param ... additional arguments passed to `bioRad::read_cajun()`
@@ -14,7 +14,7 @@
 #'   rounded_interval = lubridate::interval(start = "20150101", end = "20150201")
 #' )
 read_vpts_dark_ecology <- function(
-  path = "/media/pieter_huybrechts/data/profiles_lite/",
+  directory,
   radar,
   rounded_interval,
   ...
@@ -28,7 +28,7 @@ read_vpts_dark_ecology <- function(
 
   search_paths <-
     file.path(
-      path,
+      directory,
       lubridate::year(days),
       stringr::str_pad(
         lubridate::month(days),

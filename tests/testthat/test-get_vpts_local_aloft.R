@@ -43,7 +43,7 @@ withr::with_tempdir({
     )
   })
 
-  test_that("can read data", {
+  test_that("result for different sources is the same", {
     withr::with_options(
       c(
         "getRad.vpts_local_path_format" = "{radar}/{year}/{radar}_vpts_{year}{month}{day}.csv"

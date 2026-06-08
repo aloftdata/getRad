@@ -9,11 +9,11 @@
 #' @returns
 #'
 #' @examples
-#' read_vpts_dark_ecology(
+#' get_vpts_dark_ecology(
 #'   radar = "KCBX",
 #'   rounded_interval = lubridate::interval(start = "20150101", end = "20150201")
 #' )
-read_vpts_dark_ecology <- function(
+get_vpts_dark_ecology <- function(
   directory,
   radar,
   rounded_interval,

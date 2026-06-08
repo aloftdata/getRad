@@ -42,6 +42,44 @@ withr::with_tempdir({
     )
   })
 
+  test_that("can read data", {
+    withr::with_options(
+      c(
+        "getRad.vpts_local_path_format" = "{radar}/{year}/{radar}_vpts_{year}{month}{day}.csv"
+      ),
+      {
+        ref <- get_vpts("bewid", as.Date("2016-2-1"), path = local_dir)
+        expect_identical(
+          ref,
+          get_vpts(
+            "bewid",
+            as.Date("2016-2-1"),
+            source = "baltrad",
+            path = local_dir
+          )
+        )
+        expect_identical(
+          ref,
+          get_vpts(
+            "bewid",
+            as.Date("2016-2-1"),
+            source = "uva",
+            path = local_dir
+          )
+        )
+        expect_identical(
+          ref,
+          get_vpts(
+            "bewid",
+            as.Date("2016-2-1"),
+            source = "ecog-04003",
+            path = local_dir
+          )
+        )
+      }
+    )
+  })
+
   test_that("errors outside of range or directory with corect format", {
     withr::with_options(
       c(

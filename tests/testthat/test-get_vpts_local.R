@@ -4,7 +4,7 @@ test_that("correct error for no download function", {
     class = 'getRad_error_no_function_for_reading_local_source'
   )
 })
-test_that("correct error for non existing dir", {
+test_that("correct error for specifying more then one directory", {
   expect_error(
     get_vpts(
       "KABX",
@@ -16,6 +16,30 @@ test_that("correct error for non existing dir", {
   )
 })
 
+test_that("correct error for non character", {
+  expect_error(
+    get_vpts(
+      "KABX",
+      as.Date('2023-1-5'),
+      "dark_ecology",
+      path = 1L
+    ),
+    class = 'getRad_error_vpts_local_not_character'
+  )
+})
+
+
+test_that("correct error for non character", {
+  expect_error(
+    get_vpts(
+      "KABX",
+      as.Date('2023-1-5'),
+      "dark_ecology",
+      path = factor("asdf")
+    ),
+    class = 'getRad_error_vpts_local_not_character'
+  )
+})
 
 test_that("correct error for non existing dir", {
   expect_error(

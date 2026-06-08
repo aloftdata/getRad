@@ -17,7 +17,13 @@ get_vpts_local <- function(
       call = call
     )
   }
-
+  if (!rlang::is_character(path)) {
+    cli::cli_abort(
+      "The specified path should be a character.",
+      class = "getRad_error_vpts_local_not_character",
+      call = call
+    )
+  }
   if (!dir.exists(path)) {
     cli::cli_abort(
       c(

@@ -67,9 +67,24 @@ get_vpts_dark_ecology <- function(
   search_paths |>
     purrr::keep(file.exists) |>
     purrr::map(.progress = "searching for local files", \(search_path) {
-      fs::dir_ls(
-        path = search_path,
-        fail = FALSE
+      # `{fs}` is much faster than base, and often already installed as it's a dependency of many tidyverse packages
+      ifelse(
+        rlang::is_installed("fs"),
+        yes = {
+          fs::dir_ls(
+            path = search_path,
+            recurse = TRUE,
+            fail = FALSE
+          )
+        },
+        no = {
+          list.files(
+            path = search_path,
+            recursive = TRUE,
+            full.names = TRUE
+          ) |>
+            normalizePath()
+        }
       )
     }) |>
     unlist() |>

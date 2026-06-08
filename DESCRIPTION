@@ -49,6 +49,7 @@ Imports:
     xml2
 Suggests:
     askpass,
+    fs,
     htmltools,
     keyring,
     knitr,

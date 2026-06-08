@@ -7,8 +7,10 @@
 get_vpts(
   radar,
   datetime,
-  source = c("baltrad", "uva", "ecog-04003", "rmi", "birdcast"),
-  return_type = c("vpts", "tibble")
+  source = c("baltrad", "uva", "ecog-04003", "rmi", "birdcast", "dark_ecology"),
+  return_type = c("vpts", "tibble"),
+  ...,
+  path = NULL
 )
 }
 \arguments{
@@ -28,14 +30,18 @@ downloaded.
 
 \item{source}{Source of the data. One of \code{"baltrad"}, \code{"uva"}, \code{"ecog-04003"},
 \code{"rmi"}, or \code{"birdcast"}. Only one source can be queried at a time. If not provided,
-\code{"baltrad"} is used. Alternatively a local directory can be specified,
-see details for an explanation of the file format.}
+\code{"baltrad"} is used.}
 
 \item{return_type}{Type of object that should be returned. Either:
 \itemize{
 \item \code{"vpts"}: vpts object(s) (default).
 \item \code{"tibble"}: a \code{\link[dplyr:tibble]{dplyr::tibble()}}.
 }}
+
+\item{...}{Optional arguments, that are currently not used}
+
+\item{path}{A local directory where data are read from. If specified the file structure
+is taken from the \code{source} argument. See details for an explanation of the file format.}
 }
 \value{
 Either a vpts object, a list of vpts objects or a tibble. See
@@ -49,7 +55,7 @@ as a (list of) of \link[bioRad:summary.vpts]{vpts objects} or a
 \details{
 For more details on supported sources, see \code{vignette("supported_sources")}.
 
-In that case data is read from the directory, file in the directory
+In case data is read from the directory, file in the directory
 should be structures like they are in the monthly folders of the aloft
 repository. To specify an alternative structure the
 \code{"getRad.vpts_local_path_format"} option can be used. This can, for

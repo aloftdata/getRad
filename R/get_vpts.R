@@ -7,7 +7,7 @@
 #' @details
 #' For more details on supported sources, see `vignette("supported_sources")`.
 #'
-#'   In that case data is read from the directory, file in the directory
+#'   In case data is read from the directory, file in the directory
 #'   should be structures like they are in the monthly folders of the aloft
 #'   repository. To specify an alternative structure the
 #'   `"getRad.vpts_local_path_format"` option can be used. This can, for
@@ -36,11 +36,13 @@
 #'   - A [lubridate::interval()], between which all data files are downloaded.
 #' @param source Source of the data. One of `"baltrad"`, `"uva"`, `"ecog-04003"`,
 #'   `"rmi"`, or `"birdcast"`. Only one source can be queried at a time. If not provided,
-#'   `"baltrad"` is used. Alternatively a local directory can be specified,
-#'   see details for an explanation of the file format.
+#'   `"baltrad"` is used.
 #' @param return_type Type of object that should be returned. Either:
 #'   - `"vpts"`: vpts object(s) (default).
 #'   - `"tibble"`: a [dplyr::tibble()].
+#' @param ... Optional arguments, that are currently not used
+#' @param path A local directory where data are read from. If specified the file structure
+#'  is taken from the `source` argument. See details for an explanation of the file format.
 #' @return Either a vpts object, a list of vpts objects or a tibble. See
 #'   [bioRad::summary.vpts] for details.
 #' @export
@@ -84,6 +86,7 @@ get_vpts <- function(
   datetime,
   source = c("baltrad", "uva", "ecog-04003", "rmi", "birdcast", "dark_ecology"),
   return_type = c("vpts", "tibble"),
+  ...,
   path = NULL
 ) {
   # Input checks ----

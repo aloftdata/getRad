@@ -2,19 +2,19 @@
 #'
 #' @param path
 #' @param radar
-#' @param dateinterval
+#' @param rounded_interval
 #'
 #' @returns
 #'
 #' @examples
 #' read_vpts_dark_ecology(
 #'   radar = "KCBX",
-#'   dateinterval = lubridate::interval(start = "20150101", end = "20150201")
+#'   rounded_interval = lubridate::interval(start = "20150101", end = "20150201")
 #' )
 
 read_vpts_dark_ecology <- function(
   radar,
-  dateinterval,
+  rounded_interval,
   path = "/media/pieter_huybrechts/data/profiles_lite/",
   ...,
   call = rlang::caller_env()
@@ -41,7 +41,10 @@ read_vpts_dark_ecology <- function(
         stringr::str_extract(filename, "[0-9]+(?=\\.)")
       ))
     ) |>
-    dplyr::filter(.data$station == radar, .data$datetime %within% dateinterval)
+    dplyr::filter(
+      .data$station == radar,
+      .data$datetime %within% rounded_interval
+    )
 
   profiles
 }
@@ -50,7 +53,7 @@ read_vpts_dark_ecology <- function(
 #'
 #' @param path
 #' @param radar
-#' @param dateinterval
+#' @param rounded_interval
 #' @param ... additional arguments passed to `bioRad::read_cajun()`
 #'
 #' @returns
@@ -58,18 +61,18 @@ read_vpts_dark_ecology <- function(
 #' @examples
 #' read_vpts_dark_ecology2(
 #'   radar = "KCBX",
-#'   dateinterval = lubridate::interval(start = "20150101", end = "20150201")
+#'   rounded_interval = lubridate::interval(start = "20150101", end = "20150201")
 #' )
 read_vpts_dark_ecology2 <- function(
   path = "/media/pieter_huybrechts/data/profiles_lite/",
   radar,
-  dateinterval,
+  rounded_interval,
   ...
 ) {
   days <-
     seq(
-      lubridate::int_start(dateinterval),
-      lubridate::int_end(dateinterval),
+      lubridate::int_start(rounded_interval),
+      lubridate::int_end(rounded_interval),
       by = "day"
     )
 

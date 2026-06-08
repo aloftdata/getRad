@@ -1,4 +1,5 @@
 test_that("Pvol for Danish can be downloaded", {
+  skip_if_offline("opendataapi.dmi.dk")
   time <- lubridate::floor_date(
     as.POSIXct(Sys.time(), tz = "Europe/Helsinki") - lubridate::hours(10),
     "5 mins"

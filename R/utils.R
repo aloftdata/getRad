@@ -103,6 +103,46 @@ string_squish <- function(string) {
     string_replace_all("\\s+$", "")
 }
 
+#' Pad a string to a minimum width
+#'
+#' Pads a string with a character on the left or right side until it reaches a
+#' minimum number of characters. If the string is already at least `width`
+#' characters wide, it is returned unchanged. This is a base replacement with
+#' less functionality of stringr::str_pad().
+#'
+#' @param string A character string to pad.
+#' @param width A single integer giving the minimum number of characters the
+#'   returned string should have.
+#' @param side The side on which to add padding. One of `"left"` (the default)
+#'   or `"right"`.
+#' @param pad A single character used for padding. Defaults to a space (`" "`).
+#'
+#' @return A character string padded to at least `width` characters.
+#'
+#' @noRd
+#' @examples
+#' string_pad("42", 5)
+#' string_pad("42", 5, side = "right")
+#' string_pad("7", 3, pad = "0")
+string_pad <- function(
+  string,
+  width,
+  side = c("left", "right"),
+  pad = " "
+) {
+  side <- rlang::arg_match(side)
+  purrr::map_chr(string, \(string) {
+    while (nchar(string) < width) {
+      string <- switch(
+        side,
+        "left" = paste0(pad, string),
+        "right" = paste0(string, pad)
+      )
+    }
+    as.character(string)
+  })
+}
+
 #' Round a lubridate interval
 #'
 #' Extension of [lubridate::round_date()] to round an interval, by default by

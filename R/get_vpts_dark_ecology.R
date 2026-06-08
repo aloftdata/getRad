@@ -49,13 +49,13 @@ get_vpts_dark_ecology <- function(
     file.path(
       directory,
       lubridate::year(days),
-      stringr::str_pad(
+      string_pad(
         lubridate::month(days),
         width = 2,
         pad = "0",
         side = "left"
       ),
-      stringr::str_pad(
+      string_pad(
         lubridate::day(days),
         width = 2,
         pad = "0",

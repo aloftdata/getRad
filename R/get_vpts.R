@@ -82,8 +82,9 @@
 get_vpts <- function(
   radar,
   datetime,
-  source = c("baltrad", "uva", "ecog-04003", "rmi", "birdcast"),
-  return_type = c("vpts", "tibble")
+  source = c("baltrad", "uva", "ecog-04003", "rmi", "birdcast", "dark_ecology"),
+  return_type = c("vpts", "tibble"),
+  path = NULL
 ) {
   # Input checks ----
   # Check source argument
@@ -119,11 +120,11 @@ get_vpts <- function(
   # Get the default value of the source arg, even if the user provided
   # a different value.
   supported_sources <- eval(formals()$source)
-  if (!(source %in% supported_sources | dir.exists(source))) {
+  if (!(source %in% supported_sources)) {
     cli::cli_abort(
       c(
         "{.arg source} {.val {source}} is invalid.",
-        "i" = "Supported sources: {.val {supported_sources}} or a local directory."
+        "i" = "Supported sources: {.val {supported_sources}}."
       ),
       class = "getRad_error_source_invalid"
     )
@@ -208,44 +209,53 @@ get_vpts <- function(
   # Directing to the correct get_vpts_* helper based on source.
   cl <- rlang::caller_env(0)
 
-  aloft_sources <- eval(formals("get_vpts_aloft")$source)
+  ## Split of local path (here we know there is a single valid source argument)
+  if (!missing(path)) {
+    fetched_vpts <- get_vpts_local(
+      radar = radar,
+      rounded_interval = rounded_interval,
+      source = source,
+      path = path
+    )
+  } else {
+    aloft_sources <- eval(formals("get_vpts_aloft")$source)
 
-  source_type <- dplyr::case_when(
-    source == "rmi" ~ "rmi",
-    source == "birdcast" ~ "birdcast",
-    source %in% aloft_sources ~ "aloft",
-    dir.exists(source) ~ "local"
-  )
+    source_type <- dplyr::case_when(
+      source == "rmi" ~ "rmi",
+      source == "birdcast" ~ "birdcast",
+      source %in% aloft_sources ~ "aloft",
+      dir.exists(source) ~ "local"
+    )
 
-  fetched_vpts <-
-    switch(
-      source_type,
-      rmi = purrr::map(
-        radar,
-        ~ get_vpts_rmi(.x, rounded_interval),
-        .purrr_error_call = cl
-      ),
-      aloft = purrr::map(
-        radar,
-        ~ get_vpts_aloft(
-          .x,
-          rounded_interval = rounded_interval,
-          source = source
+    fetched_vpts <-
+      switch(
+        source_type,
+        rmi = purrr::map(
+          radar,
+          ~ get_vpts_rmi(.x, rounded_interval),
+          .purrr_error_call = cl
         ),
-        .purrr_error_call = cl
-      ),
-      birdcast = purrr::map(
-        radar,
-        ~ get_vpts_birdcast(
-          .x,
-          rounded_interval = rounded_interval
+        aloft = purrr::map(
+          radar,
+          ~ get_vpts_aloft(
+            .x,
+            rounded_interval = rounded_interval,
+            source = source
+          ),
+          .purrr_error_call = cl
         ),
-        .purrr_error_call = cl
-      ),
-      local = get_vpts_local(radar, rounded_interval, directory = source)
-    ) |>
-    radar_to_name()
-
+        birdcast = purrr::map(
+          radar,
+          ~ get_vpts_birdcast(
+            .x,
+            rounded_interval = rounded_interval
+          ),
+          .purrr_error_call = cl
+        ),
+        local = get_vpts_local(radar, rounded_interval, directory = source)
+      ) |>
+      radar_to_name()
+  }
   # Drop any results outside the requested interval ----
   filtered_vpts <-
     fetched_vpts |>

@@ -24,14 +24,14 @@ withr::with_tempdir({
       ),
       {
         expect_s3_class(
-          get_vpts("bewid", as.Date("2016-2-1"), source = local_dir),
+          get_vpts("bewid", as.Date("2016-2-1"), path = local_dir),
           class = "vpts"
         )
         expect_type(
           ret <- get_vpts(
             c("bewid", "bejab"),
             as.Date("2016-2-1"),
-            source = local_dir
+            path = local_dir
           ),
           "list"
         )
@@ -49,18 +49,18 @@ withr::with_tempdir({
       ),
       {
         expect_error(
-          get_vpts("bewid", as.Date("2016-2-1"), source = dir),
+          get_vpts("bewid", as.Date("2016-2-1"), path = dir),
           class = "getRad_error_files_not_in_source_dir"
         )
         expect_error(
-          get_vpts("bewid", as.Date("2016-3-1"), source = local_dir),
+          get_vpts("bewid", as.Date("2016-3-1"), path = local_dir),
           class = "getRad_error_files_not_in_source_dir"
         )
         expect_warning(
           ret <- get_vpts(
             "bewid",
             as.Date("2016-2-1") + -3:1,
-            source = local_dir
+            path = local_dir
           ),
           class = "getRad_warning_some_files_not_in_source_dir"
         )
@@ -70,7 +70,7 @@ withr::with_tempdir({
           ret <- get_vpts(
             c("bewid", "behav"),
             as.Date("2016-2-1"),
-            source = local_dir
+            path = local_dir
           ),
           class = "getRad_warning_some_files_not_in_source_dir"
         )
@@ -82,7 +82,7 @@ withr::with_tempdir({
             get_vpts(
               c("bewid", "behav"),
               as.Date("2016-2-1"),
-              source = local_dir
+              path = local_dir
             ),
             class = "getRad_warning_some_files_not_in_source_dir"
           )$missing_files
@@ -93,16 +93,16 @@ withr::with_tempdir({
 
   test_that("error on non existing files", {
     expect_error(
-      get_vpts("bewid", as.Date("2016-2-1"), source = local_dir),
+      get_vpts("bewid", as.Date("2016-2-1"), path = local_dir),
       class = "getRad_error_files_not_in_source_dir"
     )
     expect_error(
-      get_vpts("bewid", as.Date("2016-2-10"), source = local_dir),
+      get_vpts("bewid", as.Date("2016-2-10"), path = local_dir),
       class = "getRad_error_files_not_in_source_dir"
     )
     # test if by default the aloft file structure is used
     expect_error(
-      get_vpts("bewid", as.Date("2016-2-10"), source = local_dir),
+      get_vpts("bewid", as.Date("2016-2-10"), path = local_dir),
       "local_tests/bewid/2016/bewid_vpts_201602.csv.gz"
     )
   })

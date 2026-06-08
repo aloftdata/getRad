@@ -13,7 +13,6 @@
 #'   radar = "KCBX",
 #'   rounded_interval = lubridate::interval(start = "20150101", end = "20150201")
 #' )
-
 read_vpts_dark_ecology <- function(
   path = "/media/pieter_huybrechts/data/profiles_lite/",
   radar,

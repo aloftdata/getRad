@@ -67,7 +67,7 @@ rlang::on_load(rlang::local_use_cli(inline = TRUE))
 release_bullets <- function() {
   c(
     "Update codemeta.json with: `codemetar::write_codemeta()`",
-    "update CITATION.cff with `cffr::cff_write(dependencies = FALSE)`
+    "Update CITATION.cff with `cffr::cff_write(dependencies = FALSE)`
     (after incrementing version)"
   )
 }

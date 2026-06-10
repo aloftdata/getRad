@@ -29,7 +29,12 @@ withr::with_tempdir({
           class = "vpts"
         )
         expect_s3_class(
-          get_vpts("bewid", as.Date("2016-2-1"), path = local_dir, return_type = "tibble"),
+          get_vpts(
+            "bewid",
+            as.Date("2016-2-1"),
+            path = local_dir,
+            return_type = "tibble"
+          ),
           class = "tbl_df"
         )
         expect_type(

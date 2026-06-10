@@ -257,6 +257,27 @@ get_vpts <- function(
       ) |>
       radar_to_name()
   }
+  # Return the vpts data ----
+  ## By default, return drop the source column and convert to a vpts object for
+  ## usage in bioRad
+  return_type <- rlang::arg_match(return_type)
+
+  # dark ecology local now only returns vpts
+  if (any(purrr::map_lgl(fetched_vpts, inherits, "vpts"))) {
+    if (return_type != "vpts") {
+      cli::cli_abort(
+        "For the {.arg source} {.val {source}} the {.arg return_type} {.val {return_type}} is
+                           currently not supported. Only a {.cls vpts} can be returned.",
+        class = "getRad_error_vpts_not_supported_return_type"
+      )
+    }
+    if (length(fetched_vpts) != 1) {
+      return(fetched_vpts)
+    } else {
+      return(purrr::chuck(fetched_vpts, 1))
+    }
+  }
+
   # Drop any results outside the requested interval ----
   filtered_vpts <-
     fetched_vpts |>
@@ -275,10 +296,6 @@ get_vpts <- function(
       },
       .purrr_error_call = cl
     )
-  # Return the vpts data ----
-  ## By default, return drop the source column and convert to a vpts object for
-  ## usage in bioRad
-  return_type <- rlang::arg_match(return_type)
   ## Depending on the value of the `return_type` argument, do some final
   ## formatting or conversion
   return_object <-

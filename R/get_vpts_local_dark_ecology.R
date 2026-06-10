@@ -38,26 +38,9 @@ get_vpts_local_dark_ecology <- function(
       day = sprintf("%02i", lubridate::day(dates)),
       date = dates
     ))
-  )
+  ) |>
+    purrr::set_names(radar)
   search_paths <- purrr::map(sub_search_paths, ~ file.path(path, .x))
-  # search_paths <-
-  #   file.path(
-  #     path,
-  #     lubridate::year(days),
-  #     string_pad(
-  #       lubridate::month(days),
-  #       width = 2,
-  #       pad = "0",
-  #       side = "left"
-  #     ),
-  #     string_pad(
-  #       lubridate::day(days),
-  #       width = 2,
-  #       pad = "0",
-  #       side = "left"
-  #     ),
-  #     radar
-  #   )
   files <- purrr::map(
     search_paths,
     ~ .x |>
@@ -81,6 +64,17 @@ get_vpts_local_dark_ecology <- function(
       }) |>
       unlist()
   )
+  n_files <- purrr::map_int(files, length)
+  if (all(n_files == 0)) {
+    cli::cli_abort(
+      c(
+        x = "No files have been found for the radar{?s} specified ({.val {radar}}).",
+        i = "The following paths have been searched {.file {unlist(search_paths)}}."
+      ),
+      call = call,
+      class = "getRad_error_vpts_dark_ecology_no_files"
+    )
+  }
   purrr::map(files, \(y) {
     bioRad::bind_into_vpts(purrr::map(y, bioRad::read_cajun, ...))
   })

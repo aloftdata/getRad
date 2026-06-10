@@ -60,6 +60,7 @@ get_vpts_local <- function(
     radar = radar,
     rounded_interval = rounded_interval,
     path = path,
-    ...
+    ...,
+    call = call
   )
 }

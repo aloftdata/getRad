@@ -577,10 +577,11 @@ is_readable <- function(path) {
       purrr::set_names(path)
 }
 
-#' Wrapper of bioRad::get_elevation_angles
+#' Wrapper of bioRad::get_elevation_angles and rlang::is_installed
 #' This function is wrapped so it can be mocked in
 #' `testhat::with_mocked_bindings()` and thus allows for testing an error
 #' in`get_pvol_cz()`.
 #'
 #' @noRd
 get_elevation_angles <- bioRad::get_elevation_angles
+is_installed <- rlang::is_installed

@@ -271,6 +271,10 @@ get_vpts <- function(
         class = "getRad_error_vpts_not_supported_return_type"
       )
     }
+    fetched_vpts <- purrr::map(
+      fetched_vpts,
+      ~ .x[lubridate::`%within%`(.x$datetime, date_interval)]
+    )
     if (length(fetched_vpts) != 1) {
       return(fetched_vpts)
     } else {

@@ -47,7 +47,7 @@ get_vpts_local_dark_ecology <- function(
       purrr::keep(file.exists) |>
       purrr::map(.progress = "searching for local files", \(search_path) {
         # `{fs}` is much faster than base, and often already installed as it's a dependency of many tidyverse packages
-        if (rlang::is_installed("fs")) {
+        if (is_installed("fs")) {
           fs::dir_ls(
             path = search_path,
             recurse = TRUE,
@@ -62,7 +62,8 @@ get_vpts_local_dark_ecology <- function(
             normalizePath()
         }
       }) |>
-      unlist()
+      unlist() |>
+      unname()
   )
   n_files <- purrr::map_int(files, length)
   if (all(n_files == 0)) {
@@ -74,6 +75,19 @@ get_vpts_local_dark_ecology <- function(
       call = call,
       class = "getRad_error_vpts_dark_ecology_no_files"
     )
+  }
+  if (any(n_files == 0)) {
+    radars_no_data <- radar[n_files == 0]
+    cli::cli_warn(
+      c(
+        x = "No files have been found for one or more the radars specified ({.val {radars_no_data}}).",
+        i = "The following paths have been searched {.file {unlist(search_paths[n_files==0])}}.",
+        i = "These files are considered missing data and therefore omitted from the results."
+      ),
+      call = call,
+      class = "getRad_warning_vpts_dark_ecology_no_files_for_some_radars"
+    )
+    files <- files[n_files != 0]
   }
   purrr::map(files, \(y) {
     bioRad::bind_into_vpts(purrr::map(y, bioRad::read_cajun, ...))

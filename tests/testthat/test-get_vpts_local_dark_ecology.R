@@ -12,7 +12,19 @@ test_that("get_vpts_dark_ecology() returns error on invalid odim code", {
       ),
       source = "dark_ecology"
     ),
-    class = "getRad_error_vpts_not_supported_return_type"
+    class = "getRad_error_vpts_dark_ecology_no_files"
+  )
+  expect_warning(
+    get_vpts(
+      path = dk_path,
+      radar = c("KCBA", "KCBX"),
+      lubridate::interval(
+        start = "20150101",
+        end = "20150201"
+      ),
+      source = "dark_ecology"
+    ),
+    class = "getRad_warning_vpts_dark_ecology_no_files_for_some_radars"
   )
 })
 
@@ -95,8 +107,71 @@ test_that("get_vpts_dark_ecology() supports reading multiple radars", {
   )
 })
 
-test_that("get_vpts_aloft() returns error when radar is not found", {})
 
-test_that("get_vpts_dark_ecology() returns error when date is not found", {})
+test_that("get_vpts_dark_ecology() works if `{fs}` is not installed", {
+  expect_identical(
+    vpts <- with_mocked_bindings(
+      code = {
+        get_vpts(
+          path = dk_path,
+          source = "dark_ecology",
+          radar = "KCBX",
+          lubridate::interval(
+            start = "20150101",
+            end = "20150201"
+          )
+        )
+      },
+      is_installed = \(x) FALSE
+    ),
+    get_vpts(
+      path = dk_path,
+      source = "dark_ecology",
+      radar = "KCBX",
+      lubridate::interval(
+        start = "20150101",
+        end = "20150201"
+      )
+    )
+  )
+})
 
-test_that("get_vpts_dark_ecology() works if `{fs}` is not installed", {})
+
+test_that("get_vpts_dark_ecology() returns data in interval", {
+  int <- lubridate::interval(
+    start = "20150101 04:35:00",
+    end = "20150201 09:00:22"
+  )
+  int_small <- lubridate::interval(
+    start = "20150107 04:35:00",
+    end = "20150107 09:00:22"
+  )
+  expect_identical(
+    kcbx_vpts <- get_vpts(
+      path = dk_path,
+      radar = "KCBX",
+      int,
+      source = "dark_ecology"
+    ),
+    get_vpts(
+      path = dk_path,
+      radar = "KCBX",
+      as.Date("2015-1-7"),
+      source = "dark_ecology"
+    )
+  )
+  expect_s3_class(
+    kcbx_vpts_small <- get_vpts(
+      path = dk_path,
+      radar = "KCBX",
+      int_small,
+      source = "dark_ecology"
+    ),
+    'vpts'
+  )
+  expect_all_true(lubridate::`%within%`(kcbx_vpts_small$datetime, int_small))
+  expect_length(
+    kcbx_vpts_small$datetime,
+    sum(lubridate::`%within%`(kcbx_vpts$datetime, int_small))
+  )
+})

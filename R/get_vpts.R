@@ -22,7 +22,13 @@
 #'  * `"{radar}/{year}/{radar}_vpts_{year}{month}{day}.csv"`: The format as daily
 #'  data is stored in aloft data
 #'
-#'  Besides the examples above there is a `date` object available for formatting.
+#'  A similar option (`"getRad.vpts_local_path_format_aloft"`) exist for reading
+#'  dark ecology data. The default value here is `"getRad.vpts_local_path_format_aloft"`.
+#'  Here the option does refer to the directories where the dark ecology files
+#'  should be searched.
+#'
+#'  Besides the examples above there is a `date` object available for formatting. Note
+#'  that `day` and `month` are zero padded character strings in the glue formating.
 #'
 #' @inheritParams get_pvol
 #' @inherit get_vpts_aloft details

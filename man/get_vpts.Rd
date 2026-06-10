@@ -71,7 +71,13 @@ The format as in the files in the zenodo aloft repository
 data is stored in aloft data
 }
 
-Besides the examples above there is a \code{date} object available for formatting.
+A similar option (\code{"getRad.vpts_local_path_format_aloft"}) exist for reading
+dark ecology data. The default value here is \code{"getRad.vpts_local_path_format_aloft"}.
+Here the option does refer to the directories where the dark ecology files
+should be searched.
+
+Besides the examples above there is a \code{date} object available for formatting. Note
+that \code{day} and \code{month} are zero padded character strings in the glue formating.
 }
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}

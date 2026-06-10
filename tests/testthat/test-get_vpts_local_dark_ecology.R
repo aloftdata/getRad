@@ -175,3 +175,46 @@ test_that("get_vpts_dark_ecology() returns data in interval", {
     sum(lubridate::`%within%`(kcbx_vpts$datetime, int_small))
   )
 })
+test_that("get_vpts_dark_ecology() option works as expected", {
+  expect_identical(
+    withr::with_options(
+      c(
+        "getRad.vpts_local_path_format_dark_ecology" = "{month}/{day}/{radar}/"
+      ),
+      {
+        get_vpts(
+          path = file.path(dk_path, '2015'),
+          source = "dark_ecology",
+          radar = "KCBX",
+          lubridate::interval(
+            start = "20150101",
+            end = "20150201"
+          )
+        )
+      }
+    ),
+    get_vpts(
+      path = dk_path,
+      source = "dark_ecology",
+      radar = "KCBX",
+      lubridate::interval(
+        start = "20150101",
+        end = "20150201"
+      )
+    )
+  )
+  expect_error(
+    {
+      get_vpts(
+        path = file.path(dk_path, '2015'),
+        source = "dark_ecology",
+        radar = "KCBX",
+        lubridate::interval(
+          start = "20150101",
+          end = "20150201"
+        )
+      )
+    },
+    class = "getRad_error_vpts_dark_ecology_no_files"
+  )
+})

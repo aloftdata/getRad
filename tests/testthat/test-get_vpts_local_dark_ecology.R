@@ -218,3 +218,24 @@ test_that("get_vpts_dark_ecology() option works as expected", {
     class = "getRad_error_vpts_dark_ecology_no_files"
   )
 })
+test_that("get_vpts_dark_ecology() read_cajun options", {
+  wl <- 5.7
+  rcs <- 9.4
+  expect_s3_class(
+    vpts <- get_vpts(
+      path = dk_path,
+      radar = "KCBX",
+      lubridate::interval(
+        start = "20150101",
+        end = "20150201"
+      ),
+      wavelength = wl,
+      rcs = rcs,
+      source = "dark_ecology"
+    ),
+    "vpts"
+  )
+  expect_identical(vpts$attributes$how$wavelength, wl)
+  rcsvals <- unique(c(vpts$data$eta / vpts$data$dens))
+  expect_equal(rcsvals, rep(rcs, length(rcsvals)))
+})

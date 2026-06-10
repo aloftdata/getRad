@@ -29,7 +29,7 @@ downloaded.
 }}
 
 \item{source}{Source of the data. One of \code{"baltrad"}, \code{"uva"}, \code{"ecog-04003"},
-\code{"rmi"}, or \code{"birdcast"}. Only one source can be queried at a time. If not provided,
+\code{"rmi"}, \code{"dark_ecology"} or \code{"birdcast"}. Only one source can be queried at a time. If not provided,
 \code{"baltrad"} is used.}
 
 \item{return_type}{Type of object that should be returned. Either:
@@ -38,7 +38,7 @@ downloaded.
 \item \code{"tibble"}: a \code{\link[dplyr:tibble]{dplyr::tibble()}}.
 }}
 
-\item{...}{Optional arguments, that are currently not used}
+\item{...}{Optional arguments, to \code{\link[bioRad:read_cajun]{bioRad::read_cajun()}} when reading \code{"dark_ecology"} data.}
 
 \item{path}{A local directory where data are read from. If specified the file structure
 is taken from the \code{source} argument. See details for an explanation of the file format.}

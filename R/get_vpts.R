@@ -41,12 +41,12 @@
 #'   downloaded.
 #'   - A [lubridate::interval()], between which all data files are downloaded.
 #' @param source Source of the data. One of `"baltrad"`, `"uva"`, `"ecog-04003"`,
-#'   `"rmi"`, or `"birdcast"`. Only one source can be queried at a time. If not provided,
+#'   `"rmi"`, `"dark_ecology"` or `"birdcast"`. Only one source can be queried at a time. If not provided,
 #'   `"baltrad"` is used.
 #' @param return_type Type of object that should be returned. Either:
 #'   - `"vpts"`: vpts object(s) (default).
 #'   - `"tibble"`: a [dplyr::tibble()].
-#' @param ... Optional arguments, that are currently not used
+#' @param ... Optional arguments, to [bioRad::read_cajun()] when reading `"dark_ecology"` data.
 #' @param path A local directory where data are read from. If specified the file structure
 #'  is taken from the `source` argument. See details for an explanation of the file format.
 #' @return Either a vpts object, a list of vpts objects or a tibble. See
@@ -224,7 +224,8 @@ get_vpts <- function(
       radar = radar,
       rounded_interval = rounded_interval,
       source = source,
-      path = path
+      path = path,
+      ...
     )
   } else {
     aloft_sources <- eval(formals("get_vpts_aloft")$source)

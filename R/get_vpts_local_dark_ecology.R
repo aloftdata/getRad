@@ -20,27 +20,16 @@ get_vpts_local_dark_ecology <- function(
   ...,
   call = rlang::caller_env()
 ) {
-  dates <- as.Date(seq(
-    lubridate::int_start(rounded_interval),
-    lubridate::int_end(rounded_interval),
-    by = "day"
-  ))
-  sub_search_paths <- purrr::map(
-    radar,
-    ~ unique(glue::glue(
-      getOption(
-        "getRad.vpts_local_path_format_dark_ecology",
-        default = "{year}/{month}/{day}/{radar}/"
-      ),
-      radar = .x,
-      year = lubridate::year(dates),
-      month = sprintf("%02i", lubridate::month(dates)),
-      day = sprintf("%02i", lubridate::day(dates)),
-      date = dates
-    ))
-  ) |>
-    purrr::set_names(radar)
-  search_paths <- purrr::map(sub_search_paths, ~ file.path(path, .x))
+  search_paths <- format_paths_local_vpts(
+    rounded_interval = rounded_interval,
+    path = path,
+    radar = radar,
+    format = getOption(
+      "getRad.vpts_local_path_format_dark_ecology",
+      default = "{year}/{month}/{day}/{radar}/"
+    )
+  )
+
   files <- purrr::map(
     search_paths,
     ~ .x |>

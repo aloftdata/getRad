@@ -5,28 +5,16 @@ get_vpts_local_aloft <- function(
   ...,
   call = rlang::caller_env()
 ) {
-  dates <- as.Date(seq(
-    lubridate::int_start(rounded_interval),
-    lubridate::int_end(rounded_interval),
-    "day"
-  ))
-  file_paths_list <- radar |>
-    purrr::map(
-      ~ unique(glue::glue(
-        getOption(
-          "getRad.vpts_local_path_format_aloft",
-          default = "{radar}/{year}/{radar}_vpts_{year}{month}.csv.gz"
-        ),
-        radar = .x,
-        year = lubridate::year(dates),
-        month = sprintf("%02i", lubridate::month(dates)),
-        day = sprintf("%02i", lubridate::day(dates)),
-        date = dates
-      ))
-    ) |>
-    purrr::set_names(radar)
+  full_paths_list <- format_paths_local_vpts(
+    rounded_interval = rounded_interval,
+    radar = radar,
+    path = path,
+    format = getOption(
+      "getRad.vpts_local_path_format_aloft",
+      default = "{radar}/{year}/{radar}_vpts_{year}{month}.csv.gz"
+    )
+  )
   # `full_paths_list` is a list of file paths per radar, so that one vpts per radar is calculated
-  full_paths_list <- purrr::map(file_paths_list, ~ file.path(path, .x))
   full_paths_exist_list <- purrr::map(full_paths_list, file.exists)
   if (all(!unlist(full_paths_exist_list))) {
     cli::cli_abort(

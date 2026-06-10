@@ -546,3 +546,28 @@ is_readable <- function(path) {
 #' @noRd
 get_elevation_angles <- bioRad::get_elevation_angles
 is_installed <- rlang::is_installed
+
+
+#' Helper function to format paths for get_vpts consistently
+#' @noRd
+format_paths_local_vpts <- function(radar, rounded_interval, format, path) {
+  dates <- as.Date(seq(
+    lubridate::int_start(rounded_interval),
+    lubridate::int_end(rounded_interval),
+    "day"
+  ))
+
+  radar |>
+    purrr::map(
+      ~ unique(glue::glue(
+        format,
+        radar = .x,
+        year = lubridate::year(dates),
+        month = sprintf("%02i", lubridate::month(dates)),
+        day = sprintf("%02i", lubridate::day(dates)),
+        date = dates
+      ))
+    ) |>
+    purrr::set_names(radar) |>
+    purrr::map(~ file.path(path, .x))
+}

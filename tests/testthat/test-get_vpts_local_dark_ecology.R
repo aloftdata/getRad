@@ -1,6 +1,6 @@
 dk_path <- system.file("extdata", "darkecology", package = "getRad")
 
-
+skip_if(dk_path == "")
 test_that("get_vpts_dark_ecology() returns error on invalid odim code", {
   expect_error(
     get_vpts(

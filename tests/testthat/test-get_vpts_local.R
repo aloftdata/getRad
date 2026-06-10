@@ -63,6 +63,7 @@ test_that("correct error for non existing dir", {
 
 
 test_that("correct error directory not readable", {
+  skip_on_os("windows")
   withr::with_tempdir({
     dir.create(dir <- file.path(tempdir(), "new"), mode = "0333")
     expect_error(

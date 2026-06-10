@@ -14,7 +14,7 @@ get_vpts_local_aloft <- function(
     purrr::map(
       ~ unique(glue::glue(
         getOption(
-          "getRad.vpts_local_path_format",
+          "getRad.vpts_local_path_format_aloft",
           default = "{radar}/{year}/{radar}_vpts_{year}{month}.csv.gz"
         ),
         radar = .x,

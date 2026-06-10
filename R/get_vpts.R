@@ -7,10 +7,10 @@
 #' @details
 #' For more details on supported sources, see `vignette("supported_sources")`.
 #'
-#'   In case data is read from the directory, file in the directory
+#'   In case data is read from a directory, file in the directory
 #'   should be structures like they are in the monthly folders of the aloft
 #'   repository. To specify an alternative structure the
-#'   `"getRad.vpts_local_path_format"` option can be used. This can, for
+#'   `"getRad.vpts_local_path_format_aloft"` option can be used. This can, for
 #'   example, be used to read daily data. Some example options for the glue
 #'   formatters are:
 #'
@@ -279,7 +279,7 @@ get_vpts <- function(
     )
   # Return the vpts data ----
   ## By default, return drop the source column and convert to a vpts object for
-  ## usage in bioRAD
+  ## usage in bioRad
   return_type <- rlang::arg_match(return_type)
   ## Depending on the value of the `return_type` argument, do some final
   ## formatting or conversion

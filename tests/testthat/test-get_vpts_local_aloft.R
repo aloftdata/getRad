@@ -21,7 +21,7 @@ withr::with_tempdir({
   test_that("can read data", {
     withr::with_options(
       c(
-        "getRad.vpts_local_path_format" = "{radar}/{year}/{radar}_vpts_{year}{month}{day}.csv"
+        "getRad.vpts_local_path_format_aloft" = "{radar}/{year}/{radar}_vpts_{year}{month}{day}.csv"
       ),
       {
         expect_s3_class(
@@ -46,7 +46,7 @@ withr::with_tempdir({
   test_that("result for different sources is the same", {
     withr::with_options(
       c(
-        "getRad.vpts_local_path_format" = "{radar}/{year}/{radar}_vpts_{year}{month}{day}.csv"
+        "getRad.vpts_local_path_format_aloft" = "{radar}/{year}/{radar}_vpts_{year}{month}{day}.csv"
       ),
       {
         ref <- get_vpts("bewid", as.Date("2016-2-1"), path = local_dir)
@@ -84,7 +84,7 @@ withr::with_tempdir({
   test_that("errors outside of range or directory with corect format", {
     withr::with_options(
       c(
-        "getRad.vpts_local_path_format" = "{radar}/{year}/{radar}_vpts_{year}{month}{day}.csv"
+        "getRad.vpts_local_path_format_aloft" = "{radar}/{year}/{radar}_vpts_{year}{month}{day}.csv"
       ),
       {
         expect_error(
@@ -148,7 +148,7 @@ withr::with_tempdir({
   test_that("datetime_intervalworksas expected", {
     withr::with_options(
       c(
-        "getRad.vpts_local_path_format" = "{radar}/{year}/{radar}_vpts_{year}{month}{day}.csv"
+        "getRad.vpts_local_path_format_aloft" = "{radar}/{year}/{radar}_vpts_{year}{month}{day}.csv"
       ),
       {
         int_one <- lubridate::as.interval(

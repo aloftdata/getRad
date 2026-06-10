@@ -226,8 +226,7 @@ get_vpts <- function(
     source_type <- dplyr::case_when(
       source == "rmi" ~ "rmi",
       source == "birdcast" ~ "birdcast",
-      source %in% aloft_sources ~ "aloft",
-      dir.exists(source) ~ "local"
+      source %in% aloft_sources ~ "aloft"
     )
 
     fetched_vpts <-
@@ -254,8 +253,7 @@ get_vpts <- function(
             rounded_interval = rounded_interval
           ),
           .purrr_error_call = cl
-        ),
-        local = get_vpts_local(radar, rounded_interval, directory = source)
+        )
       ) |>
       radar_to_name()
   }

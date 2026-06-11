@@ -177,7 +177,10 @@ test_that("get_pvol handles NA", {
   expect_error(
     get_pvol(
       radar = "deess",
-      datetime = lubridate::interval(structure(1781179785.67152, class = c("POSIXct", "POSIXt")), NA_POSIXct_)
+      datetime = lubridate::interval(
+        structure(1781179785.67152, class = c("POSIXct", "POSIXt")),
+        NA_POSIXct_
+      )
     ),
     class = "getRad_error_time_na"
   )

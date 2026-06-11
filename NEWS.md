@@ -1,5 +1,7 @@
 # getRad (development version)
 
+# getRad 0.3.0
+
 * Implement download of `vpts` data from birdcast by Alexander Tedeschi. 
 * Implement reading aloft `vpts` data from a local directory (#135).
 * Implement reading dark ecology `vpts` data from a local directory (#175).

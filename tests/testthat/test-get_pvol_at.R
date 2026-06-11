@@ -21,6 +21,7 @@ test_that("Pvol for hochficht in austria can be downloaded", {
   )
 })
 test_that("hochficht can be combined with other radars", {
+  skip_if_offline("public.hub.geosphere.at")
   suppressMessages(expect_type(
     pvol_lst <- get_pvol(
       c("depro", "hochficht", "KABX"),

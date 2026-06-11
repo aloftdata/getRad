@@ -167,22 +167,22 @@ test_that("Mixed radar vector + 9 minute interval", {
 })
 test_that("get_pvol handles NA", {
   expect_error(
-    get_pvol(radar = "nlhrw", datetime = as.POSIXct(NA)),
+    get_pvol(radar = "nlhrw", datetime = NA_POSIXct_),
     class = "getRad_error_time_na"
   )
   expect_error(
-    get_pvol(radar = "fianj", datetime = as.POSIXct(NA)),
+    get_pvol(radar = "fianj", datetime = NA_POSIXct_),
     class = "getRad_error_time_na"
   )
   expect_error(
     get_pvol(
       radar = "deess",
-      datetime = lubridate::interval(Sys.time(), as.POSIXct(NA))
+      datetime = lubridate::interval(structure(1781179785.67152, class = c("POSIXct", "POSIXt")), NA_POSIXct_)
     ),
     class = "getRad_error_time_na"
   )
   expect_error(
-    get_pvol(radar = "czska", datetime = c(Sys.time(), as.POSIXct(NA))),
+    get_pvol(radar = "czska", datetime = c(structure(1781179785, class = c("POSIXct", "POSIXt")), NA_POSIXct_)),
     class = "getRad_error_time_na"
   )
 })

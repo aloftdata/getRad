@@ -1,12 +1,14 @@
 # getRad (development version)
 
 * Implement download of `vpts` data from birdcast by Alexander Tedeschi. 
-* Implement reading `vpts` data from a local directory (#135).
+* Implement reading aloft `vpts` data from a local directory (#135).
+* Implement reading dark ecology `vpts` data from a local directory (#175).
 * Clarify HTTP 429 error for the Netherlands (#165).
 * Clarify error for Estonia and propagate call (#173).
 * Include the hochficht radar in Austria (#169).
 * For Romania match deviating file format (thanks to Sorin Burcea, #167).
 * Fix download for Czechia as multiple scans were found (#183).
+* Improved error for `NA` datetime in `get_pvol` (#193).
 
 # getRad 0.2.4
 

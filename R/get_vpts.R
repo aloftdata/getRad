@@ -7,10 +7,10 @@
 #' @details
 #' For more details on supported sources, see `vignette("supported_sources")`.
 #'
-#'   In that case data is read from the directory, file in the directory
+#'   In case data is read from a directory, file in the directory
 #'   should be structures like they are in the monthly folders of the aloft
 #'   repository. To specify an alternative structure the
-#'   `"getRad.vpts_local_path_format"` option can be used. This can, for
+#'   `"getRad.vpts_local_path_format_aloft"` option can be used. This can, for
 #'   example, be used to read daily data. Some example options for the glue
 #'   formatters are:
 #'
@@ -22,7 +22,13 @@
 #'  * `"{radar}/{year}/{radar}_vpts_{year}{month}{day}.csv"`: The format as daily
 #'  data is stored in aloft data
 #'
-#'  Besides the examples above there is a `date` object available for formatting.
+#'  A similar option (`"getRad.vpts_local_path_format_aloft"`) exist for reading
+#'  dark ecology data. The default value here is `"getRad.vpts_local_path_format_aloft"`.
+#'  Here the option does refer to the directories where the dark ecology files
+#'  should be searched.
+#'
+#'  Besides the examples above there is a `date` object available for formatting. Note
+#'  that `day` and `month` are zero padded character strings in the glue formating.
 #'
 #' @inheritParams get_pvol
 #' @inherit get_vpts_aloft details
@@ -35,12 +41,14 @@
 #'   downloaded.
 #'   - A [lubridate::interval()], between which all data files are downloaded.
 #' @param source Source of the data. One of `"baltrad"`, `"uva"`, `"ecog-04003"`,
-#'   `"rmi"`, or `"birdcast"`. Only one source can be queried at a time. If not provided,
-#'   `"baltrad"` is used. Alternatively a local directory can be specified,
-#'   see details for an explanation of the file format.
+#'   `"rmi"`, `"dark_ecology"` or `"birdcast"`. Only one source can be queried at a time. If not provided,
+#'   `"baltrad"` is used.
 #' @param return_type Type of object that should be returned. Either:
 #'   - `"vpts"`: vpts object(s) (default).
 #'   - `"tibble"`: a [dplyr::tibble()].
+#' @param ... Optional arguments, to [bioRad::read_cajun()] when reading `"dark_ecology"` data.
+#' @param path A local directory where data are read from. If specified the file structure
+#'  is taken from the `source` argument. See details for an explanation of the file format.
 #' @return Either a vpts object, a list of vpts objects or a tibble. See
 #'   [bioRad::summary.vpts] for details.
 #' @export
@@ -82,8 +90,10 @@
 get_vpts <- function(
   radar,
   datetime,
-  source = c("baltrad", "uva", "ecog-04003", "rmi", "birdcast"),
-  return_type = c("vpts", "tibble")
+  source = c("baltrad", "uva", "ecog-04003", "rmi", "birdcast", "dark_ecology"),
+  return_type = c("vpts", "tibble"),
+  ...,
+  path = NULL
 ) {
   # Input checks ----
   # Check source argument
@@ -119,11 +129,11 @@ get_vpts <- function(
   # Get the default value of the source arg, even if the user provided
   # a different value.
   supported_sources <- eval(formals()$source)
-  if (!(source %in% supported_sources | dir.exists(source))) {
+  if (!(source %in% supported_sources)) {
     cli::cli_abort(
       c(
         "{.arg source} {.val {source}} is invalid.",
-        "i" = "Supported sources: {.val {supported_sources}} or a local directory."
+        "i" = "Supported sources: {.val {supported_sources}}."
       ),
       class = "getRad_error_source_invalid"
     )
@@ -208,43 +218,76 @@ get_vpts <- function(
   # Directing to the correct get_vpts_* helper based on source.
   cl <- rlang::caller_env(0)
 
-  aloft_sources <- eval(formals("get_vpts_aloft")$source)
+  ## Split of local path (here we know there is a single valid source argument)
+  if (!missing(path)) {
+    fetched_vpts <- get_vpts_local(
+      radar = radar,
+      rounded_interval = rounded_interval,
+      source = source,
+      path = path,
+      ...
+    )
+  } else {
+    aloft_sources <- eval(formals("get_vpts_aloft")$source)
 
-  source_type <- dplyr::case_when(
-    source == "rmi" ~ "rmi",
-    source == "birdcast" ~ "birdcast",
-    source %in% aloft_sources ~ "aloft",
-    dir.exists(source) ~ "local"
-  )
+    source_type <- dplyr::case_when(
+      source == "rmi" ~ "rmi",
+      source == "birdcast" ~ "birdcast",
+      source %in% aloft_sources ~ "aloft"
+    )
 
-  fetched_vpts <-
-    switch(
-      source_type,
-      rmi = purrr::map(
-        radar,
-        ~ get_vpts_rmi(.x, rounded_interval),
-        .purrr_error_call = cl
-      ),
-      aloft = purrr::map(
-        radar,
-        ~ get_vpts_aloft(
-          .x,
-          rounded_interval = rounded_interval,
-          source = source
+    fetched_vpts <-
+      switch(
+        source_type,
+        rmi = purrr::map(
+          radar,
+          ~ get_vpts_rmi(.x, rounded_interval),
+          .purrr_error_call = cl
         ),
-        .purrr_error_call = cl
-      ),
-      birdcast = purrr::map(
-        radar,
-        ~ get_vpts_birdcast(
-          .x,
-          rounded_interval = rounded_interval
+        aloft = purrr::map(
+          radar,
+          ~ get_vpts_aloft(
+            .x,
+            rounded_interval = rounded_interval,
+            source = source
+          ),
+          .purrr_error_call = cl
         ),
-        .purrr_error_call = cl
-      ),
-      local = get_vpts_local(radar, rounded_interval, directory = source)
-    ) |>
-    radar_to_name()
+        birdcast = purrr::map(
+          radar,
+          ~ get_vpts_birdcast(
+            .x,
+            rounded_interval = rounded_interval
+          ),
+          .purrr_error_call = cl
+        )
+      ) |>
+      radar_to_name()
+  }
+  # Return the vpts data ----
+  ## By default, return drop the source column and convert to a vpts object for
+  ## usage in bioRad
+  return_type <- rlang::arg_match(return_type)
+
+  # dark ecology local now only returns vpts
+  if (any(purrr::map_lgl(fetched_vpts, inherits, "vpts"))) {
+    if (return_type != "vpts") {
+      cli::cli_abort(
+        "For the {.arg source} {.val {source}} the {.arg return_type} {.val {return_type}} is
+                           currently not supported. Only a {.cls vpts} can be returned.",
+        class = "getRad_error_vpts_not_supported_return_type"
+      )
+    }
+    fetched_vpts <- purrr::map(
+      fetched_vpts,
+      ~ .x[lubridate::`%within%`(.x$datetime, date_interval)]
+    )
+    if (length(fetched_vpts) != 1) {
+      return(fetched_vpts)
+    } else {
+      return(purrr::chuck(fetched_vpts, 1))
+    }
+  }
 
   # Drop any results outside the requested interval ----
   filtered_vpts <-
@@ -264,10 +307,6 @@ get_vpts <- function(
       },
       .purrr_error_call = cl
     )
-  # Return the vpts data ----
-  ## By default, return drop the source column and convert to a vpts object for
-  ## usage in bioRAD
-  return_type <- rlang::arg_match(return_type)
   ## Depending on the value of the `return_type` argument, do some final
   ## formatting or conversion
   return_object <-

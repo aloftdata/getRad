@@ -1,5 +1,8 @@
 test_that("Pvol for the Netherlands can be downloaded", {
-  skip_if(Sys.which("KNMI_vol_h5_to_ODIM_h5") == "")
+  skip_if(
+    Sys.which("KNMI_vol_h5_to_ODIM_h5") == "",
+    message = "No local converter for Dutch data installed. As a consequence loading can't be tested."
+  )
   skip_if_offline(host = "api.dataplatform.knmi.nl")
 
   # First see if a key can be retrieved if not make sure env is used as a keyring backend

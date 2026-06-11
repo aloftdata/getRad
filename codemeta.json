@@ -430,7 +430,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "28975.11KB",
+  "fileSize": "28975.154KB",
   "releaseNotes": "https://github.com/aloftdata/getRad/blob/main/NEWS.md",
   "readme": "https://github.com/aloftdata/getRad/blob/main/README.md",
   "contIntegration": ["https://github.com/aloftdata/getRad/actions/workflows/R-CMD-check.yaml", "https://app.codecov.io/gh/aloftdata/getRad/", "https://github.com/aloftdata/getRad/actions/workflows/regular-checks.yaml"],

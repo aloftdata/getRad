@@ -8,7 +8,7 @@
   "codeRepository": "https://github.com/aloftdata/getRad",
   "issueTracker": "https://github.com/aloftdata/getRad/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -105,6 +105,18 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=askpass"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "fs",
+      "name": "fs",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=fs"
     },
     {
       "@type": "SoftwareApplication",
@@ -418,7 +430,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "3693.219KB",
+  "fileSize": "28975.11KB",
   "releaseNotes": "https://github.com/aloftdata/getRad/blob/main/NEWS.md",
   "readme": "https://github.com/aloftdata/getRad/blob/main/README.md",
   "contIntegration": ["https://github.com/aloftdata/getRad/actions/workflows/R-CMD-check.yaml", "https://app.codecov.io/gh/aloftdata/getRad/", "https://github.com/aloftdata/getRad/actions/workflows/regular-checks.yaml"],

@@ -13,3 +13,4 @@
 ^CRAN-SUBMISSION$
 ^[.]?air[.]toml$
 ^\.vscode$
+^inst/extdata/darkecology$

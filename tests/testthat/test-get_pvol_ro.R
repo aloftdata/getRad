@@ -1,5 +1,5 @@
 test_that("Check if the available attributes changed", {
-  skip_if_offline()
+  skip_if_offline("opendata.meteoromania.ro")
   expect_identical(
     httr2::request("https://opendata.meteoromania.ro/radar/MED/") |>
       httr2::req_perform() |>
@@ -16,7 +16,7 @@ test_that("Check if the available attributes changed", {
   )
 })
 test_that("Pvol for Romania can be downloaded", {
-  skip_if_offline()
+  skip_if_offline("opendata.meteoromania.ro")
   time <- lubridate::floor_date(
     as.POSIXct(Sys.time(), tz = "Europe/Helsinki") - lubridate::hours(10),
     "5 mins"

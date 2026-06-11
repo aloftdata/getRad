@@ -103,6 +103,7 @@ string_squish <- function(string) {
     string_replace_all("\\s+$", "")
 }
 
+
 #' Round a lubridate interval
 #'
 #' Extension of [lubridate::round_date()] to round an interval, by default by
@@ -522,10 +523,51 @@ get_element_regex <- function(html, regex) {
     (\(vec) vec[!is.na(vec)])()
 }
 
-#' Wrapper of bioRad::get_elevation_angles
+#' Check that a path is readable
+#'
+#' Heavily inspired by assertthat::is.readable
+#'
+#' @param path A character vector of file paths to check for readability.
+#'
+#' @returns A named logical vector indicating whether the path is readable.
+#'
+#' @noRd
+is_readable <- function(path) {
+  file.access(path, mode = 4) ==
+    0 |>
+      purrr::set_names(path)
+}
+
+#' Wrapper of bioRad::get_elevation_angles and rlang::is_installed
 #' This function is wrapped so it can be mocked in
 #' `testhat::with_mocked_bindings()` and thus allows for testing an error
 #' in`get_pvol_cz()`.
 #'
 #' @noRd
 get_elevation_angles <- bioRad::get_elevation_angles
+is_installed <- rlang::is_installed
+
+
+#' Helper function to format paths for get_vpts consistently
+#' @noRd
+format_paths_local_vpts <- function(radar, rounded_interval, format, path) {
+  dates <- as.Date(seq(
+    lubridate::int_start(rounded_interval),
+    lubridate::int_end(rounded_interval),
+    "day"
+  ))
+
+  radar |>
+    purrr::map(
+      ~ unique(glue::glue(
+        format,
+        radar = .x,
+        year = lubridate::year(dates),
+        month = sprintf("%02i", lubridate::month(dates)),
+        day = sprintf("%02i", lubridate::day(dates)),
+        date = dates
+      ))
+    ) |>
+    purrr::set_names(radar) |>
+    purrr::map(~ file.path(path, .x))
+}

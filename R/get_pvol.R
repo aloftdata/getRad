@@ -68,6 +68,12 @@ get_pvol <- function(radar = NULL, datetime = NULL, ...) {
       class = "getRad_error_time_not_correct"
     )
   }
+  if (any(is.na(datetime))) {
+    cli::cli_abort(
+      "{.arg datetime} should not be {.val NA}.",
+      class = "getRad_error_time_na"
+    )
+  }
 
   safe_get_pvol <- purrr::possibly(get_pvol, otherwise = NULL, quiet = TRUE)
 

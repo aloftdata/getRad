@@ -8,6 +8,7 @@
 * Include the hochficht radar in Austria (#169).
 * For Romania match deviating file format (thanks to Sorin Burcea, #167).
 * Fix download for Czechia as multiple scans were found (#183).
+* Improved error for `NA` datetime in `get_pvol` (#193).
 
 # getRad 0.2.4
 

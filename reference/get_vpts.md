@@ -11,8 +11,10 @@ objects](http://adriaandokter.com/bioRad/reference/summary.vpts.md) or a
 get_vpts(
   radar,
   datetime,
-  source = c("baltrad", "uva", "ecog-04003", "rmi", "birdcast"),
-  return_type = c("vpts", "tibble")
+  source = c("baltrad", "uva", "ecog-04003", "rmi", "birdcast", "dark_ecology"),
+  return_type = c("vpts", "tibble"),
+  ...,
+  path = NULL
 )
 ```
 
@@ -44,9 +46,8 @@ get_vpts(
 - source:
 
   Source of the data. One of `"baltrad"`, `"uva"`, `"ecog-04003"`,
-  `"rmi"`, or `"birdcast"`. Only one source can be queried at a time. If
-  not provided, `"baltrad"` is used. Alternatively a local directory can
-  be specified, see details for an explanation of the file format.
+  `"rmi"`, `"dark_ecology"` or `"birdcast"`. Only one source can be
+  queried at a time. If not provided, `"baltrad"` is used.
 
 - return_type:
 
@@ -56,6 +57,18 @@ get_vpts(
 
   - `"tibble"`: a
     [`dplyr::tibble()`](https://tibble.tidyverse.org/reference/tibble.html).
+
+- ...:
+
+  Optional arguments, to
+  [`bioRad::read_cajun()`](http://adriaandokter.com/bioRad/reference/read_cajun.md)
+  when reading `"dark_ecology"` data.
+
+- path:
+
+  A local directory where data are read from. If specified the file
+  structure is taken from the `source` argument. See details for an
+  explanation of the file format.
 
 ## Value
 
@@ -68,12 +81,12 @@ for details.
 For more details on supported sources, see
 [`vignette("supported_sources")`](https://aloftdata.github.io/getRad/articles/supported_sources.md).
 
-In that case data is read from the directory, file in the directory
-should be structures like they are in the monthly folders of the aloft
-repository. To specify an alternative structure the
-`"getRad.vpts_local_path_format"` option can be used. This can, for
-example, be used to read daily data. Some example options for the glue
-formatters are:
+In case data is read from a directory, file in the directory should be
+structures like they are in the monthly folders of the aloft repository.
+To specify an alternative structure the
+`"getRad.vpts_local_path_format_aloft"` option can be used. This can,
+for example, be used to read daily data. Some example options for the
+glue formatters are:
 
 - `"{radar}/{year}/{radar}_vpts_{year}{month}.csv.gz"`: The default
   format, the same structure as the monthly directories in the aloft
@@ -86,8 +99,14 @@ formatters are:
 - `"{radar}/{year}/{radar}_vpts_{year}{month}{day}.csv"`: The format as
   daily data is stored in aloft data
 
+A similar option (`"getRad.vpts_local_path_format_aloft"`) exist for
+reading dark ecology data. The default value here is
+`"getRad.vpts_local_path_format_aloft"`. Here the option does refer to
+the directories where the dark ecology files should be searched.
+
 Besides the examples above there is a `date` object available for
-formatting.
+formatting. Note that `day` and `month` are zero padded character
+strings in the glue formating.
 
 ## Examples
 

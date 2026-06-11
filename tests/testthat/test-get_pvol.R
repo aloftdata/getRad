@@ -182,7 +182,13 @@ test_that("get_pvol handles NA", {
     class = "getRad_error_time_na"
   )
   expect_error(
-    get_pvol(radar = "czska", datetime = c(structure(1781179785, class = c("POSIXct", "POSIXt")), NA_POSIXct_)),
+    get_pvol(
+      radar = "czska",
+      datetime = c(
+        structure(1781179785, class = c("POSIXct", "POSIXt")),
+        NA_POSIXct_
+      )
+    ),
     class = "getRad_error_time_na"
   )
 })

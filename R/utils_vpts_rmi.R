@@ -6,7 +6,7 @@
 #' removes any leading or trailing whitespace and replaces "NaN" with NA.
 #'
 #' @param x A character vector containing the numeric values to be parsed.
-#' @return A numeric vector with the parsed values.
+#' @returns A numeric vector with the parsed values.
 #' @noRd
 #' @examples
 #' parse_numeric("   42 ")
@@ -32,7 +32,7 @@ parse_numeric <- function(x) {
 #'   actually the start position of the next field as the fwf file is aligned
 #'   on the end of the columns.
 #' @param parser A function to parse/coerce the value to a R class.
-#' @return A function that takes a character vector and returns a parsed value.
+#' @returns A function that takes a character vector and returns a parsed value.
 #' @noRd
 #' @examplesIf interactive()
 #' get_datetime <- create_rmi_helper(0, 13, lubridate::ymd_hm)
@@ -56,7 +56,7 @@ create_rmi_helper <- function(start_value, stop_value, parser) {
 #' provided in the `specs` list.
 #'
 #' @param lines A character vector containing the lines of the RMI VPTS file.
-#' @return A tibble with the parsed VPTS data.
+#' @returns A tibble with the parsed VPTS data.
 #' @noRd
 #' @examples
 #' read_lines_from_url(file.path(
@@ -136,7 +136,7 @@ parse_rmi <- function(lines) {
 #' Get the source file name from the RMI VPTS metadata header
 #'
 #' @param lines A character vector containing the lines of the RMI vpts file.
-#' @return A character string representing the source file name.
+#' @returns A character string representing the source file name.
 #' @noRd
 #' @examples
 #' vroom::vroom_lines("https://opendata.meteo.be/ftp/observations/radar/vbird/bejab/2020/bejab_vpts_20200124.txt") |>

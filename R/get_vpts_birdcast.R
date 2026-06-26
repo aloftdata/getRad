@@ -24,7 +24,7 @@
 #'   archive. If not provided, it will be fetched via the internet.
 #' @param ... Used to prevent accidentally using the `call` argument
 #' @param call A call used for error messaging.
-#' @return A tibble with VPTS data.
+#' @returns A tibble with VPTS data.
 #' @noRd
 get_vpts_birdcast <- function(
   radar,

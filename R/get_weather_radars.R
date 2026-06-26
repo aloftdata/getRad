@@ -22,9 +22,10 @@
 #'    This can also be useful if you want to force a refresh of the cache.
 #' @param ... Additional arguments passed on to reading functions per source,
 #'   currently not used.
-#' @return A sf or tibble with weather radar metadata. In all cases the column `source` is
-#' added to indicate the source of the data and `radar` to show the radar identifiers
-#'  used in other functions like [get_pvol()] and [get_vpts()].
+#' @returns A sf or tibble with weather radar metadata. In all cases the column
+#'   `source` is added to indicate the source of the data and `radar` to show
+#'   the radar identifiers used in other functions like [get_pvol()] and
+#'   [get_vpts()].
 #' @export
 #' @examplesIf interactive()
 #' # Get radar metadata from OPERA

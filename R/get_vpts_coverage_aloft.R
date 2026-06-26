@@ -6,9 +6,9 @@
 #' gives the number of hdf5 files per directory in the bucket. By default this
 #' file is cached for 6 hours.
 #'
-#' @param call A call used for error messaging.
 #' @inheritParams req_cache_getrad
-#' @return A data frame of the coverage file on the Aloft bucket.
+#' @param call A call used for error messaging.
+#' @returns A data frame of the coverage file on the Aloft bucket.
 #' @noRd
 #' @examplesIf interactive()
 #' get_vpts_coverage_aloft()

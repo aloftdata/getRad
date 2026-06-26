@@ -28,9 +28,9 @@ downloaded.
 \item A \code{\link[lubridate:interval]{lubridate::interval()}}, between which all data files are downloaded.
 }}
 
-\item{source}{Source of the data. One of \code{"baltrad"}, \code{"uva"}, \code{"ecog-04003"},
-\code{"rmi"}, \code{"dark_ecology"} or \code{"birdcast"}. Only one source can be queried at a time. If not provided,
-\code{"baltrad"} is used.}
+\item{source}{Source of the data. One of \code{"baltrad"}, \code{"uva"},
+\code{"ecog-04003"}, \code{"rmi"}, \code{"dark_ecology"} or \code{"birdcast"}. Only one source
+can be queried at a time. If not provided, \code{"baltrad"} is used.}
 
 \item{return_type}{Type of object that should be returned. Either:
 \itemize{
@@ -38,10 +38,12 @@ downloaded.
 \item \code{"tibble"}: a \code{\link[dplyr:tibble]{dplyr::tibble()}}.
 }}
 
-\item{...}{Optional arguments, to \code{\link[bioRad:read_cajun]{bioRad::read_cajun()}} when reading \code{"dark_ecology"} data.}
+\item{...}{Optional arguments, to \code{\link[bioRad:read_cajun]{bioRad::read_cajun()}} when reading
+\code{"dark_ecology"} data.}
 
-\item{path}{A local directory where data are read from. If specified the file structure
-is taken from the \code{source} argument. See details for an explanation of the file format.}
+\item{path}{A local directory where data are read from. If specified the file
+structure is taken from the \code{source} argument. See details for an
+explanation of the file format.}
 }
 \value{
 Either a vpts object, a list of vpts objects or a tibble. See

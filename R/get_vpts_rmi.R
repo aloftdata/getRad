@@ -4,9 +4,8 @@
 #' https://opendata.meteo.be/geonetwork/srv/eng/catalog.search#/metadata/RMI_DATASET_CROW).
 #'
 #' @inheritParams get_vpts_aloft
-#' @return A tibble with VPTS data.
+#' @returns A tibble with VPTS data.
 #' @noRd
-
 get_vpts_rmi <- function(radar_odim_code, rounded_interval) {
   # Check the coverage for data availability
   coverage <- get_vpts_coverage_rmi(

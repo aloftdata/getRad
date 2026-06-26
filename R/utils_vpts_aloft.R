@@ -12,9 +12,9 @@
 #' standard. However, [bioRad::as.vpts()] currently doesn't support factors,
 #' thus any fields sent to that function need to be parsed as character vectors.
 #'
-#' @param urls Character vector of URLs to VPTS files.
 #' @inheritParams req_cache_getrad
-#' @return A list of tibbles, one for each URL.
+#' @param urls Character vector of URLs to VPTS files.
+#' @returns A list of tibbles, one for each URL.
 #' @noRd
 #' @examples
 #' c(

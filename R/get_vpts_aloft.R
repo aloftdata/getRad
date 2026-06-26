@@ -24,7 +24,7 @@
 #' @param source Source of the data. One of `baltrad`, `uva` or `ecog-04003`.
 #' @param coverage A data frame containing the coverage of the Aloft bucket.
 #'   If not provided, it will be fetched from via the internet.
-#' @return A tibble with VPTS data.
+#' @returns A tibble with VPTS data.
 #' @noRd
 get_vpts_aloft <- function(
   radar_odim_code,

@@ -15,7 +15,7 @@
 #'   `"nl_api_key"`).
 #' @param secret Optionally a character string with the secret, alternatively
 #'   the system will prompt the user.
-#' @return `set_secret()` returns `TRUE` when a secret has successfully been
+#' @returns `set_secret()` returns `TRUE` when a secret has successfully been
 #'   set. `get_secret()` returns the secret as a character string.
 #' @rdname secret
 #' @export

@@ -5,8 +5,7 @@
 #' @param rounded_interval the time range to search in
 #' @param ... additional arguments passed to `bioRad::read_cajun()`
 #' @param call the call for error messages
-#'
-#' @returns a vpts for now
+#' @returns A vpts for now.
 #' @noRd
 #' @examples
 #' get_vpts_local_dark_ecology(

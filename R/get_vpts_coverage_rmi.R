@@ -4,7 +4,7 @@
 #'
 #' @param radar Optional. Character vector of radars to get coverage for.
 #' @param year Optional. Integer vector of years to get coverage for.
-#' @return A tibble with RMI data coverage.
+#' @returns A tibble with RMI data coverage.
 #' @noRd
 #' @examplesIf interactive()
 #' # Get coverage for all radars and years

@@ -44,7 +44,7 @@ radar_recode <- function(radar, ..., call = rlang::caller_env()) {
 #'
 #' @param string The input string from which the substring will be extracted.
 #' @param pattern The regular expression pattern used to match the substring.
-#' @return The extracted substring.
+#' @returns The extracted substring.
 #' @noRd
 #' @examples
 #' string_extract("Hello World", "o W")
@@ -62,7 +62,7 @@ string_extract <- function(string, pattern) {
 #' @param string The input string.
 #' @param pattern The pattern to search for in the string.
 #' @param replacement The replacement string.
-#' @return The modified string with the pattern replaced.
+#' @returns The modified string with the pattern replaced.
 #' @noRd
 #' @examples
 #' string_replace("I'm looking for radars", "radar", "bird")
@@ -79,7 +79,7 @@ string_replace <- function(string, pattern, replacement) {
 #' @param string The input string.
 #' @param pattern The pattern to search for in the string.
 #' @param replacement The replacement string.
-#' @return The modified string with all occurrences of the pattern replaced.
+#' @returns The modified string with all occurrences of the pattern replaced.
 #' @noRd
 #' @examples
 #' string_replace_all("starwars", "wars", "trek")
@@ -93,7 +93,7 @@ string_replace_all <- function(string, pattern, replacement) {
 #' string. This is a base replacement of stringr::str_squish().
 #'
 #' @param string The input string.
-#' @return A string with all whitespace removed from both ends.
+#' @returns A string with all whitespace removed from both ends.
 #' @noRd
 #' @examples
 #' string_squish("  aoosh  ")
@@ -112,7 +112,7 @@ string_squish <- function(string) {
 #' end.
 #'
 #' @inheritParams lubridate::round_date
-#' @return An interval starting with the floor of `x` and ending with the
+#' @returns An interval starting with the floor of `x` and ending with the
 #'   ceiling of `x`, by the chosen unit.
 #' @noRd
 #' @examples
@@ -128,7 +128,7 @@ round_interval <- function(x, unit = "day") {
 #'
 #' @param date Datetime object or a character string that can be coerced to a
 #'   datetime object.
-#' @return A datetime object representing the end of the day.
+#' @returns A datetime object representing the end of the day.
 #' @noRd
 #' @examples
 #' end_of_day("2016-03-05")
@@ -149,7 +149,7 @@ end_of_day <- function(date) {
 #'
 #' @param eta Animal reflectivity,
 #' @param dens Animal density.
-#' @return A numeric value representing the mean radar cross section (rcs).
+#' @returns A numeric value representing the mean radar cross section (rcs).
 #' @noRd
 calc_single_mean_rcs <- function(eta, dens) {
   rcs <- eta / dens
@@ -162,7 +162,7 @@ calc_single_mean_rcs <- function(eta, dens) {
 #' Set the list names to the unique value of the radar column
 #'
 #' @param vpts_df_list List of vpts data frames.
-#' @return A list of vpts data frames with the names set to the unique value of
+#' @returns A list of vpts data frames with the names set to the unique value of
 #'   the radar column of the data frames.
 #' @noRd
 #' @examples
@@ -183,7 +183,7 @@ radar_to_name <- function(vpts_df_list) {
 #' vctrs::vec_cast().
 #'
 #' @param x Character vector.
-#' @return An integer vector.
+#' @returns An integer vector.
 #' @noRd
 #' @examples
 #' as_integer_shh(c("1", "2", "3"))
@@ -198,7 +198,7 @@ as_integer_shh <- function(x) {
 #'
 #' @param x Character vector only containing `Y`, `N` and `NA`. Any other
 #'   values will be silenty converted to `NA`.
-#' @return A logical vector.
+#' @returns A logical vector.
 #' @noRd
 #' @examples
 #' yes_no_as_logical(c("Y", "N", NA, NA, "Y"))
@@ -227,7 +227,7 @@ yes_no_as_logical <- function(x) {
 #' vctrs::vec_cast().
 #'
 #' @param x Character vector.
-#' @return A numeric vector.
+#' @returns A numeric vector.
 #' @noRd
 #' @examples
 #' as_double_shh(c("1.1", "2.2", "3.3"))
@@ -404,7 +404,7 @@ check_odim_nexrad_scalar <- function(
 #' Replace "nan" with NaN in a string
 #'
 #' @param string Character vector that may contain `"nan"` values.
-#' @return A numeric vector where `"nan"` values are replaced with NaN.
+#' @returns A numeric vector where `"nan"` values are replaced with NaN.
 #' @noRd
 #' @examples
 #' replace_nan_numeric(c("44", "-95.6", "nan", 88))
@@ -417,7 +417,7 @@ replace_nan_numeric <- function(string) {
 #' @param url Character vector of URLs to fetch data from.
 #' @param use_cache Logical value indicating whether to use caching for the
 #'  requests. Default is `TRUE`.
-#' @return A list of raw response bodies from the URLs.
+#' @returns A list of raw response bodies from the URLs.
 #' @noRd
 fetch_from_url_raw <- function(urls, use_cache = TRUE, parallel = TRUE) {
   data_request <- purrr::map(urls, httr2::request) |>
@@ -477,7 +477,7 @@ fetch_from_url_raw <- function(urls, use_cache = TRUE, parallel = TRUE) {
 #' @param urls Character vector of URLs to read lines from.
 #' @param use_cache Logical value indicating whether to use caching for the
 #'   requests.
-#' @return A list of character vectors, each containing the lines read from the
+#' @returns A list of character vectors, each containing the lines read from the
 #'  corresponding URL.
 #' @noRd
 #' @examples
@@ -498,7 +498,7 @@ read_lines_from_url <- function(urls, use_cache = TRUE, parallel = TRUE) {
 #' @param url URL to get the HTML from.
 #' @param use_cache Logical. If `TRUE`, use the cache. If `FALSE`, do not use
 #'   the cache.
-#' @return HTML content from the URL as a xml2 html object.
+#' @returns HTML content from the URL as a xml2 html object.
 #' @noRd
 get_html <- function(url, use_cache = TRUE, ..., call = rlang::caller_env()) {
   httr2::request(url) |>
@@ -513,7 +513,7 @@ get_html <- function(url, use_cache = TRUE, ..., call = rlang::caller_env()) {
 #'
 #' @param html html object from the `xml2` package.
 #' @param regex regex to select the element.
-#' @return A character vector with the selected elements.
+#' @returns A character vector with the selected elements.
 #' @noRd
 get_element_regex <- function(html, regex) {
   html |>

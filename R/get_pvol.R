@@ -25,7 +25,7 @@
 #'   between which all data files are downloaded.
 #' @param ... Additional arguments passed on to reading functions, for example
 #'   `param = "all"` to the [bioRad::read_pvolfile()].
-#' @return Either a polar volume or a list of polar volumes. See
+#' @returns Either a polar volume or a list of polar volumes. See
 #'   [bioRad::summary.pvol()] for details.
 #' @export
 #' @examplesIf interactive()

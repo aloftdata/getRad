@@ -18,9 +18,10 @@ This can also be useful if you want to force a refresh of the cache.}
 currently not used.}
 }
 \value{
-A sf or tibble with weather radar metadata. In all cases the column \code{source} is
-added to indicate the source of the data and \code{radar} to show the radar identifiers
-used in other functions like \code{\link[=get_pvol]{get_pvol()}} and \code{\link[=get_vpts]{get_vpts()}}.
+A sf or tibble with weather radar metadata. In all cases the column
+\code{source} is added to indicate the source of the data and \code{radar} to show
+the radar identifiers used in other functions like \code{\link[=get_pvol]{get_pvol()}} and
+\code{\link[=get_vpts]{get_vpts()}}.
 }
 \description{
 Gets weather radar metadata from \href{https://www.eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/index.html}{OPERA}

@@ -3,13 +3,11 @@
 #' Several countries have pvol files per parameter this helper function reads them.
 #' It combines them all into one pvol, and checks the attributes are equal
 #'
+#' @inheritParams radar_recode call
 #' @param urls A character vector with urls to h5 files to read
 #' @param ... arguments to bioRad::read_pvolfile
-#' @inheritParams radar_recode call
-#'
-#' @returns a pvol
+#' @returns A pvol.
 #' @noRd
-#'
 read_pvol_from_url_per_param <- function(
   urls,
   ...,

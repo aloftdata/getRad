@@ -40,16 +40,18 @@
 #'   - A vector of datetimes or dates, between which all data files are
 #'   downloaded.
 #'   - A [lubridate::interval()], between which all data files are downloaded.
-#' @param source Source of the data. One of `"baltrad"`, `"uva"`, `"ecog-04003"`,
-#'   `"rmi"`, `"dark_ecology"` or `"birdcast"`. Only one source can be queried at a time. If not provided,
-#'   `"baltrad"` is used.
+#' @param source Source of the data. One of `"baltrad"`, `"uva"`,
+#'   `"ecog-04003"`, `"rmi"`, `"dark_ecology"` or `"birdcast"`. Only one source
+#'   can be queried at a time. If not provided, `"baltrad"` is used.
 #' @param return_type Type of object that should be returned. Either:
 #'   - `"vpts"`: vpts object(s) (default).
 #'   - `"tibble"`: a [dplyr::tibble()].
-#' @param ... Optional arguments, to [bioRad::read_cajun()] when reading `"dark_ecology"` data.
-#' @param path A local directory where data are read from. If specified the file structure
-#'  is taken from the `source` argument. See details for an explanation of the file format.
-#' @return Either a vpts object, a list of vpts objects or a tibble. See
+#' @param ... Optional arguments, to [bioRad::read_cajun()] when reading
+#'   `"dark_ecology"` data.
+#' @param path A local directory where data are read from. If specified the file
+#'   structure is taken from the `source` argument. See details for an
+#'   explanation of the file format.
+#' @returns Either a vpts object, a list of vpts objects or a tibble. See
 #'   [bioRad::summary.vpts] for details.
 #' @export
 #' @examplesIf interactive()

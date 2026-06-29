@@ -283,7 +283,8 @@ get_vpts <- function(
     fetched_vpts <- purrr::map(
       fetched_vpts,
       ~ .x[lubridate::`%within%`(.x$datetime, date_interval)]
-    )
+    ) |>
+      purrr::map(add_reference_vpts, source = source)
     if (length(fetched_vpts) != 1) {
       return(fetched_vpts)
     } else {
@@ -322,7 +323,11 @@ get_vpts <- function(
             \(df) dplyr::select(df, -source),
             .purrr_error_call = cl
           )
-        vpts_list <- purrr::map(filtered_vpts_no_source, bioRad::as.vpts)
+        vpts_list <- purrr::map(
+          filtered_vpts_no_source,
+          bioRad::as.vpts
+        ) |>
+          purrr::map(add_reference_vpts, source = source)
         # If we are only returning a single radar, don't return a list
         if (length(vpts_list) == 1) {
           return(purrr::chuck(vpts_list, 1))

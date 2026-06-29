@@ -1,0 +1,25 @@
+bibentry(
+  bibtype = "Manual",
+  key = "getRad",
+  title ="getRad: Download Radar Data for Biological Research" ,
+  author = c(person(given = "Bart",
+                           family = "Kranstauber",
+                           role = c("aut", "cre"),
+                           email = "b.kranstauber@uva.nl",
+                           comment = c(ORCID = "0000-0001-8303-780X", affiliation = "University of Amsterdam")),
+                    person(given = "Pieter",
+                           family = "Huybrechts",
+                           role = "aut",
+                           email = "pieter.huybrechts@inbo.be",
+                           comment = c(ORCID = "0000-0002-6658-6062", affiliation = "Research Institute for Nature and Forest (INBO)")),
+                    person(given = "Peter",
+                           family = "Desmet",
+                           role = "aut",
+                           email = "peter.desmet@inbo.be",
+                           comment = c(ORCID = "0000-0002-8442-8025", affiliation = "Research Institute for Nature and Forest (INBO)"))),
+
+     year = "2026",
+         note = "R package version 0.3.0",
+         url = "https://CRAN.R-project.org/package=getRad",
+         doi = "10.32614/CRAN.package.getRad"
+)

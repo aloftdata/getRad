@@ -81,28 +81,37 @@ sources. See the map for details.</p>
 <h2 id="vertical-profile-time-series-vpts-data">Vertical profile time series (VPTS) data<a class="anchor" aria-label="anchor" href="#vertical-profile-time-series-vpts-data"></a>
 </h2>
 <p><code><a href="../reference/get_vpts.html">get_vpts()</a></code> can read vertical profile data from the
-following sources. These sources correspond to different processing
-pipelines. They can, for example, use polar volumes that have been
-processed and filtered in different ways, for more details see <a href="https://doi.org/10.1175/BAMS-D-21-0196.1" class="external-link">Shamoun-Baranes et
-al. (2020)</a>. Multiple sources can thus contain data from from the
-same radar and time periods. For an overview of the coverage available
-use <code><a href="../reference/get_vpts_coverage.html">get_vpts_coverage()</a></code> or explore the <a href="https://aloftdata.github.io/getRad/articles/vpts_coverage.html">article</a>
-on the getRad webpage.</p>
+online sources listed below. These sources correspond to different
+processing pipelines where polar volumes have been processed and
+filtered in different ways, see for example <a href="https://doi.org/10.1175/BAMS-D-21-0196.1" class="external-link">Shamoun-Baranes et
+al. (2020)</a>. Multiple sources can contain data from from the same
+radar and time periods. For an overview of the coverage available use
+<code><a href="../reference/get_vpts_coverage.html">get_vpts_coverage()</a></code> or explore the <a href="https://aloftdata.github.io/getRad/articles/vpts_coverage.html">article</a>
+on the getRad webpage. <code><a href="../reference/get_vpts.html">get_vpts()</a></code> can also read locally
+stored files from either the Aloft or Dark Ecology processing
+pipelines.</p>
 <div class="section level3">
-<h3 id="baltrad-uva-ecog-04003">baltrad, uva, ecog-04003<a class="anchor" aria-label="anchor" href="#baltrad-uva-ecog-04003"></a>
+<h3 id="aloft-baltrad-uva-or-ecog-04003">Aloft: baltrad, uva or ecog-04003<a class="anchor" aria-label="anchor" href="#aloft-baltrad-uva-or-ecog-04003"></a>
 </h3>
-<p>These data are stored on the Aloft bucket. The <code>baltrad</code>
-source covers most radars and longest time series, however data quality
-is more variable as polar volumes are sometimes filtered for biological
-signals before processing to vertical profiles. <code>uva</code> and
-<code>ecog-04003</code> are more curated datasets. See <a href="https://aloftdata.eu/faq/#what-data-are-in-the-bucket" class="external-link">details</a>.</p>
+<p>Vertical profiles from European weather radar data that are stored on
+the Aloft bucket. The <code>baltrad</code> source covers most radars and
+longest time series, however data quality is more variable as polar
+volumes are sometimes filtered for biological signals before processing
+to vertical profiles. <code>uva</code> and <code>ecog-04003</code> are
+more curated datasets. See <a href="https://aloftdata.eu/faq/#what-data-are-in-the-bucket" class="external-link">details</a>.</p>
 </div>
 <div class="section level3">
 <h3 id="rmi">rmi<a class="anchor" aria-label="anchor" href="#rmi"></a>
 </h3>
-<p>These data are provided by the Royal Meteorological Institute of
+<p>Vertical profiles provided by the Royal Meteorological Institute of
 Belgium (RMI). This dataset is restricted to Belgium and some radars in
 the surrounding countries. See <a href="https://opendata.meteo.be/geonetwork/srv/eng/catalog.search#/metadata/RMI_DATASET_CROW" class="external-link">details</a>.</p>
+</div>
+<div class="section level3">
+<h3 id="birdcast">BirdCast<a class="anchor" aria-label="anchor" href="#birdcast"></a>
+</h3>
+<p>Vertical profiles from the US weather radar data (NEXRAD) processed
+through the BirdCast pipeline and stored on the BirdCast bucket.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

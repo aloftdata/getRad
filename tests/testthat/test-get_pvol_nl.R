@@ -75,8 +75,7 @@ test_that("failure to find converter", {
     expect_error(
       get_pvol(
         "nlhrw",
-        time <- as.POSIXct("2024-4-4 20:00:00", tz = "Europe/Helsinki"),
-        param = "all"
+        time <- as.POSIXct("2024-4-4 20:00:00", tz = "Europe/Helsinki")
       ),
       class = "getRad_error_no_nl_converter_found"
     )
@@ -109,8 +108,7 @@ test_that("Pvol for the Netherlands authenication failure", {
   expect_error(
     pvol <- get_pvol(
       "nlhrw",
-      time <- as.POSIXct("2024-4-4 20:00:00", tz = "Europe/Helsinki"),
-      param = "all"
+      time <- as.POSIXct("2024-4-4 20:00:00", tz = "Europe/Helsinki")
     ),
     class = "getRad_error_get_pvol_nl_authorization_failure"
   )

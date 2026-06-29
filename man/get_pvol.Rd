@@ -20,7 +20,7 @@ between which all data files are downloaded.
 }}
 
 \item{...}{Additional arguments passed on to reading functions, for example
-\code{param = "all"} to the \code{\link[bioRad:read_pvolfile]{bioRad::read_pvolfile()}}.}
+\code{param = c("DBZH", "VRADH")} to the \code{\link[bioRad:read_pvolfile]{bioRad::read_pvolfile()}}.}
 }
 \value{
 Either a polar volume or a list of polar volumes. See
@@ -50,6 +50,11 @@ get_pvol("deess", as.POSIXct(Sys.Date()))
 get_pvol(
   c("deess", "dehnr", "fianj", "czska", "KABR"),
   as.POSIXct(Sys.Date())
+)
+
+get_pvol("fianj",
+  as.POSIXct("2012-05-11 23:00", tz = "UTC"),
+  param = "DBZH"
 )
 \dontshow{\}) # examplesIf}
 }

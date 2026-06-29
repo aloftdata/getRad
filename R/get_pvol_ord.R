@@ -216,6 +216,10 @@ get_pvol_ord <- function(radar, time, ..., call = rlang::caller_env()) {
     "getRad.opera_ord_base_url",
     default = "s3.waw3-1.cloudferro.com"
   )
+  rlang::check_installed(
+    "aws.s3",
+    reason = "to download data from the Opera open radar data."
+  )
   keys <- aws.s3::get_bucket_df(
     "openradar-24h",
     prefix = glue::glue(

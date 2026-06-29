@@ -290,7 +290,7 @@ get_pvol_ord <- function(radar, time, ..., call = rlang::caller_env()) {
       select = c("what.startdate", "what.starttime", "how.scan_index")
     ) |>
       purrr::list_rbind() |>
-      dplyr::select(-param) |>
+      dplyr::select(!dplyr::matches("param")) |>
       tibble::add_column(
         where.elangle = purrr::map_dbl(scans, bioRad::get_elevation_angles)
       ) |>

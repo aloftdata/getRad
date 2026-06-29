@@ -1,3 +1,4 @@
+#' @importFrom utils modifyList
 merge_attributes <- function(attribute_list, type) {
   attributes_new <- purrr::reduce(attribute_list, modifyList)
   if (
@@ -158,7 +159,7 @@ merge_pvols <- function(pvol_list, ..., call = rlang::caller_env()) {
       .x,
       select = c("what.startdate", "what.starttime", "how.scan_index")
     ) |>
-      dplyr::select(-param)
+      dplyr::select(!dplyr::matches("param"))
   ) |>
     dplyr::bind_rows()
   split_df$where.elangle <- purrr::map_dbl(

@@ -1,3 +1,23 @@
+test_that("add_references_vpts fails", {
+  expect_error(
+    add_reference_vpts(2, 1),
+    class = "getRad_error_add_reference_vpts_invalid_source"
+  )
+
+  expect_error(
+    add_reference_vpts(2, letters),
+    class = "getRad_error_add_reference_vpts_invalid_source"
+  )
+  expect_error(
+    add_reference_vpts(2, "nonsense_name"),
+    class = "getRad_error_add_reference_vpts_invalid_source"
+  )
+  expect_error(
+    add_reference_vpts(2, "baltrad"),
+    class = "getRad_error_add_reference_vpts_only_df_and_vpts"
+  )
+})
+
 test_that("Dark ecology reference", {
   dk_path <- system.file("extdata", "darkecology", package = "getRad")
   skip_if(
@@ -47,8 +67,19 @@ test_that("aloft reference", {
   )
 
   expect_identical(
-    get_vpts("nlhrw", as.Date("2016-10-6"), source = "ecog-04003") |>
+    get_vpts("nldbl", as.Date("2016-10-6"), source = "ecog-04003") |>
       purrr::pluck("attributes", "references", 1),
+    vptsReferences |> purrr::pluck("ecog-04003")
+  )
+  expect_identical(
+    get_vpts(
+      "nldbl",
+      as.Date("2016-10-6"),
+      source = "ecog-04003",
+      return_type = "tibble"
+    ) |>
+      attr("references") |>
+      purrr::pluck(1),
     vptsReferences |> purrr::pluck("ecog-04003")
   )
 })

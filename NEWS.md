@@ -1,5 +1,7 @@
 # getRad (development version)
 
+* Include references to vpts data sources (#200).
+
 # getRad 0.3.0
 
 * Implement download of `vpts` data from birdcast by Alexander Tedeschi. 

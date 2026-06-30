@@ -498,7 +498,10 @@ test_that("get_vpts() can return data as a vpts object compatible with getRad", 
     ) |>
       dplyr::select(-source) |>
       bioRad::as.vpts(),
-    returned_vpts_object
+    purrr::list_modify(
+      returned_vpts_object,
+      attributes = list(references = rlang::zap())
+    )
   )
   # This also works when multiple radars are selected
   ## In this case a list of vpts objects should be returned

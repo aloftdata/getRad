@@ -22,6 +22,21 @@ test_that("expected warnings from ord", {
     get_pvol("iedub", time, use_opera_ord = T),
     class = "getRad_warn_ord_irish_merging"
   )
+  expect_error(
+    get_pvol("nlhrw", time + lubridate::hours(3), use_opera_ord = T),
+    class = "getRad_error_ord_no_keys_found"
+  )
+  expect_error(
+    get_pvol("nlhrv", time + lubridate::hours(3), use_opera_ord = T),
+    class = "getRad_error_ord_no_keys_found"
+  )
+  expect_error(
+    get_pvol("nlhrv", time - lubridate::hours(30), use_opera_ord = T),
+    class = "getRad_error_ord_no_keys_found"
+  )
+})
+test_that("expected warnings from ord", {
+  skip_if_offline("s3.waw3-1.cloudferro.com")
   expect_warning(
     get_pvol("mtgud", time, use_opera_ord = T),
     class = "getRad_warn_ord_conflicting_attributes"
@@ -32,6 +47,92 @@ test_that("expected warnings from ord", {
       classes = "getRad_warn_ord_conflicting_attributes"
     ),
     class = "getRad_warn_ord_polish_scans"
+  )
+})
+
+test_that("internal merging functions", {
+  pv <- get_pvol("fikor", as.POSIXct("2025-3-6") - 7200) |>
+    dplyr::select(DBZH, VRADH)
+  expect_identical(
+    merge_pvols(
+      merge_list <- list(pv |> dplyr::select(DBZH), pv |> dplyr::select(VRADH))
+    ),
+    pv
+  )
+  expect_error(
+    class = 'getRad_error_ord_pvol_multi_geo',
+    merge_pvols(
+      modifyList(
+        merge_list |> setNames(c('a', 'b')),
+        list(a = list(geo = list(lat = 2)))
+      ) |>
+        unname()
+    )
+  )
+  expect_error(
+    class = 'getRad_error_ord_pvol_multi_time',
+    merge_pvols(
+      modifyList(
+        merge_list |> setNames(c('a', 'b')),
+        list(b = list(datetime = merge_list[[1]]$datetime + 300))
+      ) |>
+        unname()
+    )
+  )
+  expect_error(
+    class = 'getRad_error_ord_pvol_multi_radar',
+    merge_pvols(
+      modifyList(
+        merge_list |> setNames(c('a', 'b')),
+        list(b = list(radar = "fibor"))
+      ) |>
+        unname()
+    )
+  )
+  merge_list_scan <- list(
+    a = merge_list$a$scans[[1]],
+    b = merge_list$b$scans[[1]]
+  )
+  expect_error(
+    class = 'getRad_error_ord_scan_multi_geo',
+    merge_scans(
+      modifyList(
+        merge_list_scan,
+        list(b = list(geo = list(height = -1)))
+      ) |>
+        unname()
+    )
+  )
+  expect_error(
+    class = 'getRad_error_ord_scan_multi_radar',
+    merge_scans(
+      modifyList(
+        merge_list_scan,
+        list(b = list(radar = "aa"))
+      ) |>
+        unname()
+    )
+  )
+  expect_error(
+    class = 'getRad_error_ord_scan_multi_time',
+    merge_scans(
+      modifyList(
+        merge_list_scan,
+        list(b = list(datetime = pv$datetime - 300))
+      ) |>
+        unname()
+    )
+  )
+
+  expect_error(
+    class = 'getRad_error_ord_scan_duplicated_param',
+    merge_scans(
+      modifyList(
+        merge_list_scan,
+        list(b = list(params = merge_list_scan$a$params))
+      ) |>
+        unname()
+    )
   )
 })
 

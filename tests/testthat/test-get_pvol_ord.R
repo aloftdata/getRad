@@ -83,8 +83,19 @@ test_that("Local long test", {
     ),
     DK = c("dkbor", "dkrom", "dksam", "dksin", "dkste"),
     EE = "eesur",
-    ES=c("esahr", "esatn", "esbnv", "esclg", "esgld", "eslid", "esnjr",
-         "espdg", "essft", "essse", "estjv"),
+    ES = c(
+      "esahr",
+      "esatn",
+      "esbnv",
+      "esclg",
+      "esgld",
+      "eslid",
+      "esnjr",
+      "espdg",
+      "essft",
+      "essse",
+      "estjv"
+    ),
     FI = c(
       "fianj",
       "fikan",

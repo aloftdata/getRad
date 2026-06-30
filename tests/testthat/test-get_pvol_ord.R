@@ -38,6 +38,26 @@ test_that("expected warnings from ord", {
 test_that("Local long test", {
   skip_if_offline()
   skip_on_ci()
+
+  countries <- aws.s3::get_bucket(
+    "openradar-24h",
+    prefix = glue::glue(
+      '{format(Sys.Date(),"%Y/%m/%d", tz="UTC")}/'
+    ),
+    base_url = "s3.waw3-1.cloudferro.com",
+    region = "",
+    parse_response = F,
+    delimiter = '/',
+    max = Inf
+  ) |>
+    httr::content(as = "parsed", encoding = "UTF-8") |>
+    xml2::xml_ns_strip() |>
+    xml2::xml_find_all("CommonPrefixes/Prefix|Contents/Key") |>
+    xml2::xml_text() |>
+    strsplit("/") |>
+    purrr::map_chr(tail, 1) |>
+    tolower()
+
   radars <- list(
     BE = c("behel", "bejab", "bewid"),
     CH = c("chalb", "chdol", "chlem", "chppm", "chwei"),
@@ -63,6 +83,8 @@ test_that("Local long test", {
     ),
     DK = c("dkbor", "dkrom", "dksam", "dksin", "dkste"),
     EE = "eesur",
+    ES=c("esahr", "esatn", "esbnv", "esclg", "esgld", "eslid", "esnjr",
+         "espdg", "essft", "essse", "estjv"),
     FI = c(
       "fianj",
       "fikan",

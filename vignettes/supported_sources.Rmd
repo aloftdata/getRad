@@ -21,8 +21,23 @@ knitr::opts_chunk$set(
 ```{r, echo=FALSE, message=FALSE}
 require(leaflet)
 require(rnaturalearth)
+
+opera<-dplyr::tribble(
+  ~code, ~description, ~time, ~supported, ~license, ~links,
+    "opera", "Data is publicly available", "Data is available for the last 24 hours","Readable","CC BY 4.0<sup>    <a href='https://api.meteogate.eu/eu-eumetnet-weather-radar/docs'>1</a> </sup>",c("Information"="https://meteogate.eu/"),
+    
+) |>
+  dplyr::left_join(
+
+     
+,
+    by = c(code = "key_lower")
+  ) |>
+  sf::st_as_sf()
+
 included_countries <- dplyr::tribble(
   ~code, ~description, ~time, ~supported, ~license, ~links,
+      "opera", "Data centralized by opera is publicly available for a large selection of european countries. However biological information is frequently filtered out of the reflectivity parameter (DBZH). The unfiltered reflectivity (TH) might contain more valuable information for biological analysis.", "Data is available for the last 24 hours","Readable","CC BY 4.0<sup>    <a href='https://api.meteogate.eu/eu-eumetnet-weather-radar/docs'>1</a> </sup>",c("Information"="https://meteogate.eu/"),
     "sk", "Data is publicly available", "Data seems to be available for about one month","Readable","CC BY 4.0<sup>    <a href='https://data.europa.eu/data/datasets/https-data-gov-sk-set-4432e760-cb76-411e-883a-4ed4a182dee7'>1</a>    <a href='https://data.europa.eu/data/datasets/https-data-gov-sk-set-841fe874-0ce2-4dc9-96f4-a058d078dac5'>2</a>    <a href='https://data.europa.eu/data/datasets/https-data-gov-sk-set-1367914a-2847-420e-906e-4bdece18888a'>3</a>    <a href='https://data.europa.eu/data/datasets/https-data-gov-sk-set-07de9eb1-d329-43fd-ab44-c00c6dc91207'>4</a>  </sup>",c("Data source"="https://opendata.shmu.sk/meteorology/weather/radar/volume/"),
       "ro", "Data is publicly available", "Data seems to be available for about the last 4 days","Readable","CC BY 4.0<sup><a href='https://data.gov.ro/en/dataset/date-radare-meteorologice'>1</a></sup>",c("Data source"="https://opendata.meteoromania.ro/radar/"),
         "at", "Data is publicly available. There is only data for one radar that is not part of the odim network. The data can be downloaded using \"hochficht\" as radar code to `get_pvol`", "Data is available for about three days" ,"Readable","CC BY 4.0<sup><a href='https://data.hub.geosphere.at/dataset/radar_volumen_hochficht-v1-5min'>1</a></sup>",c("Data source"="https://public.hub.geosphere.at/public/datahub.html?id=radar_volumen_hochficht-v1-5min/filelisting"),
@@ -38,9 +53,11 @@ included_countries <- dplyr::tribble(
   "cz", "Polar volumes are reconstructed from parameter specific polar volumes", "The last three days are available", "Readable", NA, c("Data description" = "https://opendata.chmi.cz/meteorology/weather/radar/radar_description_en.pdf"),
   "ee", "The repository seems to implement quite strict rate limiting therefore retries are implemented. However the http error 429 is still frequently returned.", NA, "Readable", NA, c("Data" = "https://avaandmed.keskkonnaportaal.ee/dhs/Active/documentList.aspx?ViewId=b92201f4-8b48-4d3a-b410-30c8ce4016d5")
 ) |>
-  dplyr::left_join(
+  dplyr::left_join(dplyr::bind_rows(   rnaturalearth::ne_countries("medium") |>
+      dplyr::mutate(key_lower = tolower(iso_a2_eh)) |> dplyr::filter(key_lower %in%c("be", "ch", "cz", "de", "dk", "es", "ee", "fi", "fr", "hr", #"ie", 
+"is", "lt", "mt", "nl", "no", "pl", "ro", "se", "si")) |> dplyr::summarise(key_lower="opera", name="Europe"),
     rnaturalearth::ne_countries("medium") |>
-      dplyr::mutate(key_lower = tolower(iso_a2_eh)),
+      dplyr::mutate(key_lower = tolower(iso_a2_eh))),
     by = c(code = "key_lower")
   ) |>
   sf::st_as_sf() |>
@@ -74,12 +91,12 @@ labels <- glue::glue(
 leaf <- leaflet(width = "100%") |>
   addTiles() |>
   addPolygons(
-    opacity = 1,
-    data = included_countries, color = "white", weight = 3,
+#    opacity = 1,
+    data = included_countries, color = "white", weight = 3, opacity=.5,
     highlightOptions = highlightOptions(
-      weight = 5,
+      weight = 7,
       color = "#666",
-      bringToFront = TRUE
+      bringToFront = T, sendToBack = T
     ), fillColor = ~ pal(supported),
     popup = labels
   ) |>

@@ -182,6 +182,7 @@ select_get_pvol_function <- function(
         "de",
         "dk",
         "ee",
+        "es",
         "fi",
         "fr",
         "hr",

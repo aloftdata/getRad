@@ -166,7 +166,8 @@ merge_pvols <- function(pvol_list, ..., call = rlang::caller_env()) {
     scans,
     ~ bioRad::get_elevation_angles(.x)
   )
-  scans_list <- split(
+
+  split(
     scans,
     split_df,
     drop = T

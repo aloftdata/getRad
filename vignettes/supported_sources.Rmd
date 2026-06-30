@@ -21,20 +21,6 @@ knitr::opts_chunk$set(
 ```{r, echo=FALSE, message=FALSE}
 require(leaflet)
 require(rnaturalearth)
-
-opera<-dplyr::tribble(
-  ~code, ~description, ~time, ~supported, ~license, ~links,
-    "opera", "Data is publicly available", "Data is available for the last 24 hours","Readable","CC BY 4.0<sup>    <a href='https://api.meteogate.eu/eu-eumetnet-weather-radar/docs'>1</a> </sup>",c("Information"="https://meteogate.eu/"),
-    
-) |>
-  dplyr::left_join(
-
-     
-,
-    by = c(code = "key_lower")
-  ) |>
-  sf::st_as_sf()
-
 included_countries <- dplyr::tribble(
   ~code, ~description, ~time, ~supported, ~license, ~links,
       "opera", "Data centralized by opera is publicly available for a large selection of european countries. However biological information is frequently filtered out of the reflectivity parameter (DBZH). The unfiltered reflectivity (TH) might contain more valuable information for biological analysis.", "Data is available for the last 24 hours","Readable","CC BY 4.0<sup>    <a href='https://api.meteogate.eu/eu-eumetnet-weather-radar/docs'>1</a> </sup>",c("Information"="https://meteogate.eu/"),

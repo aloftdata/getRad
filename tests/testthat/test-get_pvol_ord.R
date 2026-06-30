@@ -90,8 +90,8 @@ test_that("internal merging functions", {
     )
   )
   merge_list_scan <- list(
-    a = merge_list$a$scans[[1]],
-    b = merge_list$b$scans[[1]]
+    a = merge_list[[1]]$scans[[1]],
+    b = merge_list[[2]]$scans[[1]]
   )
   expect_error(
     class = 'getRad_error_ord_scan_multi_geo',

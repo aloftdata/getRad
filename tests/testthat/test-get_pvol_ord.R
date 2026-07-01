@@ -11,10 +11,12 @@ test_that("Pvol can be downloaded from ord", {
   pvol <- expect_s3_class(get_pvol("nlhrw", time, use_opera_ord = T), "pvol")
   expect_true(bioRad::is.pvol(pvol))
   expect_identical(pvol$datetime, time_floor_utc)
-
   pvol <- expect_s3_class(get_pvol("frabb", time, use_opera_ord = T), "pvol")
   expect_true(bioRad::is.pvol(pvol))
   expect_identical(pvol$datetime, time_floor_utc)
+  pvol <- expect_s3_class(get_pvol("nobml", time, use_opera_ord = T), "pvol")
+  expect_true(bioRad::is.pvol(pvol))
+  expect_identical(pvol$datetime, time_floor_utc + lubridate::seconds(4))
 })
 test_that("expected warnings from ord", {
   skip_if_offline("s3.waw3-1.cloudferro.com")

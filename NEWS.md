@@ -1,5 +1,7 @@
 # getRad (development version)
 
+* Implement reading data from the opera open radar data (#170).
+
 # getRad 0.3.0
 
 * Implement download of `vpts` data from birdcast by Alexander Tedeschi. 

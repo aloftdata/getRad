@@ -258,7 +258,12 @@ read_scan <- function(
   )
   quantities <- lapply(quantities, "[[", "quantity")
   names(quantities) <- quantityNames
-  if (is.null(attribs.how$wavelength)) {
+  if (
+    is.null(attribs.how$wavelength) &&
+      is.list(attributes) &&
+      is.list(attributes$how) &&
+      !is.null(attributes$how$wavelength)
+  ) {
     attribs.how$wavelength <- attributes$how$wavelength
   }
   output <- list(
@@ -311,11 +316,7 @@ rr <- function(
   attributes(data)$param <- as.character(attr$quantity)
   attributes(data)$conversion <- conversion
   list(
-    quantityName = paste0(
-      strsplit(file, "_")[[1]][6],
-      "_",
-      basename(dirname(file))
-    ),
+    quantityName = as.character(attr$quantity),
     quantity = data
   )
 }

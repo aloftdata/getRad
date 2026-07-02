@@ -1,5 +1,7 @@
 # getRad (development version)
 
+* Use options for urls so they can be changes without a package update (#120).
+
 # getRad 0.3.0
 
 * Implement download of `vpts` data from birdcast by Alexander Tedeschi. 

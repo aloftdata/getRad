@@ -10,11 +10,15 @@ get_pvol_de <- function(radar, time, ..., call = rlang::caller_env()) {
     call = call
   )
   urls <- c(
+    glue::glue(getOption(
+      "getRad.de_url_format_simple",
+      default = "https://opendata.dwd.de/weather/radar/sites/sweep_vol_{c('z','v')}/{substr(radar,3,5)}/hdf5/filter_simple/"
+    )),
     glue::glue(
-      "https://opendata.dwd.de/weather/radar/sites/sweep_vol_{c('z','v')}/{substr(radar,3,5)}/hdf5/filter_simple/"
-    ),
-    glue::glue(
-      "https://opendata.dwd.de/weather/radar/sites/sweep_vol_{c('rhohv','phidp','zdr')}/{substr(radar,3,5)}/unfiltered/"
+      getOption(
+        "getRad.de_url_format_unfiltered",
+        default = "https://opendata.dwd.de/weather/radar/sites/sweep_vol_{c('rhohv','phidp','zdr')}/{substr(radar,3,5)}/unfiltered/"
+      )
     )
   )
 

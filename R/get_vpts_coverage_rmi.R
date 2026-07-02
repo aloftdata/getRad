@@ -27,9 +27,10 @@ get_vpts_coverage_rmi <- function(
     call = call
   )
 
-  base_url <-
-    "https://opendata.meteo.be/ftp/observations/radar/vbird"
-
+  base_url <- getOption(
+    "getRad.rmi_url",
+    default = "https://opendata.meteo.be/ftp/observations/radar/vbird"
+  )
   found_radars <- get_element_regex(
     get_html(base_url, call = call),
     "[a-z]{5}(?=\\/)"

@@ -39,7 +39,11 @@ test_that("Pvol for the Netherlands can be downloaded. Incorrect converter resul
   ))
 
   # First see if a key can be retrieved if not make sure env is used as a keyring backend
-  if (rlang::is_error(rlang::catch_cnd(getRad::get_secret("nl_api_key")))) {
+  if (
+    rlang::is_error(rlang::catch_cnd(suppressWarnings(getRad::get_secret(
+      "nl_api_key"
+    ))))
+  ) {
     withr::local_options(list(
       "keyring_backend" = "env"
     ))

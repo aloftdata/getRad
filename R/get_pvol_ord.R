@@ -60,7 +60,7 @@ merge_scans <- function(scan_list, ..., call = rlang::caller_env()) {
   radar <- unique(radars)
   datetimes <- purrr::map_vec(scan_list, purrr::pluck, 'datetime')
   if (
-    substr(radar, 1, 2) == "no" &&
+    is_odim_country(radar, "no") &&
       dplyr::n_distinct(datetimes) == 2
   ) {
     datetime <- min(datetimes)
@@ -196,7 +196,7 @@ merge_pvols <- function(pvol_list, ..., call = rlang::caller_env()) {
 
 get_pvol_ord <- function(radar, time, ..., call = rlang::caller_env()) {
   # url <- "https://s3.waw3-1.cloudferro.com/openradar-24h/"
-  if (substr(radar, 1, 2) == "pl") {
+  if (is_odim_country(radar, "pl")) {
     cli::cli_warn(
       c(
         "Polish radar data has conflicting scan attributes. As a result it is unclear if and how these data should be merged."
@@ -204,7 +204,7 @@ get_pvol_ord <- function(radar, time, ..., call = rlang::caller_env()) {
       class = "getRad_warn_ord_polish_scans"
     )
   }
-  if (substr(radar, 1, 2) == "ie") {
+  if (is_odim_country(radar, "ie")) {
     cli::cli_abort(
       c(
         "No merging strategy for Irish radars has been implemented."

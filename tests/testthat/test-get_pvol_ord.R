@@ -18,6 +18,18 @@ test_that("Pvol can be downloaded from ord", {
   expect_true(bioRad::is.pvol(pvol))
   expect_identical(pvol$datetime, time_floor_utc + lubridate::seconds(4))
 })
+test_that("ie still has scans and pvols", {
+  with_mocked_bindings(
+    code = {
+      expect_error(
+        get_pvol("iedub", time, param = "all"),
+        class = "getRad_error_ord_mixed_types"
+      )
+    },
+    is_odim_country = function(...) FALSE
+  )
+})
+
 test_that("expected warnings from ord", {
   skip_if_offline("s3.waw3-1.cloudferro.com")
   expect_error(

@@ -73,7 +73,7 @@ between which all data files are downloaded.</p></li>
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional arguments passed on to reading functions, for example
-<code>param = "all"</code> to the <code><a href="http://adriaandokter.com/bioRad/reference/read_pvolfile.html" class="external-link">bioRad::read_pvolfile()</a></code>.</p></dd>
+<code>param = c("DBZH", "VRADH")</code> to the <code><a href="http://adriaandokter.com/bioRad/reference/read_pvolfile.html" class="external-link">bioRad::read_pvolfile()</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -102,6 +102,11 @@ be identified using the <code>stntype</code> column in <code>get_weather_radars(
 <span class="r-in"><span><span class="fu">get_pvol</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"deess"</span>, <span class="st">"dehnr"</span>, <span class="st">"fianj"</span>, <span class="st">"czska"</span>, <span class="st">"KABR"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">get_pvol</span><span class="op">(</span><span class="st">"fianj"</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="st">"2012-05-11 23:00"</span>, tz <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  param <span class="op">=</span> <span class="st">"DBZH"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>

@@ -34,7 +34,7 @@ get_pvol(radar = NULL, datetime = NULL, ...)
 - ...:
 
   Additional arguments passed on to reading functions, for example
-  `param = "all"` to the
+  `param = c("DBZH", "VRADH")` to the
   [`bioRad::read_pvolfile()`](http://adriaandokter.com/bioRad/reference/read_pvolfile.md).
 
 ## Value
@@ -67,6 +67,11 @@ get_pvol("deess", as.POSIXct(Sys.Date()))
 get_pvol(
   c("deess", "dehnr", "fianj", "czska", "KABR"),
   as.POSIXct(Sys.Date())
+)
+
+get_pvol("fianj",
+  as.POSIXct("2012-05-11 23:00", tz = "UTC"),
+  param = "DBZH"
 )
 }
 ```

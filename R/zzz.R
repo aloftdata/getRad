@@ -15,6 +15,7 @@
   op <- options()
   op.getRad <- list(
     getRad.key_prefix = "getRad_",
+    getRad.progress = TRUE,
     getRad.user_agent = paste(
       "R package getRad",
       getNamespaceVersion("getRad")

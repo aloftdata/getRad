@@ -79,6 +79,7 @@ get_pvol_de <- function(radar, time, ..., call = rlang::caller_env()) {
   pvol <- withr::with_tempdir({
     files_to_get$resp <- files_to_get$req |>
       httr2::req_perform_parallel(
+        progress = getOption("getRad.progress"),
         paths = replicate(
           length(files_to_get$req),
           tempfile(fileext = ".h5", tmpdir = getwd())

@@ -24,7 +24,7 @@
 #'   - A [lubridate::interval()] or two [`POSIXct`][base::DateTimeClasses],
 #'   between which all data files are downloaded.
 #' @param ... Additional arguments passed on to reading functions, for example
-#'   `param = "all"` to the [bioRad::read_pvolfile()].
+#'   `param = c("DBZH", "VRADH")` to the [bioRad::read_pvolfile()].
 #' @returns Either a polar volume or a list of polar volumes. See
 #'   [bioRad::summary.pvol()] for details.
 #' @export
@@ -36,6 +36,11 @@
 #' get_pvol(
 #'   c("deess", "dehnr", "fianj", "czska", "KABR"),
 #'   as.POSIXct(Sys.Date())
+#' )
+#'
+#' get_pvol("fianj",
+#'   as.POSIXct("2012-05-11 23:00", tz = "UTC"),
+#'   param = "DBZH"
 #' )
 get_pvol <- function(radar = NULL, datetime = NULL, ...) {
   if (!identical(radar, "hochficht")) {

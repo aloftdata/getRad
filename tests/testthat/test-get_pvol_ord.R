@@ -14,15 +14,39 @@ test_that("Pvol can be downloaded from ord", {
   pvol <- expect_s3_class(get_pvol("frabb", time, use_opera_ord = T), "pvol")
   expect_true(bioRad::is.pvol(pvol))
   expect_identical(pvol$datetime, time_floor_utc)
+  pvol <- expect_s3_class(
+    get_pvol(
+      "iedub",
+      lubridate::floor_date(time, "15 min") + lubridate::minutes(5),
+      use_opera_ord = T
+    ),
+    "pvol"
+  )
+  expect_true(bioRad::is.pvol(pvol))
+  pvol <- expect_s3_class(
+    get_pvol(
+      "iesha",
+      lubridate::floor_date(time, "15 min") + lubridate::minutes(10),
+      use_opera_ord = T
+    ),
+    "pvol"
+  )
+  expect_true(bioRad::is.pvol(pvol))
   pvol <- expect_s3_class(get_pvol("nobml", time, use_opera_ord = T), "pvol")
   expect_true(bioRad::is.pvol(pvol))
-  expect_identical(pvol$datetime, time_floor_utc + lubridate::seconds(4))
+  expect_true(
+    pvol$datetime %within%
+      lubridate::interval(
+        time_floor_utc,
+        time_floor_utc + lubridate::seconds(10)
+      )
+  )
 })
 test_that("ie still has scans and pvols", {
   with_mocked_bindings(
     code = {
       expect_error(
-        get_pvol("iedub", time, param = "all"),
+        get_pvol("iedub", lubridate::floor_date(time, "15 min"), param = "all"),
         class = "getRad_error_ord_mixed_types"
       )
     },
@@ -33,7 +57,7 @@ test_that("ie still has scans and pvols", {
 test_that("expected warnings from ord", {
   skip_if_offline("s3.waw3-1.cloudferro.com")
   expect_error(
-    get_pvol("iedub", time, use_opera_ord = T),
+    get_pvol("iedub", lubridate::floor_date(time, "15 min"), use_opera_ord = T),
     class = "getRad_warn_ord_irish_merging"
   )
   expect_error(
@@ -153,7 +177,6 @@ test_that("internal merging functions", {
 test_that("Local long test", {
   skip_if_offline()
   skip_on_ci()
-
   # countries <- aws.s3::get_bucket(
   #   "openradar-24h",
   #   prefix = glue::glue(

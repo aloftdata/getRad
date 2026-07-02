@@ -204,7 +204,11 @@ get_pvol_ord <- function(radar, time, ..., call = rlang::caller_env()) {
       class = "getRad_warn_ord_polish_scans"
     )
   }
-  if (is_odim_country(radar, "ie")) {
+  if (
+    is_odim_country(radar, "ie") &&
+      lubridate::floor_date(time, "15 min") ==
+        lubridate::floor_date(time, "5 min")
+  ) {
     cli::cli_abort(
       c(
         "No merging strategy for Irish radars has been implemented."

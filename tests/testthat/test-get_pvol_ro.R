@@ -37,13 +37,32 @@ test_that("Pvol for Romania can be downloaded", {
   )
 })
 test_that("Pvol for Romania fails if urls are wrong", {
+  expect_error(
+    get_pvol(
+      "romed",
+      lubridate::floor_date(
+        as.POSIXct(Sys.time(), tz = "Europe/Helsinki") - lubridate::hours(90),
+        "5 mins"
+      ),
+      param = "all"
+    ),
+    class = "httr2_http_404"
+  )
+
   withr::with_options(
     list(
       "getRad.ro_url" = "https://opendata.meteoromania.ro/radar/{toupper(substr(radar,3,5))}/{toupper(substr(radar,3,5))}_{strftime(time,'%Y%m%d%H%M', tz='UTC')}0400{params}.hdf",
       "getRad.ro_url_alt" = "https://opendata.meteoromania.ro/radar/{toupper(substr(radar,3,5))}/{toupper(substr(radar,3,5))}_{strftime(time,'%Y%m%d%H%M', tz='UTC')}0500{params}.hdf"
     ),
     expect_error(
-      get_pvol("romed", time, param = "all"),
+      get_pvol(
+        "romed",
+        lubridate::floor_date(
+          as.POSIXct(Sys.time(), tz = "Europe/Helsinki") - lubridate::hours(10),
+          "5 mins"
+        ),
+        param = "all"
+      ),
       class = "httr2_http_404"
     )
   )

@@ -1,4 +1,73 @@
 #' @importFrom utils modifyList
+NULL
+
+#' Merge a list of attribute table into one, warn for conflicting attributes
+#'
+#' @param attribute_list A list of attributes tables from a bioRad object to merge
+#' @param type The time of object, used for clarifying the warning
+#'
+#'
+#'
+#' @noRd
+#' @examples
+#'
+#'
+#' merge_attributes(list(   list(how = list(NI = 24),
+#'        what = list(
+#'       startdate = "20151018", starttime = "180003"
+#'     ), where = list(
+#'       elangle = 0.5, nbins = 480L, nrays = 360L
+#'     )))
+#'   ,
+#'   "scan"
+#' )
+#' # Two identical
+#' merge_attributes(list(   list(how = list(NI = 24),
+#'                               what = list(
+#'                                 startdate = "20151018", starttime = "180003"
+#'                               ), where = list(
+#'                                 elangle = 0.5, nbins = 480L, nrays = 360L
+#'                               )),list(how = list(NI = 24),
+#'                                       what = list(
+#'                                         startdate = "20151018", starttime = "180003"
+#'                                       ), where = list(
+#'                                         elangle = 0.5, nbins = 480L, nrays = 360L
+#'                                       )))
+#'                  ,
+#'                  "scan"
+#')
+#'
+#' # Two both with missing data
+#' merge_attributes(list(   list(how = list(NI = 24),
+#'                               what = list(
+#'                                 startdate = "20151018"
+#'                               ), where = list(
+#'                                 elangle = 0.5, nbins = 480L, nrays = 360L
+#'                               )),list(how = list(NI = 24),
+#'                                       what = list(
+#'                                         startdate = "20151018", starttime = "180003"
+#'                                       ), where = list(
+#'                                         elangle = 0.5,  nrays = 360L
+#'                                       )))
+#'                  ,
+#'                  "scan"
+#' )
+#'
+#' # Two both with missing and conflicting data
+#' merge_attributes(list(   list(how = list(NI = 23),
+#'                               what = list(
+#'                                 startdate = "20151018"
+#'                               ), where = list(
+#'                                 elangle = 0.5, nbins = 480L, nrays = 360L
+#'                               )),list(how = list(NI = 24),
+#'                                       what = list(
+#'                                         startdate = "20151018", starttime = "180003"
+#'                                       ), where = list(
+#'                                         elangle = 0.5,  nrays = 360L
+#'                                       )))
+#'                  ,
+#'                  "scan"
+#')
 merge_attributes <- function(attribute_list, type) {
   attributes_new <- purrr::reduce(attribute_list, modifyList)
   if (
@@ -33,6 +102,20 @@ merge_attributes <- function(attribute_list, type) {
   return(attributes_new)
 }
 
+#' Merge a list of scans into one scan
+#'
+#' Frequently different parameters are stored in ths separate scans this function can help merging them
+#'
+#' @param scan_list A list of scans
+#' @param ... not used
+#' @param call the calling environment for error messages
+#'
+#' @returns a bioRad::scan
+#' @noRd
+#'
+#' @examples
+#'
+#' merge_scans(list(bioRad::example_scan |> dplyr::select("DBZH"), bioRad::example_scan |> dplyr::select(-DBZH)))
 merge_scans <- function(scan_list, ..., call = rlang::caller_env()) {
   geos <- purrr::map(scan_list, purrr::pluck, 'geo')
   rscales <- purrr::map_vec(geos, purrr::pluck, 'rscale')
@@ -117,6 +200,13 @@ merge_scans <- function(scan_list, ..., call = rlang::caller_env()) {
   }
   return(new_scan)
 }
+#' Merge polar volumes containing different scans
+#'
+#' @param pvol_list a list of polar volumes
+#' @inheritParams merge_scan ... call
+#'
+#' @returns a single polar volume
+#' @noRd
 merge_pvols <- function(pvol_list, ..., call = rlang::caller_env()) {
   radars <- purrr::map_chr(pvol_list, purrr::pluck, 'radar')
   if (dplyr::n_distinct(radars) != 1) {
@@ -214,7 +304,8 @@ get_pvol_ord <- function(radar, time, ..., call = rlang::caller_env()) {
   ) {
     cli::cli_abort(
       c(
-        "No merging strategy for Irish radars has been implemented."
+        x = "No merging strategy for Irish radars has been implemented for times in the full quarter.",
+        i = "Other times are ok and can be loaded."
       ),
       call = call,
       class = "getRad_warn_ord_irish_merging"
@@ -229,6 +320,7 @@ get_pvol_ord <- function(radar, time, ..., call = rlang::caller_env()) {
     "aws.s3",
     reason = "to download data from the Opera open radar data."
   )
+  # list all keys for a radar and time combination
   keys <- aws.s3::get_bucket_df(
     "openradar-24h",
     prefix = glue::glue(
@@ -238,6 +330,7 @@ get_pvol_ord <- function(radar, time, ..., call = rlang::caller_env()) {
     region = "",
     max = Inf
   )
+  # Extract time from the keys and floor them to assign them to a pvol
   t_floored <- purrr::map_chr(strsplit(keys$Key, '@'), purrr::pluck, 2) |>
     lubridate::parse_date_time(orders = '%Y%m%dT%H%M', tz = 'UTC', exact = T) |>
     lubridate::floor_date("5 mins")
@@ -256,7 +349,7 @@ get_pvol_ord <- function(radar, time, ..., call = rlang::caller_env()) {
       call = call
     )
   }
-
+  # Figureout if the odim files are SCANS or PVOLS and read accordingly
   type <- unique(purrr::map_chr(strsplit(keys_selected, '/'), purrr::pluck, 6))
   if (dplyr::n_distinct(type) != 1 || !(type %in% c("SCAN", "PVOL"))) {
     cli::cli_abort(

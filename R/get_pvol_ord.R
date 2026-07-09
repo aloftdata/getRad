@@ -37,7 +37,10 @@ merge_scans <- function(scan_list, ..., call = rlang::caller_env()) {
   geos <- purrr::map(scan_list, purrr::pluck, 'geo')
   rscales <- purrr::map_vec(geos, purrr::pluck, 'rscale')
   if (dplyr::n_distinct(rscales) != 1) {
-    ## Possibly warn
+    cli::cli_warn(
+      "Data contains multiple range scales ({.val {rscales}}), therefore they are omitted in the scan {.attr geos} attribute.",
+      class = "getRad_warn_ord_scan_conflicting_rscales"
+    )
     geos <- purrr::modify(geos, purrr::list_modify, rscale = rlang::zap())
   }
   if (dplyr::n_distinct(geos) != 1) {

@@ -86,6 +86,19 @@ test_that("expected warnings from ord", {
     ),
     class = "getRad_warn_ord_polish_scans"
   )
+  suppressWarnings(
+    expect_warning(
+      suppressWarnings(
+        get_pvol("pluzr", time, use_opera_ord = T),
+        classes = c(
+          "getRad_warn_ord_conflicting_attributes",
+          "getRad_warn_ord_polish_scans"
+        )
+      ),
+      class = "getRad_warn_ord_scan_conflicting_rscales"
+    ),
+    classes = "getRad_warn_ord_scan_conflicting_rscales"
+  )
 })
 
 test_that("internal merging functions", {

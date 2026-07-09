@@ -1,6 +1,8 @@
 # getRad (development version)
 
 * Implement reading data from the opera open radar data (#170).
+* Use options for urls so they can be changes without a package update (#120).
+* Add `getRad.progress` option to silence progress.
 
 # getRad 0.3.0
 

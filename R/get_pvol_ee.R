@@ -62,7 +62,10 @@ get_pvol_ee <- function(radar, time, ..., call = rlang::caller_env()) {
       )
     )
   files <- httr2::request(
-    "https://avaandmed.keskkonnaportaal.ee/api/lists/active/items/query"
+    getOption(
+      "getRad.ee_url_query",
+      default = "https://avaandmed.keskkonnaportaal.ee/api/lists/active/items/query"
+    )
   ) |>
     req_user_agent_getrad() |>
     httr2::req_body_json(json_list) |>
@@ -77,9 +80,10 @@ get_pvol_ee <- function(radar, time, ..., call = rlang::caller_env()) {
     )
   }
   pvol <- withr::with_tempfile("file", fileext = ".h5", {
-    req <- httr2::request(
-      "https://avaandmed.keskkonnaportaal.ee/_vti_bin/RmApi.svc/active/items/"
-    ) |>
+    req <- httr2::request(getOption(
+      "getRad.ee_url_items",
+      default = "https://avaandmed.keskkonnaportaal.ee/_vti_bin/RmApi.svc/active/items/"
+    )) |>
       req_user_agent_getrad() |>
       httr2::req_url_path_append(files$documents[[1]]$id) |>
       httr2::req_url_path_append("files/0") |>

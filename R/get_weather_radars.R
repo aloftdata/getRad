@@ -187,7 +187,10 @@ get_weather_radars_nexrad <- function(
 ) {
   #  https://www.ncei.noaa.gov/access/homr/reports
   file_content <- httr2::request(
-    "https://www.ncei.noaa.gov/access/homr/file/nexrad-stations.txt"
+    getOption(
+      "getRad.nexrad_stations_url",
+      default = "https://www.ncei.noaa.gov/access/homr/file/nexrad-stations.txt"
+    )
   ) |>
     req_user_agent_getrad() |>
     req_retry_getrad(transient_statuses = 503L) |>

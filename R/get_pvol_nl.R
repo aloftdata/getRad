@@ -40,7 +40,10 @@ get_pvol_nl <- function(radar, time, ..., call = rlang::caller_env()) {
   )
   # This request generate the temporary download url where the polar volume file can be retrieved
   resp <- tryCatch(
-    httr2::request("https://api.dataplatform.knmi.nl/open-data/v1/datasets/") |>
+    httr2::request(getOption(
+      "getRad.nl_dataset_url",
+      default = "https://api.dataplatform.knmi.nl/open-data/v1/datasets/"
+    )) |>
       httr2::req_url_path_append(
         mapped_radar,
         "versions",

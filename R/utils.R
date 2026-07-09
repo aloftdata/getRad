@@ -439,7 +439,7 @@ fetch_from_url_raw <- function(urls, use_cache = TRUE, parallel = TRUE) {
     data_response <-
       data_request |>
       httr2::req_perform_parallel(
-        progress = interactive(),
+        progress = getOption("getRad.progress"),
         on_error = "continue"
       )
   } else {

@@ -32,20 +32,41 @@ test_that("Pvol for the Netherlands can be downloaded", {
 
 test_that("Pvol for the Netherlands can be downloaded. Incorrect converter results in failure.", {
   skip_if_offline(host = "api.dataplatform.knmi.nl")
-
+  with_warning_handler <- function(reg, ...) {
+    withCallingHandlers(..., warning = function(w) {
+      condition <- conditionMessage(w)
+      if (grepl(reg, condition)) invokeRestart("muffleWarning")
+    })
+  }
   # make sure local env is used by keyring so that api key can be set
   withr::local_options(list(
     "getRad.nl_converter" = "ls"
   ))
 
   # First see if a key can be retrieved if not make sure env is used as a keyring backend
-  if (rlang::is_error(rlang::catch_cnd(getRad::get_secret("nl_api_key")))) {
+  if (
+    rlang::is_error(rlang::catch_cnd(
+      with_warning_handler(
+        "Secrets are stored in environment variables",
+        getRad::get_secret(
+          "nl_api_key"
+        )
+      )
+    ))
+  ) {
     withr::local_options(list(
       "keyring_backend" = "env"
     ))
   }
   # If no key can be retrieved from the current backend set the key to the anonymous key of KNMI
-  if (rlang::is_error(rlang::catch_cnd(getRad::get_secret("nl_api_key")))) {
+  if (
+    rlang::is_error(rlang::catch_cnd(
+      with_warning_handler(
+        "Secrets are stored in environment variables",
+        getRad::get_secret("nl_api_key")
+      )
+    ))
+  ) {
     # get public key here https://developer.dataplatform.knmi.nl/open-data-api#token
     withr::local_envvar(
       list(
@@ -55,7 +76,10 @@ test_that("Pvol for the Netherlands can be downloaded. Incorrect converter resul
   }
   time <- as.POSIXct("2024-4-4 20:00:00", tz = "Europe/Helsinki")
   expect_error(
-    get_pvol("nlhrw", time, param = "all"),
+    with_warning_handler(
+      "Secrets are stored in environment variables",
+      get_pvol("nlhrw", time, param = "all")
+    ),
     class = "getRad_error_dutch_converter_failed"
   )
 })

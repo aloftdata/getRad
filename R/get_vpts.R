@@ -95,7 +95,8 @@ get_vpts <- function(
   source = c("baltrad", "uva", "ecog-04003", "rmi", "birdcast", "dark_ecology"),
   return_type = c("vpts", "tibble"),
   ...,
-  path = NULL
+  path = NULL,
+  local_csv_path = NULL
 ) {
   # Input checks ----
   # Check source argument
@@ -251,7 +252,8 @@ get_vpts <- function(
           ~ get_vpts_aloft(
             .x,
             rounded_interval = rounded_interval,
-            source = source
+            source = source,
+            local_csv_path = local_csv_path
           ),
           .purrr_error_call = cl
         ),

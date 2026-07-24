@@ -31,6 +31,7 @@ get_vpts_aloft <- function(
   rounded_interval,
   source = c("baltrad", "uva", "ecog-04003"),
   coverage = get_vpts_coverage_aloft(),
+  local_csv_path = NULL,
   ...,
   call = rlang::caller_env()
 ) {
@@ -111,8 +112,38 @@ get_vpts_aloft <- function(
   # Read the vpts csv files
   aloft_data_url <- getOption("getRad.aloft_data_url")
 
-  paste(aloft_data_url, s3_paths, sep = "/") |>
-    read_vpts_from_url() |>
+  file_urls <- paste(aloft_data_url, s3_paths, sep = "/")
+  if (is.null(local_csv_path)) {
+    vpts_lst <- file_urls |>
+      read_vpts_from_url()
+  } else {
+    if(!dir.exists(local_csv_path)){
+      dir.create(local_csv_path)
+    }
+    purrr::map(file_urls, httr2::request) |>
+      purrr::map(req_user_agent_getrad) |>
+      httr2::req_perform_parallel(paths = file.path(local_csv_path,
+                                                    basename(file_urls)),
+                                  on_error = "continue"
+                                  )
+
+    # read the local files instead of redownloading: not resistant to missing
+    # files
+    vpts_lst <- list.files(local_csv_path, full.names = TRUE) |>
+      # duplicated from fetch_from_url_raw()
+      purrr::map(
+          ~vroom::vroom(
+            delim = ",",
+            .x,
+            col_types = getOption(
+              "getRad.vpts_col_types"
+            ),
+            show_col_types = NULL,
+            progress = FALSE
+          )
+      )
+  }
+  vpts_lst |>
     # Add a column with the radar source to not lose this information
     purrr::map2(
       s3_paths,

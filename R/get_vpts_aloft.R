@@ -117,30 +117,45 @@ get_vpts_aloft <- function(
     vpts_lst <- file_urls |>
       read_vpts_from_url()
   } else {
-    if(!dir.exists(local_csv_path)){
+    if (!dir.exists(local_csv_path)) {
       dir.create(local_csv_path)
     }
-    purrr::map(file_urls, httr2::request) |>
-      purrr::map(req_user_agent_getrad) |>
-      httr2::req_perform_parallel(paths = file.path(local_csv_path,
-                                                    basename(file_urls)),
-                                  on_error = "continue"
-                                  )
+
+    # don't download files that already exist
+    file_urls <- purrr::set_names(
+      file.path(local_csv_path, basename(file_urls)),
+      file_urls
+    ) |>
+      purrr::discard(fs::file_exists) |>
+      names()
+    if (length(file_urls)) {
+      file_urls |>
+        purrr::map(httr2::request) |>
+        purrr::map(req_user_agent_getrad) |>
+        httr2::req_perform_parallel(
+          paths = file.path(local_csv_path, basename(file_urls)),
+          on_error = "continue"
+        )
+      return(TRUE)
+    } else {
+      # early return in case all files are already downloaded
+      return(TRUE)
+    }
 
     # read the local files instead of redownloading: not resistant to missing
     # files
     vpts_lst <- list.files(local_csv_path, full.names = TRUE) |>
       # duplicated from fetch_from_url_raw()
       purrr::map(
-          ~vroom::vroom(
-            delim = ",",
-            .x,
-            col_types = getOption(
-              "getRad.vpts_col_types"
-            ),
-            show_col_types = NULL,
-            progress = FALSE
-          )
+        ~ vroom::vroom(
+          delim = ",",
+          .x,
+          col_types = getOption(
+            "getRad.vpts_col_types"
+          ),
+          show_col_types = NULL,
+          progress = FALSE
+        )
       )
   }
   vpts_lst |>

@@ -265,9 +265,10 @@ get_vpts <- function(
           ),
           .purrr_error_call = cl
         )
-      ) |>
-      radar_to_name()
+      ) #|>
+      # radar_to_name()
   }
+  return(TRUE)
   # Return the vpts data ----
   ## By default, return drop the source column and convert to a vpts object for
   ## usage in bioRad

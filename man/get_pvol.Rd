@@ -20,7 +20,10 @@ between which all data files are downloaded.
 }}
 
 \item{...}{Additional arguments passed on to reading functions, for example
-\code{param = c("DBZH", "VRADH")} to the \code{\link[bioRad:read_pvolfile]{bioRad::read_pvolfile()}}.}
+\code{param = c("DBZH", "VRADH")} to the \code{\link[bioRad:read_pvolfile]{bioRad::read_pvolfile()}}. For date
+from the United Kingdom the option exist to select either short pulse or
+long pulse data using \code{pulse_type = "sp"} or \code{pulse_type = "lp"}. By
+default long pulse data is read.}
 }
 \value{
 Either a polar volume or a list of polar volumes. See

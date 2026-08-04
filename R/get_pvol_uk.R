@@ -5,7 +5,9 @@ get_pvol_uk <- function(
   ...,
   call = rlang::caller_env()
 ) {
-  uk_odim_map <- c(
+  radar_name <- radar_recode(
+    radar,
+    call = call,
     ukcle = "clee-hill",
     ukham = "hameldon-hill",
     ukche = "chenies",
@@ -23,7 +25,9 @@ get_pvol_uk <- function(
     ukmun = "munduff-hill",
     ukhmy = "high-moorsley"
   )
-  uk_odim_map_radar_number <- c(
+  radar_number <- radar_recode(
+    radar,
+    call = call,
     ukcle = 3,
     ukham = 4,
     ukche = 5,
@@ -55,9 +59,10 @@ get_pvol_uk <- function(
     )
   }
   withr::with_file("file.h5", {
-    url <- glue::glue(
-      "https://ncas-radar-o.s3-ext.jc.rl.ac.uk/uk-wsr-visualizer-public/ukmo-nimrod/pvol/{uk_odim_map[radar]}/{format(time,'%Y/%m/%d')}/{pulse_type}/{format(time,'%Y%m%d')}_polar_pl_radar{sprintf('%02d', uk_odim_map_radar_number[radar])}_aggregate_{pulse_type}_{format(time,'%H%M')}.h5"
-    )
+    url <- glue::glue(getOption(
+      "getRad.uk_url",
+      "https://ncas-radar-o.s3-ext.jc.rl.ac.uk/uk-wsr-visualizer-public/ukmo-nimrod/pvol/{radar_name}/{format(time,'%Y/%m/%d')}/{pulse_type}/{format(time,'%Y%m%d')}_polar_pl_radar{sprintf('%02d', radar_number)}_aggregate_{pulse_type}_{format(time,'%H%M')}.h5"
+    ))
     req <- tryCatch(
       httr2::request(url) |>
         req_user_agent_getrad() |>

@@ -30,6 +30,10 @@ test_that("404 no data", {
     get_pvol("ukcas", as.POSIXct("2012-4-1 10:00:10")),
     class = "getRad_error_uk_no_data_404"
   )
+  expect_error(
+    get_pvol("ukcos", as.POSIXct("2012-4-1 10:00:10")),
+    class = "getRad_error_radar_not_found"
+  )
 })
 
 test_that("no sp data", {

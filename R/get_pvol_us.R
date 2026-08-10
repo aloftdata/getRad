@@ -60,7 +60,12 @@ get_pvol_us <- function(radar, datetime, ..., call = rlang::caller_env()) {
     lubridate::day(d),
     toupper(radar)
   )
-  ns <- c(s3 = "http://s3.amazonaws.com/doc/2006-03-01/")
+  ns <- c(
+    s3 = getOption(
+      "getRad.nexrad_s3_url",
+      default = "http://s3.amazonaws.com/doc/2006-03-01/"
+    )
+  )
   host <- getOption(
     "getRad.nexrad_data_url",
     default = "https://unidata-nexrad-level2.s3.amazonaws.com"

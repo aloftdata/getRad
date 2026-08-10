@@ -11,6 +11,17 @@ test_that("NEXRAD polar volume can be downloaded", {
   )
 })
 
+test_that("pvol us internal functions", {
+  expect_error(
+    get_pvol_us("KABX", datetime = "2026-01-01 00:01:11"),
+    class = "getRad_error_us_time_not_posix"
+  )
+  expect_error(
+    .list_nexrad_keys(as.Date("2025-3-4"), c("KARX", "KABX")),
+    class = "getRad_error_pvol_us_radar_not_scalar"
+  )
+})
+
 test_that("NEXRAD polar volume correct time is downloaded", {
   skip_if_offline(host = "unidata-nexrad-level2.s3.amazonaws.com")
   t <- as.POSIXct("2025-1-10 18:00:00", tz = "UTC")

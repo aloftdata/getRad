@@ -40,7 +40,10 @@ get_pvol_nl <- function(radar, time, ..., call = rlang::caller_env()) {
   )
   # This request generate the temporary download url where the polar volume file can be retrieved
   resp <- tryCatch(
-    httr2::request("https://api.dataplatform.knmi.nl/open-data/v1/datasets/") |>
+    httr2::request(getOption(
+      "getRad.nl_dataset_url",
+      default = "https://api.dataplatform.knmi.nl/open-data/v1/datasets/"
+    )) |>
       httr2::req_url_path_append(
         mapped_radar,
         "versions",
@@ -64,7 +67,7 @@ get_pvol_nl <- function(radar, time, ..., call = rlang::caller_env()) {
           "There was an authorization error. You may have used an invalid API
            key.",
           "i" = "Please check if you set the correct {.val nl_api_key} with
-                 {.code get_secret(\"nl_api_key\")}."
+                 {.run [get_secret(\"nl_api_key\")](getRad::get_secret(\"nl_api_key\"))}."
         ),
         cnd = cnd,
         class = "getRad_error_get_pvol_nl_authorization_failure",
@@ -77,7 +80,7 @@ get_pvol_nl <- function(radar, time, ..., call = rlang::caller_env()) {
           "There was a rate limitation error (HTTP 429) while getting data from the Netherlands.",
           "i" = "This frequently occurs when using the anonymous key, if it occurs repeatedly consider requesting a registered key ({.url https://developer.dataplatform.knmi.nl/open-data-api#token}). ",
           "i" = "You can check the current value of {.val nl_api_key} with
-                 {.code get_secret(\"nl_api_key\")}."
+                 {.run [get_secret(\"nl_api_key\")](getrad::get_secret(\"nl_api_key\"))}."
         ),
         cnd = cnd,
         class = "getRad_error_get_pvol_nl_429_failure",

@@ -34,7 +34,10 @@ get_vpts_rmi <- function(radar_odim_code, rounded_interval) {
   # Build the potential path for the rmi fwf files
 
   rmi_urls <- file.path(
-    "https://opendata.meteo.be/ftp",
+    getOption(
+      "getRad.rmi_url_ftp",
+      default = "https://opendata.meteo.be/ftp"
+    ),
     filtered_coverage$directory,
     filtered_coverage$file
   )

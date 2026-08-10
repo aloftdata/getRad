@@ -24,6 +24,7 @@ read_pvol_from_url_per_param <- function(
         # use .data to prevent note about no visible binding for global variable
         resp = httr2::req_perform_parallel(
           .data$req,
+          progress = getOption("getRad.progress"),
           paths = replicate(
             length(.data$req),
             tempfile(fileext = ".h5", tmpdir = getwd())

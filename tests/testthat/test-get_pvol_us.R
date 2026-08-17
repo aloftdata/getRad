@@ -3,6 +3,8 @@ dt_int <- lubridate::interval(time_utc, time_utc + lubridate::minutes(9))
 
 test_that("NEXRAD polar volume can be downloaded", {
   skip_if_offline(host = "unidata-nexrad-level2.s3.amazonaws.com")
+  skip_if_not_installed("vol2birdR", "1.3.0")
+
   suppressMessages(
     expect_s3_class(
       getRad::get_pvol("KABR", time_utc),
@@ -24,6 +26,8 @@ test_that("pvol us internal functions", {
 
 test_that("NEXRAD polar volume correct time is downloaded", {
   skip_if_offline(host = "unidata-nexrad-level2.s3.amazonaws.com")
+  skip_if_not_installed("vol2birdR", "1.3.0")
+
   t <- as.POSIXct("2025-1-10 18:00:00", tz = "UTC")
   suppressMessages(expect_identical(
     getRad::get_pvol("KABX", t)$datetime,

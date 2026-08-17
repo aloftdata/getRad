@@ -1,5 +1,5 @@
 test_that("Pvol for hochficht in austria can be downloaded", {
-  skip_if_offline("public.hub.geosphere.at")
+  skip_if_offline(host = "public.hub.geosphere.at")
   time <- as.POSIXct(Sys.time() - 10000, tz = "Europe/Helsinki")
   pvol <- expect_s3_class(get_pvol("hochficht", time, param = "all"), "pvol")
   expect_true(bioRad::is.pvol(pvol))
@@ -10,7 +10,7 @@ test_that("Pvol for hochficht in austria can be downloaded", {
 })
 
 test_that("Pvol for hochficht in austria can be downloaded", {
-  skip_if_offline("public.hub.geosphere.at")
+  skip_if_offline(host = "public.hub.geosphere.at")
   time <- as.POSIXct(
     Sys.time() - 10000 - 24 * 3 * 60 * 60,
     tz = "Europe/Helsinki"
@@ -21,7 +21,10 @@ test_that("Pvol for hochficht in austria can be downloaded", {
   )
 })
 test_that("hochficht can be combined with other radars", {
-  skip_if_offline("public.hub.geosphere.at")
+  skip_if_offline(host = "public.hub.geosphere.at")
+  skip_if_offline(host = "unidata-nexrad-level2.s3.amazonaws.com")
+  skip_if_offline(host = "opendata.dwd.de")
+  skip_if_not_installed("vol2birdR", "1.3.0")
   suppressMessages(expect_type(
     pvol_lst <- get_pvol(
       c("depro", "hochficht", "KABX"),

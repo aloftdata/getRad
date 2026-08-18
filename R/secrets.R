@@ -79,7 +79,7 @@ get_secret <- function(name) {
     cli::cli_abort(
       c(
         "Can't find secret {.arg {sname}} in the keyring.",
-        "i" = "Please use {.code set_secret(\"{name}\")} to store the secret. Note that the prefix is automatically added in {.fun set_secret}."
+        "i" = "Please use {.run [set_secret(\"{name}\")](getRad::set_secret(\"{name}\"))} to store the secret. Note that the prefix is automatically added in {.fun set_secret}."
       ),
       class = "getRad_error_secret_not_found"
     )

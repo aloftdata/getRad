@@ -130,6 +130,7 @@ test_that("multiple timestamps and radars work", {
 
 test_that("Mixed radar vector (single timestamp)", {
   skip_if_offline()
+  skip_if_not_installed("vol2birdR", "1.3.0")
   time_utc <- lubridate::as_datetime("2021-01-20 05:01:00")
   suppressMessages(pvols <- getRad::get_pvol(c("KABR", "finur"), time_utc))
   expect_true(is.list(pvols))
@@ -152,6 +153,8 @@ test_that("Mixed radar vector (single timestamp)", {
 
 test_that("Mixed radar vector + 9 minute interval", {
   skip_if_offline()
+  skip_if_not_installed("vol2birdR", "1.3.0")
+
   time_utc <- lubridate::as_datetime("2025-01-20 03:55:50")
   dt_int <- lubridate::interval(time_utc, time_utc + lubridate::minutes(9))
   suppressMessages(pvols <- getRad::get_pvol(c("KABR", "fikan"), dt_int))

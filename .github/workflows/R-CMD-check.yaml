@@ -26,7 +26,8 @@ jobs:
           - {os: ubuntu-latest,   r: 'release'}
           - {os: ubuntu-latest,   r: 'oldrel-1'}
           # And minimum supported version in DESCRIPTION
-          - {os: ubuntu-latest, r: '4.1.0'}
+          # this seems to be failing due to a issue installing rhdf5 from bioconductor
+          # - {os: ubuntu-latest, r: '4.1.0'}
 
     env:
       getRad_nl_api_key: ${{ secrets.GETRAD_NL_API_KEY }}

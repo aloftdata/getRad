@@ -19,8 +19,14 @@ before.
 between which all data files are downloaded.
 }}
 
-\item{...}{Additional arguments passed on to reading functions, for example
-\code{param = c("DBZH", "VRADH")} to the \code{\link[bioRad:read_pvolfile]{bioRad::read_pvolfile()}}.}
+\item{...}{Additional arguments used to select reading functions or passed on
+to reading functions. For example:
+\itemize{
+\item \code{use_opera_ord = TRUE} if you want to force using the
+Opera open radar data over specific reading functions. Generally speaking
+this data is less suitable for biological analysis.
+\item \code{param = c("DBZH", "VRADH")} to the \code{\link[bioRad:read_pvolfile]{bioRad::read_pvolfile()}}.
+}}
 }
 \value{
 Either a polar volume or a list of polar volumes. See

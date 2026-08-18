@@ -28,8 +28,13 @@
 #'   before.
 #'   - A [lubridate::interval()] or two [`POSIXct`][base::DateTimeClasses],
 #'   between which all data files are downloaded.
-#' @param ... Additional arguments passed on to reading functions, for example
-#'   `param = c("DBZH", "VRADH")` to the [bioRad::read_pvolfile()].
+#' @param ... Additional arguments used to select reading functions or passed on
+#'  to reading functions. For example:
+#'
+#'  - `use_opera_ord = TRUE` if you want to force using the
+#' Opera open radar data over specific reading functions. Generally speaking
+#' this data is less suitable for biological analysis.
+#'  - `param = c("DBZH", "VRADH")` to the [bioRad::read_pvolfile()].
 #' @returns Either a polar volume or a list of polar volumes. See
 #'   [bioRad::summary.pvol()] for details.
 #' @export

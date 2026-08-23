@@ -24,7 +24,10 @@
 #'   - A [lubridate::interval()] or two [`POSIXct`][base::DateTimeClasses],
 #'   between which all data files are downloaded.
 #' @param ... Additional arguments passed on to reading functions, for example
-#'   `param = c("DBZH", "VRADH")` to the [bioRad::read_pvolfile()].
+#'   `param = c("DBZH", "VRADH")` to the [bioRad::read_pvolfile()]. For date
+#'   from the United Kingdom the option exist to select either short pulse or
+#'   long pulse data using `pulse_type = "sp"` or `pulse_type = "lp"`. By
+#'   default long pulse data is read.
 #' @returns Either a polar volume or a list of polar volumes. See
 #'   [bioRad::summary.pvol()] for details.
 #' @export

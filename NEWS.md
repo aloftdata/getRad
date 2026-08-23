@@ -2,6 +2,7 @@
 
 * Use options for urls so they can be changes without a package update (#120).
 * Add `getRad.progress` option to silence progress.
+* Support reading data from the United Kingdom (#202).
 
 # getRad 0.3.0
 

@@ -5,7 +5,9 @@
 #' [dplyr::tibble()].
 #'
 #' @details
-#' For more details on supported sources, see `vignette("supported_sources")`.
+#' For more details on supported sources, see `vignette("supported_sources")`. For
+#' details on the data available and the appropriate data references read the
+#' [coverage](https://aloftdata.github.io/getRad/articles/vpts_coverage.html) article.
 #'
 #'   In case data is read from a directory, file in the directory
 #'   should be structures like they are in the monthly folders of the aloft
@@ -283,7 +285,8 @@ get_vpts <- function(
     fetched_vpts <- purrr::map(
       fetched_vpts,
       ~ .x[lubridate::`%within%`(.x$datetime, date_interval)]
-    )
+    ) |>
+      add_reference_vpts(source = source)
     if (length(fetched_vpts) != 1) {
       return(fetched_vpts)
     } else {
@@ -322,7 +325,11 @@ get_vpts <- function(
             \(df) dplyr::select(df, -source),
             .purrr_error_call = cl
           )
-        vpts_list <- purrr::map(filtered_vpts_no_source, bioRad::as.vpts)
+        vpts_list <- purrr::map(
+          filtered_vpts_no_source,
+          bioRad::as.vpts
+        )
+
         # If we are only returning a single radar, don't return a list
         if (length(vpts_list) == 1) {
           return(purrr::chuck(vpts_list, 1))
@@ -330,7 +337,8 @@ get_vpts <- function(
           return(vpts_list)
         }
       })(filtered_vpts)
-    )
+    ) |>
+    add_reference_vpts(source = source)
   # Return the converted/formatted object ----
   return(return_object)
 }

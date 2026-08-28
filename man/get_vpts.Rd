@@ -55,7 +55,9 @@ as a (list of) of \link[bioRad:summary.vpts]{vpts objects} or a
 \code{\link[dplyr:tibble]{dplyr::tibble()}}.
 }
 \details{
-For more details on supported sources, see \code{vignette("supported_sources")}.
+For more details on supported sources, see \code{vignette("supported_sources")}. For
+details on the data available and the appropriate data references read the
+\href{https://aloftdata.github.io/getRad/articles/vpts_coverage.html}{coverage} article.
 
 In case data is read from a directory, file in the directory
 should be structures like they are in the monthly folders of the aloft

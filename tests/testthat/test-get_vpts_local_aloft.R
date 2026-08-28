@@ -48,6 +48,13 @@ withr::with_tempdir({
         expect_length(ret, 2L)
         expect_s3_class(ret[[1]], class = "vpts")
         expect_s3_class(ret[[2]], class = "vpts")
+        expect_s3_class(ret[[1]]$attributes$references, "bibentry")
+        expect_s3_class(ret[[2]]$attributes$references, "bibentry")
+        expect_length(ret[[2]]$attributes$references, 2)
+        expect_identical(
+          ret[[2]]$attributes$references[1],
+          vptsReferences['baltrad']
+        )
       }
     )
   })
@@ -68,6 +75,8 @@ withr::with_tempdir({
             path = local_dir
           )
         )
+        ref$attributes$references[1] <- vptsReferences["uva"]
+        names(ref$attributes$references)[1] <- "uva"
         expect_identical(
           ref,
           get_vpts(
@@ -77,6 +86,9 @@ withr::with_tempdir({
             path = local_dir
           )
         )
+        ref$attributes$references[1] <- vptsReferences["ecog-04003"]
+        names(ref$attributes$references)[1] <- "ecog-04003"
+
         expect_identical(
           ref,
           get_vpts(

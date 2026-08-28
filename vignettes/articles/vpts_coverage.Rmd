@@ -9,9 +9,13 @@ knitr::opts_chunk$set(
 )
 ```
 
-Various sources of VPTS files cover different radars and time periods. Here we visualize the temporal coverage per source and radar. If you click on a radar on the map a plot shows the percentage of days with available data per month. Note that this article gets generated irregularly and is up to date until `r  Sys.Date()`.
+Various sources of VPTS files cover different radars and time periods. Here we visualize the temporal coverage per source and radar. If you click on a radar on the map a plot shows the percentage of days with available data per month. Note that this article gets generated irregularly and is up to date until `r Sys.Date()`.
 
 For a more detailed description of the data in Aloft bucket and its pitfalls see the [FAQ](https://aloftdata.eu/faq/).
+
+When using these datasets ensure that you reference them appropriately as well as the R package you used to process them (e.g. `citation("getRad")` and `citation("bioRad")`)
+
+## Online sources
 
 ```{r setup, message=FALSE}
 library(getRad)
@@ -23,13 +27,13 @@ library(htmltools)
 ```
 
 ```{r data}
-cvr <- get_vpts_coverage("all")
+cvr <- get_vpts_coverage("all") 
 wr <- get_weather_radars("all") |>
   group_by(radar) |>
   arrange(status) |>
   slice_tail(n = 1)
 ```
-```{r}
+```{r create_images}
 # there is a with issue in the svg, here is a temporary solution: https://github.com/r-spatial/leafpop/issues/25
 assignInNamespace("popupSVGraph",function(graphs, #dsn = tempdir(),
                         width = 300, height = 300, ...) {
@@ -156,7 +160,18 @@ for (i in unique(cvr$source)) {
       clusterOptions = markerClusterOptions(maxClusterRadius = 30),
       popup = popupGraph(res$grph, type = "svg")
     )
-  html <- c(html, list(h3(i), lft, ll))
+  html <- c(html, list(h3("Data source:",i), 
+                       lft, ll, 
+                       h4("Data reference"),
+                      HTML( format(getRad:::vptsReferences[i],"html"))
+                       ))
 }
 tagList(html)
+```
+## Local sources
+
+Data can also be read from a local copy of a repository. This can be either data formatted like it is on `aloft` or from `dark_ecology`. In the former case the appropriate references are mentioned above. For `dark_ecology` data reference the following article:
+
+```{r de}
+tagList(list(HTML( format(getRad:::vptsReferences["dark_ecology"],"html"))))
 ```

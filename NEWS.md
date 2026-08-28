@@ -1,5 +1,6 @@
 # getRad (development version)
 
+* Include references to vpts data sources (#200).
 * Use options for urls so they can be changes without a package update (#120).
 * Add `getRad.progress` option to silence progress.
 

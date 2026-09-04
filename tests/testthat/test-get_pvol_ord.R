@@ -190,6 +190,7 @@ test_that("internal merging functions", {
 test_that("Local long test", {
   skip_if_offline()
   skip_on_ci()
+  skip("Only run manually as mostlikely there will always be a radar off")
   # countries <- aws.s3::get_bucket(
   #   "openradar-24h",
   #   prefix = glue::glue(

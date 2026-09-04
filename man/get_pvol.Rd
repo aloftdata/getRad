@@ -19,8 +19,14 @@ before.
 between which all data files are downloaded.
 }}
 
-\item{...}{Additional arguments passed on to reading functions, for example
-\code{param = c("DBZH", "VRADH")} to the \code{\link[bioRad:read_pvolfile]{bioRad::read_pvolfile()}}.}
+\item{...}{Additional arguments used to select reading functions or passed on
+to reading functions. For example:
+\itemize{
+\item \code{use_opera_ord = TRUE} if you want to force using the
+Opera open radar data over specific reading functions. Generally speaking
+this data is less suitable for biological analysis.
+\item \code{param = c("DBZH", "VRADH")} to the \code{\link[bioRad:read_pvolfile]{bioRad::read_pvolfile()}}.
+}}
 }
 \value{
 Either a polar volume or a list of polar volumes. See
@@ -37,6 +43,11 @@ supported countries there might also be temporal restrictions on the radars that
 are operational. For example, radars with the \code{status} \code{0} in \code{get_weather_radars("opera")}
 are currently not operational.
 
+For European countries where a dedicated archive exist this data is used. Alternatively
+data is downloaded from the Opera open radar data archive. This data is frequently
+filtered. Use the argument \code{use_opera_ord = TRUE} if you want to force using the
+Opera open radar data.
+
 Not all radars in the nexrad archive can be read successfully. Radars associated
 with the Terminal Doppler Weather Radar (TDWR) program can not be read. These can
 be identified using the \code{stntype} column in \code{get_weather_radars("nexrad")}.
@@ -45,6 +56,9 @@ be identified using the \code{stntype} column in \code{get_weather_radars("nexra
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Get PVOL data for a single radar and datetime
 get_pvol("deess", as.POSIXct(Sys.Date()))
+
+# Get similar data from the opera open radar data
+get_pvol("deess", as.POSIXct(Sys.Date()), use_opera_ord=TRUE)
 
 # Get PVOL data for multiple radars and a single datetime
 get_pvol(

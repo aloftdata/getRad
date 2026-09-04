@@ -81,7 +81,7 @@ test_that("expected warnings from ord", {
   )
   expect_warning(
     suppressWarnings(
-      get_pvol("plpas", time, use_opera_ord = T),
+      get_pvol("plpoz", time, use_opera_ord = T),
       classes = "getRad_warn_ord_conflicting_attributes"
     ),
     class = "getRad_warn_ord_polish_scans"

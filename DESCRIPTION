@@ -49,6 +49,7 @@ Imports:
     xml2
 Suggests:
     askpass,
+    aws.s3,
     fs,
     htmltools,
     keyring,

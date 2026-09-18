@@ -322,6 +322,9 @@ is_odim <- function(x) {
   }
   rlang::is_character(x) & !is.na(x) & grepl("^[a-zA-Z]{5}$", x)
 }
+is_odim_country <- function(odim, country_code) {
+  substr(odim, 1, 2) == country_code
+}
 is_nexrad <- function(x) {
   if (length(x) < 1) {
     return(FALSE)

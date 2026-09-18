@@ -1,4 +1,4 @@
-# getRad (development version)
+# getRad 0.4.0
 
 * Implement reading data from the opera open radar data (#170).
 * Use options for urls so they can be changes without a package update (#120).

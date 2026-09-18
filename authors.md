@@ -38,7 +38,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/aloftdata/getRad/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/aloftdata/getRad/blob/v0.4.0/DESCRIPTION)
 
 Kranstauber B, Huybrechts P, Desmet P (2026). *getRad: Download Radar
 Data for Biological Research*. R package version 0.4.0,

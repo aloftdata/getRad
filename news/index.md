@@ -2,6 +2,8 @@
 
 ## getRad (development version)
 
+- Implement reading data from the opera open radar data
+  ([\#170](https://github.com/aloftdata/getRad/issues/170)).
 - Use options for urls so they can be changes without a package update
   ([\#120](https://github.com/aloftdata/getRad/issues/120)).
 - Add `getRad.progress` option to silence progress.

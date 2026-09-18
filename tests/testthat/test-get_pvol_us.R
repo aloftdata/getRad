@@ -34,7 +34,7 @@ test_that("NEXRAD polar volume correct time is downloaded", {
     as.POSIXct("2025-01-10 17:58:13", tz = "UTC")
   ))
   # also test different tz
-  t <- as.POSIXct("2023-1-10 12:00:00", tz = "US/Alaska")
+  t <- as.POSIXct("2023-1-10 12:00:00", tz = "America/Juneau")
   suppressMessages(expect_identical(
     getRad::get_pvol("KAMA", t)$datetime,
     as.POSIXct("2023-01-10 20:55:53", tz = "UTC")

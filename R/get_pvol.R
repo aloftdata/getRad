@@ -33,7 +33,8 @@
 #'
 #'  - `use_opera_ord = TRUE` if you want to force using the
 #' Opera open radar data over specific reading functions. Generally speaking
-#' this data is less suitable for biological analysis.
+#' this data is less suitable for biological analysis. Note this data is only
+#' available for 24 hours.
 #'  - `param = c("DBZH", "VRADH")` to the [bioRad::read_pvolfile()].
 #' @returns Either a polar volume or a list of polar volumes. See
 #'   [bioRad::summary.pvol()] for details.

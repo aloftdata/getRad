@@ -24,7 +24,8 @@ to reading functions. For example:
 \itemize{
 \item \code{use_opera_ord = TRUE} if you want to force using the
 Opera open radar data over specific reading functions. Generally speaking
-this data is less suitable for biological analysis.
+this data is less suitable for biological analysis. Note this data is only
+available for 24 hours.
 \item \code{param = c("DBZH", "VRADH")} to the \code{\link[bioRad:read_pvolfile]{bioRad::read_pvolfile()}}.
 }}
 }

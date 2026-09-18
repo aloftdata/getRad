@@ -9,7 +9,7 @@ test_that("Pvol can be downloaded from ord", {
   expect_true(bioRad::is.pvol(pvol))
   pvol <- expect_s3_class(get_pvol("seang", time, use_opera_ord = T), "pvol")
   expect_true(bioRad::is.pvol(pvol))
-  expect_true("how.NI",names(bioRad::attribute_table(pvol)))
+  expect_true("how.NI" %in% names(bioRad::attribute_table(pvol)))
   expect_identical(pvol$datetime, time_floor_utc)
   pvol <- expect_s3_class(get_pvol("nlhrw", time, use_opera_ord = T), "pvol")
   expect_true(bioRad::is.pvol(pvol))

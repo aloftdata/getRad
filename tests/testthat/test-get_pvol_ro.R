@@ -37,6 +37,7 @@ test_that("Pvol for Romania can be downloaded", {
   )
 })
 test_that("Pvol for Romania fails if urls are wrong", {
+  skip_if_offline("opendata.meteoromania.ro")
   expect_error(
     get_pvol(
       "romed",

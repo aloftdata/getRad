@@ -4,6 +4,8 @@
 
 ## getRad 0.4.0
 
+CRAN release: 2026-09-18
+
 - Implement reading data from the opera open radar data
   ([\#170](https://github.com/aloftdata/getRad/issues/170)).
 - Use options for urls so they can be changes without a package update

@@ -4,7 +4,7 @@ Various sources of VPTS files cover different radars and time periods.
 Here we visualize the temporal coverage per source and radar. If you
 click on a radar on the map a plot shows the percentage of days with
 available data per month. Note that this article gets generated
-irregularly and is up to date until 2026-09-22.
+irregularly and is up to date until 2026-10-15.
 
 For a more detailed description of the data in Aloft bucket and its
 pitfalls see the [FAQ](https://aloftdata.eu/faq/).
@@ -13,7 +13,7 @@ pitfalls see the [FAQ](https://aloftdata.eu/faq/).
 
 The following radars were omitted from the map because they lack
 location information in OPERA: deflg, desna, esalm, esbad, esbar, escor,
-eslpa, esmad, esmal, esmur, espma, essev, eszar and hrzag.
+eslpa, esmad, esmal, esmur, espma, essan, essev, esval, eszar and hrzag.
 
 ### ecog-04003
 

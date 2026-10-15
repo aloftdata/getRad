@@ -21,6 +21,10 @@ knitr::opts_chunk$set(
 ```{r, echo=FALSE, message=FALSE}
 require(leaflet)
 require(rnaturalearth)
+opera_codes<- c(
+          "be", "ch", "cz", "de", "dk", "es", "ee", "fi", "fr", "hr", # "ie",
+          "is", "lt", "mt", "nl", "no", "pl", "ro", "se", "si"
+        )
 included_countries <- dplyr::tribble(
   ~code, ~description, ~time, ~supported, ~license, ~links,
   "opera", "Data centralized by opera is publicly available for a large selection of european countries. However biological information is frequently filtered out of the reflectivity parameter (DBZH). The unfiltered reflectivity (TH) might contain more valuable information for biological analysis.", "Data is available for the last 24 hours", "Readable", "CC BY 4.0<sup>    <a href='https://api.meteogate.eu/eu-eumetnet-weather-radar/docs'>1</a> </sup>", c("Information" = "https://meteogate.eu/"),
@@ -42,10 +46,7 @@ included_countries <- dplyr::tribble(
   dplyr::left_join(
     dplyr::bind_rows(
       rnaturalearth::ne_countries("medium") |>
-        dplyr::mutate(key_lower = tolower(iso_a2_eh)) |> dplyr::filter(key_lower %in% c(
-          "be", "ch", "cz", "de", "dk", "es", "ee", "fi", "fr", "hr", # "ie",
-          "is", "lt", "mt", "nl", "no", "pl", "ro", "se", "si"
-        )) |> dplyr::summarise(key_lower = "opera", name = "Europe"),
+        dplyr::mutate(key_lower = tolower(iso_a2_eh)) |> dplyr::filter(key_lower %in%opera_codes) |> dplyr::summarise(key_lower = "opera", name = "Europe"),
       rnaturalearth::ne_countries("medium") |>
         dplyr::mutate(key_lower = tolower(iso_a2_eh))
     ),

@@ -1,5 +1,7 @@
 # getRad (development version)
 
+* Adapt to removal of the `stratus` and `cirusnimbus` columns from the OPERA radar database (#221).
+
 # getRad 0.4.0
 
 * Implement reading data from the opera open radar data (#170).

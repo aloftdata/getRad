@@ -343,7 +343,8 @@ get_pvol_ord <- function(radar, time, ..., call = rlang::caller_env()) {
     cli::cli_abort(
       c(
         x = "No data was found for the selected combination of radar and time.",
-        i = "Make sure a valid odim code is used to identify the radar and a timestamp within the last 24 hours."
+        i = "Make sure a valid odim code is used to identify the radar and a timestamp within the last 24 hours.",
+        i = "This error can also occur when there is (temporarily) no data for a radar."
       ),
       class = "getRad_error_ord_no_keys_found",
       call = call

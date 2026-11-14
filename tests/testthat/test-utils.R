@@ -58,3 +58,7 @@ test_that("fetch_from_url_raw warns on failing url", {
     200
   )
 })
+testthat::test_that("release_bullets returns expected", {
+  expect_type(release_bullets(), "character")
+  expect_gte(length(release_bullets()), 1)
+})

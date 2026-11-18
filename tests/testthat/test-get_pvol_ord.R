@@ -46,6 +46,7 @@ test_that("Pvol can be downloaded from ord", {
   )
 })
 test_that("ie still has scans and pvols", {
+  skip_if_offline("s3.waw3-1.cloudferro.com")
   with_mocked_bindings(
     code = {
       expect_error(

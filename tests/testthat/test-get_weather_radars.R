@@ -40,7 +40,7 @@ test_that("get_weather_radars returns a tibble with expected columns", {
   ## Right number of columns
   expect_length(
     weather_radar_metadata,
-    32
+    30
   )
 
   ## Right columns, in a certain order
@@ -71,12 +71,10 @@ test_that("get_weather_radars returns a tibble with expected columns", {
       "beam",
       "gain",
       "frequency",
-      "stratus",
-      "cirusnimbus",
-      "wrwp",
       "finishyear",
       "singlerrr",
       "compositerrr",
+      "wrwp",
       "origin",
       "source",
       "geometry"
@@ -116,12 +114,10 @@ test_that("get_weather_radars returns sf with correct data types", {
       beam = "numeric",
       gain = "numeric",
       frequency = "numeric",
-      stratus = "character", # currently unused?
-      cirusnimbus = "character", # currently unused?
-      wrwp = "logical",
       finishyear = "integer",
       singlerrr = "logical",
       compositerrr = "logical",
+      wrwp = "logical",
       origin = "character",
       source = "character",
       geometry = c("sfc_POINT", "sfc")

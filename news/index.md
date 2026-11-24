@@ -2,6 +2,10 @@
 
 ## getRad (development version)
 
+- Adapt to removal of the `stratus` and `cirusnimbus` columns from the
+  OPERA radar database
+  ([\#221](https://github.com/aloftdata/getRad/issues/221)).
+
 ## getRad 0.4.0
 
 CRAN release: 2026-09-18
